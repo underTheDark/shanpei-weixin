@@ -164,17 +164,7 @@
 				}
 			}
         }
-        ,{
-            "path" : "pages/user/coupon/coupon",
-            "style" : {
-				"navigationBarTitleText": "优惠券",
-				"navigationBarBackgroundColor":"#f06c7a",
-				"navigationBarTextStyle":"white",
-				"app-plus":{
-					"bounce":"none"
-				}
-			}
-        }
+        
         ,{
             "path" : "pages/user/keep/keep",
             "style" : {
@@ -185,8 +175,41 @@
 					"bounce":"none"
 				}
 			}
-        }
+        },
+		{
+		    "path" : "pages/user/keep/sayFeel/sayFeel",
+		    "style" : {
+				"navigationBarTitleText": "评价",
+				"navigationBarBackgroundColor":"#f06c7a",
+				"navigationBarTextStyle":"white",
+				"app-plus":{
+					"bounce":"none"
+				}
+			}
+		}
         ,{
+            "path" : "pages/user/credit/credit",
+            "style" : {
+				"navigationBarTitleText": "积分",
+				"navigationBarBackgroundColor":"#f06c7a",
+				"navigationBarTextStyle":"white",
+				"app-plus":{
+					"bounce":"none"
+				}
+			}
+        },
+		{
+		    "path" : "pages/user/collect/collect",
+		    "style" : {
+				"navigationBarTitleText": "收藏",
+				"navigationBarBackgroundColor":"#f06c7a",
+				"navigationBarTextStyle":"white",
+				"app-plus":{
+					"bounce":"none"
+				}
+			}
+		},
+		{
             "path" : "pages/user/address/address",
             "style" : {
 				"navigationBarBackgroundColor":"#ffffff",
@@ -243,6 +266,19 @@
         }
         ,{
             "path" : "pages/user/order_list/logistics/logistics",
+            "style" : {}
+        }
+        
+        ,{
+            "path" : "pages/user/service/service",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/user/credit/credit",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/user/collect/collect",
             "style" : {}
         }
     ],

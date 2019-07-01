@@ -102,6 +102,17 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 {
   data: function data() {
     return {
@@ -119,24 +130,52 @@
         envelope: 0 },
 
       // 订单类型
-      orderList: [
-      { text: '待付款', icon: "fukuan" },
-      { text: '待发货', icon: "fahuo" },
-      { text: '待收货', icon: "shouhuo" },
-      { text: '待评价', icon: "pingjia" },
-      { text: '退换货', icon: "tuihuo" }],
+      orderList: [{
+        text: '待付款',
+        icon: "fukuan" },
+
+      {
+        text: '待发货',
+        icon: "fahuo" },
+
+      {
+        text: '待收货',
+        icon: "shouhuo" },
+
+      {
+        text: '已完成',
+        icon: "pingjia" }],
+
+
 
       // 工具栏列表
-      mytoolbarList: [
-      { url: '../user/keep/keep', text: '我的收藏', img: '../../static/img/user/point.png' },
-      { url: '../user/coupon/coupon', text: '优惠券', img: '../../static/img/user/quan.png' },
-      { url: '', text: '新客豪礼', img: '../../static/img/user/renw.png' },
-      { url: '', text: '领红包', img: '../../static/img/user/momey.png' },
+      mytoolbarList: [{
+        url: '../user/keep/keep',
+        text: '我的评价',
+        img: '../../static/img/user/point.png' },
 
-      { url: '../user/address/address', text: '收货地址', img: '../../static/img/user/addr.png' },
-      { url: '', text: '账户安全', img: '../../static/img/user/security.png' },
-      { url: '', text: '银行卡', img: '../../static/img/user/bank.png' },
-      { url: '', text: '抽奖', img: '../../static/img/user/choujiang.png' }] };
+      {
+        url: '../user/coupon/coupon',
+        text: '我的积分',
+        img: '../../static/img/user/quan.png' },
+
+      {
+        url: '',
+        text: '我的收藏',
+        img: '../../static/img/user/renw.png' },
+
+      {
+        url: '',
+        text: '我的售后',
+        img: '../../static/img/user/momey.png' },
+
+
+      {
+        url: '../user/address/address',
+        text: '地址管理',
+        img: '../../static/img/user/addr.png' }] };
+
+
 
 
 
@@ -166,10 +205,8 @@
     uni.setStorage({
       key: 'UserInfo',
       data: false,
-      success: function success() {
-      },
-      fail: function fail(e) {
-      } });
+      success: function success() {},
+      fail: function fail(e) {} });
 
   },
   onShow: function onShow() {var _this = this;
@@ -197,7 +234,9 @@
 
     },
     toOrderList: function toOrderList(index) {
-      uni.navigateTo({ url: '../user/order_list/order_list?tbIndex=' + index });
+      uni.navigateTo({
+        url: '../user/order_list/order_list?tbIndex=' + index });
+
     },
     toSetting: function toSetting() {
       uni.navigateTo({
@@ -210,7 +249,10 @@
 
     },
     toLogin: function toLogin() {
-      uni.showToast({ title: '请登录', icon: "none" });
+      uni.showToast({
+        title: '请登录',
+        icon: "none" });
+
       uni.navigateTo({
         url: '../login/login' });
 
@@ -270,130 +312,77 @@ var render = function() {
       staticClass: "status",
       style: { position: _vm.headerPosition, top: _vm.statusTop }
     }),
-    _c(
-      "view",
-      {
-        staticClass: "header",
-        style: { position: _vm.headerPosition, top: _vm.headerTop }
-      },
-      [
-        _c("view", { staticClass: "addr" }),
-        _c("view", { staticClass: "input-box" }),
-        _c("view", { staticClass: "icon-btn" }, [
-          _c("view", {
-            staticClass: "icon tongzhi",
-            attrs: { eventid: "0c0ea9f6-0" },
-            on: { tap: _vm.toMsg }
-          }),
-          _c("view", {
-            staticClass: "icon setting",
-            attrs: { eventid: "0c0ea9f6-1" },
-            on: { tap: _vm.toSetting }
-          })
-        ])
-      ]
-    ),
     _c("view", { staticClass: "place" }),
     _c("view", { staticClass: "user" }, [
       _c("view", { staticClass: "left" }, [
         _c("image", {
-          attrs: { src: _vm.user.face, eventid: "0c0ea9f6-2" },
+          attrs: { src: _vm.user.face, eventid: "0c0ea9f6-0" },
           on: { tap: _vm.toSetting }
-        })
-      ]),
-      _c("view", { staticClass: "right" }, [
+        }),
         _c(
           "view",
           {
             staticClass: "username",
-            attrs: { eventid: "0c0ea9f6-3" },
+            attrs: { eventid: "0c0ea9f6-1" },
             on: { tap: _vm.toLogin }
           },
           [_vm._v(_vm._s(_vm.user.username))]
-        ),
-        _c(
-          "view",
-          {
-            staticClass: "signature",
-            attrs: { eventid: "0c0ea9f6-4" },
-            on: { tap: _vm.toSetting }
-          },
-          [_vm._v(_vm._s(_vm.user.signature))]
         )
-      ]),
-      _c(
-        "view",
-        {
-          staticClass: "erweima",
-          attrs: { eventid: "0c0ea9f6-5" },
-          on: { tap: _vm.toMyQR }
-        },
-        [_c("view", { staticClass: "icon qr" })]
-      )
+      ])
     ]),
-    _vm._m(0),
     _c("view", { staticClass: "order" }, [
-      _c(
-        "view",
-        { staticClass: "list" },
-        _vm._l(_vm.orderList, function(row, index) {
-          return _c(
+      _c("view", { staticClass: "list" }, [
+        _c("view", { staticClass: "list-top" }, [
+          _c("view", { staticClass: "myorder" }, [_vm._v("我的订单")]),
+          _c(
             "view",
             {
-              key: index,
-              staticClass: "box",
-              attrs: { eventid: "0c0ea9f6-6-" + index },
+              staticClass: "allorder",
+              attrs: { eventid: "0c0ea9f6-2" },
               on: {
-                tap: function($event) {
-                  _vm.toOrderList(index)
+                click: function($event) {
+                  _vm.toOrderList(-1)
                 }
               }
             },
             [
-              _c("view", { staticClass: "img" }, [
-                _c("view", { staticClass: "icon", class: row.icon })
-              ]),
-              _c("view", { staticClass: "text" }, [_vm._v(_vm._s(row.text))])
+              _c("view", [_vm._v("全部订单")]),
+              _c("image", {
+                staticClass: "img",
+                attrs: { src: "../../static/img/category/youce-jiantou.png" }
+              })
             ]
           )
-        })
-      ),
-      _c("view", { staticClass: "balance-info" }, [
-        _c("view", { staticClass: "left" }, [
-          _c("view", { staticClass: "box" }, [
-            _c("view", { staticClass: "num" }, [
-              _vm._v(_vm._s(_vm.user.integral))
-            ]),
-            _c("view", { staticClass: "text" }, [_vm._v("积分")])
-          ]),
-          _c("view", { staticClass: "box" }, [
-            _c("view", { staticClass: "num" }, [
-              _vm._v(_vm._s(_vm.user.envelope))
-            ]),
-            _c("view", { staticClass: "text" }, [_vm._v("佣金")])
-          ]),
-          _c("view", { staticClass: "box" }, [
-            _c("view", { staticClass: "num" }, [
-              _vm._v(_vm._s(_vm.user.balance))
-            ]),
-            _c("view", { staticClass: "text" }, [_vm._v("余额")])
-          ])
         ]),
-        _c("view", { staticClass: "right" }, [
-          _c(
-            "view",
-            {
-              staticClass: "box",
-              attrs: { eventid: "0c0ea9f6-7" },
-              on: { tap: _vm.toDeposit }
-            },
-            [_vm._m(1), _c("view", { staticClass: "text" }, [_vm._v("充值")])]
-          )
-        ])
+        _c(
+          "view",
+          { staticClass: "list-bottom" },
+          _vm._l(_vm.orderList, function(row, index) {
+            return _c(
+              "view",
+              {
+                key: index,
+                staticClass: "box",
+                attrs: { eventid: "0c0ea9f6-3-" + index },
+                on: {
+                  tap: function($event) {
+                    _vm.toOrderList(index)
+                  }
+                }
+              },
+              [
+                _c("view", { staticClass: "img" }, [
+                  _c("view", { staticClass: "icon", class: row.icon })
+                ]),
+                _c("view", { staticClass: "text" }, [_vm._v(_vm._s(row.text))])
+              ]
+            )
+          })
+        )
       ])
     ]),
     _c("view", { staticClass: "toolbar" }, [
-      _c("view", { staticClass: "title" }, [_vm._v("我的工具栏")]),
+      _c("view", { staticClass: "title" }, [_vm._v("我的服务")]),
       _c(
         "view",
         { staticClass: "list" },
@@ -403,7 +392,7 @@ var render = function() {
             {
               key: index,
               staticClass: "box",
-              attrs: { eventid: "0c0ea9f6-8-" + index },
+              attrs: { eventid: "0c0ea9f6-4-" + index },
               on: {
                 tap: function($event) {
                   _vm.toPage(row.url)
@@ -423,28 +412,7 @@ var render = function() {
     _c("view", { staticClass: "place-bottom" })
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "VIP" }, [
-      _c("view", { staticClass: "img" }, [
-        _c("image", { attrs: { src: "../../static/img/VIP.png" } })
-      ]),
-      _c("view", { staticClass: "title" }, [_vm._v("开通VIP会员")]),
-      _c("view", { staticClass: "tis" }, [_vm._v("会员特权")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "img" }, [
-      _c("view", { staticClass: "icon chongzhi" })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

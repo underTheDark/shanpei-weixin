@@ -72,6 +72,64 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {
   data: function data() {
     return {
@@ -89,7 +147,7 @@
       headerTop: 0,
       //控制滑动效果
       typeClass: 'goods',
-      subState: '',
+      subState: 1,
       theIndex: null,
       oldIndex: null,
       isStop: false };
@@ -118,21 +176,33 @@
 
   },
   methods: {
-    switchType: function switchType(type) {var _this = this;
-      if (this.typeClass == type) {
-        return;
-      }
-      uni.pageScrollTo({
-        scrollTop: 0,
-        duration: 0 });
+    sayFeel: function sayFeel() {
+      uni.navigateTo({
+        url: "/pages/user/sayFeel/sayFeel" });
 
+    },
+    switchType: function switchType(type) {
+      // if(this.typeClass==type){
+      // 	return ;
+      // }
+      // uni.pageScrollTo({
+      // 	scrollTop:0,
+      // 	duration:0
+      // })
+      // this.typeClass = type;
+      // this.subState = this.typeClass==''?'':'show'+type;
+      // setTimeout(()=>{
+      // 	this.oldIndex = null;
+      // 	this.theIndex = null;
+      // 	this.subState = this.typeClass=='goods'?'':this.subState;
+      // },200)
       this.typeClass = type;
-      this.subState = this.typeClass == '' ? '' : 'show' + type;
-      setTimeout(function () {
-        _this.oldIndex = null;
-        _this.theIndex = null;
-        _this.subState = _this.typeClass == 'goods' ? '' : _this.subState;
-      }, 200);
+      if (type == "goods") {
+        this.subState = 1;
+
+      } else if (type == "shop") {
+        this.subState = 2;
+      }
     },
     //控制左滑删除效果-begin
     touchStart: function touchStart(index, event) {
@@ -146,7 +216,7 @@
       //初始坐标
       this.initXY = [event.touches[0].pageX, event.touches[0].pageY];
     },
-    touchMove: function touchMove(index, event) {var _this2 = this;
+    touchMove: function touchMove(index, event) {var _this = this;
       //多点触控不触发
       if (event.touches.length > 1) {
         this.isStop = true;
@@ -173,7 +243,7 @@
           this.theIndex = null;
           this.isStop = true;
           setTimeout(function () {
-            _this2.oldIndex = null;
+            _this.oldIndex = null;
           }, 150);
         }
       }
@@ -243,7 +313,7 @@ var render = function() {
             }
           }
         },
-        [_vm._v("商品(" + _vm._s(_vm.goodsList.length) + ")")]
+        [_vm._v("已评价")]
       ),
       _c(
         "view",
@@ -256,168 +326,150 @@ var render = function() {
             }
           }
         },
-        [_vm._v("店铺(" + _vm._s(_vm.shopList.length) + ")")]
+        [_vm._v("待评价")]
       ),
       _c("view", { staticClass: "border", class: _vm.typeClass })
     ]),
     _c("view", { staticClass: "place" }),
-    _c("view", { staticClass: "list" }, [
+    _c("view", { staticClass: "keep-main" }, [
       _c(
         "view",
-        { staticClass: "sub-list goods", class: _vm.subState },
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.subState == 1,
+              expression: "subState==1"
+            }
+          ],
+          staticClass: "list"
+        },
         [
-          _vm.goodsList.length == 0
-            ? _c("view", { staticClass: "tis" }, [_vm._v("没有数据~")])
-            : _vm._e(),
-          _vm._l(_vm.goodsList, function(row, index) {
-            return _c("view", { key: index, staticClass: "row" }, [
-              _c(
-                "view",
-                {
-                  staticClass: "menu",
-                  attrs: { eventid: "2ec82c3c-2-" + index },
-                  on: {
-                    tap: function($event) {
-                      $event.stopPropagation()
-                      _vm.deleteCoupon(row.id, _vm.goodsList)
-                    }
-                  }
-                },
-                [_c("view", { staticClass: "icon shanchu" })]
-              ),
-              _c(
-                "view",
-                {
-                  staticClass: "carrier",
-                  class: [
-                    _vm.typeClass == "goods"
-                      ? _vm.theIndex == index
-                        ? "open"
-                        : _vm.oldIndex == index
-                        ? "close"
-                        : ""
-                      : ""
-                  ],
-                  attrs: { eventid: "2ec82c3c-4-" + index },
-                  on: {
-                    touchstart: function($event) {
-                      _vm.touchStart(index, $event)
-                    },
-                    touchmove: function($event) {
-                      _vm.touchMove(index, $event)
-                    },
-                    touchend: function($event) {
-                      _vm.touchEnd(index, $event)
-                    }
-                  }
-                },
-                [
-                  _c(
-                    "view",
-                    {
-                      staticClass: "goods-info",
-                      attrs: { eventid: "2ec82c3c-3-" + index },
-                      on: {
-                        tap: function($event) {
-                          _vm.toGoods(row)
-                        }
-                      }
-                    },
-                    [
-                      _c("view", { staticClass: "img" }, [
-                        _c("image", { attrs: { src: row.img } })
-                      ]),
-                      _c("view", { staticClass: "info" }, [
-                        _c("view", { staticClass: "title" }, [
-                          _vm._v(_vm._s(row.name))
-                        ]),
-                        _c("view", { staticClass: "price-number" }, [
-                          _c("view", { staticClass: "keep-num" }, [
-                            _vm._v("905人收藏")
-                          ]),
-                          _c("view", { staticClass: "price" }, [
-                            _vm._v("￥" + _vm._s(row.price))
-                          ])
-                        ])
-                      ])
-                    ]
-                  )
-                ]
-              )
-            ])
-          })
-        ],
-        2
+          _vm._m(0),
+          _c("view", { staticClass: "list-two" }, [
+            _vm._v(
+              "非常非常棒，厨房里的好帮手，喜欢！非常非常棒，厨房里的好帮手，喜欢！非常非常棒，厨房里的好帮手，喜欢！"
+            )
+          ]),
+          _vm._m(1),
+          _vm._m(2)
+        ]
       ),
       _c(
         "view",
-        { staticClass: "sub-list shop", class: _vm.subState },
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.subState == 2,
+              expression: "subState==2"
+            }
+          ],
+          staticClass: "do-evaluate"
+        },
         [
-          _vm.shopList.length == 0
-            ? _c("view", { staticClass: "tis" }, [_vm._v("没有数据~")])
-            : _vm._e(),
-          _vm._l(_vm.shopList, function(row, index) {
-            return _c("view", { key: index, staticClass: "row" }, [
-              _c(
-                "view",
-                {
-                  staticClass: "menu",
-                  attrs: { eventid: "2ec82c3c-5-" + index },
-                  on: {
-                    tap: function($event) {
-                      $event.stopPropagation()
-                      _vm.deleteCoupon(row.id, _vm.shopList)
-                    }
-                  }
-                },
-                [_c("view", { staticClass: "icon shanchu" })]
-              ),
-              _c(
-                "view",
-                {
-                  staticClass: "carrier",
-                  class: [
-                    _vm.typeClass == "shop"
-                      ? _vm.theIndex == index
-                        ? "open"
-                        : _vm.oldIndex == index
-                        ? "close"
-                        : ""
-                      : ""
-                  ],
-                  attrs: { eventid: "2ec82c3c-6-" + index },
-                  on: {
-                    touchstart: function($event) {
-                      _vm.touchStart(index, $event)
-                    },
-                    touchmove: function($event) {
-                      _vm.touchMove(index, $event)
-                    },
-                    touchend: function($event) {
-                      _vm.touchEnd(index, $event)
-                    }
-                  }
-                },
-                [
-                  _c("view", { staticClass: "left" }, [
-                    _c("image", { attrs: { src: row.img } })
-                  ]),
-                  _c("view", { staticClass: "right" }, [
-                    _c("view", { staticClass: "name" }, [
-                      _vm._v(_vm._s(row.name))
-                    ])
-                  ])
-                ]
-              )
-            ])
-          })
-        ],
-        2
+          _vm._m(3),
+          _vm._m(4),
+          _c(
+            "view",
+            {
+              staticClass: "do-evaluate-three",
+              attrs: { eventid: "2ec82c3c-2" },
+              on: {
+                click: function($event) {
+                  _vm.sayFeel()
+                }
+              }
+            },
+            [_c("text", [_vm._v("去评价")])]
+          )
+        ]
       )
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("view", { staticClass: "list-one" }, [
+      _c("view", { staticClass: "one-left" }, [
+        _c("image", {
+          attrs: { src: "../../../static/img/category/banner.jpg" }
+        }),
+        _c("view", { staticClass: "evaluate" }, [
+          _c("text", [_vm._v("姓名")]),
+          _c("text", [_vm._v("星星")])
+        ])
+      ]),
+      _c("view", { staticClass: "one-right" }, [_vm._v("222222--2222   12:00")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("view", { staticClass: "list-three" }, [
+      _c("image", { attrs: { src: "../../../static/img/category/banner.jpg" } })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("view", { staticClass: "list-four" }, [
+      _c("view", { staticClass: "four-left" }, [
+        _c("image", {
+          attrs: { src: "../../../static/img/category/banner.jpg" }
+        })
+      ]),
+      _c("view", { staticClass: "four-right" }, [
+        _c("text", [
+          _vm._v(
+            "非常非常棒，厨房里的好帮手，喜欢！非常非常棒，厨房里的好帮手，喜欢！非常非常棒，厨房里的好帮手，喜欢！"
+          )
+        ]),
+        _c("text", [_vm._v("价格")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("view", { staticClass: "do-evaluate-one" }, [
+      _c("view", { staticClass: "evaluate-left" }, [
+        _vm._v("订单编号：2344444444")
+      ]),
+      _c("view", { staticClass: "evaluate-right" }, [_vm._v("已完成")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("view", { staticClass: "do-evaluate-two" }, [
+      _c("image", {
+        attrs: { src: "../../../static/img/category/banner.jpg" }
+      }),
+      _c("view", { staticClass: "goods-dec" }, [
+        _c("text", { staticClass: "goods-title" }, [
+          _vm._v("国产红心火龙果   4个装中果  单果约300~400g 新鲜水果")
+        ]),
+        _c("view", { staticClass: "goods-price" }, [
+          _c("text", [_vm._v("共2件产品  合计：")]),
+          _c("view", { staticClass: "total-price" }, [
+            _c("text", [_vm._v("￥")]),
+            _c("text", [_vm._v("108")])
+          ])
+        ])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 

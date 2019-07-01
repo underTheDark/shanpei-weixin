@@ -17,13 +17,15 @@
     "pages/msg/chat/chat",
     "pages/user/coupon/coupon",
     "pages/user/keep/keep",
+    "pages/user/sayFeel/sayFeel",
     "pages/user/address/address",
     "pages/user/address/edit/edit",
     "pages/user/deposit/deposit",
     "pages/pay/payment/payment",
     "pages/pay/success/success",
     "pages/goods/ratings/ratings",
-    "pages/user/order_list/logistics/logistics"
+    "pages/user/order_list/logistics/logistics",
+    "pages/user/keep/sayFeel/sayFeel"
   ],
   "subPackages": [],
   "window": {
@@ -67,6 +69,5 @@
       }
     ]
   },
-  "permission": {},
-  "sitemapLocation": "sitemap.json"
+  "permission": {}
 }

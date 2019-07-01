@@ -1,3 +1,4 @@
+
 <template>
 	<view>
 		<view class="header" :style="{position:headerPosition,top:headerTop}">
