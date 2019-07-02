@@ -81,55 +81,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 {
   data: function data() {
     return {
@@ -178,7 +129,7 @@
   methods: {
     sayFeel: function sayFeel() {
       uni.navigateTo({
-        url: "/pages/user/sayFeel/sayFeel" });
+        url: "/pages/user/keep/sayFeel/sayFeel" });
 
     },
     switchType: function switchType(type) {
@@ -204,68 +155,7 @@
         this.subState = 2;
       }
     },
-    //控制左滑删除效果-begin
-    touchStart: function touchStart(index, event) {
-      //多点触控不触发
-      if (event.touches.length > 1) {
-        this.isStop = true;
-        return;
-      }
-      this.oldIndex = this.theIndex;
-      this.theIndex = null;
-      //初始坐标
-      this.initXY = [event.touches[0].pageX, event.touches[0].pageY];
-    },
-    touchMove: function touchMove(index, event) {var _this = this;
-      //多点触控不触发
-      if (event.touches.length > 1) {
-        this.isStop = true;
-        return;
-      }
-      var moveX = event.touches[0].pageX - this.initXY[0];
-      var moveY = event.touches[0].pageY - this.initXY[1];
 
-      if (this.isStop || Math.abs(moveX) < 5) {
-        return;
-      }
-      if (Math.abs(moveY) > Math.abs(moveX)) {
-        // 竖向滑动-不触发左滑效果
-        this.isStop = true;
-        return;
-      }
-
-      if (moveX < 0) {
-        this.theIndex = index;
-        this.isStop = true;
-      } else if (moveX > 0) {
-        if (this.theIndex != null && this.oldIndex == this.theIndex) {
-          this.oldIndex = index;
-          this.theIndex = null;
-          this.isStop = true;
-          setTimeout(function () {
-            _this.oldIndex = null;
-          }, 150);
-        }
-      }
-    },
-
-    touchEnd: function touchEnd(index, $event) {
-      //解除禁止触发状态
-      this.isStop = false;
-    },
-
-    //删除商品
-    deleteCoupon: function deleteCoupon(id, List) {
-      var len = List.length;
-      for (var i = 0; i < len; i++) {
-        if (id == List[i].id) {
-          List.splice(i, 1);
-          break;
-        }
-      }
-      this.oldIndex = null;
-      this.theIndex = null;
-    },
 
     discard: function discard() {
       //丢弃

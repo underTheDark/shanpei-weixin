@@ -1,2 +1,0 @@
-<import src="./sayFeel.vue.wxml" />
-    <template is="68263fb4" data="{{ ...$root['0'], $root }}"/>

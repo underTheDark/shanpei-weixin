@@ -3,15 +3,15 @@
 		<view class="content">
 			<view class="row">
 				<view class="nominal">
-					收件人
+					收货人
 				</view>
 				<view class="input">
-					<input placeholder="请输入收件人姓名" type="text" v-model="name" />
+					<input placeholder="请输入收件人" type="text" v-model="name" />
 				</view>
 			</view>
 			<view class="row">
 				<view class="nominal">
-					电话号码
+					手机号
 				</view>
 				<view class="input">
 					<input placeholder="请输入收件人电话号码" type="text" v-model="tel" />
@@ -19,7 +19,7 @@
 			</view>
 			<view class="row">
 				<view class="nominal">
-					所在地区
+					地区
 				</view>
 				<view class="input" @tap="chooseCity">
 					{{region.label}}
@@ -28,23 +28,28 @@
 			</view>
 			<view class="row">
 				<view class="nominal">
+					街道
+				</view>
+				<view class="input" @tap="chooseCity">
+					{{region.label}}
+				</view>
+				
+			</view>
+			<view class="row detail-add">
+				<view class="nominal">
 					详细地址
 				</view>
-				<view class="input">
-					<textarea v-model="detailed" auto-height="true" placeholder="输入详细地址"></textarea>
+				<view class="input add-content">
+					<textarea  v-model="detailed" auto-height="true" placeholder="输入详细地址"></textarea>
 				</view>
 			</view>
-			<view class="row">
+			<view class="add-border"></view>
+			<view class="row last-row">
 				<view class="nominal">
 					设置默认地址
 				</view>
-				<view class="input switch">
-					<switch color="#f06c7a" :checked="isDefault" @change=isDefaultChange />
-				</view>
-			</view>
-			<view class="row" v-if="editType=='edit'" @tap="del">
-				<view class="del">
-					删除收货地址
+				<view class="input switch" >
+					<switch color="rgba(20,204,33,1)" :checked="isDefault" @change=isDefaultChange />
 				</view>
 			</view>
 		</view>
@@ -90,26 +95,7 @@
 			isDefaultChange(e){
 				this.isDefault = e.detail.value;
 			},
-			del(){
-				uni.showModal({
-					title: '删除提示',
-					content: '你将删除这个收货地址',
-					success: (res)=>{
-						if (res.confirm) {
-							uni.setStorage({
-								key:'delAddress',
-								data:{id:this.id},
-								success() {
-									uni.navigateBack();
-								}
-							})
-						} else if (res.cancel) {
-							console.log('用户点击取消');
-						}
-					}
-				});
-				
-			},
+			
 			save(){
 				let data={"name":this.name,"head":this.name.substr(0,1),"tel":this.tel,"address":{"region":this.region,"detailed":this.detailed},"isDefault":this.isDefault}
 				if(this.editType=='edit'){
@@ -189,18 +175,19 @@
 			display: flex;
 		}
 		position: fixed;
-		bottom: 0;
+		bottom: 60upx;
 		width: 100%;
 		height: 120upx;
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		.btn{
-			box-shadow: 0upx 5upx 10upx rgba(0,0,0,0.4);
-			width: 70%;
+			
+			width: 90%;
 			height: 80upx;
-			border-radius: 80upx;
-			background-color: #f06c7a;
+			
+			background:rgba(20,204,33,1);
+
 			color: #fff;
 			justify-content: center;
 			align-items: center;
@@ -217,13 +204,20 @@
 	.content{
 		display: flex;
 		flex-wrap: wrap;
+		background:white;
 		view{
 			display: flex;
 		}
+		.add-border{
+			width:100%;
+			height:0;
+			border-bottom: 20upx solid rgba(247,247,247,1);
+		}
 		.row{
-			width: 94%;
+			width: 96%;
+			display: flex;
 			
-			margin: 0 3%;
+			margin: 0 2%;
 			border-top: solid 1upx #eee;
 			.nominal{
 				width: 30%;
@@ -233,29 +227,45 @@
 				align-items: center;
 			}
 			.input{
-				width: 70%;
-				padding: 20upx 0;
+				
+				padding-bottom:30upx;
 				align-items: center;
 				font-size: 30upx;
 				&.switch{
 					justify-content: flex-end;
 				}
 				.textarea{
-					margin: 20upx 0;
+					
 					min-height: 120upx;
+					height:360upx;
 				}
 			}
-			.del{
-				width: 100%;
-				height: 100upx;
-				justify-content: center;
-				align-items: center;
-				font-size: 36upx;
-				color: #f06c7a;
-				background-color: rgba(255,0,0,0.05);
-				border-bottom: solid 1upx #eee;
+			
+		}
+		.last-row{
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding:20upx 0;
+		}
+	.detail-add{
+		display: flex;
+		flex-direction: column;
+		border:none;
+		.add-content{
+			height:180upx;
+			textarea{
+				height:180upx;
+				
+				
 			}
 		}
+
+		.nominal{
+			
+		}
 	}
+	
+}
 	
 </style>

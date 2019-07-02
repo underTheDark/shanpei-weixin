@@ -15,9 +15,10 @@
     "pages/user/myQR/myQR",
     "pages/msg/msg",
     "pages/msg/chat/chat",
-    "pages/user/coupon/coupon",
     "pages/user/keep/keep",
-    "pages/user/sayFeel/sayFeel",
+    "pages/user/keep/sayFeel/sayFeel",
+    "pages/user/credit/credit",
+    "pages/user/collect/collect",
     "pages/user/address/address",
     "pages/user/address/edit/edit",
     "pages/user/deposit/deposit",
@@ -25,7 +26,9 @@
     "pages/pay/success/success",
     "pages/goods/ratings/ratings",
     "pages/user/order_list/logistics/logistics",
-    "pages/user/keep/sayFeel/sayFeel"
+    "pages/user/service/service",
+    "pages/user/credit/credit",
+    "pages/user/collect/collect"
   ],
   "subPackages": [],
   "window": {
@@ -69,5 +72,6 @@
       }
     ]
   },
-  "permission": {}
+  "permission": {},
+  "sitemapLocation": "sitemap.json"
 }

@@ -123,7 +123,25 @@
 				"backgroundColorTop":"#f3f3f3",
 				"backgroundColorBottom":"#ffffff"
 			}
-        }
+        },
+		{
+		    "path" : "pages/detail/detail",
+		    "style" : {
+				"navigationBarTitleText":"订单详情",
+				"navigationBarBackgroundColor":"#f8f8f8",
+				"backgroundColorTop":"#f3f3f3",
+				"backgroundColorBottom":"#ffffff"
+			}
+		},
+		{
+			"path" : "pages/viewsend/viewsend",
+			"style" : {
+				"navigationBarTitleText":"查看物流",
+				"navigationBarBackgroundColor":"#f8f8f8",
+				"backgroundColorTop":"#f3f3f3",
+				"backgroundColorBottom":"#ffffff"
+			}
+		}
         ,{
             "path" : "pages/user/setting/setting",
             "style" : {
@@ -264,21 +282,49 @@
 				"backgroundColorBottom":"#ffffff"
 			}
         }
+       
         ,{
-            "path" : "pages/user/order_list/logistics/logistics",
-            "style" : {}
-        }
-        
-        ,{
-            "path" : "pages/user/service/service",
-            "style" : {}
-        }
-        ,{
-            "path" : "pages/user/credit/credit",
-            "style" : {}
+            "path" : "pages/confirm/confirm",
+               "style" : {
+            	"navigationBarTitleText":"确认订单",
+            	"enablePullDownRefresh": true,
+            	"onReachBottomDistance":50,
+            	"backgroundColorTop":"#ffffff",
+            	"backgroundColorBottom":"#ffffff"
+            }
         }
         ,{
-            "path" : "pages/user/collect/collect",
+            "path" : "pages/serType/serType",
+                "style" : {
+            	"navigationBarTitleText":"选择服务类型",
+            	"enablePullDownRefresh": true,
+            	"onReachBottomDistance":50,
+            	"backgroundColorTop":"#ffffff",
+            	"backgroundColorBottom":"#ffffff"
+            }
+        }
+        ,{
+            "path" : "pages/applyReturn/applyReturn",
+                 "style" : {
+            	"navigationBarTitleText":"申请退款",
+            	"enablePullDownRefresh": true,
+            	"onReachBottomDistance":50,
+            	"backgroundColorTop":"#ffffff",
+            	"backgroundColorBottom":"#ffffff"
+            }
+        }
+        ,{
+            "path" : "pages/applyChange/applyChange",
+                 "style" : {
+            	"navigationBarTitleText":"申请换货",
+            	"enablePullDownRefresh": true,
+            	"onReachBottomDistance":50,
+            	"backgroundColorTop":"#ffffff",
+            	"backgroundColorBottom":"#ffffff"
+            }
+        }
+        ,{
+            "path" : "pages/reSelect/reSelect",
             "style" : {}
         }
     ],

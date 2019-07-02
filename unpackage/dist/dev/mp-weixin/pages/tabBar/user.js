@@ -155,17 +155,18 @@
         img: '../../static/img/user/point.png' },
 
       {
-        url: '../user/coupon/coupon',
+        url: '../user/credit/credit',
         text: '我的积分',
         img: '../../static/img/user/quan.png' },
 
+
       {
-        url: '',
+        url: '../user/collect/collect',
         text: '我的收藏',
         img: '../../static/img/user/renw.png' },
 
       {
-        url: '',
+        url: '../user/service/service',
         text: '我的售后',
         img: '../../static/img/user/momey.png' },
 

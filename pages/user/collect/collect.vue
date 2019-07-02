@@ -6,7 +6,7 @@
 				<view class="tis" v-if="goodsList.length==0">没有数据~</view>
 
 				<view class="row" v-for="(row,index) in goodsList" :key="index">
-					<uni-swipe-action @click="bindClick" :options="options">
+					<uni-swipe-action @click="bindClick(index)" :options="options">
 						<!-- <view class="menu" @tap.stop="deleteCoupon(row.id,goodsList)">
 						<view class="icon shanchu"></view>
 					</view> -->
@@ -89,6 +89,8 @@
 		methods: {
 			bindClick(options){
 				console.log(options)
+				this.goodsList=this.goodsList.splice(options,2)
+				console.log(this.goodsList)
 			},
 			//控制左滑删除效果-begin
 			touchStart(index, event) {
@@ -176,7 +178,7 @@
 			.img {
 				width: 222upx;
 				height: 222upx;
-
+                display: inline-block;
 				image {
 					width: 222upx;
 					height: 222upx;
@@ -187,12 +189,15 @@
 				margin-left: 20upx;
 				display: flex;
 				flex-direction: column;
-
+                 flex-wrap: wrap;
 				.title {
 					font-size: 28upx;
 					font-family: PingFang-SC-Medium;
 					font-weight: 500;
 					color: rgba(16, 16, 16, 1);
+					display: flex;
+					flex-wrap: wrap;
+					word-wrap: break-word;
 				}
 
 				.price-compare {

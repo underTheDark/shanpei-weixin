@@ -1,8 +1,82 @@
 <template>
-	<view>
-		<view class="content">
-			<view class="list">
-				<view class="row" v-for="(row,index) in addressList" :key="index" @tap="select(row)">
+	<view id="address">
+
+		<view class="list">
+			<view v-if="this.addressList.length == 0" class="noAdd">
+				<view class="img">
+					<image src="../../../static/img/add-position.png"></image>
+				</view>
+
+				<text>赶快去添加收货地址吧！</text>
+			</view>
+			<view class="address-title">
+				<view :class="{on:typeClass=='home'}" @tap="switchType('home')">常用地址管理</view>
+				<view :class="{on:typeClass=='self'}" @tap="switchType('self')">常用自提点管理</view>
+			</view>
+			<!-- 常用地址管理 -->
+			<view v-show="subState==1" class="row" v-for="(row,index) in addressList" :key="index" @tap="select(row)">
+				<view class="row-top">
+					<view class="top-one">
+						<text>姓名</text>
+						<text>手机号</text>
+					</view>
+					<view class="top-two">
+
+						河南省 郑州市 高新技术开发区 科学大道 广告产业园9号楼
+						13楼1317室
+
+					</view>
+				</view>
+				<view class="row-bottom">
+					<view class="left">
+						<image src="../../../static/img/address/duihao.png"></image>
+						<view>其他地址</view>
+					</view>
+					<view class="right">
+						<view class="jianju"  @tap.stop="edit(row)">
+							<image src="../../../static/img/address/write.png"></image>
+							<view>编辑</view>
+						</view>
+						<view>
+							<image src="../../../static/img/address/delete.png"></image>
+							<view>删除</view>
+						</view>
+					</view>
+				</view>
+			</view>
+			<!-- 常用自提点管理 -->
+			<view v-show="subState==2" class="row" v-for="(row,index) in addressList" :key="index" @tap="select(row)">
+				<view class="row-top">
+					<view class="get-position">大城小爱超市</view>
+					<view class="top-one">
+						<text>姓名</text>
+						<text>手机号</text>
+					</view>
+					<view class="top-two">
+
+						河南省 郑州市 高新技术开发区 科学大道 广告产业园9号楼
+						13楼1317室
+
+					</view>
+				</view>
+				<view class="row-bottom">
+					<view class="left">
+						<image src="../../../static/img/address/duihao.png"></image>
+						<view>其他地址</view>
+					</view>
+					<view class="right">
+						<view class="jianju" @tap.stop="edit(row)">
+							<image src="../../../static/img/address/write.png"></image>
+							<view>编辑</view>
+						</view>
+						<view @tap.stop="clear(row)">
+							<image src="../../../static/img/address/delete.png"></image>
+							<view>删除</view>
+						</view>
+					</view>
+				</view>
+			</view>
+			<!-- <view class="row" v-for="(row,index) in addressList" :key="index" @tap="select(row)">
 					<view class="left">
 						<view class="head">
 							{{row.head}}
@@ -25,9 +99,9 @@
 							
 						</view>
 					</view>
-				</view>
-			</view>
+				</view> -->
 		</view>
+
 		<view class="add">
 			<view class="btn" @tap="add">
 				<view class="icon tianjia"></view>新增地址
@@ -39,88 +113,158 @@
 	export default {
 		data() {
 			return {
-				isSelect:false,
-				addressList:[
-					{id:1,name:"大黑哥",head:"大",tel:"18816881688",address:{region:{"label":"广东省-深圳市-福田区","value":[18,2,1],"cityCode":"440304"},detailed:'深南大道1111号无名摩登大厦6楼A2'},isDefault:true},
-					{id:2,name:"大黑哥",head:"大",tel:"15812341234",address:{region:{"label":"广东省-深圳市-福田区","value":[18,2,1],"cityCode":"440304"},detailed:'深北小道2222号有名公寓502'},isDefault:false},
-					{id:3,name:"老大哥",head:"老",tel:"18155467897",address:{region:{"label":"广东省-深圳市-福田区","value":[18,2,1],"cityCode":"440304"},detailed:'深南大道1111号无名摩登大厦6楼A2'},isDefault:false},
-					{id:4,name:"王小妹",head:"王",tel:"13425654895",address:{region:{"label":"广东省-深圳市-福田区","value":[18,2,1],"cityCode":"440304"},detailed:'深南大道1111号无名摩登大厦6楼A2'},isDefault:false},
+				typeClass: 'home',
+				subState: 1,
+				isSelect: false,
+				addressList: [{
+						id: 1,
+						name: "大黑哥",
+						head: "大",
+						tel: "18816881688",
+						address: {
+							region: {
+								"label": "广东省-深圳市-福田区",
+								"value": [18, 2, 1],
+								"cityCode": "440304"
+							},
+							detailed: '深南大道1111号无名摩登大厦6楼A2'
+						},
+						isDefault: true
+					},
+					{
+						id: 2,
+						name: "大黑哥",
+						head: "大",
+						tel: "15812341234",
+						address: {
+							region: {
+								"label": "广东省-深圳市-福田区",
+								"value": [18, 2, 1],
+								"cityCode": "440304"
+							},
+							detailed: '深北小道2222号有名公寓502'
+						},
+						isDefault: false
+					},
+					{
+						id: 3,
+						name: "老大哥",
+						head: "老",
+						tel: "18155467897",
+						address: {
+							region: {
+								"label": "广东省-深圳市-福田区",
+								"value": [18, 2, 1],
+								"cityCode": "440304"
+							},
+							detailed: '深南大道1111号无名摩登大厦6楼A2'
+						},
+						isDefault: false
+					},
+					{
+						id: 4,
+						name: "王小妹",
+						head: "王",
+						tel: "13425654895",
+						address: {
+							region: {
+								"label": "广东省-深圳市-福田区",
+								"value": [18, 2, 1],
+								"cityCode": "440304"
+							},
+							detailed: '深南大道1111号无名摩登大厦6楼A2'
+						},
+						isDefault: false
+					},
 				]
 			};
 		},
 		onShow() {
-			
+
 			uni.getStorage({
-				key:'delAddress',
+				key: 'delAddress',
 				success: (e) => {
 					let len = this.addressList.length;
-					if(e.data.hasOwnProperty('id')){
-						for(let i=0;i<len;i++){
-							if(this.addressList[i].id==e.data.id){
-								this.addressList.splice(i,1);
+					if (e.data.hasOwnProperty('id')) {
+						for (let i = 0; i < len; i++) {
+							if (this.addressList[i].id == e.data.id) {
+								this.addressList.splice(i, 1);
 								break;
 							}
 						}
 					}
 					uni.removeStorage({
-						key:'delAddress'
+						key: 'delAddress'
 					})
 				}
 			})
 			uni.getStorage({
-				key:'saveAddress',
+				key: 'saveAddress',
 				success: (e) => {
 					let len = this.addressList.length;
-					if(e.data.hasOwnProperty('id')){
-						for(let i=0;i<len;i++){
-							if(this.addressList[i].id==e.data.id){
-								this.addressList.splice(i,1,e.data);
+					if (e.data.hasOwnProperty('id')) {
+						for (let i = 0; i < len; i++) {
+							if (this.addressList[i].id == e.data.id) {
+								this.addressList.splice(i, 1, e.data);
 								break;
 							}
 						}
-					}else{
-						let lastid = this.addressList[len-1];
+					} else {
+						let lastid = this.addressList[len - 1];
 						lastid++;
 						e.data.id = lastid;
 						this.addressList.push(e.data);
 					}
 					uni.removeStorage({
-						key:'saveAddress'
+						key: 'saveAddress'
 					})
 				}
 			})
 		},
 		onLoad(e) {
-			if(e.type=='select'){
+			if (e.type == 'select') {
 				this.isSelect = true;
 			}
 		},
-		methods:{
-			edit(row){
+		methods: {
+			switchType(type) {
+
+				this.typeClass = type;
+				if (type == "home") {
+					this.subState = 1;
+
+				} else if (type == "self") {
+					this.subState = 2;
+				}
+			},
+			edit(row) {
 				uni.setStorage({
-					key:'address',
-					data:row,
+					key: 'address',
+					data: row,
 					success() {
 						uni.navigateTo({
-							url:"edit/edit?type=edit"
+							url: "/pages/user/address/edit/edit?type=edit"
 						})
 					}
 				});
+
+			},
+			clear(row){
 				
 			},
-			add(){
+			add() {
 				uni.navigateTo({
-					url:"edit/edit?type=add"
+					url: "edit/edit?type=add"
 				})
 			},
-			select(row){
+			select(row) {
 				//是否需要返回地址(从订单确认页跳过来选收货地址)
-				if(!this.isSelect){
-					return ;
+				if (!this.isSelect) {
+					return;
 				}
 				uni.setStorage({
-					key:'selectAddress',
-					data:row,
+					key: 'selectAddress',
+					data: row,
 					success() {
 						uni.navigateBack();
 					}
@@ -131,114 +275,191 @@
 </script>
 
 <style lang="scss">
-view{
-	display: flex;
-}
-@font-face {font-family:"HMfont-home";src:url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAAMIAAsAAAAABvwAAAK8AAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCDBgqBSIFAATYCJAMMCwgABCAFhG0HVBskBsiusClj9ljNiEIaBdizs389YOCARVDt99mzu+8dMMpzQEn5KEAZRez+yRDbSDIixkYo1tF/+vv5OxYJFk2VghXWbbzzPn8D/OMG3vvXGTU90ZFhOrNJROZwCRGjj/Iry36wAbfSxBsuNGggeG9sMbJKDd7xg8vpr4ACmWdZLnMtGxMwwUD3wCiywi3oDWMXuITzBNpNc4BP3j5/Q1thTQvE1SQiaOd8isKSrUJds7aIVyqt6XECAF6Gj49/sBcUSZVZc09duQng/CfPcXTVrIs+gj+fBWwTGZsghbhcGzurJhgZ1S6rt2fXipDmCv5PyNMltf2HRxJEzSrsBKtIk9wU32WS+E1w14UZ1HFiG+QkJg3ODWmyn5/20eOvTz5LnR6l8aWDT5Sn3wLtYlfNe7RIik/fN961C3Vftf6YZLr5ZMcjU/LExqD9u3LzvKE8KQtBGAp9ilm1XbAK2m83TdlozEvQ0Zbrh8HBMrKDB03MjRwHaJKP2f5jf+NfDvML4f+tHQX8+EJvkwL1z9Mqwfi/kd+zq+hCS5+LynN5piObGRlNaNedmrJc/R7jVUO3agmtOT7zJy32WkjWahGihbQJlQ5bklpT7ENotyG3ucOAjpoobVi3BxB6HSDp9h2yXne0kDSoDPtBrTdQaHc61D07LEezm1Im4wBLc2z6UoaO0bpR8SdHLifNCkPKL+s4CaLX5Skm77hknWNBdxLt9SzEmkqBWXAZ57lgSyVl37YaZqMzt7tWd6OtshTQdYJixLAAKplDTT5RCv3Bplu6/ycWcXJEW+pqrL+YGkuGR14unh7onazsVXcv13RNRPb0mBCqUaKAssDCcjsmUKt+VIr5zJbGiMjIGTfqV+sr21pfUXxALmvCmpMjRY5i9G5CZepynIyYZOr+sksyR2W0UHLiChIrRmXfA0E') format('woff2');}
+	view {
+		display: flex;
+	}
+
+	@font-face {
+		font-family: "HMfont-home";
+		src: url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAAMIAAsAAAAABvwAAAK8AAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCDBgqBSIFAATYCJAMMCwgABCAFhG0HVBskBsiusClj9ljNiEIaBdizs389YOCARVDt99mzu+8dMMpzQEn5KEAZRez+yRDbSDIixkYo1tF/+vv5OxYJFk2VghXWbbzzPn8D/OMG3vvXGTU90ZFhOrNJROZwCRGjj/Iry36wAbfSxBsuNGggeG9sMbJKDd7xg8vpr4ACmWdZLnMtGxMwwUD3wCiywi3oDWMXuITzBNpNc4BP3j5/Q1thTQvE1SQiaOd8isKSrUJds7aIVyqt6XECAF6Gj49/sBcUSZVZc09duQng/CfPcXTVrIs+gj+fBWwTGZsghbhcGzurJhgZ1S6rt2fXipDmCv5PyNMltf2HRxJEzSrsBKtIk9wU32WS+E1w14UZ1HFiG+QkJg3ODWmyn5/20eOvTz5LnR6l8aWDT5Sn3wLtYlfNe7RIik/fN961C3Vftf6YZLr5ZMcjU/LExqD9u3LzvKE8KQtBGAp9ilm1XbAK2m83TdlozEvQ0Zbrh8HBMrKDB03MjRwHaJKP2f5jf+NfDvML4f+tHQX8+EJvkwL1z9Mqwfi/kd+zq+hCS5+LynN5piObGRlNaNedmrJc/R7jVUO3agmtOT7zJy32WkjWahGihbQJlQ5bklpT7ENotyG3ucOAjpoobVi3BxB6HSDp9h2yXne0kDSoDPtBrTdQaHc61D07LEezm1Im4wBLc2z6UoaO0bpR8SdHLifNCkPKL+s4CaLX5Skm77hknWNBdxLt9SzEmkqBWXAZ57lgSyVl37YaZqMzt7tWd6OtshTQdYJixLAAKplDTT5RCv3Bplu6/ycWcXJEW+pqrL+YGkuGR14unh7onazsVXcv13RNRPb0mBCqUaKAssDCcjsmUKt+VIr5zJbGiMjIGTfqV+sr21pfUXxALmvCmpMjRY5i9G5CZepynIyYZOr+sksyR2W0UHLiChIrRmXfA0E') format('woff2');
+	}
+
 	.icon {
-		font-family:"HMfont-home" !important;
-		font-size:60upx;
-		font-style:normal;
-		color:#000000;
+		font-family: "HMfont-home" !important;
+		font-size: 60upx;
+		font-style: normal;
+		color: #000000;
+
 		&.bianji {
-			&:before{content:"\e61b";}
+			&:before {
+				content: "\e61b";
+			}
 		}
+
 		&.tianjia {
-			&:before{content:"\e81a";}
+			&:before {
+				content: "\e81a";
+			}
+
+			margin-left:20upx;
 		}
 	}
-	.add{
+
+	#address .on {
+
+		border-bottom: 5upx solid rgba(20, 204, 33, 1);
+		font-weight: bold;
+		color: rgba(20, 204, 33, 1);
+	}
+
+	.add {
 		position: fixed;
-		bottom: 0;
+		bottom: 50upx;
 		width: 100%;
 		height: 120upx;
 		justify-content: center;
 		align-items: center;
-		.btn{
-			box-shadow: 0upx 5upx 10upx rgba(0,0,0,0.4);
-			width: 70%;
+
+		.btn {
+
+			width: 90%;
 			height: 80upx;
-			border-radius: 80upx;
-			background-color: #f06c7a;
+
+			background: rgba(22, 208, 255, 0.15);
 			color: #fff;
 			justify-content: center;
 			align-items: center;
-			.icon{
+
+			.icon {
 				height: 80upx;
 				color: #fff;
 				font-size: 30upx;
 				justify-content: center;
 				align-items: center;
 			}
+
 			font-size: 30upx;
 		}
 	}
-	.list{
-		flex-wrap: wrap;
-		.row{
-			width: 96%;
-			padding: 20upx 2%;
-			.left{
-				width: 90upx;
-				flex-shrink: 0;
+
+	#address {
+		width: 100%;
+		height: 100%;
+	}
+
+	.list {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+
+
+		.noAdd {
+			padding-top: 50%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: column;
+
+			image {
+				width: 119upx;
+				height: 141upx;
+				margin-bottom: 60upx;
+
+
+			}
+
+			text {
+				font-size: 28upx;
+				color: rgba(102, 102, 102, 1);
+			}
+		}
+
+		.address-title {
+			display: flex;
+			border-bottom: 20upx solid rgba(245, 245, 245, 1);
+			justify-content: space-around;
+			align-items: center;
+
+			view {
+				color: rgba(51, 51, 51, 1);
+				font-size: 30upx;
+				padding: 20upx 0;
+
+
+			}
+		}
+    .row{
+		display:flex;
+		flex-direction: column;
+		font-size: 28upx;
+		border-bottom: 20upx solid rgba(245, 245, 245, 1);
+		.row-top{
+			display: flex;
+			flex-direction: column;
+			padding:20upx 20upx 60upx;
+			
+			border-bottom: 1px solid #cecece;
+			.get-position{
+				font-size: 32upx;
+				color:rgba(51,51,51,1);
+                font-weight: bold;
+			}
+			.top-one{
+				display: flex;
 				align-items: center;
-				.head{
-					width: 70upx;
-					height: 70upx;
-					background:linear-gradient(to right,#ccc,#aaa);
-					color: #fff;
-					justify-content: center;
-					align-items: center;
-					border-radius: 60upx;
-					font-size: 35upx;
+				padding:15upx 0;
+				
+                text{
+					margin-right:30upx;
+					color:rgba(51,51,51,1);
 				}
 			}
-			.center{
-				width: 100%;
-				flex-wrap: wrap;
-				.name-tel{
-					width: 100%;
-					align-items: baseline;
-					.name{
-						font-size: 34upx;
-					}
-					.tel{
-						margin-left: 30upx;
-						font-size: 24upx;
-						color: #777;
-					}
-					.default{
+			.top-two{
+				color:rgba(85,85,85,1);
 
-						font-size: 22upx;
-						
-						background-color: #f06c7a;
-						color: #fff;
-						padding: 0 18upx;
-						border-radius: 24upx;
-						margin-left: 20upx;
-					}
-				}
-				.address{
-					width: 100%;
-					font-size: 24upx;
-					align-items: baseline;
-					color: #777;
+			}
+		}
+		.row-bottom{
+			
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 20upx ;
+			.left{
+				display: flex;
+				color:rgba(153,153,153,1);
+                image{
+					width:36upx;
+					height:36upx;
+					margin-right:8upx;
 				}
 			}
 			.right{
-				flex-shrink: 0;
-				align-items: center;
-				margin-left: 20upx;
-				.icon{
-					justify-content: center;
+				display: flex;
+				color:rgba(153,153,153,1);
+				view{
+					display: flex;
+					justify-content: flex-start;
 					align-items: center;
-					width: 80upx;
-					height: 60upx;
-					border-left: solid 1upx #aaa;
-					font-size: 40upx;
-					color: #777;
+					image{
+						margin-right:8upx;
+					}
+				}
+				.jianju{
+					margin-right:60upx;
+				}
+				// view:nth-child(2){
+				// 	margin-left:80upx;
+				// 	
+				// }
+			    image{
+					width:36upx;
+					height:36upx;
 				}
 			}
 		}
+	}
+
 	}
 </style>
