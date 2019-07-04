@@ -11,23 +11,7 @@
 		</view>
 		<!-- 收货地址 -->
 		<view class="addr" @tap="selectAddress">
-			<!-- <view class="icon">
-				<image src="../../static/img/addricon.png" mode=""></image>
-			</view>
-			<view class="right">
-				<view class="tel-name">
-					<view class="name">
-						{{recinfo.name}}
-					</view>
-					<view class="tel">
-						{{recinfo.tel}}
-					</view>
-				</view>
-				<view class="addres">
-					{{recinfo.address.region.label}}
-					{{recinfo.address.detailed}}
-				</view>
-			</view> -->
+		
 			<view class="sendgoods-info">配送信息</view>
 			<view class="sendgoods-addr">
 				<view>
@@ -75,55 +59,8 @@
 				</view>
 			</view>
 		</view>
-		<!-- 提示-备注 -->
-		<!-- <view class="order">
-			<view class="row">
-				<view class="left">
-					积分 :
-				</view>
-				<view class="right">
-					已扣除{{int}}积分抵扣{{deduction|toFixed}}元
-				</view>
-			</view>
-			<view class="row">
-				<view class="left">
-					备注 :
-				</view>
-				<view class="right">
-					<input placeholder="选填,备注内容" v-model="note" />
-				</view>
-			</view>
-		</view> -->
-		<!-- 明细 -->
-		<!-- <view class="detail">
-			<view class="row">
-				<view class="nominal">
-					商品金额
-				</view>
-				<view class="content">
-					￥{{goodsPrice|toFixed}}
-				</view>
-			</view>
-			<view class="row">
-				<view class="nominal">
-					运费
-				</view>
-				<view class="content">
-					￥+{{freight|toFixed}}
-				</view>
-			</view>
-			<view class="row">
-				<view class="nominal">
-					积分抵扣
-				</view>
-				<view class="content">
-					￥-{{deduction|toFixed}}
-				</view>
-			</view>
-		</view> -->
-		<view class="blck">
 
-		</view>
+	
 		<view class="footer">
 			<view class="settlement">
 				<view class="sum">待支付:<view class="money">￥{{sumPrice|toFixed}}</view>
@@ -488,13 +425,16 @@
 		.total-pay-money {
 			padding: 20upx 0;
 			display: flex;
-			justify-content: space-between;
+			justify-content: flex-end;
 			align-items: center;
 
 			text {
 				font-size: 24upx;
 				color: rgba(102, 102, 102, 1);
-
+               margin-right:20upx;
+			   display:flex;
+			   align-items: center;
+			   justify-content: center;
 			}
 
 			.pay-money {
@@ -537,10 +477,7 @@
 		}
 	}
 
-	.blck {
-		width: 100%;
-		height: 100upx;
-	}
+	
 
 	.footer {
 		width: 100%;

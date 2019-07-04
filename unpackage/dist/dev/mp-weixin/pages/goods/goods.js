@@ -287,6 +287,10 @@
 
 
 
+
+
+
+
 var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/uni-number-box/uni-number-box.vue */ "C:\\Users\\Administrator\\Desktop\\shanpei-weixin\\components\\uni-number-box\\uni-number-box.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
 {
   components: {
@@ -1007,7 +1011,16 @@ var render = function() {
       ]
     ),
     _vm._m(7),
-    _vm._m(8)
+    _vm._m(8),
+    _c(
+      "view",
+      {
+        staticClass: "people-service",
+        attrs: { eventid: "62af3366-21" },
+        on: { tap: _vm.toChat }
+      },
+      [_c("text", [_vm._v("咨询")]), _c("text", [_vm._v("客服")])]
+    )
   ])
 }
 var staticRenderFns = [
@@ -1115,7 +1128,7 @@ var staticRenderFns = [
           _c("view", { staticClass: "recomment-list-right" }, [
             _c("view", { staticClass: "product-name" }, [
               _vm._v(
-                "国产红心火龙果 4个装中果单果约300\n\t\t\t\t\t\t~400g 新鲜水果"
+                "国产红心火龙果 4个装中果单果约300\n\t\t\t\t\t\t\t~400g 新鲜水果"
               )
             ]),
             _c("view", { staticClass: "product-eval" }, [

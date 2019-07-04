@@ -113,10 +113,10 @@
 			<view class="layer" @tap.stop="discard">
 				<view class="content">
 					<view class="product-title">
-						<image src="../../static/img/1.jpg" />
+						<image :src="goodsData.logo" />
 						<view class="product-mes">
-							<text>库存</text>
-							<text>价格</text>
+							<text>{{goodsData.number_stock}}</text>
+							<text>{{goodsData.price}}</text>
 						</view>
 						<view class="hidden"  @tap="hideSpec">x</view>
 					</view>
@@ -157,17 +157,17 @@
 		<!-- 标题 价格 -->
 		<view class="info-box goods-info">
 			<view class="title">
-				{{goodsData.name}}
+				{{goodsData.title}}
 			</view>
 
 			<view class="product-info">
 				<view class="info">
 					<text>￥{{goodsData.price}}</text>
-					<text>￥{{goodsData.lprice}}</text>
+					<text>￥{{goodsData.market_price}}</text>
 				</view>
 				<view class="evaluate">
-					<view class="evaluate-num">{{goodsData.num}}</view>
-					<view class="evaluate-good">{{goodsData.good}}</view>
+					<view class="evaluate-num">销量{{goodsData.number_sales}}</view>
+					<view class="evaluate-good">好评{{goodsData.good_percent}}%</view>
 				</view>
 			</view>
 
@@ -178,7 +178,7 @@
 				<view class="add-color">库存</view>
 				<!-- <view class="content"><view class="serviceitem" v-for="(item,index) in goodsData.service" :key="index">{{item.name}}</view></view>
 				<view class="arrow"><view class="icon xiangyou"></view></view> -->
-				<view class="resdius-num">1000</view>
+				<view class="resdius-num">{{goodsData.number_stock}}</view>
 			</view>
 			<view class="row" @tap="showSpec(false)">
 				<!-- <view class="text">选择</view>
@@ -196,7 +196,7 @@
 		<!-- 评价 -->
 		<view class="info-box comments" id="comments">
 			<view class="row">
-				<view class="text">评价 ({{goodsData.comment.number}})</view>
+				<view class="text">评价 ({{goodsData.comment_num}})</view>
 				<view class="arrow" @tap="toRatings">
 					<view class="show" @tap="showComments(goodsData.id)">
 						更多
@@ -204,26 +204,29 @@
 					</view>
 				</view>
 			</view>
-			<view class="comment" @tap="toRatings">
+			<view class="comment" @tap="toRatings" v-for="(commentList,index) in comment" :key=index>
 				<view class="user-info">
 					<view class="comment-user-info">
 
 						<view class="people-icon">
-							<image :src="goodsData.comment.userface" class="people-icon" />
+							<image :src="goodsData.comment[0].member.heading" class="people-icon" />
 						</view>
 						<view class="star">
-							{{goodsData.comment.username}}
+							<view>{{goodsData.comment[0].member.nickname}}</view>
+							<view>{{goodsData.comment[0].comment_star}}</view>
 						</view>
 					</view>
 					<view class="comment-time">
-						时间
+						{{goodsData.comment.create_at}}
 					</view>
 				</view>
 				<view class="content">
-					{{goodsData.comment.content}}
+					{{goodsData.comment[0].comment_content}}
 				</view>
 				<view class="product-icon">
-					<image src="../../static/img/category/lunbo1.png"></image>
+					<view class="img" v-for="(src,index) in evaImg" :key="index">
+						<image :src="src"></image>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -233,8 +236,8 @@
 			<!-- <view class="content"><rich-text :nodes="descriptionStr"></rich-text></view> -->
 			<view class="product-detail">
 				<view >
-				<text>产品</text>
-				<text>特点</text>
+					<text>产品</text>
+					<text>特点</text>
 				</view>
 				<view class="product-dec">
 
@@ -242,29 +245,29 @@
 			</view>
 		</view>
 		<!-- 推荐 -->
-		<view class="recomment">
+		<view class="recomment" >
 			<view class="recomment-title ">推荐商品</view>
 			<view class="recomment-contain">
-				<view class="recomment-list">
+				<view class="recomment-list" @click="gotui(tui.id)" v-for="(tui,tuiIndex) in tuiList" :key="tuiIndex">
 					<view class="recomment-list-left">
-						<image src="../../static/img/1.jpg" mode=""></image>
+						<image :src="tui.logo"></image>
 					</view>
 					<view class="recomment-list-right">
 
 
 						<view class="product-name">
-							国产红心火龙果 4个装中果单果约300
-							~400g 新鲜水果
+							{{tui.title}}
 						</view>
 						<view class="product-eval">
-							<view class="evaluate-num">652人已购买</view>
+							<view class="hot-product" v-show="tui.is_hot==1">热销</view>
+							<view class="evaluate-num">{{tui.number_sales}}人已购买</view>
 
-							<view class="evaluate-good">100%</view>
+							<view class="evaluate-good">{{tui.good_percent}}%好评</view>
 						</view>
 						<view class="product-info">
-							<view class="price">100</view>
+							<view class="price">{{tui.price}}</view>
 
-							<view class="slogan">200</view>
+							<view class="slogan">{{tui.market_price}}</view>
 
 						</view>
 
@@ -272,13 +275,18 @@
 				</view>
 			</view>
 		</view>
-
+        <!-- 咨询客服 -->
+		<view class="people-service" @tap="toChat">
+			<text>咨询</text>
+			<text>客服</text>
+		</view>
 	</view>
 </template>
 
 <script>
 	import uniNumberBox from "@/components/uni-number-box/uni-number-box.vue"
 	export default {
+		
 		components: {
 			uniNumberBox
 		},
@@ -289,12 +297,13 @@
 				afterHeaderzIndex: 10, //层级
 				beforeHeaderOpacity: 1, //不透明度
 				afterHeaderOpacity: 0, //不透明度
+				id:"",  //商品id
 				//是否显示返回按钮
 				// #ifndef MP
 				showBack: true,
 				// #endif
-
-
+                evaImg:[], //评价上传图片
+                tuiList:[], //推荐商品
 
 				//轮播主图数据
 				swiperList: [{
@@ -322,40 +331,13 @@
 				specClass: '', //规格弹窗css类，控制开关动画
 				shareClass: '', //分享弹窗css类，控制开关动画
 				// 商品信息
-				goodsData: {
-					id: 1,
-					name: "商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题",
-					price: "127.00",
-					number: 1,
-					num: 22,
-					good: "100%",
-					lprice: "333",
-					service: [{
-							name: "正品保证",
-							description: "此商品官方保证为正品"
-						},
-						{
-							name: "极速退款",
-							description: "此商品享受退货极速退款服务"
-						},
-						{
-							name: "7天退换",
-							description: "此商品享受7天无理由退换服务"
-						}
-					],
-					spec: ["XS", "S", "M", "L", "XL", "XXL"],
-					comment: {
-						number: 102,
-						userface: '../../static/img/face.jpg',
-						username: '大黑哥',
-						content: '很不错，之前买了很多次了，很好看，能放很久，和图片色差不大，值得购买！'
-					}
-
-				},
+			    goodsData:null,
 				selectSpec: null, //选中规格
 				isKeep: false, //收藏
 				//商品描述html
 				descriptionStr: '<div style="text-align:center;"><img width="100%" src="https://ae01.alicdn.com/kf/HTB1t0fUl_Zmx1VjSZFGq6yx2XXa5.jpg"/><img width="100%" src="https://ae01.alicdn.com/kf/HTB1LzkjThTpK1RjSZFKq6y2wXXaT.jpg"/><img width="100%" src="https://ae01.alicdn.com/kf/HTB18dkiTbvpK1RjSZPiq6zmwXXa8.jpg"/></div>'
+			   ,comment:[], //评论信息
+			   
 			};
 		},
 		onLoad(option) {
@@ -364,7 +346,9 @@
 			this.showBack = false;
 			// #endif
 			//option为object类型，会序列化上个页面传递的参数
-			console.log(option.cid); //打印出上个页面传递的参数。
+			console.log(option.id); //打印出上个页面传递的参数。
+			this.id=option.id;
+			
 		},
 		onReady() {
 			this.calcAnchor(); //计算锚点高度，页面数据是ajax加载时，请把此行放在数据渲染完成事件中执行以保证高度计算正确
@@ -388,9 +372,52 @@
 			});
 		},
 		mounted() {
-
+            uni.request({
+            	url: this.config.url+"goods/detail",
+            	data: {
+            		"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NjA5MjQ3NjgsImV4cCI6MTU4Njg0NDc2OCwiZGF0YSI6eyJpZCI6Mywib3BlbmlkIjoib0lieWY0cER5Z0ZLcWNRT1h3OGhaclZFbnJTRSIsImhlYWRpbWciOiJodHRwczpcL1wvd3gucWxvZ28uY25cL21tb3BlblwvdmlfMzJcL1EwajRUd0dUZlRMMFpGR3QwNWliMTJVWnJoMkNidm1VOUcwOGJpYW5pYmtiOXViWXVWaWN5WkZFaWNQUE9JQ1dPZ041UEYyVmxPOTRQVkFEUVBCYzZWM3pxZUFcLzEzMiIsIm5pY2tuYW1lIjoiXHU1ZjIwXHU0ZTA5IiwicGhvbmUiOiIiLCJ1c2VybmFtZSI6IiIsInZpcF9sZXZlbCI6MCwidmlwX2RhdGUiOm51bGwsImNyZWF0ZV9hdCI6IjIwMTktMDYtMTkgMTQ6MTE6NTgifX0.B32WfMWQ-0QJ1VtEbhxXgtT-nBqc8GwJb3ANBhy8BxU"
+                    ,
+					id:this.id
+            		
+            	},
+            	method: "post",
+            	success: (res) => {
+                     console.log(res);
+            		this.goodsData =res.data.data;
+            		this.comment=this.goodsData.comment;
+					this.evaImg=this.goodsData.commit[0].comment_covers;
+					this.isKeep=this.goodsData.is_collect
+            	}
+            
+            });
+			  // 推荐商品
+			  uni.request({
+				url: this.config.url+"recommend",
+				data: {
+					"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NjA5MjQ3NjgsImV4cCI6MTU4Njg0NDc2OCwiZGF0YSI6eyJpZCI6Mywib3BlbmlkIjoib0lieWY0cER5Z0ZLcWNRT1h3OGhaclZFbnJTRSIsImhlYWRpbWciOiJodHRwczpcL1wvd3gucWxvZ28uY25cL21tb3BlblwvdmlfMzJcL1EwajRUd0dUZlRMMFpGR3QwNWliMTJVWnJoMkNidm1VOUcwOGJpYW5pYmtiOXViWXVWaWN5WkZFaWNQUE9JQ1dPZ041UEYyVmxPOTRQVkFEUVBCYzZWM3pxZUFcLzEzMiIsIm5pY2tuYW1lIjoiXHU1ZjIwXHU0ZTA5IiwicGhvbmUiOiIiLCJ1c2VybmFtZSI6IiIsInZpcF9sZXZlbCI6MCwidmlwX2RhdGUiOm51bGwsImNyZWF0ZV9hdCI6IjIwMTktMDYtMTkgMTQ6MTE6NTgifX0.B32WfMWQ-0QJ1VtEbhxXgtT-nBqc8GwJb3ANBhy8BxU"
+			        ,
+					
+					
+				},
+				method: "post",
+				success: (res) => {
+			         console.log(res);
+					 this.tuiList=res.data.data.data
+					// this.goodsData =res.data.data;
+					// this.comment=this.goodsData.comment;
+					// this.evaImg=this.goodsData.commit[0].comment_covers;
+					// this.tuiList=this.goodsData.goods_list;
+				}
+			
+			})
 		},
 		methods: {
+		//	跳转推荐详情
+		 gotui(index){
+			 uni.navigateTo({
+			 	url:"/pages/goods/goods?id="+index
+			 })
+		 },
 			//跳转购物车
 			skipCart(){
 				uni.switchTab({
@@ -426,6 +453,17 @@
 			//收藏
 			keep() {
 				this.isKeep = this.isKeep ? false : true;
+				uni.request({
+					url:this.config.url+"goods/collect",
+					data:{
+						token:this.token,
+						goods_id:this.id,
+					},
+					method:"post",
+					success:function(res){
+						console.log(res)
+					}
+				})
 			},
 			// 加入购物车
 			joinCart() {
@@ -624,7 +662,24 @@
 		font-family: 'HMfont-home';
 		src: url('data:application/x-font-woff2;charset=utf-8;base64,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') format('woff2');
 	}
-
+   // 人工服务
+	.people-service{
+		position: fixed;
+		bottom:171upx;
+		right:25upx;
+		background:linear-gradient(0deg,rgba(255,142,28,0.99),rgba(255,179,73,0.99));
+		color:white;
+		font-size: 24upx;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		
+		width:84upx;
+		height:84upx;
+		border-radius: 84upx;
+		
+	}
 	.icon {
 		font-family: 'HMfont-home' !important;
 		font-size: 26upx;
@@ -690,7 +745,7 @@
 			}
 		}
 	}
-
+    
 	.status {
 		width: 100%;
 		height: 0;
@@ -1006,7 +1061,7 @@
 			}
 		}
 	}
-
+  // 商品详情
 	.description {
 		
 		
@@ -1028,7 +1083,7 @@
 		.product-detail {
 			display: flex;
 			flex-direction: column;
-
+            justify-content: center;
 			align-items: center;
 			height: 300upx;
             view:nth-child(1){
@@ -1036,20 +1091,21 @@
 				flex-direction: column;
 				justify-content: center;
 				align-items: center;
-				width:150upx;
-				height:150upx;
-				border-radius: 200upx;
+				width:100upx;
+				height:100upx;
+				border-radius: 50%;
 				border: 1px dashed #aaa;
-				margin:30upx 0
+				margin:30upx 0;
+				font-size: 24upx;
 			}
-			text {
-				
-				disply: flex;
-				flex-wrap: wrap;
-				align-items: center;
-				justify-content: center;
-				font-size: 26upx;
-			}
+			// text {
+			// 	
+			// 	disply: flex;
+			// 	
+			// 	align-items: center;
+			// 	justify-content: center;
+			// 	font-size: 26upx;
+			// }
 
 			.product-dec {
 				background: red;
@@ -1098,61 +1154,72 @@
 					}
 				}
 
-
+                 .recomment-list-right {
+                 	display: flex;
+                 	flex-direction: column;
+                    border-bottom:1px solid rgba(230,230,230,1);
+                   width:100%;
+                 	.product-name {
+                 
+                 		display: -webkit-box;
+                 		-webkit-box-orient: vertical;
+                 		-webkit-line-clamp: 2;
+                 		text-align: justify;
+                 		overflow: hidden;
+                 		text-overflow: ellipsis;
+                 		font-size: 30upx;
+                 	}
+                 
+                 	.product-info {
+                 		display: flex;
+                 		align-items: center;
+                        margin:10upx 0;
+                 
+                 		.price {
+                 			color: #e65339;
+                 			font-size: 30upx;
+                 			font-weight: 600;
+                 		}
+                 
+                 		.slogan {
+                 			font-size: 24upx;
+                 			font-family: PingFang-SC-Regular;
+                 			font-weight: 400;
+                 			text-decoration: line-through;
+                 			color: rgba(153, 153, 153, 1);
+                 			margin-left: 20upx;
+                 		}
+                 	}
+                 
+                 	.product-eval {
+                 
+                 		display: flex;
+                 		margin-top:40upx;
+                 		align-items: center;
+                 		color: rgba(102, 102, 102, 1);
+                 		font-size: 22upx;
+                        .hot-product{
+							width:54upx;
+height:30upx;
+border:1px solid rgba(199,22,34,1);
+border-radius:15px;
+color:rgba(199,22,34,1);
+font-size: 20upx;
+display: flex;
+justify-content: center;
+align-items: center;
+margin-right:20upx;
+						}
+                 		.evaluate-good {
+                 			margin-left: 20upx;
+                 		}
+                 	}
+                 }
 			}
 		}
 	}
 
-	.recommet-list-right {
-		display: flex;
-		flex-direction: column;
-
-
-		.product-name {
-
-			display: -webkit-box;
-			-webkit-box-orient: vertical;
-			-webkit-line-clamp: 2;
-			text-align: justify;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			font-size: 30upx;
-		}
-
-		.product-info {
-			display: flex;
-			align-items: center;
-
-
-			.price {
-				color: #e65339;
-				font-size: 30upx;
-				font-weight: 600;
-			}
-
-			.slogan {
-				font-size: 24upx;
-				font-family: PingFang-SC-Regular;
-				font-weight: 400;
-				text-decoration: line-through;
-				color: rgba(153, 153, 153, 1);
-				margin-left: 20upx;
-			}
-		}
-
-		.product-eval {
-
-			display: flex;
-			justify-content: flex-start;
-			align-items: center;
-			color: rgba(102, 102, 102, 1);
-			font-size: 22upx;
-
-			.evaluate-good {
-				margin-left: 20upx;
-			}
-		}
-	}
+	
 
 	.footer {
 		position: fixed;

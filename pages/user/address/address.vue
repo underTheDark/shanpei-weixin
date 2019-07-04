@@ -14,7 +14,7 @@
 				<view :class="{on:typeClass=='self'}" @tap="switchType('self')">常用自提点管理</view>
 			</view>
 			<!-- 常用地址管理 -->
-			<view v-show="subState==1" class="row" v-for="(row,index) in addressList" :key="index" @tap="select(row)">
+			<view v-show="subState==1" class="row" v-for="(row,index) in addressList" :key="index">
 				<view class="row-top">
 					<view class="top-one">
 						<text>姓名</text>
@@ -33,11 +33,11 @@
 						<view>其他地址</view>
 					</view>
 					<view class="right">
-						<view class="jianju"  @tap.stop="edit(row)">
+						<view class="jianju" @tap.stop="edit(row)">
 							<image src="../../../static/img/address/write.png"></image>
 							<view>编辑</view>
 						</view>
-						<view>
+						<view  @click="removeM()">
 							<image src="../../../static/img/address/delete.png"></image>
 							<view>删除</view>
 						</view>
@@ -69,37 +69,14 @@
 							<image src="../../../static/img/address/write.png"></image>
 							<view>编辑</view>
 						</view>
-						<view @tap.stop="clear(row)">
+						<view  @click="removeM()">
 							<image src="../../../static/img/address/delete.png"></image>
 							<view>删除</view>
 						</view>
 					</view>
 				</view>
 			</view>
-			<!-- <view class="row" v-for="(row,index) in addressList" :key="index" @tap="select(row)">
-					<view class="left">
-						<view class="head">
-							{{row.head}}
-						</view>
-					</view>
-					<view class="center">
-						<view class="name-tel">
-							<view class="name">{{row.name}}</view>
-							<view class="tel">{{row.tel}}</view>
-							<view class="default" v-if="row.isDefault">
-								默认
-							</view>
-						</view>
-						<view class="address">
-							{{row.address.region.label}} {{row.address.detailed}}
-						</view>
-					</view>
-					<view class="right">
-						<view class="icon bianji" @tap.stop="edit(row)">
-							
-						</view>
-					</view>
-				</view> -->
+
 		</view>
 
 		<view class="add">
@@ -107,10 +84,18 @@
 				<view class="icon tianjia"></view>新增地址
 			</view>
 		</view>
+
+		<!-- <uni-popup :show=true type="middle" mode="fixed" msg="居中弹出popup" @hidePopup="hidePopup"></uni-popup> -->
+
 	</view>
 </template>
 <script>
+	import uniPopup  from "../../../components/uni-popup/uni-popup.vue"
+
 	export default {
+		components: {
+			uniPopup
+		},
 		data() {
 			return {
 				typeClass: 'home',
@@ -227,6 +212,32 @@
 			}
 		},
 		methods: {
+				// 删除
+			removeM(index, id) {
+				console.log(2222)
+				let self = this
+				console.log('点击删除')
+				uni.showModal({
+					title: '',
+					content: '确定要删除该信息吗？',
+					confirmText: '删除',
+					cancelColor:'rgba(102,102,102,1)',
+					confirmColor:'rgba(20,204,33,1)',
+					success: function (res) {
+						if (res.confirm) {
+							console.log('用户点击确定')
+							
+							uni.showToast({
+								icon: "success",
+								title: '操作成功!',
+								duration: 2000
+							});
+						} else if (res.cancel) {
+							console.log('用户点击取消')
+						}
+					}
+				});
+			},
 			switchType(type) {
 
 				this.typeClass = type;
@@ -249,8 +260,8 @@
 				});
 
 			},
-			clear(row){
-				
+			clear(row) {
+				console.log(row)
 			},
 			add() {
 				uni.navigateTo({
@@ -275,6 +286,9 @@
 </script>
 
 <style lang="scss">
+	// #address uni-modal .uni-modal{
+	// 	background:rgba(22,208,255,0.15);
+	// }
 	view {
 		display: flex;
 	}
@@ -305,6 +319,10 @@
 		}
 	}
 
+	#address {
+		background: white;
+	}
+
 	#address .on {
 
 		border-bottom: 5upx solid rgba(20, 204, 33, 1);
@@ -320,12 +338,17 @@
 		justify-content: center;
 		align-items: center;
 
+		.tianjia {
+			margin-right: 15upx;
+			padding-top: 8upx;
+		}
+
 		.btn {
 
 			width: 90%;
 			height: 80upx;
 
-			background: rgba(22, 208, 255, 0.15);
+			background: rgba(20, 204, 33, 1);
 			color: #fff;
 			justify-content: center;
 			align-items: center;
@@ -365,8 +388,6 @@
 				width: 119upx;
 				height: 141upx;
 				margin-bottom: 60upx;
-
-
 			}
 
 			text {
@@ -389,77 +410,90 @@
 
 			}
 		}
-    .row{
-		display:flex;
-		flex-direction: column;
-		font-size: 28upx;
-		border-bottom: 20upx solid rgba(245, 245, 245, 1);
-		.row-top{
+
+		.row {
 			display: flex;
 			flex-direction: column;
-			padding:20upx 20upx 60upx;
-			
-			border-bottom: 1px solid #cecece;
-			.get-position{
-				font-size: 32upx;
-				color:rgba(51,51,51,1);
-                font-weight: bold;
-			}
-			.top-one{
-				display: flex;
-				align-items: center;
-				padding:15upx 0;
-				
-                text{
-					margin-right:30upx;
-					color:rgba(51,51,51,1);
-				}
-			}
-			.top-two{
-				color:rgba(85,85,85,1);
+			font-size: 28upx;
+			border-bottom: 20upx solid rgba(245, 245, 245, 1);
 
-			}
-		}
-		.row-bottom{
-			
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			padding: 20upx ;
-			.left{
+			.row-top {
 				display: flex;
-				color:rgba(153,153,153,1);
-                image{
-					width:36upx;
-					height:36upx;
-					margin-right:8upx;
+				flex-direction: column;
+				padding: 20upx 20upx 60upx;
+
+				border-bottom: 1px solid #cecece;
+
+				.get-position {
+					font-size: 32upx;
+					color: rgba(51, 51, 51, 1);
+					font-weight: bold;
 				}
-			}
-			.right{
-				display: flex;
-				color:rgba(153,153,153,1);
-				view{
+
+				.top-one {
 					display: flex;
-					justify-content: flex-start;
 					align-items: center;
-					image{
-						margin-right:8upx;
+					padding: 15upx 0;
+
+					text {
+						margin-right: 30upx;
+						color: rgba(51, 51, 51, 1);
 					}
 				}
-				.jianju{
-					margin-right:60upx;
+
+				.top-two {
+					color: rgba(85, 85, 85, 1);
+
 				}
-				// view:nth-child(2){
-				// 	margin-left:80upx;
-				// 	
-				// }
-			    image{
-					width:36upx;
-					height:36upx;
+			}
+
+			.row-bottom {
+
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 20upx;
+
+				.left {
+					display: flex;
+					color: rgba(153, 153, 153, 1);
+
+					image {
+						width: 36upx;
+						height: 36upx;
+						margin-right: 8upx;
+					}
+				}
+
+				.right {
+					display: flex;
+					color: rgba(153, 153, 153, 1);
+
+					view {
+						display: flex;
+						justify-content: flex-start;
+						align-items: center;
+
+						image {
+							margin-right: 8upx;
+						}
+					}
+
+					.jianju {
+						margin-right: 60upx;
+					}
+
+					// view:nth-child(2){
+					// 	margin-left:80upx;
+					// 	
+					// }
+					image {
+						width: 36upx;
+						height: 36upx;
+					}
 				}
 			}
 		}
-	}
 
 	}
 </style>

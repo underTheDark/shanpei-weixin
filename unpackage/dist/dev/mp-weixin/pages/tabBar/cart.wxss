@@ -46,19 +46,16 @@ page {
 .icon.shanchu:before {
     content: "\E6A4";
 }
-uni-checkbox .uni-checkbox-input {
-  width: 35rpx;
-  height: 35rpx;
-  -webkit-border-radius: 100%;
-          border-radius: 100%;
+checkbox .wx-checkbox-input {
+  -webkit-border-radius: 50%;
+          border-radius: 50%;
 }
-.checkbox .uni-checkbox-input.uni-checkbox-input-checked {
-  color: white;
+checkbox .wx-checkbox-input.wx-checkbox-input-checked {
+  color: #fff !important;
   background: green;
 }
-.uni-checkbox-input-checked {
-  color: white;
-  background: green;
+checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
+  font-size: 30rpx;
 }
 .carrier {
   diplay: flex;
@@ -94,38 +91,6 @@ uni-checkbox .uni-checkbox-input {
 .checkbox-box .text {
     font-size: 28rpx;
     margin-left: 10rpx;
-}
-.status {
-  width: 100%;
-  height: 0;
-  position: fixed;
-  z-index: 10;
-  background-color: #fff;
-  top: 0;
-}
-.header {
-  width: 92%;
-  padding: 0 4%;
-  height: 100rpx;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  position: fixed;
-  top: 0;
-  z-index: 10;
-  background-color: #fff;
-}
-.header .title {
-    font-size: 36rpx;
-}
-.place {
-  background-color: #ffffff;
-  height: 100rpx;
 }
 .goods-list {
   width: 100%;
@@ -289,7 +254,7 @@ uni-checkbox .uni-checkbox-input {
 }
 .goods-list .row .carrier .goods-info .info {
           width: 100%;
-          height: 22vw;
+          height: 23vw;
           overflow: hidden;
           display: -webkit-box;
           display: -webkit-flex;
@@ -338,10 +303,10 @@ uni-checkbox .uni-checkbox-input {
             -webkit-justify-content: space-between;
                 -ms-flex-pack: justify;
                     justify-content: space-between;
-            -webkit-box-align: end;
-            -webkit-align-items: flex-end;
-                -ms-flex-align: end;
-                    align-items: flex-end;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+                -ms-flex-align: center;
+                    align-items: center;
             font-size: 28rpx;
             height: 60rpx;
 }
@@ -386,63 +351,11 @@ uni-checkbox .uni-checkbox-input {
               -webkit-justify-content: center;
                   -ms-flex-pack: center;
                       justify-content: center;
-              -webkit-box-align: end;
-              -webkit-align-items: flex-end;
-                  -ms-flex-align: end;
-                      align-items: flex-end;
-}
-.goods-list .row .carrier .goods-info .info .price-number .number .input {
-                width: 60rpx;
-                height: 60rpx;
-                margin: 0 10rpx;
-                background-color: #f3f3f3;
-}
-.goods-list .row .carrier .goods-info .info .price-number .number .input input {
-                  width: 60rpx;
-                  height: 60rpx;
-                  display: -webkit-box;
-                  display: -webkit-flex;
-                  display: -ms-flexbox;
-                  display: flex;
-                  -webkit-box-pack: center;
-                  -webkit-justify-content: center;
-                      -ms-flex-pack: center;
-                          justify-content: center;
-                  -webkit-box-align: center;
-                  -webkit-align-items: center;
-                      -ms-flex-align: center;
-                          align-items: center;
-                  text-align: center;
-                  font-size: 26rpx;
-}
-.goods-list .row .carrier .goods-info .info .price-number .number .sub,
-              .goods-list .row .carrier .goods-info .info .price-number .number .add {
-                width: 45rpx;
-                height: 45rpx;
-                background-color: #f3f3f3;
-                -webkit-border-radius: 5rpx;
-                        border-radius: 5rpx;
-}
-.goods-list .row .carrier .goods-info .info .price-number .number .sub .icon,
-                .goods-list .row .carrier .goods-info .info .price-number .number .add .icon {
-                  font-size: 22rpx;
-                  width: 45rpx;
-                  height: 45rpx;
-                  display: -webkit-box;
-                  display: -webkit-flex;
-                  display: -ms-flexbox;
-                  display: flex;
-                  -webkit-box-pack: center;
-                  -webkit-justify-content: center;
-                      -ms-flex-pack: center;
-                          justify-content: center;
-                  -webkit-box-align: center;
-                  -webkit-align-items: center;
-                      -ms-flex-align: center;
-                          align-items: center;
+              margin-right: 3rpx;
 }
 .footer {
-  width: 100%;
+  width: 98%;
+  padding-left: 2%;
   background-color: #fbfbfb;
   height: 100rpx;
   display: -webkit-box;
@@ -466,8 +379,8 @@ uni-checkbox .uni-checkbox-input {
     margin-left: 10rpx;
 }
 .footer .delBtn {
-    border: solid 1rpx #f06c7a;
-    color: #f06c7a;
+    border: solid 1rpx #14cc21;
+    color: #14cc21;
     padding: 0 30rpx;
     height: 50rpx;
     -webkit-border-radius: 30rpx;
@@ -504,7 +417,7 @@ uni-checkbox .uni-checkbox-input {
 .footer .settlement .sum {
       width: 50%;
       font-size: 28rpx;
-      margin-right: 10rpx;
+      margin-right: 30rpx;
       display: -webkit-box;
       display: -webkit-flex;
       display: -ms-flexbox;

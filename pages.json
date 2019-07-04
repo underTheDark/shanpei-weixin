@@ -228,14 +228,16 @@
 			}
 		},
 		{
-            "path" : "pages/user/address/address",
-            "style" : {
-				"navigationBarBackgroundColor":"#ffffff",
-				"navigationBarTitleText":"地址管理",
-				"backgroundColorTop":"#ffffff",
-				"backgroundColorBottom":"#ffffff"
+		    "path" : "pages/user/service/service",
+		    "style" : {
+				"navigationBarTitleText": "我的售后",
+				"navigationBarBackgroundColor":"#f06c7a",
+				"navigationBarTextStyle":"white",
+				"app-plus":{
+					"bounce":"none"
+				}
 			}
-        }
+		}
         ,{
             "path" : "pages/user/address/edit/edit",
             "style" : {
@@ -244,7 +246,17 @@
 				"backgroundColorTop":"#ffffff",
 				"backgroundColorBottom":"#ffffff"
 			}
+        } 
+		,{
+            "path" : "pages/user/address/address",
+            "style" : {
+				"navigationBarBackgroundColor":"#ffffff",
+				"navigationBarTitleText":"地址管理",
+				"backgroundColorTop":"#ffffff",
+				"backgroundColorBottom":"#ffffff"
+			}
         }
+		 
         ,{
             "path" : "pages/user/deposit/deposit",
             "style" : {
@@ -327,6 +339,7 @@
             "path" : "pages/reSelect/reSelect",
             "style" : {}
         }
+       
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

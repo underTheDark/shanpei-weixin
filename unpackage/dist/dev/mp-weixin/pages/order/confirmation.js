@@ -82,69 +82,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 {
   data: function data() {
     return {
@@ -350,7 +287,6 @@ var render = function() {
       ],
       2
     ),
-    _c("view", { staticClass: "blck" }),
     _c("view", { staticClass: "footer" }, [
       _c("view", { staticClass: "settlement" }, [
         _c("view", { staticClass: "sum" }, [

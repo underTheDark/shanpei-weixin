@@ -377,19 +377,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("view", [
-    _c("view", {
-      staticClass: "status",
-      style: { position: _vm.headerPosition, top: _vm.statusTop }
-    }),
-    _c(
-      "view",
-      {
-        staticClass: "header",
-        style: { position: _vm.headerPosition, top: _vm.headerTop }
-      },
-      [_c("view", { staticClass: "title" }, [_vm._v("购物车")])]
-    ),
+  return _c("view", { attrs: { id: "cart" } }, [
     _c("view", { staticClass: "place" }),
     _c(
       "view",
@@ -453,46 +441,44 @@ var render = function() {
                   [_c("checkbox", { staticClass: "checkbox" })],
                   1
                 ),
-                _c(
-                  "view",
-                  {
-                    staticClass: "goods-info",
-                    attrs: { eventid: "0c1f8b4c-2-" + index },
-                    on: {
-                      tap: function($event) {
-                        _vm.toGoods(row)
-                      }
-                    }
-                  },
-                  [
-                    _c("view", { staticClass: "img" }, [
-                      _c("image", { attrs: { src: row.img } })
+                _c("view", { staticClass: "goods-info" }, [
+                  _c("view", { staticClass: "img" }, [
+                    _c("image", { attrs: { src: row.img } })
+                  ]),
+                  _c("view", { staticClass: "info" }, [
+                    _c(
+                      "view",
+                      {
+                        staticClass: "title",
+                        attrs: { eventid: "0c1f8b4c-2-" + index },
+                        on: {
+                          tap: function($event) {
+                            _vm.toGoods(row)
+                          }
+                        }
+                      },
+                      [_vm._v(_vm._s(row.name))]
+                    ),
+                    _c("view", { staticClass: "spec" }, [
+                      _vm._v(_vm._s(row.spec))
                     ]),
-                    _c("view", { staticClass: "info" }, [
-                      _c("view", { staticClass: "title" }, [
-                        _vm._v(_vm._s(row.name))
+                    _c("view", { staticClass: "price-number" }, [
+                      _c("view", { staticClass: "price" }, [
+                        _vm._v("￥" + _vm._s(row.price))
                       ]),
-                      _c("view", { staticClass: "spec" }, [
-                        _vm._v(_vm._s(row.spec))
-                      ]),
-                      _c("view", { staticClass: "price-number" }, [
-                        _c("view", { staticClass: "price" }, [
-                          _vm._v("￥" + _vm._s(row.price))
-                        ]),
-                        _c(
-                          "view",
-                          { staticClass: "number" },
-                          [
-                            _c("uni-number-box", {
-                              attrs: { min: 1, mpcomid: "0c1f8b4c-0-" + index }
-                            })
-                          ],
-                          1
-                        )
-                      ])
+                      _c(
+                        "view",
+                        { staticClass: "number" },
+                        [
+                          _c("uni-number-box", {
+                            attrs: { min: 1, mpcomid: "0c1f8b4c-0-" + index }
+                          })
+                        ],
+                        1
+                      )
                     ])
-                  ]
-                )
+                  ])
+                ])
               ]
             )
           ])

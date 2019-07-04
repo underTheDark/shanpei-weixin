@@ -215,6 +215,11 @@ var _area = _interopRequireDefault(__webpack_require__(/*! ./city-data/area.js *
 
 
 
+
+
+
+
+
 var _mpvueCityPicker = _interopRequireDefault(__webpack_require__(/*! @/components/mpvue-citypicker/mpvueCityPicker.vue */ "C:\\Users\\Administrator\\Desktop\\shanpei-weixin\\components\\mpvue-citypicker\\mpvueCityPicker.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
 {
   components: {
@@ -247,26 +252,7 @@ var _mpvueCityPicker = _interopRequireDefault(__webpack_require__(/*! @/componen
     isDefaultChange: function isDefaultChange(e) {
       this.isDefault = e.detail.value;
     },
-    del: function del() {var _this = this;
-      uni.showModal({
-        title: '删除提示',
-        content: '你将删除这个收货地址',
-        success: function success(res) {
-          if (res.confirm) {
-            uni.setStorage({
-              key: 'delAddress',
-              data: { id: _this.id },
-              success: function success() {
-                uni.navigateBack();
-              } });
 
-          } else if (res.cancel) {
-            console.log('用户点击取消');
-          }
-        } });
-
-
-    },
     save: function save() {
       var data = { "name": this.name, "head": this.name.substr(0, 1), "tel": this.tel, "address": { "region": this.region, "detailed": this.detailed }, "isDefault": this.isDefault };
       if (this.editType == 'edit') {
@@ -306,7 +292,7 @@ var _mpvueCityPicker = _interopRequireDefault(__webpack_require__(/*! @/componen
 
     } },
 
-  onLoad: function onLoad(e) {var _this2 = this;
+  onLoad: function onLoad(e) {var _this = this;
     //获取传递过来的参数
 
     this.editType = e.type;
@@ -314,13 +300,13 @@ var _mpvueCityPicker = _interopRequireDefault(__webpack_require__(/*! @/componen
       uni.getStorage({
         key: 'address',
         success: function success(e) {
-          _this2.id = e.data.id;
-          _this2.name = e.data.name;
-          _this2.tel = e.data.tel;
-          _this2.detailed = e.data.address.detailed;
-          _this2.isDefault = e.data.isDefault;
-          _this2.cityPickerValue = e.data.address.region.value;
-          _this2.region = e.data.address.region;
+          _this.id = e.data.id;
+          _this.name = e.data.name;
+          _this.tel = e.data.tel;
+          _this.detailed = e.data.address.detailed;
+          _this.isDefault = e.data.isDefault;
+          _this.cityPickerValue = e.data.address.region.value;
+          _this.region = e.data.address.region;
         } });
 
     }
@@ -505,7 +491,7 @@ var render = function() {
     [
       _c("view", { staticClass: "content" }, [
         _c("view", { staticClass: "row" }, [
-          _c("view", { staticClass: "nominal" }, [_vm._v("收件人")]),
+          _c("view", { staticClass: "nominal" }, [_vm._v("收货人")]),
           _c("view", { staticClass: "input" }, [
             _c("input", {
               directives: [
@@ -517,7 +503,7 @@ var render = function() {
                 }
               ],
               attrs: {
-                placeholder: "请输入收件人姓名",
+                placeholder: "请输入收件人",
                 type: "text",
                 eventid: "f1d01cb2-0"
               },
@@ -534,7 +520,7 @@ var render = function() {
           ])
         ]),
         _c("view", { staticClass: "row" }, [
-          _c("view", { staticClass: "nominal" }, [_vm._v("电话号码")]),
+          _c("view", { staticClass: "nominal" }, [_vm._v("手机号")]),
           _c("view", { staticClass: "input" }, [
             _c("input", {
               directives: [
@@ -563,7 +549,7 @@ var render = function() {
           ])
         ]),
         _c("view", { staticClass: "row" }, [
-          _c("view", { staticClass: "nominal" }, [_vm._v("所在地区")]),
+          _c("view", { staticClass: "nominal" }, [_vm._v("地区")]),
           _c(
             "view",
             {
@@ -575,8 +561,20 @@ var render = function() {
           )
         ]),
         _c("view", { staticClass: "row" }, [
+          _c("view", { staticClass: "nominal" }, [_vm._v("街道")]),
+          _c(
+            "view",
+            {
+              staticClass: "input",
+              attrs: { eventid: "f1d01cb2-3" },
+              on: { tap: _vm.chooseCity }
+            },
+            [_vm._v(_vm._s(_vm.region.label))]
+          )
+        ]),
+        _c("view", { staticClass: "row detail-add" }, [
           _c("view", { staticClass: "nominal" }, [_vm._v("详细地址")]),
-          _c("view", { staticClass: "input" }, [
+          _c("view", { staticClass: "input add-content" }, [
             _c("textarea", {
               directives: [
                 {
@@ -589,7 +587,7 @@ var render = function() {
               attrs: {
                 "auto-height": "true",
                 placeholder: "输入详细地址",
-                eventid: "f1d01cb2-3"
+                eventid: "f1d01cb2-4"
               },
               domProps: { value: _vm.detailed },
               on: {
@@ -603,30 +601,20 @@ var render = function() {
             })
           ])
         ]),
-        _c("view", { staticClass: "row" }, [
+        _c("view", { staticClass: "add-border" }),
+        _c("view", { staticClass: "row last-row" }, [
           _c("view", { staticClass: "nominal" }, [_vm._v("设置默认地址")]),
           _c("view", { staticClass: "input switch" }, [
             _c("switch", {
               attrs: {
-                color: "#f06c7a",
+                color: "rgba(20,204,33,1)",
                 checked: _vm.isDefault,
-                eventid: "f1d01cb2-4"
+                eventid: "f1d01cb2-5"
               },
               on: { change: _vm.isDefaultChange }
             })
           ])
-        ]),
-        _vm.editType == "edit"
-          ? _c(
-              "view",
-              {
-                staticClass: "row",
-                attrs: { eventid: "f1d01cb2-5" },
-                on: { tap: _vm.del }
-              },
-              [_c("view", { staticClass: "del" }, [_vm._v("删除收货地址")])]
-            )
-          : _vm._e()
+        ])
       ]),
       _c(
         "view",

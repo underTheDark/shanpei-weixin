@@ -1,9 +1,9 @@
 <template>
-	<view>
-		<view class="status" :style="{position:headerPosition,top:statusTop}"></view>
+	<view id="cart">
+<!-- 		<view class="status" :style="{position:headerPosition,top:statusTop}"></view>
 		<view class="header" :style="{position:headerPosition,top:headerTop}">
 			<view class="title">购物车</view>
-		</view>
+		</view> -->
 		<!-- 占位 -->
 		<view class="place"></view>
 		<!-- 商品列表 -->
@@ -27,12 +27,12 @@
 
 					</view>
 					<!-- 商品信息 -->
-					<view class="goods-info" @tap="toGoods(row)">
+					<view class="goods-info">
 						<view class="img">
 							<image :src="row.img"></image>
 						</view>
 						<view class="info">
-							<view class="title">{{row.name}}</view>
+							<view class="title"  @tap="toGoods(row)">{{row.name}}</view>
 							<view class="spec">{{row.spec}}</view>
 							<view class="price-number">
 								<view class="price">￥{{row.price}}</view>
@@ -378,22 +378,35 @@
 
 	}
 
-	
-		uni-checkbox .uni-checkbox-input {
-			width:35upx;
-			height:35upx;
-			border-radius: 100%;
-		}
-		.checkbox .uni-checkbox-input.uni-checkbox-input-checked{
-color:white;
-background: green;
-}
+	  /* #ifdef H5 */
+    
 
-		.uni-checkbox-input-checked {
-			color: white;
-			background: green;
+	   checkbox .uni-checkbox-input {
+			
+			border-radius: 50%;
 		}
-	
+	    checkbox .uni-checkbox-input.uni-checkbox-input-checked{
+          color:#fff!important;
+          background: green;
+       }
+	   checkbox .uni-checkbox-input.uni-checkbox-input-checked::before{
+		  font-size: 25upx;
+	   }
+
+   	/* #endif */
+	/* #ifdef APP-PLUS || MP-WEIXIN */
+	      checkbox .wx-checkbox-input {
+	   			
+	   			border-radius: 50%;
+	   		}
+	    checkbox .wx-checkbox-input.wx-checkbox-input-checked{
+	      color:#fff!important;
+	      background: green;
+	   }
+	   checkbox .wx-checkbox-input.wx-checkbox-input-checked::before{
+	   		  font-size: 30upx;
+	   }
+	/* #endif */
 
 	.carrier {
 		diplay: flex;
@@ -418,46 +431,15 @@ background: green;
 		}
 	}
 
-	.status {
-		width: 100%;
-		height: 0;
-		position: fixed;
-		z-index: 10;
-		background-color: #fff;
-		top: 0;
-		/*  #ifdef  APP-PLUS  */
-		height: var(--status-bar-height); //覆盖样式
-		/*  #endif  */
-	}
 
-	.header {
-		width: 92%;
-		padding: 0 4%;
-		height: 100upx;
-		display: flex;
-		align-items: center;
-		position: fixed;
-		top: 0;
-		z-index: 10;
-		background-color: #fff;
-		/*  #ifdef  APP-PLUS  */
-		top: var(--status-bar-height);
-
-		/*  #endif  */
-		.title {
-			font-size: 36upx;
-		}
-
-	}
-
-	.place {
-
-		background-color: #ffffff;
-		height: 100upx;
-		/*  #ifdef  APP-PLUS  */
-		margin-top: var(--status-bar-height);
-		/*  #endif  */
-	}
+// 	.place {
+// 
+// 		background-color: #ffffff;
+// 		height: 100upx;
+// 		/*  #ifdef  APP-PLUS  */
+// 		margin-top: var(--status-bar-height);
+// 		/*  #endif  */
+// 	}
 
 	.goods-list {
 		width: 100%;
@@ -571,12 +553,12 @@ background: green;
 
 					.info {
 						width: 100%;
-						height: 22vw;
+						height: 23vw;
 						overflow: hidden;
 						display: flex;
 						flex-wrap: wrap;
 						position: relative;
-
+                        
 						.title {
 							width: 100%;
 							font-size: 28upx;
@@ -605,9 +587,10 @@ background: green;
 							bottom: 0upx;
 							display: flex;
 							justify-content: space-between;
-							align-items: flex-end;
+							align-items: center;
 							font-size: 28upx;
 							height: 60upx;
+							
                              .uni-numbox[data-v-5fc0e502]{
 								 width:140upx;
 								 height:50upx;
@@ -631,42 +614,42 @@ background: green;
 							.number {
 								display: flex;
 								justify-content: center;
-								align-items: flex-end;
+								margin-right:3upx;
+                                   
+// 								.input {
+// 									width: 60upx;
+// 									height: 60upx;
+// 									margin: 0 10upx;
+// 									background-color: #f3f3f3;
+// 
+// 									input {
+// 										width: 60upx;
+// 										height: 60upx;
+// 										display: flex;
+// 										justify-content: center;
+// 										align-items: center;
+// 										text-align: center;
+// 										font-size: 26upx;
+// 									}
+// 								}
 
-								.input {
-									width: 60upx;
-									height: 60upx;
-									margin: 0 10upx;
-									background-color: #f3f3f3;
-
-									input {
-										width: 60upx;
-										height: 60upx;
-										display: flex;
-										justify-content: center;
-										align-items: center;
-										text-align: center;
-										font-size: 26upx;
-									}
-								}
-
-								.sub,
-								.add {
-									width: 45upx;
-									height: 45upx;
-									background-color: #f3f3f3;
-									border-radius: 5upx;
-
-									.icon {
-										font-size: 22upx;
-										width: 45upx;
-										height: 45upx;
-										display: flex;
-										justify-content: center;
-										align-items: center;
-
-									}
-								}
+// 								.sub,
+// 								.add {
+// 									width: 45upx;
+// 									height: 45upx;
+// 									background-color: #f3f3f3;
+// 									border-radius: 5upx;
+// 
+// 									.icon {
+// 										font-size: 22upx;
+// 										width: 45upx;
+// 										height: 45upx;
+// 										display: flex;
+// 										justify-content: center;
+// 										align-items: center;
+// 
+// 									}
+// 								}
 							}
 						}
 					}
@@ -676,7 +659,8 @@ background: green;
 	}
 
 	.footer {
-		width:100%;
+		width:98%;
+		padding-left: 2%;
 		background-color: #fbfbfb;
 		height: 100upx;
 		display: flex;
@@ -690,8 +674,8 @@ background: green;
 			margin-left:10upx;
 		}
 		.delBtn {
-			border: solid 1upx #f06c7a;
-			color: #f06c7a;
+			border: solid 1upx rgba(20,204,33,1);
+			color: rgba(20,204,33,1);
 			padding: 0 30upx;
 			height: 50upx;
 			border-radius: 30upx;
@@ -710,7 +694,7 @@ background: green;
 			.sum {
 				width: 50%;
 				font-size: 28upx;
-				margin-right: 10upx;
+				margin-right: 30upx;
 				display: flex;
 				justify-content: flex-end;
 

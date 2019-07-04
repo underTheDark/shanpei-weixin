@@ -38,7 +38,7 @@
   -webkit-justify-content: flex-start;
       -ms-flex-pack: start;
           justify-content: flex-start;
-  height: 70rpx;
+  height: 50rpx;
   position: relative;
 }
 .uni-numbox:after {
@@ -64,10 +64,10 @@
 .uni-numbox__minus, .uni-numbox__plus {
     margin: 0;
     background-color: #f8f8f8;
-    width: 70rpx;
+    width: 50rpx;
     font-size: 40rpx;
     height: 100%;
-    line-height: 70rpx;
+    line-height: 50rpx;
     text-align: center;
     color: #333;
     position: relative;
@@ -75,7 +75,7 @@
 .uni-numbox__value {
     position: relative;
     background-color: #ffffff;
-    width: 80rpx;
+    width: 50rpx;
     height: 100%;
     text-align: center;
 }

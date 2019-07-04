@@ -95,9 +95,9 @@
 	}
 </script>
 <style lang="scss">
-	$numbox-btn-width:70upx;
-	$numbox-input-width:80upx;
-	$numbox-height:70upx;
+	$numbox-btn-width:50upx;
+	$numbox-input-width:50upx;
+	$numbox-height:50upx;
 	$uni-font-size-xxl:40upx;
 
 	.uni-numbox {

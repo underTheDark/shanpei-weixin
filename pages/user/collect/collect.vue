@@ -67,7 +67,7 @@
 					},
 					{
 						id: 2,
-						img: '/static/img/goods/p1.jpg',
+						img: '/static/img/goods/p2.jpg',
 						name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
 						spec: '规格:S码',
 						price: 127.5,
@@ -76,7 +76,7 @@
 					},
 					{
 						id: 3,
-						img: '/static/img/goods/p1.jpg',
+						img: '/static/img/goods/p3.jpg',
 						name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
 						spec: '规格:S码',
 						price: 127.5,
@@ -173,12 +173,13 @@
 		.row {
 			display: flex;
 			justify-content: space-between;
+			align-items: center;
 			padding: 20upx 2%;
 
 			.img {
 				width: 222upx;
 				height: 222upx;
-                display: inline-block;
+                
 				image {
 					width: 222upx;
 					height: 222upx;
@@ -205,7 +206,7 @@
 					justify-content: flex-start;
 					align-items: center;
 					width: 92%;
-					padding: 10upx 4% 10upx 4%;
+					padding: 10upx 4% 10upx 0;
 
 					.price {
 						color: #e65339;
@@ -225,7 +226,7 @@
 
 				.evaluate {
 					width: 92%;
-					padding: 0 4% 20upx;
+					padding: 0 4% 20upx 0;
 					display: flex;
 					justify-content: flex-start;
 					align-items: center;

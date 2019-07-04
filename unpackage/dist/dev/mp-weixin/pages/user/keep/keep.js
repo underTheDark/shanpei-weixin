@@ -80,20 +80,57 @@
 
 
 
-
 {
   data: function data() {
     return {
-      goodsList: [
-      { id: 1, img: '/static/img/goods/p1.jpg', name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题', spec: '规格:S码', price: 127.5, number: 1, selected: false },
-      { id: 2, img: '/static/img/goods/p1.jpg', name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题', spec: '规格:S码', price: 127.5, number: 1, selected: false },
-      { id: 3, img: '/static/img/goods/p1.jpg', name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题', spec: '规格:S码', price: 127.5, number: 1, selected: false }],
+      goodsList: [{
+        id: 1,
+        img: '/static/img/goods/p1.jpg',
+        name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
+        spec: '规格:S码',
+        price: 127.5,
+        number: 1,
+        selected: false },
 
-      shopList: [
-      { id: 1, name: "冰鲜专卖店", img: "/static/img/shop/1.jpg" },
-      { id: 2, name: "果蔬天下", img: "/static/img/shop/2.jpg" },
-      { id: 3, name: "办公耗材用品店", img: "/static/img/shop/3.jpg" },
-      { id: 4, name: "天天看好书", img: "/static/img/shop/4.jpg" }],
+      {
+        id: 2,
+        img: '/static/img/goods/p1.jpg',
+        name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
+        spec: '规格:S码',
+        price: 127.5,
+        number: 1,
+        selected: false },
+
+      {
+        id: 3,
+        img: '/static/img/goods/p1.jpg',
+        name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
+        spec: '规格:S码',
+        price: 127.5,
+        number: 1,
+        selected: false }],
+
+
+      shopList: [{
+        id: 1,
+        name: "冰鲜专卖店",
+        img: "/static/img/shop/1.jpg" },
+
+      {
+        id: 2,
+        name: "果蔬天下",
+        img: "/static/img/shop/2.jpg" },
+
+      {
+        id: 3,
+        name: "办公耗材用品店",
+        img: "/static/img/shop/3.jpg" },
+
+      {
+        id: 4,
+        name: "天天看好书",
+        img: "/static/img/shop/4.jpg" }],
+
 
       headerTop: 0,
       //控制滑动效果
@@ -295,7 +332,7 @@ var staticRenderFns = [
           _c("text", [_vm._v("星星")])
         ])
       ]),
-      _c("view", { staticClass: "one-right" }, [_vm._v("222222--2222   12:00")])
+      _c("view", { staticClass: "one-right" }, [_vm._v("222222--2222 12:00")])
     ])
   },
   function() {
@@ -347,7 +384,7 @@ var staticRenderFns = [
       }),
       _c("view", { staticClass: "goods-dec" }, [
         _c("text", { staticClass: "goods-title" }, [
-          _vm._v("国产红心火龙果   4个装中果  单果约300~400g 新鲜水果")
+          _vm._v("国产红心火龙果 4个装中果 单果约300~400g 新鲜水果")
         ]),
         _c("view", { staticClass: "goods-price" }, [
           _c("text", [_vm._v("共2件产品  合计：")]),

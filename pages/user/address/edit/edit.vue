@@ -228,7 +228,7 @@
 			}
 			.input{
 				
-				padding-bottom:30upx;
+				
 				align-items: center;
 				font-size: 30upx;
 				&.switch{
@@ -252,18 +252,19 @@
 		display: flex;
 		flex-direction: column;
 		border:none;
+		.nominal{
+			height:40upx;
+		}
 		.add-content{
 			height:180upx;
 			textarea{
 				height:180upx;
-				
+				width:100%;
 				
 			}
 		}
 
-		.nominal{
-			
-		}
+		
 	}
 	
 }

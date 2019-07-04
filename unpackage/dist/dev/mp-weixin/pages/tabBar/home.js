@@ -149,26 +149,44 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 var _amapWx = _interopRequireDefault(__webpack_require__(/*! @/common/SDK/amap-wx.js */ "C:\\Users\\Administrator\\Desktop\\shanpei-weixin\\common\\SDK\\amap-wx.js"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var ttt = 0; //高德SDK
 var _default = {
+  mounted: function mounted() {var _this = this;
+    // 轮播,热销
+    uni.request({
+      url: 'http://shanpei.wsstreet.net/index', //仅为示例，并非真实接口地址。
+      data: {
+        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NjA5MjQ3NjgsImV4cCI6MTU4Njg0NDc2OCwiZGF0YSI6eyJpZCI6Mywib3BlbmlkIjoib0lieWY0cER5Z0ZLcWNRT1h3OGhaclZFbnJTRSIsImhlYWRpbWciOiJodHRwczpcL1wvd3gucWxvZ28uY25cL21tb3BlblwvdmlfMzJcL1EwajRUd0dUZlRMMFpGR3QwNWliMTJVWnJoMkNidm1VOUcwOGJpYW5pYmtiOXViWXVWaWN5WkZFaWNQUE9JQ1dPZ041UEYyVmxPOTRQVkFEUVBCYzZWM3pxZUFcLzEzMiIsIm5pY2tuYW1lIjoiXHU1ZjIwXHU0ZTA5IiwicGhvbmUiOiIiLCJ1c2VybmFtZSI6IiIsInZpcF9sZXZlbCI6MCwidmlwX2RhdGUiOm51bGwsImNyZWF0ZV9hdCI6IjIwMTktMDYtMTkgMTQ6MTE6NTgifX0.B32WfMWQ-0QJ1VtEbhxXgtT-nBqc8GwJb3ANBhy8BxU" },
+
+      method: "post",
+      success: function success(res) {
+        console.log(res);
+        _this.swiperList = res.data.data.banner;
+        _this.categoryList = res.data.data.cate;
+        _this.hotList = res.data.data.hot;
+      } });
+
+    // 首页为你推荐
+    uni.request({
+      url: 'http://shanpei.wsstreet.net/recommend', //仅为示例，并非真实接口地址。
+      data: {
+        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NjA5MjQ3NjgsImV4cCI6MTU4Njg0NDc2OCwiZGF0YSI6eyJpZCI6Mywib3BlbmlkIjoib0lieWY0cER5Z0ZLcWNRT1h3OGhaclZFbnJTRSIsImhlYWRpbWciOiJodHRwczpcL1wvd3gucWxvZ28uY25cL21tb3BlblwvdmlfMzJcL1EwajRUd0dUZlRMMFpGR3QwNWliMTJVWnJoMkNidm1VOUcwOGJpYW5pYmtiOXViWXVWaWN5WkZFaWNQUE9JQ1dPZ041UEYyVmxPOTRQVkFEUVBCYzZWM3pxZUFcLzEzMiIsIm5pY2tuYW1lIjoiXHU1ZjIwXHU0ZTA5IiwicGhvbmUiOiIiLCJ1c2VybmFtZSI6IiIsInZpcF9sZXZlbCI6MCwidmlwX2RhdGUiOm51bGwsImNyZWF0ZV9hdCI6IjIwMTktMDYtMTkgMTQ6MTE6NTgifX0.B32WfMWQ-0QJ1VtEbhxXgtT-nBqc8GwJb3ANBhy8BxU",
+        "page": '1' },
+
+      method: "post",
+      success: function success(res) {
+        console.log(res);
+        _this.totalList = res.data.data.data;
+        for (var i = 0; i < 10; i++) {
+          _this.productList.push(_this.totalList[i]);
+        }
+
+        _this.current_page = res.data.data.current_page;
+        _this.last_page = res.data.data.data.last_page;
+        _this.total = res.data.data.data.total;
+      } });
+
+  },
   data: function data() {
     return {
       afterHeaderOpacity: 1, //不透明度
@@ -178,151 +196,22 @@ var _default = {
       city: '北京',
       currentSwiper: 0,
       // 轮播图片
-      swiperList: [
-      { id: 1, src: 'url1', img: '../../static/img/1.jpg' },
-      { id: 2, src: 'url2', img: '../../static/img/2.jpg' },
-      { id: 3, src: 'url3', img: '../../static/img/3.jpg' }],
+      swiperList: [],
 
       // 分类菜单
-      categoryList: [
-      { id: 1, name: '米面粮油', img: '../../static/img/category/liangyou.png' },
-      { id: 2, name: '新鲜蔬菜', img: '../../static/img/category/shucai.png' },
-      { id: 3, name: '海鲜生产', img: '../../static/img/category/shuichan.png' },
-      { id: 4, name: '调料干货', img: '../../static/img/category/ganhuo.png' },
-      { id: 5, name: '餐厨用品', img: '../../static/img/category/yongpin.png' },
-      { id: 6, name: '肉禽', img: '../../static/img/category/rouqin.png' },
-      { id: 7, name: '方便菜', img: '../../static/img/category/fangbiancai.png' },
-      { id: 8, name: '休闲酒饮', img: '../../static/img/category/jiuyin.png' },
-      { id: 9, name: '生鲜', img: '../../static/img/category/shengxian.png' },
-      { id: 10, name: '本地肉禽', img: '../../static/img/category/rouqin.png' }],
-
+      categoryList: [],
       Promotion: [],
       // 热销产品
-      hotList: [
-
-      {
-        goods_id: 0,
-        img: '../../static/img/category/food-icon.png',
-        name: '商品名称商品名称商品名称商品名称商品名称',
-        price: '￥168',
-        lprice: "$222",
-        slogan: '1235人付款' },
-
-      {
-        goods_id: 0,
-        img: '../../static/img/category/food-icon.png',
-        name: '商品名称商品名称商品名称商品名称商品名称',
-        price: '￥168',
-        lprice: "$222",
-        slogan: '1235人付款' },
-
-      {
-        goods_id: 0,
-        img: '../../static/img/category/food-icon.png',
-        name: '商品名称商品名称商品名称商品名称商品名称',
-        price: '￥168',
-        lprice: "$222",
-        slogan: '1235人付款' },
-
-      {
-        goods_id: 0,
-        img: '../../static/img/category/food-icon.png',
-        name: '商品名称商品名称商品名称商品名称商品名称',
-        price: '￥168',
-        lprice: "$222",
-        slogan: '1235人付款' },
-
-      {
-        goods_id: 0,
-        img: '../../static/img/category/food-icon.png',
-        name: '商品名称商品名称商品名称商品名称商品名称',
-        price: '￥168',
-        lprice: "$222",
-        slogan: '1235人付款' },
-
-      {
-        goods_id: 0,
-        img: '../../static/img/category/food-icon.png',
-        name: '商品名称商品名称商品名称商品名称商品名称',
-        price: '￥168',
-        lprice: "$222",
-        slogan: '1235人付款' }],
-
+      hotList: [],
 
       //猜你喜欢列表
-      productList: [
-      {
-        goods_id: 0,
-        img: '../../static/img/goods/p1.jpg',
-        name: '商品名称商品名称商品名称商品名称商品名称',
-        price: '￥168',
-        slogan: '1235人付款' },
+      productList: [],
 
-      {
-        goods_id: 1,
-        img: '../../static/img/goods/p2.jpg',
-        name: '商品名称商品名称商品名称商品名称商品名称',
-        price: '￥168',
-        slogan: '1235人付款' },
-
-      {
-        goods_id: 2,
-        img: '../../static/img/goods/p3.jpg',
-        name: '商品名称商品名称商品名称商品名称商品名称',
-        price: '￥168',
-        slogan: '1235人付款' },
-
-      {
-        goods_id: 3,
-        img: '../../static/img/goods/p4.jpg',
-        name: '商品名称商品名称商品名称商品名称商品名称',
-        price: '￥168',
-        slogan: '1235人付款' },
-
-      {
-        goods_id: 4,
-        img: '../../static/img/goods/p5.jpg',
-        name: '商品名称商品名称商品名称商品名称商品名称',
-        price: '￥168',
-        slogan: '1235人付款' },
-
-      {
-        goods_id: 5,
-        img: '../../static/img/goods/p6.jpg',
-        name: '商品名称商品名称商品名称商品名称商品名称',
-        price: '￥168',
-        slogan: '1235人付款' },
-
-      {
-        goods_id: 6,
-        img: '../../static/img/goods/p7.jpg',
-        name: '商品名称商品名称商品名称商品名称商品名称',
-        price: '￥168',
-        slogan: '1235人付款' },
-
-      {
-        goods_id: 7,
-        img: '../../static/img/goods/p8.jpg',
-        name: '商品名称商品名称商品名称商品名称商品名称',
-        price: '￥168',
-        slogan: '1235人付款' },
-
-      {
-        goods_id: 8,
-        img: '../../static/img/goods/p9.jpg',
-        name: '商品名称商品名称商品名称商品名称商品名称',
-        price: '￥168',
-        slogan: '1235人付款' },
-
-      {
-        goods_id: 9,
-        img: '../../static/img/goods/p10.jpg',
-        name: '商品名称商品名称商品名称商品名称商品名称',
-        price: '￥168',
-        slogan: '1235人付款' }],
-
-
-      loadingText: '正在加载...' };
+      totalList: [],
+      loadingText: '正在加载...',
+      current_page: "",
+      total: "",
+      last_page: "" };
 
   },
   onPageScroll: function onPageScroll(e) {
@@ -339,28 +228,27 @@ var _default = {
   },
   //上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
   onReachBottom: function onReachBottom() {
-    uni.showToast({ title: '触发上拉加载' });
-    var len = this.productList.length;
-    if (len >= 40) {
+
+    var total = this.total;
+    var last_page = this.last_page;
+    var current_page = this.current_page;
+    if (this.productList.length >= total) {
       this.loadingText = '到底了';
       return false;
     }
     // 演示,随机加入商品,生成环境请替换为ajax请求
-    var end_goods_id = this.productList[len - 1].goods_id;
-    for (var i = 1; i <= 10; i++) {
-      var goods_id = end_goods_id + i;
-      var p = {
-        goods_id: goods_id,
-        img:
-        '../../static/img/goods/p' + (goods_id % 10 == 0 ? 10 : goods_id % 10) + '.jpg',
-        name: '商品名称商品名称商品名称商品名称商品名称',
-        price: '￥168',
-        slogan: '1235人付款' };
 
-      this.productList.push(p);
+
+    for (var i = 10; i < current_page * 10; i++) {
+      if (this.productList.length < this.totalList.length) {
+        this.productList.push(this.totalList(i));
+      } else {
+
+      }
+
     }
   },
-  onLoad: function onLoad() {var _this = this;
+  onLoad: function onLoad() {var _this2 = this;
 
 
 
@@ -371,7 +259,7 @@ var _default = {
     //定位地址
     this.amapPlugin.getRegeo({
       success: function success(data) {
-        _this.city = data[0].regeocodeData.addressComponent.city.replace(/市/g, ''); //把"市"去掉
+        _this2.city = data[0].regeocodeData.addressComponent.city.replace(/市/g, ''); //把"市"去掉
       } });
 
     //开启定时器
@@ -387,8 +275,7 @@ var _default = {
       mm = cutTime.getMonth() + 1,
       dd = cutTime.getDate();
       var tmpcountdown = yy + '/' + mm + '/' + dd + ' 23:59:59';
-      var tmpPromotion = [
-      {
+      var tmpPromotion = [{
         title: '整点秒杀',
         ad: '整天秒杀专区',
         img: '../../static/img/s1.jpg',
@@ -421,17 +308,21 @@ var _default = {
             m = m < 10 ? '0' + m : m;
             s = s < 10 ? '0' + s : s;
           }
-          tmpPromotion[i].countdown = { h: h, m: m, s: s };
+          tmpPromotion[i].countdown = {
+            h: h,
+            m: m,
+            s: s };
+
         }
       }
       this.Promotion = tmpPromotion;
     },
     //定时器
-    Timer: function Timer() {var _this2 = this;
+    Timer: function Timer() {var _this3 = this;
       setInterval(function () {
-        if (_this2.Promotion.length > 0) {
-          for (var i = 0; i < _this2.Promotion.length; i++) {
-            var row = _this2.Promotion[i];
+        if (_this3.Promotion.length > 0) {
+          for (var i = 0; i < _this3.Promotion.length; i++) {
+            var row = _this3.Promotion[i];
             if (row.countdown) {
               if (
               !(
@@ -462,7 +353,7 @@ var _default = {
                   row.countdown.m = 59;
                   row.countdown.s = 59;
                 }
-                _this2.Promotion[i].countdown = row.countdown;
+                _this3.Promotion[i].countdown = row.countdown;
               }
             }
           }
@@ -477,30 +368,36 @@ var _default = {
     },
     //搜索跳转
     toSearch: function toSearch() {
-      uni.showToast({ title: '建议跳转到新页面做搜索功能' });
+      uni.showToast({
+        title: '建议跳转到新页面做搜索功能' });
+
 
     },
     //轮播图跳转
     toSwiper: function toSwiper(e, index) {
-      uni.showToast({ title: e.src, icon: 'none' });
-      this.currentSwiper = index;
+
+      //this.currentSwiper = index
     },
     //分类跳转
     toCategory: function toCategory(e) {
-      //uni.showToast({title: e.name,icon:"none"});
-      uni.navigateTo({
-        url: '../goods/goods-list?cid=' + e.id + '&name=' + e.name });
 
+      uni.navigateTo({
+        // url: '../goods/goods-list?cid=' + e.id + '&name=' + e.name
+      });
     },
     //推荐商品跳转
     toPromotion: function toPromotion(e) {
-      uni.showToast({ title: e.title, icon: 'none' });
+      uni.showToast({});
+
+
     },
     //商品跳转
     toGoods: function toGoods(e) {
-      uni.showToast({ title: '商品' + e.goods_id, icon: 'none' });
-      uni.navigateTo({
-        url: '../goods/goods' });
+      uni.showToast({});
+
+
+      uni.navigateTo({});
+
 
     },
     //轮播图指示器
@@ -610,7 +507,10 @@ var render = function() {
                 },
                 [
                   _c("image", {
-                    attrs: { src: swiper.img, eventid: "0c1a97ce-2-" + index },
+                    attrs: {
+                      src: swiper.cover,
+                      eventid: "0c1a97ce-2-" + index
+                    },
                     on: {
                       tap: function($event) {
                         _vm.toSwiper(swiper, index)
@@ -647,9 +547,9 @@ var render = function() {
           },
           [
             _c("view", { staticClass: "img" }, [
-              _c("image", { attrs: { src: row.img } })
+              _c("image", { attrs: { src: row.logo } })
             ]),
-            _c("view", { staticClass: "text" }, [_vm._v(_vm._s(row.name))])
+            _c("view", { staticClass: "text" }, [_vm._v(_vm._s(row.title))])
           ]
         )
       })
@@ -737,14 +637,14 @@ var render = function() {
             },
             [
               _c("view", { staticClass: "item-img" }, [
-                _c("image", { attrs: { src: row.img } })
+                _c("image", { attrs: { src: row.logo } })
               ]),
               _c("view", { staticClass: "item-title" }, [
-                _vm._v(_vm._s(row.name))
+                _vm._v(_vm._s(row.title))
               ]),
               _c("view", { staticClass: "item-price" }, [
                 _c("text", [_vm._v(_vm._s(row.price))]),
-                _c("text", [_vm._v(_vm._s(row.lprice))])
+                _c("text", [_vm._v(_vm._s(row.market_price))])
               ])
             ]
           )
@@ -770,16 +670,16 @@ var render = function() {
               }
             },
             [
-              _c("image", { attrs: { mode: "widthFix", src: product.img } }),
+              _c("image", { attrs: { mode: "widthFix", src: product.logo } }),
               _c("view", { staticClass: "name" }, [
-                _vm._v(_vm._s(product.name))
+                _vm._v(_vm._s(product.title))
               ]),
               _c("view", { staticClass: "info" }, [
                 _c("view", { staticClass: "price" }, [
                   _vm._v(_vm._s(product.price))
                 ]),
                 _c("view", { staticClass: "slogan" }, [
-                  _vm._v(_vm._s(product.slogan))
+                  _vm._v(_vm._s(product.market_price))
                 ])
               ])
             ]

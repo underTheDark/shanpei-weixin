@@ -227,7 +227,7 @@ var _uniSwipeAction = _interopRequireDefault(__webpack_require__(/*! @/component
 
       {
         id: 2,
-        img: '/static/img/goods/p1.jpg',
+        img: '/static/img/goods/p2.jpg',
         name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
         spec: '规格:S码',
         price: 127.5,
@@ -236,7 +236,7 @@ var _uniSwipeAction = _interopRequireDefault(__webpack_require__(/*! @/component
 
       {
         id: 3,
-        img: '/static/img/goods/p1.jpg',
+        img: '/static/img/goods/p3.jpg',
         name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
         spec: '规格:S码',
         price: 127.5,
