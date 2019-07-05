@@ -120,28 +120,27 @@
 						</view>
 						<view class="hidden"  @tap="hideSpec">x</view>
 					</view>
-					<view class="product-color">
-						<text>颜色</text>
-						<view>
-							毛衣 （加厚班）
-						</view>
-					</view>
-					<view class="product-size product-color">
-						<text>颜色</text>
-						<view>
-							毛衣 （加厚班）
-						</view>
+				
+					<view class="pro-content" v-for="(gui,index) in guiList" :key="index">
+						    <h2 @click="addTitle(index)">{{gui.name}}</h2>
+					        <view  class="product-color">
+								<text @click="addColor(colorIndex)" v-for="(color,colorIndex) in gui.list" :key="colorIndex">
+									 {{color.name}}
+								</text>
+							</view>
+						
 					</view>
 					<view class="product-num">
 						<text>数量</text>
 						<view>
-							<uni-number-box :min="1"></uni-number-box>
+							<uni-number-box :min="1" :value="proNum"></uni-number-box>
 						</view>
 					</view>
 				</view>
 
-				<view class="btn">
-					<view class="button" @tap="hideSpec">完成</view>
+				<view class="spec-btn">
+					<view class="cancelB" @click="cancel()">加入购物车</view>
+					<view class="confirmB" @tap="confirm()">立即购买</view>
 				</view>
 			</view>
 		</view>
@@ -297,14 +296,15 @@
 				afterHeaderzIndex: 10, //层级
 				beforeHeaderOpacity: 1, //不透明度
 				afterHeaderOpacity: 0, //不透明度
-				id:"",  //商品id
+				id:"",  //商品id,
+				proNum:1, //加入购物车数量
 				//是否显示返回按钮
 				// #ifndef MP
 				showBack: true,
 				// #endif
                 evaImg:[], //评价上传图片
                 tuiList:[], //推荐商品
-
+                guiList:[], //规格
 				//轮播主图数据
 				swiperList: [{
 						id: 1,
@@ -375,9 +375,8 @@
             uni.request({
             	url: this.config.url+"goods/detail",
             	data: {
-            		"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NjA5MjQ3NjgsImV4cCI6MTU4Njg0NDc2OCwiZGF0YSI6eyJpZCI6Mywib3BlbmlkIjoib0lieWY0cER5Z0ZLcWNRT1h3OGhaclZFbnJTRSIsImhlYWRpbWciOiJodHRwczpcL1wvd3gucWxvZ28uY25cL21tb3BlblwvdmlfMzJcL1EwajRUd0dUZlRMMFpGR3QwNWliMTJVWnJoMkNidm1VOUcwOGJpYW5pYmtiOXViWXVWaWN5WkZFaWNQUE9JQ1dPZ041UEYyVmxPOTRQVkFEUVBCYzZWM3pxZUFcLzEzMiIsIm5pY2tuYW1lIjoiXHU1ZjIwXHU0ZTA5IiwicGhvbmUiOiIiLCJ1c2VybmFtZSI6IiIsInZpcF9sZXZlbCI6MCwidmlwX2RhdGUiOm51bGwsImNyZWF0ZV9hdCI6IjIwMTktMDYtMTkgMTQ6MTE6NTgifX0.B32WfMWQ-0QJ1VtEbhxXgtT-nBqc8GwJb3ANBhy8BxU"
-                    ,
-					id:this.id
+                       token:this.token,
+					   id:this.id
             		
             	},
             	method: "post",
@@ -385,8 +384,14 @@
                      console.log(res);
             		this.goodsData =res.data.data;
             		this.comment=this.goodsData.comment;
-					this.evaImg=this.goodsData.commit[0].comment_covers;
-					this.isKeep=this.goodsData.is_collect
+					//this.evaImg=this.goodsData.commit[0].comment_covers;
+					this.isKeep=this.goodsData.is_collect;
+					this.guiList=this.goodsData.specs;
+				       console.log(this.guiList)
+					// for(var i=0; i<guiList.length;i++){
+					// 	this.colorList=guiList[i];
+					// 	this.sizeList=guiList[i]
+					// }
             	}
             
             });
@@ -401,7 +406,7 @@
 				},
 				method: "post",
 				success: (res) => {
-			         console.log(res);
+			        // console.log(res);
 					 this.tuiList=res.data.data.data
 					// this.goodsData =res.data.data;
 					// this.comment=this.goodsData.comment;
@@ -412,6 +417,27 @@
 			})
 		},
 		methods: {
+			addTitle(index){
+				console.log(index)
+			},
+			addColor(index){
+				console.log(index)
+			},
+			//加入购物车
+			cancel(){
+				uni.request({
+					url:this.config.url+"goods/car",
+					method:"post",
+					data:{
+						token:this.token,
+						goods_id:this.id,
+						goods_spec:{
+							
+						},
+						number:this.proNum
+					}
+				})
+			},
 		//	跳转推荐详情
 		 gotui(index){
 			 uni.navigateTo({
@@ -970,6 +996,7 @@
 	}
 
 	.spec {
+		
 		.row {
 			display: flex;
 			justify-content: space-between;
@@ -977,6 +1004,7 @@
 			font-size: 29upx;
 			color: #cecece;
 			height: 100upx;
+			
 		}
 	}
 
@@ -1311,7 +1339,24 @@ margin-right:20upx;
 		height: 100%;
 		z-index: 20;
 		display: none;
-
+    .spec-btn{
+		width:100%;
+		height:100upx;
+		display:flex;
+		align-items: center;
+		.confirmB,.cancelB{
+			width:50%;
+			height:100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 28upx;
+		}
+		.confirmB{
+			color: #fff;
+			background: rgba(20, 204, 33, 1);
+		}
+	}
 		.mask {
 			position: fixed;
 			top: 0;
@@ -1325,8 +1370,8 @@ margin-right:20upx;
 			position: fixed;
 			z-index: 22;
 			bottom: -70%;
-			width: 92%;
-			padding: 0 4%;
+			width: 100%;
+			
 			height: 70%;
 			border-radius: 20upx 20upx 0 0;
 			background-color: #fff;
@@ -1335,8 +1380,8 @@ margin-right:20upx;
 			align-content: space-between;
 
 			.content {
-				width: 100%;
-				padding: 20upx 0;
+				width: 92%;
+				padding: 30upx 4% 0;
 
 				.product-title {
 					display: flex;
@@ -1383,29 +1428,34 @@ margin-right:20upx;
 						}
 					}
 				}
-
-				.product-color {
-					display: flex;
-					font-size: 26upx;
-					flex-direction: column;
-
-					text {
-						color: rgba(51, 51, 51, 1);
-						font-size: 30upx;
-						padding: 30upx 0;
-					}
-
-					view {
+            // 规格
+			  .pro-content{
+				  display: flex;
+				  flex-direction: column;
+				  h2{
+					  margin-top:20upx;
+					  font-size:30upx;
+color:rgba(51,51,51,1);
+				  }
+				  .product-color {
+				  	display: flex;
+				  	font-size: 26upx;
+				  	
+				   
+				  	text {
+				  	    display: flex;
+						align-items: center;
+						justify-content: center;
+						background: rgba(245, 245, 245, 1);
 						width: 234upx;
 						height: 56upx;
-						background: rgba(245, 245, 245, 1);
-						display: flex;
-						justify-content: center;
 						color: rgba(51, 51, 51, 1);
-						margin-right: 20upx;
-						line-height: 56upx;
-					}
-				}
+						margin-right:20upx;
+				  	}
+			
+				  }
+			  }
+				
 
 				.product-num {
 					display: flex;
@@ -1418,6 +1468,9 @@ margin-right:20upx;
 						color: rgba(51, 51, 51, 1);
 						font-size: 30upx;
 						padding: 30upx 0;
+						display: flex;
+						justify-content: center;
+						align-items: center;
 					}
 
 					view {
@@ -1430,23 +1483,23 @@ margin-right:20upx;
 
 			}
 
-			.btn {
-				width: 100%;
-				height: 100upx;
-
-				.button {
-					width: 100%;
-					height: 80upx;
-					border-radius: 40upx;
-					color: #fff;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					font-size: 28upx;
-					background: rgba(20, 204, 33, 1);
-
-				}
-			}
+// 			.btn {
+// 				width: 100%;
+// 				height: 100upx;
+// 
+// 				.button {
+// 					width: 100%;
+// 					height: 80upx;
+// 					border-radius: 40upx;
+// 					color: #fff;
+// 					display: flex;
+// 					align-items: center;
+// 					justify-content: center;
+// 					font-size: 28upx;
+// 					background: rgba(20, 204, 33, 1);
+// 
+// 				}
+// 			}
 		}
 
 		&.show {

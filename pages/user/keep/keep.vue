@@ -9,53 +9,53 @@
 
 		<view class="keep-main">
 			<!-- 已评价 -->
-			<view class="list" v-show="subState==1">
+			<view class="list" v-show="subState==1" v-for="(eva,index) in goodsList" :key="index">
 				<view class="list-one">
 					<view class="one-left">
-						<image src="../../../static/img/category/banner.jpg"></image>
+						<image :src="eva.goods_logo"></image>
 						<view class="evaluate">
-							<text>姓名</text>
-							<text>星星</text>
+							<text>{{eva.id}}</text>
+							<text>{{eva.comment_star}}</text>
 						</view>
 					</view>
 					<view class="one-right">
-						222222--2222 12:00
+						{{eva.create_at}}
 					</view>
 				</view>
 				<view class="list-two">
-					非常非常棒，厨房里的好帮手，喜欢！非常非常棒，厨房里的好帮手，喜欢！非常非常棒，厨房里的好帮手，喜欢！
+					{{eva.comment_content}}
 				</view>
-				<view class="list-three">
-					<image src="../../../static/img/category/banner.jpg"></image>
+				<view class="list-three" v-for="(src,index) in eva.comment_covers">
+					<image src="src"></image>
 				</view>
 				<view class="list-four">
 					<view class="four-left">
-						<image src="../../../static/img/category/banner.jpg"></image>
+						<image  src="eva.goods_logo"></image>
 					</view>
 					<view class="four-right">
-						<text>非常非常棒，厨房里的好帮手，喜欢！非常非常棒，厨房里的好帮手，喜欢！非常非常棒，厨房里的好帮手，喜欢！</text>
-						<text>价格</text>
+						<text>{{eva.comment_content}}</text>
+						<text>{{eva.price_selling}}</text>
 					</view>
 				</view>
 			</view>
-			<view class="do-evaluate" v-show="subState==2">
+			<view class="do-evaluate" v-show="subState==2" v-for="(eva,index) in goodsList" :key="index">
 				<view class="do-evaluate-one">
 					<view class="evaluate-left">
-						订单编号：2344444444
+						{{eva.order_no}}
 					</view>
 					<view class="evaluate-right">已完成</view>
 				</view>
 				<view class="do-evaluate-two">
-					<image src="../../../static/img/category/banner.jpg"></image>
+					<image src="eva.goods_logo"></image>
 					<view class="goods-dec">
 						<text class="goods-title">
-							国产红心火龙果 4个装中果 单果约300~400g 新鲜水果
+							{{eva.goods_title}}
 						</text>
 						<view class="goods-price">
-							<text>共2件产品 &nbsp合计：</text>
+							<text>共{{eva.number}}件产品 &nbsp合计：</text>
 							<view class="total-price">
 								<text>￥</text>
-								<text>108</text>
+								<text>{{eva.price_real}}</text>
 							</view>
 						</view>
 
@@ -71,57 +71,24 @@
 
 <script>
 	export default {
+		mounted(){
+			var _this=this
+			uni.request({
+				url:this.config.url+"member/comment",
+				method:"post",
+				data:{
+					token:this.token,
+					type:this.subState,
+				},
+				success(res) {
+					console.log(res)
+					_this.goodsList=res.data.data.data;
+				}
+			})
+		},
 		data() {
 			return {
-				goodsList: [{
-						id: 1,
-						img: '/static/img/goods/p1.jpg',
-						name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
-						spec: '规格:S码',
-						price: 127.5,
-						number: 1,
-						selected: false
-					},
-					{
-						id: 2,
-						img: '/static/img/goods/p1.jpg',
-						name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
-						spec: '规格:S码',
-						price: 127.5,
-						number: 1,
-						selected: false
-					},
-					{
-						id: 3,
-						img: '/static/img/goods/p1.jpg',
-						name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
-						spec: '规格:S码',
-						price: 127.5,
-						number: 1,
-						selected: false
-					},
-				],
-				shopList: [{
-						id: 1,
-						name: "冰鲜专卖店",
-						img: "/static/img/shop/1.jpg"
-					},
-					{
-						id: 2,
-						name: "果蔬天下",
-						img: "/static/img/shop/2.jpg"
-					},
-					{
-						id: 3,
-						name: "办公耗材用品店",
-						img: "/static/img/shop/3.jpg"
-					},
-					{
-						id: 4,
-						name: "天天看好书",
-						img: "/static/img/shop/4.jpg"
-					}
-				],
+				goodsList: [],
 				headerTop: 0,
 				//控制滑动效果
 				typeClass: 'goods',

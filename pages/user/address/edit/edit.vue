@@ -22,7 +22,7 @@
 					地区
 				</view>
 				<view class="input" @tap="chooseCity">
-					{{region.label}}
+					{{province}}{{city}}{{area}}
 				</view>
 				
 			</view>
@@ -31,7 +31,7 @@
 					街道
 				</view>
 				<view class="input" @tap="chooseCity">
-					{{region.label}}
+					{{street}}
 				</view>
 				
 			</view>
@@ -40,12 +40,14 @@
 					详细地址
 				</view>
 				<view class="input add-content">
-					<textarea  v-model="detailed" auto-height="true" placeholder="输入详细地址"></textarea>
+					<textarea  v-model="detailed" auto-height="true" placeholder="输入详细地址">
+						
+					</textarea>
 				</view>
 			</view>
 			<view class="add-border"></view>
 			<view class="row last-row">
-				<view class="nominal">
+				<view class="nominal" >
 					设置默认地址
 				</view>
 				<view class="input switch" >
@@ -75,10 +77,14 @@
 				name:'',
 				tel:'',
 				detailed:'',
+				province:"",
+				city:"",
+				area:"",
+				street:"",
 				isDefault:false,
 				cityPickerValue: [0, 0, 1],
 				themeColor: '#007AFF',
-				region:{label:"请点击选择地址",value:[],cityCode:""}
+				region:null,
 			};
 		},
 		methods: {
@@ -89,71 +95,74 @@
 				this.$refs.mpvueCityPicker.show()
 			},
 			onConfirm(e) {
-				this.region = e;
-				this.cityPickerValue = e.value;
+				console.log(e)
+			    
+				var addList=e.label.split("-")
+			    this.province=addList[0];
+				this.city=addList[1];
+				this.area=addList[2];
+				
 			},
 			isDefaultChange(e){
 				this.isDefault = e.detail.value;
 			},
 			
 			save(){
-				let data={"name":this.name,"head":this.name.substr(0,1),"tel":this.tel,"address":{"region":this.region,"detailed":this.detailed},"isDefault":this.isDefault}
-				if(this.editType=='edit'){
-					data.id = this.id
-				}
-				if(!data.name){
+				console.log(this.tel,this.detailed)
+				let data={"name":this.name,"phone":this.tel,id:this.id,token:this.token,
+				province:this.province,city:this.city,area:this.area,street:this.street,
+				"is_default":this.isDefault,address:this.detailed}
+				
+				if(!this.name){
 					uni.showToast({title:'请输入收件人姓名',icon:'none'});
 					return ;
 				}
-				if(!data.tel){
+				if(!this.tel){
 					uni.showToast({title:'请输入收件人电话号码',icon:'none'});
 					return ;
 				}
-				if(!data.address.detailed){
+				if(!this.detailed){
 					uni.showToast({title:'请输入收件人详细地址',icon:'none'});
 					return ;
 				}
-				if(data.address.region.value.length==0){
-					uni.showToast({title:'请选择收件地址',icon:'none'});
-					return ;
-				}
-				uni.showLoading({
-					title:'正在提交'
-				})
+				
+				// uni.showLoading({
+				// 	title:'正在提交'
+				// })
 				//实际应用中请提交ajax,模板定时器模拟提交效果
-				setTimeout(()=>{
-					uni.setStorage({
-						key:'saveAddress',
-						data:data,
-						success() {
-							uni.hideLoading();
-							uni.navigateBack();
-						}
-					})
-				},300)
+			 uni.request({
+			 	url:this.config.url+"address/edit",
+				method:"post",
+				data:data,
+				success:(res)=>{
+					console.log(res)
+					if(res.data.code==1){
+						 uni.showLoading({
+							title:'保存成功'
+						})
+						setTimeout(function() {
+							uni.hideLoading()
+						}, 500);
+					}
+				}
+			 })
 				
 				
 			}
 		},
 		onLoad(e) {
 			//获取传递过来的参数
+			console.log(JSON.parse(e.type))
 			
-			this.editType = e.type;
-			if(e.type=='edit'){
-				uni.getStorage({
-					key:'address',
-					success: (e) => {
-						this.id = e.data.id;
-						this.name = e.data.name;
-						this.tel = e.data.tel;
-						this.detailed = e.data.address.detailed;
-						this.isDefault = e.data.isDefault;
-						this.cityPickerValue = e.data.address.region.value;
-						this.region = e.data.address.region;
-					}
-				})
-			}
-			
+			this.region=JSON.parse(e.type)
+		   this.name=this.region.name;
+		   this.tel=this.region.phone;
+		   this.detailed=this.region.address;
+			this.id=this.region.id;
+			this.province=this.region.province;
+			this.city=this.region.city;
+			this.area=this.region.area;
+			this.street=this.region.street;
 		},
 		onBackPress() {
 			if (this.$refs.mpvueCityPicker.showPicker) {
@@ -247,21 +256,27 @@
 			justify-content: space-between;
 			align-items: center;
 			padding:20upx 0;
+			
 		}
 	.detail-add{
 		display: flex;
 		flex-direction: column;
-		border:none;
+		
 		.nominal{
-			height:40upx;
+			height:60upx;
+			display: flex;
+			
+			align-items: center
 		}
 		.add-content{
-			height:180upx;
+			
+			display: flex;
+			height:100upx;
 			textarea{
-				height:180upx;
-				width:100%;
+				display: inline-block;
 				
-			}
+				width:100%;
+				}
 		}
 
 		

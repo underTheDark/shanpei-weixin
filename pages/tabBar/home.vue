@@ -16,7 +16,7 @@
 			</view>
 			<!-- 右侧图标按钮 -->
 			<view class="icon-btn">
-
+                <view class="hongdian"></view>
 				<view class="icon tongzhi" @tap="toMsg"></view>
 			</view>
 		</view>
@@ -32,7 +32,7 @@
 
 				</swiper>
 				<view class="indicator">
-					<view>{{currentSwiper + 1}} </view>
+					<view>{{currentSwiper + 1}}  </view>
 					<view> / {{swiperList.length}}</view>
 				</view>
 			</view>
@@ -56,7 +56,7 @@
 			<view class="promotion-head">
 				<view class="promotion-head-left">
 					<h2 class="title">限时抢购</h2>
-					<view>
+					<view class="english">
 						<text>FLASH</text>
 						<text>SALES</text>
 					</view>
@@ -92,7 +92,7 @@
 			<view class="promotion-head">
 				<view class="promotion-head-left">
 					<h2 class="title">热销产品</h2>
-					<view>
+					<view class="english">
 						<text>HOT-SALE</text>
 						<text>PRODUCT</text>
 					</view>
@@ -131,7 +131,7 @@
 					</view>
 				</view>
 			</view>
-			<view class="loading-text">{{ loadingText }}</view>
+			<view class="loading-text" v-show="tishi">{{ loadingText }}</view>
 		</view>
 	</view>
 </template>
@@ -146,22 +146,22 @@
 			uni.request({
 				url: 'http://shanpei.wsstreet.net/index', //仅为示例，并非真实接口地址。
 				data: {
-					"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NjA5MjQ3NjgsImV4cCI6MTU4Njg0NDc2OCwiZGF0YSI6eyJpZCI6Mywib3BlbmlkIjoib0lieWY0cER5Z0ZLcWNRT1h3OGhaclZFbnJTRSIsImhlYWRpbWciOiJodHRwczpcL1wvd3gucWxvZ28uY25cL21tb3BlblwvdmlfMzJcL1EwajRUd0dUZlRMMFpGR3QwNWliMTJVWnJoMkNidm1VOUcwOGJpYW5pYmtiOXViWXVWaWN5WkZFaWNQUE9JQ1dPZ041UEYyVmxPOTRQVkFEUVBCYzZWM3pxZUFcLzEzMiIsIm5pY2tuYW1lIjoiXHU1ZjIwXHU0ZTA5IiwicGhvbmUiOiIiLCJ1c2VybmFtZSI6IiIsInZpcF9sZXZlbCI6MCwidmlwX2RhdGUiOm51bGwsImNyZWF0ZV9hdCI6IjIwMTktMDYtMTkgMTQ6MTE6NTgifX0.B32WfMWQ-0QJ1VtEbhxXgtT-nBqc8GwJb3ANBhy8BxU"
+                     token:this.token
 				},
 				method:"post",
 				success: (res) => {
-					//console.log(res);
+				console.log(res);
 				this.swiperList=res.data.data.banner;
 				this.categoryList=res.data.data.cate;
 				this.hotList=res.data.data.hot;
+				this.limitList=res.data.data.limit_buy;
 				}
 			});
 		    // 首页为你推荐
 			uni.request({
 				url: 'http://shanpei.wsstreet.net/recommend', //仅为示例，并非真实接口地址。
 				data: {
-					"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NjA5MjQ3NjgsImV4cCI6MTU4Njg0NDc2OCwiZGF0YSI6eyJpZCI6Mywib3BlbmlkIjoib0lieWY0cER5Z0ZLcWNRT1h3OGhaclZFbnJTRSIsImhlYWRpbWciOiJodHRwczpcL1wvd3gucWxvZ28uY25cL21tb3BlblwvdmlfMzJcL1EwajRUd0dUZlRMMFpGR3QwNWliMTJVWnJoMkNidm1VOUcwOGJpYW5pYmtiOXViWXVWaWN5WkZFaWNQUE9JQ1dPZ041UEYyVmxPOTRQVkFEUVBCYzZWM3pxZUFcLzEzMiIsIm5pY2tuYW1lIjoiXHU1ZjIwXHU0ZTA5IiwicGhvbmUiOiIiLCJ1c2VybmFtZSI6IiIsInZpcF9sZXZlbCI6MCwidmlwX2RhdGUiOm51bGwsImNyZWF0ZV9hdCI6IjIwMTktMDYtMTkgMTQ6MTE6NTgifX0.B32WfMWQ-0QJ1VtEbhxXgtT-nBqc8GwJb3ANBhy8BxU"
-				    ,"page":'1'
+                     token:this.token
 				},
 				method:"post",
 				success: (res) => {
@@ -175,7 +175,7 @@
 				}
 				for(var i=0;i<len;i++){
 					this.productList.push(this.totalList[i])
-					console.log(this.productList)
+				//	console.log(this.productList)
 				}
 				
 				this.current_page=res.data.data.current_page;
@@ -201,7 +201,8 @@
 				Promotion: [],
 				// 热销产品
 				hotList: [],
-				
+				//限制产品
+				limitList:[],
 				//猜你喜欢列表
 				productList: [
 				],
@@ -209,7 +210,8 @@
 				loadingText: '正在加载...',
 				current_page:"",
 				total:"",
-				last_page:""
+				last_page:"",
+				tishi:false
 			};
 		},
 		onPageScroll(e) {
@@ -226,7 +228,10 @@
 		},
 		//上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
 		onReachBottom() {
-			
+			this.tishi=true;
+			setTimeout(function(){
+				this.tishi=false;
+			},500)
 			var total=this.total;
 			var last_page=this.last_page;
 			var current_page=this.current_page;
@@ -462,9 +467,14 @@
 			}
 		}
 	}
-
+    
 	.home {}
-
+    .hot .promotion-head-right{
+		font-size:24upx;
+font-family:PingFang-SC-Regular;
+font-weight:400;
+color:rgba(153,153,153,1);
+	}
 	.pullDown-effects {
 		position: fixed;
 		//top: calc(100upx - 36vw);
@@ -561,7 +571,16 @@
 			flex-shrink: 0;
 			display: flex;
 			justify-content: center;
-
+			position: relative;
+            .hongdian{
+				width:10upx;
+				height:10upx;
+				border-radius: 50%;
+				background:red;
+				position: absolute;
+				top:7upx;
+				right:30upx;
+			}
 			.icon {
 				width: 60upx;
 				height: 60upx;
@@ -623,10 +642,15 @@
 				display: flex;
 				justify-content: center;
 				align-items: center;
-
+                view:{
+					display: flex;
+					justify-content: center;
+					align-items: center;
+				}
 				view:nth-child(1) {
 					color: #00C65D;
-					font-size: 34upx;
+					font-size: 30upx;
+					amrgin-right:2upx;
 				}
 
 				view:nth-child(2) {
@@ -725,14 +749,15 @@
 					height: 100%;
 				}
 
-				view {
-					margin-left: 20upx;
+				.english {
+					margin-left: 5upx;
 					display: flex;
 					flex-direction: column;
-					justify-content: space-around;
+					-webkit-transform: scale(0.8); 
+                      transform: scale(0.6);
 
 					text {
-						font-size: 16upx;
+						font-size: 7upx;
 						font-family: PingFang-SC-Medium;
 						font-weight: 500;
 						color: rgba(85, 85, 85, 1);
@@ -828,7 +853,7 @@
 	.hot-list {
 		width: 100%;
 		display: flex;
-		justify-content: space-around;
+		
 		flex-wrap: wrap;
 
 		.hot-list-item {
@@ -836,7 +861,7 @@
 
 			display: flex;
 			flex-direction: column;
-			align-items: flex-start;
+			
 			flex-wrap: wrap;
             padding-bottom:20upx;
 			.item-img {

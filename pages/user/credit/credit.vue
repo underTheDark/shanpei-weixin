@@ -2,18 +2,19 @@
 	<view class="credit">
 		<view class="total-credit">
 			<text>我的积分</text>
-			<text>400</text>
+			<text>{{credit.score}}</text>
 		</view>
 		<view class="credit-main">
 			<view class="credit-title">
 			    积分明细
 			</view>
-			<view class="credit-recode">
+			
+			<view class="credit-recode" v-for="(row,index) in totalCredit" :key="index">
 				<view class="recode-left">
 					<text>消费赠送</text>
-					<text>2333333</text>
+					<text>{{row.create_at}}</text>
 				</view>
-				<view class="recode-right">+222</view>
+				<view class="recode-right">+{{row.score}}</view>
 			</view>
 		</view>
 	</view>
@@ -23,11 +24,28 @@
 	export default {
 		data() {
 			return {
+				totalCredit:[],
+				credit:null,
 				
 			}
 		},
 		methods: {
 			
+		},
+		mounted(){
+			var _this=this;
+			uni.request({
+				url:this.config.url+"member/score",
+				data:{
+					token:this.token
+				},
+				method:"POST",
+				success(res) {
+					console.log(res)
+					_this.credit=res.data.data
+					_this.totalCredit=res.data.data.recode.data
+				}
+			})
 		}
 	}
 </script>

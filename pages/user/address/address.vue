@@ -2,42 +2,49 @@
 	<view id="address">
 
 		<view class="list">
-			<view v-if="this.addressList.length == 0" class="noAdd">
-				<view class="img">
-					<image src="../../../static/img/add-position.png"></image>
-				</view>
-
-				<text>赶快去添加收货地址吧！</text>
-			</view>
+			
 			<view class="address-title">
 				<view :class="{on:typeClass=='home'}" @tap="switchType('home')">常用地址管理</view>
 				<view :class="{on:typeClass=='self'}" @tap="switchType('self')">常用自提点管理</view>
 			</view>
+			<view v-if="homeList.length == 0 && subState==1" class="noAdd">
+				<view class="img">
+					<image src="../../../static/img/add-position.png"></image>
+				</view>
+			
+				<text>赶快去添加收货地址吧！</text>
+			</view>
+			<view v-show="selfList.length == 0 && subState==2" class="noAdd">
+				<view class="img">
+					<image src="../../../static/img/add-position.png"></image>
+				</view>
+			
+				<text>赶快去添加收货地址吧！</text>
+			</view>
 			<!-- 常用地址管理 -->
-			<view v-show="subState==1" class="row" v-for="(row,index) in addressList" :key="index">
+			<view v-show="subState==1" class="row" v-for="(row,index) in homeList" :key="index">
 				<view class="row-top">
 					<view class="top-one">
-						<text>姓名</text>
-						<text>手机号</text>
+						<text>{{row.name}}</text>
+						<text>{{row.phone}}</text>
 					</view>
 					<view class="top-two">
-
-						河南省 郑州市 高新技术开发区 科学大道 广告产业园9号楼
-						13楼1317室
+        
+	{{row.province }}{{row.city}}{{row.area}}{{row.street}}{{row.address}}					
 
 					</view>
 				</view>
 				<view class="row-bottom">
 					<view class="left">
-						<image src="../../../static/img/address/duihao.png"></image>
-						<view>其他地址</view>
+						<image :src="row.is_default==1 ?src1:src2"></image>
+						<view :class="row.is_default==1?'selected':'noSelect'">{{row.is_default==1?"默认地址":"其他地址"}}</view>
 					</view>
 					<view class="right">
 						<view class="jianju" @tap.stop="edit(row)">
 							<image src="../../../static/img/address/write.png"></image>
 							<view>编辑</view>
 						</view>
-						<view  @click="removeM()">
+						<view  @click="removeH(index,row.id)">
 							<image src="../../../static/img/address/delete.png"></image>
 							<view>删除</view>
 						</view>
@@ -45,31 +52,30 @@
 				</view>
 			</view>
 			<!-- 常用自提点管理 -->
-			<view v-show="subState==2" class="row" v-for="(row,index) in addressList" :key="index" @tap="select(row)">
+			<view v-show="subState==2" class="row" v-for="(row,index) in selfList" :key="index" @tap="select(row)">
 				<view class="row-top">
-					<view class="get-position">大城小爱超市</view>
+					<view class="get-position">{{row.store.name}}</view>
 					<view class="top-one">
-						<text>姓名</text>
-						<text>手机号</text>
+						<text>{{row.store.username}}</text>
+						<text>{{row.store.phone}}</text>
 					</view>
 					<view class="top-two">
 
-						河南省 郑州市 高新技术开发区 科学大道 广告产业园9号楼
-						13楼1317室
+		{{row.store.province }}{{row.store.city}}{{row.store.area}}{{row.store.street}}{{row.store.address}}
 
 					</view>
 				</view>
 				<view class="row-bottom">
 					<view class="left">
-						<image src="../../../static/img/address/duihao.png"></image>
-						<view>其他地址</view>
+						<image :src="row.is_default==1 ?src1:src2"></image>
+						<view :class="row.is_default==1?'selected':'noSelect'">{{row.is_default==1?"默认地址":"其他地址"}}</view>
 					</view>
 					<view class="right">
-						<view class="jianju" @tap.stop="edit(row)">
+						<!-- <view class="jianju" @tap.stop="edit(row)">
 							<image src="../../../static/img/address/write.png"></image>
 							<view>编辑</view>
-						</view>
-						<view  @click="removeM()">
+						</view> -->
+						<view  @click="removeS(index,row.id)">
 							<image src="../../../static/img/address/delete.png"></image>
 							<view>删除</view>
 						</view>
@@ -79,7 +85,7 @@
 
 		</view>
 
-		<view class="add">
+		<view class="add" v-show="subState==1">
 			<view class="btn" @tap="add">
 				<view class="icon tianjia"></view>新增地址
 			</view>
@@ -93,118 +99,89 @@
 	import uniPopup  from "../../../components/uni-popup/uni-popup.vue"
 
 	export default {
+		mounted(){
+			
+			// 自提点
+			uni.request({
+				url:this.config.url+"member/station",
+				method:"post",
+				data:{
+					token:this.token
+				},
+				success:(res)=>{
+					console.log(res)
+					this.selfList=res.data.data;
+				}
+				
+			})
+			//我的收货地址
+			uni.request({
+				url:this.config.url+"member/address",
+				method:"POST",
+				data:{
+					token:this.token
+				},
+				success:(res)=>{
+					console.log(res)
+					this.homeList=res.data.data;
+				}
+			})
+		},
 		components: {
 			uniPopup
 		},
 		data() {
 			return {
+				src1:'../../../static/img/address/y-duihao.png' ,
+				src2: '../../../static/img/address/n-duihao.png',
 				typeClass: 'home',
 				subState: 1,
 				isSelect: false,
-				addressList: [{
-						id: 1,
-						name: "大黑哥",
-						head: "大",
-						tel: "18816881688",
-						address: {
-							region: {
-								"label": "广东省-深圳市-福田区",
-								"value": [18, 2, 1],
-								"cityCode": "440304"
-							},
-							detailed: '深南大道1111号无名摩登大厦6楼A2'
-						},
-						isDefault: true
-					},
-					{
-						id: 2,
-						name: "大黑哥",
-						head: "大",
-						tel: "15812341234",
-						address: {
-							region: {
-								"label": "广东省-深圳市-福田区",
-								"value": [18, 2, 1],
-								"cityCode": "440304"
-							},
-							detailed: '深北小道2222号有名公寓502'
-						},
-						isDefault: false
-					},
-					{
-						id: 3,
-						name: "老大哥",
-						head: "老",
-						tel: "18155467897",
-						address: {
-							region: {
-								"label": "广东省-深圳市-福田区",
-								"value": [18, 2, 1],
-								"cityCode": "440304"
-							},
-							detailed: '深南大道1111号无名摩登大厦6楼A2'
-						},
-						isDefault: false
-					},
-					{
-						id: 4,
-						name: "王小妹",
-						head: "王",
-						tel: "13425654895",
-						address: {
-							region: {
-								"label": "广东省-深圳市-福田区",
-								"value": [18, 2, 1],
-								"cityCode": "440304"
-							},
-							detailed: '深南大道1111号无名摩登大厦6楼A2'
-						},
-						isDefault: false
-					},
-				]
+				homeList: [],
+				selfList:[]
 			};
 		},
 		onShow() {
-
-			uni.getStorage({
-				key: 'delAddress',
-				success: (e) => {
-					let len = this.addressList.length;
-					if (e.data.hasOwnProperty('id')) {
-						for (let i = 0; i < len; i++) {
-							if (this.addressList[i].id == e.data.id) {
-								this.addressList.splice(i, 1);
-								break;
-							}
-						}
-					}
-					uni.removeStorage({
-						key: 'delAddress'
-					})
-				}
-			})
-			uni.getStorage({
-				key: 'saveAddress',
-				success: (e) => {
-					let len = this.addressList.length;
-					if (e.data.hasOwnProperty('id')) {
-						for (let i = 0; i < len; i++) {
-							if (this.addressList[i].id == e.data.id) {
-								this.addressList.splice(i, 1, e.data);
-								break;
-							}
-						}
-					} else {
-						let lastid = this.addressList[len - 1];
-						lastid++;
-						e.data.id = lastid;
-						this.addressList.push(e.data);
-					}
-					uni.removeStorage({
-						key: 'saveAddress'
-					})
-				}
-			})
+            
+			// uni.getStorage({
+			// 	key: 'delAddress',
+			// 	success: (e) => {
+			// 		let len = this.addressList.length;
+			// 		if (e.data.hasOwnProperty('id')) {
+			// 			for (let i = 0; i < len; i++) {
+			// 				if (this.addressList[i].id == e.data.id) {
+			// 					this.addressList.splice(i, 1);
+			// 					break;
+			// 				}
+			// 			}
+			// 		}
+			// 		uni.removeStorage({
+			// 			key: 'delAddress'
+			// 		})
+			// 	}
+			// })
+			// uni.getStorage({
+			// 	key: 'saveAddress',
+			// 	success: (e) => {
+			// 		let len = this.addressList.length;
+			// 		if (e.data.hasOwnProperty('id')) {
+			// 			for (let i = 0; i < len; i++) {
+			// 				if (this.addressList[i].id == e.data.id) {
+			// 					this.addressList.splice(i, 1, e.data);
+			// 					break;
+			// 				}
+			// 			}
+			// 		} else {
+			// 			let lastid = this.addressList[len - 1];
+			// 			lastid++;
+			// 			e.data.id = lastid;
+			// 			this.addressList.push(e.data);
+			// 		}
+			// 		uni.removeStorage({
+			// 			key: 'saveAddress'
+			// 		})
+			// 	}
+			// })
 		},
 		onLoad(e) {
 			if (e.type == 'select') {
@@ -212,32 +189,44 @@
 			}
 		},
 		methods: {
-				// 删除
-			removeM(index, id) {
-				console.log(2222)
-				let self = this
-				console.log('点击删除')
-				uni.showModal({
-					title: '',
-					content: '确定要删除该信息吗？',
-					confirmText: '删除',
-					cancelColor:'rgba(102,102,102,1)',
-					confirmColor:'rgba(20,204,33,1)',
-					success: function (res) {
-						if (res.confirm) {
-							console.log('用户点击确定')
-							
-							uni.showToast({
-								icon: "success",
-								title: '操作成功!',
-								duration: 2000
-							});
-						} else if (res.cancel) {
-							console.log('用户点击取消')
-						}
-					}
-				});
+				// 删除我的收货地址
+			removeH(index,id) {
+			console.log(index,id)
+			uni.request({
+				url:this.config.url+"address/del",
+				data:{
+					token:this.token,
+					address_id:id,
+				},
+				method:"post",
+				success: (res) => {
+					console.log(res)
+				}
+			});
 			},
+		// 删除自提点
+			removeS(index,id) {
+			
+			uni.request({
+				url:this.config.url+"station/del",
+				data:{
+					token:this.token,
+					address_id:id,
+				},
+				method:"post",
+				success: (res) => {
+					console.log(res)
+				}
+			});
+			},
+
+							// uni.showToast({
+							// 	icon: "success",
+							// 	title: '操作成功!',
+							// 	duration: 2000
+							// });
+				
+			
 			switchType(type) {
 
 				this.typeClass = type;
@@ -249,14 +238,10 @@
 				}
 			},
 			edit(row) {
-				uni.setStorage({
-					key: 'address',
-					data: row,
-					success() {
-						uni.navigateTo({
-							url: "/pages/user/address/edit/edit?type=edit"
-						})
-					}
+				var type=JSON.stringify(row)
+				
+				uni.navigateTo({
+					url: "/pages/user/address/edit/edit?type="+type
 				});
 
 			},
@@ -457,7 +442,9 @@
 				.left {
 					display: flex;
 					color: rgba(153, 153, 153, 1);
-
+                    .selected{
+                    	color:#14cc21
+                    }
 					image {
 						width: 36upx;
 						height: 36upx;

@@ -3,32 +3,32 @@
 		<view class="list">
 
 			<view class="sub-list goods">
-				<view class="tis" v-if="goodsList.length==0">没有数据~</view>
-
-				<view class="row" v-for="(row,index) in goodsList" :key="index">
-					<uni-swipe-action @click="bindClick(index)" :options="options">
+				<view class="tis" v-show="goodsList.length == 0">没有数据~</view>
+               
+				<view class="collectList" v-for="(row,index) in goodsList" :key="index">
+					<!-- <uni-swipe-action @click="bindClick(index)" :options="options"> -->
+					
 						<!-- <view class="menu" @tap.stop="deleteCoupon(row.id,goodsList)">
 						<view class="icon shanchu"></view>
 					</view> -->
 						<!-- @touchstart="touchStart(index,$event)" @touchmove="touchMove(index,$event)" @touchend="touchEnd(index,$event)" -->
+                    <uni-swipe-action @click="bindClick(index,row.goods_id)" :options="options">
 
-
-						<view class="img">
-							<image :src="row.img"></image>
-						</view>
+						
+						<image :src="row.logo"></image>
+			
 						<view class="info">
 							<view class="title">
-								国产红心火龙果 4个装中果单果约300
-								~400g 新鲜水果
+								{{row.title}}
 							</view>
 							<view class="evaluate">
-								<view class="evaluate-num">332已购买</view>
-								<view class="evaluate-good">100%好评</view>
+								<view class="evaluate-num">{{row.number_sales}}已购买</view>
+								<view class="evaluate-good">{{ row.good_percent}}%好评</view>
 							</view>
 							<view class="price-compare">
-								<view class="price">10000</view>
+								<view class="price">￥{{row.price}}</view>
 
-								<view class="slogan">3333</view>
+								<view class="slogan">￥{{row.market_price}}</view>
 
 							</view>
 						</view>
@@ -45,6 +45,22 @@
 	import uniSwipeAction from "@/components/uni-swipe-action/uni-swipe-action.vue";
 
 	export default {
+		mounted(){
+            var _this=this;
+			uni.request({
+				
+				url:this.config.url+"member/collect",
+				method:"post",
+				data:{
+					token:this.token,
+					
+				},
+				success:function(res){
+					console.log(res)
+					_this.goodsList=res.data.data.data;
+				}
+			})
+		},
 		components: {
 			uniSwipeAction
 		},
@@ -56,41 +72,31 @@
 						backgroundColor: "rgba(255,84,31,1)"
 					}
 				}],
-				goodsList: [{
-						id: 1,
-						img: '/static/img/goods/p1.jpg',
-						name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
-						spec: '规格:S码',
-						price: 127.5,
-						number: 1,
-						selected: false
-					},
-					{
-						id: 2,
-						img: '/static/img/goods/p2.jpg',
-						name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
-						spec: '规格:S码',
-						price: 127.5,
-						number: 1,
-						selected: false
-					},
-					{
-						id: 3,
-						img: '/static/img/goods/p3.jpg',
-						name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
-						spec: '规格:S码',
-						price: 127.5,
-						number: 1,
-						selected: false
-					},
-				]
+				goodsList: [],
+				
 			}
 		},
 		methods: {
-			bindClick(options){
+			
+			bindClick(options,id){
+				var _this=this;
+				uni.request({
+					url:this.config.url+"goods/collect",
+					method:"POST",
+					data:{
+						goods_id:id,
+						token:this.token
+					},
+					success:function(res){
+						console.log(res)
+						if(res.data.code==1){
+							_this.goodsList.splice(options,1)
+						}
+					}
+				})
 				console.log(options)
-				this.goodsList=this.goodsList.splice(options,2)
-				console.log(this.goodsList)
+				// this.goodsList=this.goodsList.splice(options,2)
+				// console.log(this.goodsList)
 			},
 			//控制左滑删除效果-begin
 			touchStart(index, event) {
@@ -170,27 +176,25 @@
 			font-size: 32upx;
 		}
 
-		.row {
+		.collectList {
 			display: flex;
-			justify-content: space-between;
+			flex-direction: row;
 			align-items: center;
 			padding: 20upx 2%;
-
-			.img {
-				width: 222upx;
-				height: 222upx;
-                
+            
+			border-bottom:20upx solid rgba(247,247,247,1);
+			
 				image {
 					width: 222upx;
 					height: 222upx;
 				}
-			}
+			
 
 			.info {
 				margin-left: 20upx;
 				display: flex;
 				flex-direction: column;
-                 flex-wrap: wrap;
+                 
 				.title {
 					font-size: 28upx;
 					font-family: PingFang-SC-Medium;
@@ -198,15 +202,16 @@
 					color: rgba(16, 16, 16, 1);
 					display: flex;
 					flex-wrap: wrap;
-					word-wrap: break-word;
+					
+					
 				}
 
 				.price-compare {
 					display: flex;
 					justify-content: flex-start;
 					align-items: center;
-					width: 92%;
-					padding: 10upx 4% 10upx 0;
+					
+					
 
 					.price {
 						color: #e65339;
@@ -225,14 +230,14 @@
 				}
 
 				.evaluate {
-					width: 92%;
-					padding: 0 4% 20upx 0;
+					
+					
 					display: flex;
 					justify-content: flex-start;
 					align-items: center;
 					color: rgba(102, 102, 102, 1);
 					font-size: 22upx;
-					margin-top: 40upx;
+					margin: 30upx 0;
 
 					.evaluate-good {
 						margin-left: 20upx;
