@@ -13,7 +13,7 @@
 		<view class="goods-list">
 			<view class="product-list">
 				<view class="product" v-for="(goods) in goodsList" :key="goods.goods_id" @tap="toGoods(goods)">
-					<image mode="widthFix" :src="goods.logo"></image>
+					<image  :src="goods.logo"></image>
 					<view class="name">{{goods.title}}</view>
 					<view class="info">
 					     <view class="price">{{goods.price}}</view>
@@ -48,12 +48,9 @@
 				},
 				method: "post",
 				success: (res) => {
-			
-					console.log(res);
+			        console.log(res);
 					this.goodsList =res.data.data.data;
-					
-				}
-			
+					}
 			})
 		},
 		data() {
@@ -74,6 +71,10 @@
 			};
 		},
 		onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
+			// console.log(option)
+			  uni.setNavigationBarTitle({
+             title: option.title
+      });
 			 
              this.key1=	option.key;		
 			uni.setNavigationBarTitle({
@@ -241,7 +242,7 @@
 				width: 48%;
 				border-radius: 20upx;
 				background-color: #fff;
-				margin: 0 0 15upx 0;
+				margin-bottom:30upx;
 				box-shadow: 0upx 5upx 25upx rgba(0,0,0,0.1);
 				display:flex;
 				flex-direction:column;
@@ -250,6 +251,7 @@
 					width: 100%;
 					height:273upx;
 					border-radius: 20upx 20upx 0 0;
+					margin-bottom:30upx;
 				}
 				.name{
 					width: 92%;

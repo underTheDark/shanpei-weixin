@@ -24,6 +24,15 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+.container {
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+}
+._img {
+  width: 100%;
+  height: 100%;
+}
 page {
   background-color: #f8f8f8;
 }
@@ -348,7 +357,7 @@ page {
 }
 .swiper-box swiper swiper-item image {
       width: 100%;
-      height: 100vw;
+      height: 100%;
 }
 .swiper-box .indicator {
     display: -webkit-box;
@@ -580,26 +589,10 @@ page {
     border-bottom: 1px solid #CECECE;
 }
 .description .product-detail {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: column;
-        -ms-flex-direction: column;
-            flex-direction: column;
-    -webkit-box-pack: center;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
-    height: 300rpx;
+    width: 100vw;
 }
 .description .product-detail view:nth-child(1) {
+      margin: 30rpx auto;
       display: -webkit-box;
       display: -webkit-flex;
       display: -ms-flexbox;
@@ -622,12 +615,20 @@ page {
       -webkit-border-radius: 50%;
               border-radius: 50%;
       border: 1px dashed #aaa;
-      margin: 30rpx 0;
       font-size: 24rpx;
 }
 .description .product-detail .product-dec {
-      background: red;
-      height: 300rpx;
+      width: 100vw;
+}
+.description .product-detail .product-dec ._div {
+        width: 100vw;
+}
+.description .product-detail .product-dec ._div ._p {
+          width: 100vw;
+}
+.description .product-detail .product-dec ._div ._p ._img {
+            width: 100% !important;
+            height: auto;
 }
 .recomment {
   margin-top: 20rpx;
@@ -702,6 +703,7 @@ page {
             -ms-flex-direction: column;
                 flex-direction: column;
         border-bottom: 1px solid #e6e6e6;
+        width: 100%;
 }
 .recomment .recomment-contain .recomment-list .recomment-list-right .product-name {
           display: -webkit-box;
@@ -749,6 +751,28 @@ page {
                   align-items: center;
           color: #666666;
           font-size: 22rpx;
+}
+.recomment .recomment-contain .recomment-list .recomment-list-right .product-eval .hot-product {
+            width: 54rpx;
+            height: 30rpx;
+            border: 1px solid #c71622;
+            -webkit-border-radius: 15px;
+                    border-radius: 15px;
+            color: #c71622;
+            font-size: 20rpx;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-pack: center;
+            -webkit-justify-content: center;
+                -ms-flex-pack: center;
+                    justify-content: center;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+                -ms-flex-align: center;
+                    align-items: center;
+            margin-right: 20rpx;
 }
 .recomment .recomment-contain .recomment-list .recomment-list-right .product-eval .evaluate-good {
             margin-left: 20rpx;
@@ -882,6 +906,39 @@ page {
   z-index: 20;
   display: none;
 }
+.popup .spec-btn {
+    width: 100%;
+    height: 100rpx;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
+}
+.popup .spec-btn .confirmB, .popup .spec-btn .cancelB {
+      width: 50%;
+      height: 100%;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+          -ms-flex-pack: center;
+              justify-content: center;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+          -ms-flex-align: center;
+              align-items: center;
+      font-size: 28rpx;
+}
+.popup .spec-btn .confirmB {
+      color: #fff;
+      background: #14cc21;
+}
 .popup .mask {
     position: fixed;
     top: 0;
@@ -894,8 +951,7 @@ page {
     position: fixed;
     z-index: 22;
     bottom: -70%;
-    width: 92%;
-    padding: 0 4%;
+    width: 100%;
     height: 70%;
     -webkit-border-radius: 20rpx 20rpx 0 0;
             border-radius: 20rpx 20rpx 0 0;
@@ -912,8 +968,8 @@ page {
             align-content: space-between;
 }
 .popup .layer .content {
-      width: 100%;
-      padding: 20rpx 0;
+      width: 92%;
+      padding: 30rpx 4% 0;
 }
 .popup .layer .content .product-title {
         display: -webkit-box;
@@ -977,38 +1033,54 @@ page {
 .popup .layer .content .product-title .product-mes text:nth-child(2) {
             color: #cecece;
 }
-.popup .layer .content .product-color {
+.popup .layer .content .pro-content {
         display: -webkit-box;
         display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        font-size: 26rpx;
         -webkit-box-orient: vertical;
         -webkit-box-direction: normal;
         -webkit-flex-direction: column;
             -ms-flex-direction: column;
                 flex-direction: column;
 }
-.popup .layer .content .product-color text {
-          color: #333333;
+.popup .layer .content .pro-content ._h2 {
+          margin-top: 20rpx;
+          margin-bottom: 20rpx;
           font-size: 30rpx;
-          padding: 30rpx 0;
+          color: #333333;
 }
-.popup .layer .content .product-color view {
-          width: 234rpx;
-          height: 56rpx;
-          background: whitesmoke;
+.popup .layer .content .pro-content .product-color {
           display: -webkit-box;
           display: -webkit-flex;
           display: -ms-flexbox;
           display: flex;
-          -webkit-box-pack: center;
-          -webkit-justify-content: center;
-              -ms-flex-pack: center;
-                  justify-content: center;
-          color: #333333;
-          margin-right: 20rpx;
-          line-height: 56rpx;
+          font-size: 26rpx;
+}
+.popup .layer .content .pro-content .product-color .checked {
+            color: #14cc21;
+            background: rgba(20, 204, 33, 0.3);
+            border: 1px solid #FF14CC21;
+}
+.popup .layer .content .pro-content .product-color text {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+                -ms-flex-align: center;
+                    align-items: center;
+            -webkit-box-pack: center;
+            -webkit-justify-content: center;
+                -ms-flex-pack: center;
+                    justify-content: center;
+            background: whitesmoke;
+            width: 234rpx;
+            height: 56rpx;
+            color: #333333;
+            margin-right: 20rpx;
+            border: 1px solid whitesmoke;
 }
 .popup .layer .content .product-num {
         display: -webkit-box;
@@ -1030,34 +1102,21 @@ page {
           color: #333333;
           font-size: 30rpx;
           padding: 30rpx 0;
+          display: -webkit-box;
+          display: -webkit-flex;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-pack: center;
+          -webkit-justify-content: center;
+              -ms-flex-pack: center;
+                  justify-content: center;
+          -webkit-box-align: center;
+          -webkit-align-items: center;
+              -ms-flex-align: center;
+                  align-items: center;
 }
 .popup .layer .content .product-num view {
           height: 60rpx;
-}
-.popup .layer .btn {
-      width: 100%;
-      height: 100rpx;
-}
-.popup .layer .btn .button {
-        width: 100%;
-        height: 80rpx;
-        -webkit-border-radius: 40rpx;
-                border-radius: 40rpx;
-        color: #fff;
-        display: -webkit-box;
-        display: -webkit-flex;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-align: center;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center;
-        -webkit-box-pack: center;
-        -webkit-justify-content: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-        font-size: 28rpx;
-        background: #14cc21;
 }
 .popup.show {
     display: block;

@@ -44,6 +44,7 @@
 						</view>
 					</view>
 				</view>
+				
 			</view>
 			<view class="total-money">
 				<view class="send-money">
@@ -76,6 +77,7 @@
 		data() {
 			return {
 				buylist: [], //订单列表
+				goodsinfo:{},
 				goodsPrice: 0.0, //商品合计价格
 				sumPrice: 0.0, //用户付款价格
 				freight: 12.00, //运费
@@ -129,6 +131,16 @@
 		onHide() {
 
 		},
+		onLoad(option){
+			console.log(option)
+			// 获取购买商品信息
+			this.getInfo(option.id);
+			if(option.iscart==0){
+				this.goodsinfo.size=option.size;
+				this.goodsinfo.price=option.price;
+				this.goodsinfo.num=option.num;
+			}
+		},
 		onBackPress() {
 			//页面后退时候，清除订单信息
 			this.clearOrder();
@@ -139,6 +151,26 @@
 			}
 		},
 		methods: {
+			// 获取购买商品信息
+			getInfo(id){
+				 uni.request({
+					url: this.config.url+"goods/detail",
+					data: {
+						   token:this.token,
+						   id:id
+					},
+					method: "post",
+					success: (res) => {
+						if(res.data.code==1){
+							console.log("res.data",res.data.data);
+							this.goodsinfo.img=res.data.data.logo;
+							this.goodsinfo.title=res.data.data.title;
+						}
+						 
+					}
+				});
+			
+			},
 			clearOrder() {
 				uni.removeStorage({
 					key: 'buylist',

@@ -9,7 +9,7 @@
 
 		<view class="keep-main">
 			<!-- 已评价 -->
-			<view class="list" v-show="subState==1" v-for="(eva,index) in goodsList" :key="index">
+			<view class="list" v-show="subState==1" v-for="(eva,evaNum) in goodsList" :key="evaNum">
 				<view class="list-one">
 					<view class="one-left">
 						<image :src="eva.goods_logo"></image>
