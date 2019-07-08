@@ -320,6 +320,7 @@
 		bottom: 50upx;
 		width: 100%;
 		height: 120upx;
+		display: flex;
 		justify-content: center;
 		align-items: center;
 
@@ -332,7 +333,7 @@
 
 			width: 90%;
 			height: 80upx;
-
+            display: flex;
 			background: rgba(20, 204, 33, 1);
 			color: #fff;
 			justify-content: center;

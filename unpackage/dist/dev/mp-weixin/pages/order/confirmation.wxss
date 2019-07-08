@@ -94,6 +94,7 @@
       -ms-flex-direction: column;
           flex-direction: column;
   margin-bottom: 20rpx;
+  width: 100%;
 }
 .addr .sendgoods-info {
     font-size: 32rpx;
@@ -112,6 +113,7 @@
     -webkit-justify-content: space-between;
         -ms-flex-pack: justify;
             justify-content: space-between;
+    width: 100%;
 }
 .addr .sendgoods-addr view {
       display: -webkit-box;
@@ -124,23 +126,25 @@
           -ms-flex-direction: column;
               flex-direction: column;
 }
-.addr .sendgoods-addr view text:nth-child(1) {
+.addr .sendgoods-addr view .getgoods-name {
         font-size: 28rpx;
         font-family: PingFang-SC-Regular;
         font-weight: 400;
         color: #333333;
 }
-.addr .sendgoods-addr view text:nth-child(2) {
+.addr .sendgoods-addr view .getgoods-people {
         font-size: 28rpx;
         font-family: PingFang-SC-Regular;
         font-weight: 400;
         color: #666666;
+        margin: 20rpx 0;
 }
-.addr .sendgoods-addr view text:nth-child(3) {
+.addr .sendgoods-addr view .getgoods-addr {
         font-size: 24rpx;
         font-family: PingFang-SC-Regular;
         font-weight: 400;
         color: #999999;
+        display: block;
 }
 .buy-list {
   display: -webkit-box;

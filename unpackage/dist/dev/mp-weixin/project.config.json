@@ -1,35 +1,4 @@
 {
-<<<<<<< HEAD
-  "description": "项目配置文件。",
-  "packOptions": {
-    "ignore": []
-  },
-  "setting": {
-    "urlCheck": true
-  },
-  "compileType": "miniprogram",
-  "libVersion": "2.7.0",
-  "appid": "touristappid",
-  "projectname": "商城模板",
-  "condition": {
-    "search": {
-      "current": -1,
-      "list": []
-    },
-    "conversation": {
-      "current": -1,
-      "list": []
-    },
-    "game": {
-      "current": -1,
-      "list": []
-    },
-    "miniprogram": {
-      "current": -1,
-      "list": []
-    }
-  }
-=======
 	"description": "项目配置文件。",
 	"packOptions": {
 		"ignore": []
@@ -40,7 +9,7 @@
 	"compileType": "miniprogram",
 	"libVersion": "2.7.0",
 	"appid": "touristappid",
-	"projectname": "%E5%95%86%E5%9F%8E%E6%A8%A1%E6%9D%BF",
+	"projectname": "商城模板",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
 	"condition": {
@@ -61,5 +30,4 @@
 			"list": []
 		}
 	}
->>>>>>> 0411b5533e301024b98f621e20d2fb3b92109c2a
 }

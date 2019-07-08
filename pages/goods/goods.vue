@@ -1,30 +1,7 @@
 <template>
 	<view classs='container'>
 		<view class="status" :style="{ opacity: afterHeaderOpacity }"></view>
-		<view class="header">
-			<!-- 头部-默认显示 -->
-			<!-- <view class="before" :style="{ opacity: 1 - afterHeaderOpacity, zIndex: beforeHeaderzIndex }">
-				<view class="back"><view class="icon xiangqian" @tap="back" v-if="showBack"></view></view> 
-				<view class="middle"></view>
-				<view class="icon-btn">
-					<view class="icon tongzhi" @tap="toMsg"></view>
-					<view class="icon cart" @tap="joinCart"></view>
-				</view>
-			</view> -->
-			<!-- 头部-滚动渐变显示 -->
-			<view class="after" :style="{ opacity: afterHeaderOpacity, zIndex: afterHeaderzIndex }">
-				<view class="back">
-					<view class="icon xiangqian" @tap="back" v-if="showBack"></view>
-				</view>
-				<!-- <view class="middle">
-					<view v-for="(anchor,index) in anchorlist" :class="[selectAnchor==index ?'on':'']" :key="index" @tap="toAnchor(index)">{{anchor.name}}</view>
-				</view>
-				<view class="icon-btn">
-					<view class="icon tongzhi" @tap="toMsg"></view>
-					<view class="icon cart" @tap="joinCart"></view>
-				</view> -->
-			</view>
-		</view>
+		
 		<!-- 底部菜单 -->
 		<view class="footer">
 			<view class="icons">
@@ -49,7 +26,7 @@
 			</view>
 			<view class="btn">
 				<view class="joinCart" @tap="joinCart">加入购物车</view>
-				<view class="buy" @tap="buy">立即购买</view>
+				<view class="buy" @tap="buy()">立即购买</view>
 			</view>
 		</view>
 		<!-- share弹窗 -->
@@ -175,8 +152,7 @@
 		<view class="info-box spec">
 			<view class="row">
 				<view class="add-color">库存</view>
-				<!-- <view class="content"><view class="serviceitem" v-for="(item,index) in goodsData.service" :key="index">{{item.name}}</view></view>
-				<view class="arrow"><view class="icon xiangyou"></view></view> -->
+				
 				<view class="resdius-num">{{goodsData.number_stock}}</view>
 			</view>
 			<view class="row" @tap="showSpec(false)">
@@ -211,8 +187,10 @@
 							<image :src="goodsData.comment[0].member.heading" class="people-icon" />
 						</view>
 						<view class="star">
-							<view>{{goodsData.comment[0].member.nickname}}</view>
-							<view>{{goodsData.comment[0].comment_star}}</view>
+							<view class="star-name">{{goodsData.comment[0].member.nickname}}</view>
+							<view>
+							     <uni-rate size="20" disabled="true" :value="goodsData.comment[0].comment_star"></uni-rate>
+							</view>
 						</view>
 					</view>
 					<view class="comment-time">
@@ -283,10 +261,13 @@
 
 <script>
 	import uniNumberBox from "@/components/uni-number-box/uni-number-box.vue"
+	import uniRate from "@/components/uni-rate/uni-rate.vue"  //星星评分
+
 	export default {
 		
 		components: {
-			uniNumberBox
+			uniNumberBox,
+			uniRate
 		},
 		data() {
 			return {
@@ -319,6 +300,7 @@
 				isKeep: false, //收藏
 				// 商品详情信息
 				detail:'',
+				goodsDetail:{}, //商品详情
 			   comment:[], //评论信息
 			   // 商品明细
 			   goods_list:[],
@@ -335,9 +317,9 @@
 			this.showBack = false;
 			// #endif
 			//option为object类型，会序列化上个页面传递的参数
-			console.log(option.id); //打印出上个页面传递的参数。
+			console.log(option); //打印出上个页面传递的参数。
 			this.id=option.id;
-			
+			this.goodsDetail=option;
 		},
 		onReady() {
 			this.calcAnchor(); //计算锚点高度，页面数据是ajax加载时，请把此行放在数据渲染完成事件中执行以保证高度计算正确
@@ -549,8 +531,10 @@
 			//立即购买
 			buy() {
 				if(this.selected_size && this.selected_size.indexOf('undefined')==-1){
+				var goods=JSON.stringify(this.goodsDetail)
+					//跳转到结算面
 					uni.navigateTo({
-						url:"/pages/order/confirmation?id="+this.goodsData.id+'&price='+this.goodsData.price+'&size='+this.selected_size+'&num='+this.proNum+"&iscart=0",
+						url:"/pages/order/confirmation?id="+this.goodsData.id+'&goodsDetail='+goods+'&price='+this.goodsData.price+'&size='+this.selected_size+'&num='+this.proNum+"&iscart=0"
 						
 					})
 					
@@ -1068,6 +1052,12 @@
 			font-size: 29upx;
 			color: #cecece;
 			height: 100upx;
+			.resdius-num,.add-color{
+				font-size:28upx;
+font-family:PingFang-SC-Regular;
+font-weight:400;
+color:rgba(102,102,102,1);
+			}
 			
 		}
 	}
@@ -1129,7 +1119,13 @@
 						font-size: 25upx;
 						color: #cecece;
 						margin-left: 20upx;
-
+                        .star-name{
+							padding-left:10upx;
+							font-size:28upx;
+font-family:PingFang-SC-Regular;
+font-weight:400;
+color:rgba(102,102,102,1);
+						}
 					}
 				}
 
@@ -1169,7 +1165,7 @@
 			font-size: 32upx;
 			color: #999;
 			background: white;
-			border-bottom:1px solid #CECECE;
+			border-bottom:1px solid #E6E6E6;
 		}
 
 		.product-detail {

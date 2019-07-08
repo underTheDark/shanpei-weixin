@@ -16,7 +16,7 @@
 			</view>
 			<!-- 右侧图标按钮 -->
 			<view class="icon-btn">
-				<view class="hongdian"></view>
+				<view class="hongdian" v-show="msg"></view>
 				<view class="icon tongzhi" @tap="toMsg"></view>
 			</view>
 		</view>
@@ -146,19 +146,24 @@
 	export default {
 		components: {uniLoadMore},
 		mounted() {
-			//获取地理位置
-			// uni.authorize({
-			// 	scope: 'scope.userLocation',
-			// 	success() {
-			// 		uni.getLocation()
-			// 	}
-			// });
-			uni.getLocation({
-				type: 'wgs84',
-				success: function(res) {
+			//系统消息
+			uni.request({
+				url:this.config.url+"member/message",
+				method:"POST",
+				data:{
+					token:this.token
+				},
+				success:(res)=>{
 					console.log(res)
+					if(res.data.data.data.length >0){
+						this.msg=true;
+					}
+					if(res.data.code==1){
+						this.msgList=res.data.data.data
+					}
 				}
-			});
+			})
+			
 			// 轮播,热销
 			uni.request({
 				url: 'http://shanpei.wsstreet.net/index', //仅为示例，并非真实接口地址。
@@ -167,7 +172,7 @@
 				},
 				method: "post",
 				success: (res) => {
-					// console.log("res.data",res.data);
+				    console.log("res.data",res.data);
 					this.swiperList = res.data.data.banner;
 					this.categoryList = res.data.data.cate;
 					this.hotList = res.data.data.hot;
@@ -178,6 +183,8 @@
 		},
 		data() {
 			return {
+				msg:"", //系统消息显示
+				msgList:[], //系统信息列表
 				showIcon:false,
 				status:"more",
 				afterHeaderOpacity: 1, //不透明度
@@ -379,7 +386,7 @@
 			//消息列表
 			toMsg() {
 				uni.navigateTo({
-					url: '../msg/msg'
+					url: '/pages/msg/msg'
 				})
 			},
 			//搜索跳转
