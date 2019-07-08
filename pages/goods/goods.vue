@@ -223,7 +223,7 @@
 					{{goodsData.comment[0].comment_content}}
 				</view>
 				<view class="product-icon">
-					<view class="img" v-for="(src,index) in evaImg" :key="index">
+					<view class="img" v-for="(src,iconNum) in evaImg" :key="iconNum">
 						<image :src="src"></image>
 					</view>
 				</view>
@@ -598,7 +598,7 @@
 			},
 			//返回上一页
 			back() {
-				uni.navigateBack();
+				uni.navigateBack(1);
 			},
 			//服务弹窗
 			showService() {

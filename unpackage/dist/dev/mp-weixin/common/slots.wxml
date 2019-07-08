@@ -1,5 +1,10 @@
 <import src="/components/uni-swipe-action/uni-swipe-action.vue.wxml" />
+<import src="/components/uni-load-more/uni-load-more.vue.wxml" />
+<import src="/components/uni-number-box/uni-number-box.vue.wxml" />
+<import src="/components/uni-steps/uni-steps.vue.wxml" />
+<import src="/components/mpvue-citypicker/mpvueCityPicker.vue.wxml" />
+<import src="/common/slots.wxml" />
+<import src="/components/uni-icon/uni-icon.vue.wxml" />
 
-<template name="M12794918-default-12794918-0-+index"><view class="_view M12794918 img"><image src="{{row.img}}" class="_image M12794918"></image></view><view class="_view M12794918 info"><view class="_view M12794918 title">国产红心火龙果 4个装中果单果约300
-							~400g 新鲜水果</view><view class="_view M12794918 evaluate"><view class="_view M12794918 evaluate-num">332已购买</view><view class="_view M12794918 evaluate-good">100%好评</view></view><view class="_view M12794918 price-compare"><view class="_view M12794918 price">10000</view><view class="_view M12794918 slogan">3333</view></view></view></template>
+<template name="M1436f329-default-1436f329-0-+index"><image src="{{row.logo}}" class="_image M1436f329"></image><view class="_view M1436f329 info"><view class="_view M1436f329 title">{{row.title}}</view><view class="_view M1436f329 evaluate"><view class="_view M1436f329 evaluate-num">{{row.number_sales}}已购买</view><view class="_view M1436f329 evaluate-good">{{ row.good_percent}}%好评</view></view><view class="_view M1436f329 price-compare"><view class="_view M1436f329 price">￥{{row.price}}</view><view class="_view M1436f329 slogan">￥{{row.market_price}}</view></view></view></template>
 

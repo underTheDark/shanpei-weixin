@@ -245,16 +245,27 @@
     -webkit-flex-direction: column;
         -ms-flex-direction: column;
             flex-direction: column;
-    border: none;
 }
 .content .detail-add .nominal {
-      height: 40rpx;
+      height: 60rpx;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+          -ms-flex-align: center;
+              align-items: center;
 }
 .content .detail-add .add-content {
-      height: 180rpx;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      height: 100rpx;
 }
 .content .detail-add .add-content textarea {
-        height: 180rpx;
+        display: inline-block;
         width: 100%;
 }
 

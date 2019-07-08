@@ -77,6 +77,7 @@
 				mingcheng: "",
 				categoryChild:[],
 				first:"",
+				goodsTitle:""
 			}
 		},
 		onPageScroll(e) {
@@ -90,7 +91,7 @@
 		onLoad() {
 			this.amapPlugin = new amap.AMapWX({
 				//高德地图KEY，随时失效，请务必替换为自己的KEY，参考：http://ask.dcloud.net.cn/article/35070
-				key: '7c235a9ac4e25e482614c6b8eac6fd8e'
+				key: '5b9b64be2413fc19c26683fcf0de890f'
 			});
 			//定位地址
 			this.amapPlugin.getRegeo({
@@ -102,11 +103,11 @@
 		methods: {
 			// 物品列表跳转
 			goodsList(index){
-				
+			  var title=this.mingcheng
 			   var index1=JSON.stringify(index)
 		       var key1=JSON.stringify(this.first)
 				uni.navigateTo({
-					url:"/pages/goods/goods-list?id="+index1+"&key="+key1
+					url:"/pages/goods/goods-list?id="+index1+"&key="+key1+"&title="+title
 				})
 			},
 			//消息列表

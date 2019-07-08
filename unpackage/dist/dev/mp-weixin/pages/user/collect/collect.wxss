@@ -127,30 +127,28 @@
             justify-content: center;
     font-size: 32rpx;
 }
-.sub-list .row {
+.sub-list .collectList {
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-pack: justify;
-    -webkit-justify-content: space-between;
-        -ms-flex-pack: justify;
-            justify-content: space-between;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+            flex-direction: row;
     -webkit-box-align: center;
     -webkit-align-items: center;
         -ms-flex-align: center;
             align-items: center;
     padding: 20rpx 2%;
+    border-bottom: 20rpx solid #f7f7f7;
 }
-.sub-list .row .img {
+.sub-list .collectList image {
       width: 222rpx;
       height: 222rpx;
 }
-.sub-list .row .img image {
-        width: 222rpx;
-        height: 222rpx;
-}
-.sub-list .row .info {
+.sub-list .collectList .info {
       margin-left: 20rpx;
       display: -webkit-box;
       display: -webkit-flex;
@@ -161,11 +159,8 @@
       -webkit-flex-direction: column;
           -ms-flex-direction: column;
               flex-direction: column;
-      -webkit-flex-wrap: wrap;
-          -ms-flex-wrap: wrap;
-              flex-wrap: wrap;
 }
-.sub-list .row .info .title {
+.sub-list .collectList .info .title {
         font-size: 28rpx;
         font-family: PingFang-SC-Medium;
         font-weight: 500;
@@ -177,9 +172,8 @@
         -webkit-flex-wrap: wrap;
             -ms-flex-wrap: wrap;
                 flex-wrap: wrap;
-        word-wrap: break-word;
 }
-.sub-list .row .info .price-compare {
+.sub-list .collectList .info .price-compare {
         display: -webkit-box;
         display: -webkit-flex;
         display: -ms-flexbox;
@@ -192,15 +186,13 @@
         -webkit-align-items: center;
             -ms-flex-align: center;
                 align-items: center;
-        width: 92%;
-        padding: 10rpx 4% 10rpx 0;
 }
-.sub-list .row .info .price-compare .price {
+.sub-list .collectList .info .price-compare .price {
           color: #e65339;
           font-size: 30rpx;
           font-weight: 600;
 }
-.sub-list .row .info .price-compare .slogan {
+.sub-list .collectList .info .price-compare .slogan {
           font-size: 24rpx;
           font-family: PingFang-SC-Regular;
           font-weight: 400;
@@ -208,9 +200,7 @@
           color: #999999;
           margin-left: 20rpx;
 }
-.sub-list .row .info .evaluate {
-        width: 92%;
-        padding: 0 4% 20rpx 0;
+.sub-list .collectList .info .evaluate {
         display: -webkit-box;
         display: -webkit-flex;
         display: -ms-flexbox;
@@ -225,9 +215,9 @@
                 align-items: center;
         color: #666666;
         font-size: 22rpx;
-        margin-top: 40rpx;
+        margin: 30rpx 0;
 }
-.sub-list .row .info .evaluate .evaluate-good {
+.sub-list .collectList .info .evaluate .evaluate-good {
           margin-left: 20rpx;
 }
 

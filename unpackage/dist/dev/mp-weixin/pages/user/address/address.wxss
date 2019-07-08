@@ -350,6 +350,9 @@ view {
         display: flex;
         color: #999999;
 }
+.list .row .row-bottom .left .selected {
+          color: #14cc21;
+}
 .list .row .row-bottom .left image {
           width: 36rpx;
           height: 36rpx;
