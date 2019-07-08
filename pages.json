@@ -5,8 +5,13 @@
     }
      },
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+
 		
-		{
+		
+
+	   
+		{    
+
 			"path": "pages/tabBar/home",
 			"style": {
 				"navigationBarTextStyle":"black",
@@ -31,18 +36,7 @@
 				}
 			}
 		},
-		{
-			"path": "pages/tabBar/cart",
-			"style": {
-				"enablePullDownRefresh": true,
-				"navigationBarTextStyle":"black",
-				"navigationBarTitleText": "购物车",
-				"app-plus": {
-					"titleNView": false ,//禁用原生导航栏
-					"softinputNavBar":"none"
-				}
-			}
-		},
+		
 		{
 			"path": "pages/tabBar/user",
 			"style": {
@@ -113,14 +107,15 @@
 					"softinputNavBar":"none"
 				}
 			}
-		}
-        ,{
-            "path" : "pages/order/confirmation",
-            "style": {
-            	"navigationBarTitleText": "确认订单",
-				"softinputNavBar":"none"
-            }
-        }
+		} ,
+		{
+	        "path" : "pages/order/confirmation",
+	        "style": {
+	        	"navigationBarTitleText": "确认订单",
+	    		"softinputNavBar":"none"
+	        }
+	    }
+       
         ,{
             "path" : "pages/user/order_list/order_list",
             "style" : {
@@ -139,6 +134,18 @@
 				"backgroundColorBottom":"#ffffff"
 			}
 		},
+		   {
+			"path": "pages/tabBar/cart",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationBarTextStyle":"black",
+				"navigationBarTitleText": "购物车",
+				"app-plus": {
+					"titleNView": false ,//禁用原生导航栏
+					"softinputNavBar":"none"
+				}
+			}
+		},
 		{
 			"path" : "pages/viewsend/viewsend",
 			"style" : {
@@ -147,8 +154,8 @@
 				"backgroundColorTop":"#f3f3f3",
 				"backgroundColorBottom":"#ffffff"
 			}
-		}
-        ,{
+		},
+			{
             "path" : "pages/user/setting/setting",
             "style" : {
 				"navigationBarBackgroundColor":"#f8f8f8",
@@ -172,12 +179,11 @@
             "style" : {
 				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "消息列表",
-				"navigationBarBackgroundColor":"#f06c7a",
-				"navigationBarTextStyle":"white"
+				"navigationBarBackgroundColor":"#fff"
 			}
         }
         ,{
-            "path" : "pages/msg/chat/chat",
+             "path": "pages/msg/chat/chat",
             "style" : {
 				"navigationBarBackgroundColor":"#f2f2f2",
 				"backgroundColorTop":"#e5e5e5",
@@ -261,7 +267,18 @@
 				"backgroundColorTop":"#ffffff",
 				"backgroundColorBottom":"#ffffff"
 			}
-        }
+        },
+		 {
+		    "path" : "pages/sendType/sendType",
+		    "style" : {
+				"navigationBarTitleText":"配送方式",
+				"navigationBarBackgroundColor":"#fff",
+				"backgroundColorTop":"#f3f3f3",
+				"backgroundColorBottom":"#ffffff"
+			}
+		}		
+		
+		
 		 
         ,{
             "path" : "pages/user/deposit/deposit",

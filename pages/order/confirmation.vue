@@ -3,58 +3,61 @@
 		<!-- 配送方式 -->
 		<view class="send">
 			<view class="send-title">配送方式</view>
-			<view class="send-type">
+			<view class="send-type" @click="sendType()">
 				<text>已选</text>
-				<text>ziti</text>
+				<text>{{getgoods_name?"自提":"送货上门"}}</text>
 				<image class="right-jiantou" src="../../static/img/category/youce-jiantou.png"></image>
 			</view>
 		</view>
 		<!-- 收货地址 -->
-		<view class="addr" @tap="selectAddress">
+		<view class="addr">
 		
 			<view class="sendgoods-info">配送信息</view>
 			<view class="sendgoods-addr">
 				<view>
-					<text>{{recinfo.name}}</text>
-					<text>姓名 &nbsp;&nbsp;&nbsp;1233344444</text>
-					<text>河南省郑州市高新区科学大道广告产业园9号9楼901</text>
+					<text class="getgoods-name" v-show="getgoods_name">{{addrList.name}}</text>
+					<text class="getgoods-people">{{addrList.username}} &nbsp;&nbsp;&nbsp;{{addrList.phone}}</text>
+					<text class="getgoods-addr">
+						{{addrList.province_name}}{{addrList.city_name}}{{addrList.area_name}}{{addrList.address_name}}{{addrList.street_name}}
+					</text>
 				</view>
-				<image class="right-jiantou" src="../../static/img/category/youce-jiantou.png"></image>
+				<!-- <image class="right-jiantou" src="../../static/img/category/youce-jiantou.png"></image> -->
 			</view>
 		</view>
 		<!-- 购买商品列表 -->
 		<view class="buy-list">
-			<view class="row" v-for="(row,index) in buylist" :key="index">
-				<view class="order-num">23444444444</view>
+			<view class="row"  v-for="(buy,buyIndex) in buyList" :key="buyIndex">
+			
 				<view class="goods-info">
 					<view class="img">
-						<image :src="row.img"></image>
+						<image :src="buy.goods_logo"></image>
 					</view>
 					<view class="info">
-						<view class="title">{{row.name}}</view>
+						<view class="title">{{buy.goods_title}}</view>
 						<view class="spec">
-							<text>{{row.spec}} </text>
-							<text>{{row.number}}</text>
+							<text>{{buy.goods_spec}} </text>
+							<!-- <text>{{goodsinfo.num}}</text> -->
 						</view>
 						<view class="price-number">
-							<view class="price">￥{{row.price*row.number}}</view>
+							<view class="price">￥{{buy.price_selling}}</view>
 							<view class="number">
-								x1
+								{{buy.goods_number}}
 							</view>
 						</view>
 					</view>
 				</view>
+				
 			</view>
 			<view class="total-money">
 				<view class="send-money">
 					<text>配送费</text>
-					<text>6</text>
+					<text>￥{{express}}</text>
 				</view>
 				<view class="total-pay-money">
-					<text>共几件商品</text>
+					<text>共{{number}}件商品</text>
 					<view class="pay-money">
 						<text>合计：</text>
-						<text>1000</text>
+						<text>￥{{total}}</text>
 					</view>
 				</view>
 			</view>
@@ -63,7 +66,7 @@
 	
 		<view class="footer">
 			<view class="settlement">
-				<view class="sum">待支付:<view class="money">￥{{sumPrice|toFixed}}</view>
+				<view class="sum">待支付:<view class="money">￥{{totalmoney}}</view>
 				</view>
 				<view class="btn" @tap="toPay">去结算</view>
 			</view>
@@ -73,61 +76,99 @@
 
 <script>
 	export default {
+		
+		mounted(){
+			uni.request({
+				url:this.config.url+"order/sure",
+				method:"post",
+				data:{
+					token:this.token,
+					goods:this.goods
+				},
+				success:(res) => {
+					//console.log(res)
+					if(res.data.code==1){
+						this.buyList=res.data.data.goods;
+						this.express=res.data.data.express;
+						this.total=res.data.data.total;
+						this.number=res.data.data.number;
+					}
+				}
+			})
+		},
+		computed: {
+			totalmoney() {
+				var totalNum=Number(this.total)+Number(this.express)
+				
+				return totalNum
+			}
+		},
 		data() {
 			return {
-				buylist: [], //订单列表
+				buyList: [], //订单列表
+				goodsinfo:{},
+				number:"",    //购买商品总数量
 				goodsPrice: 0.0, //商品合计价格
 				sumPrice: 0.0, //用户付款价格
 				freight: 12.00, //运费
 				note: '', //备注
 				int: 1200, //抵扣积分
-				deduction: 0, //抵扣价格
-				recinfo: {
-					id: 1,
-					name: "大黑哥",
-					head: "大",
-					tel: "18816881688",
-					address: {
-						region: {
-							"label": "广东省-深圳市-福田区",
-							"value": [18, 2, 1],
-							"cityCode": "440304"
-						},
-						detailed: '深南大道1111号无名摩登大厦6楼A2'
-					},
-					isDefault: true
-				}
-
+				deduction: 0 ,//抵扣价格
+				goods:[],
+				express:'',
+				total:"" , //商品总价格
+                addrList:{},  //地址列表
+				getgoods_name:false  //送货类型显示
 			};
 		},
 		onShow() {
 			//页面显示时，加载订单信息
-			uni.getStorage({
-				key: 'buylist',
-				success: (ret) => {
-					this.buylist = ret.data;
-					this.goodsPrice = 0;
-					//合计
-					let len = this.buylist.length;
-					for (let i = 0; i < len; i++) {
-						this.goodsPrice = this.goodsPrice + (this.buylist[i].number * this.buylist[i].price);
-					}
-					this.deduction = this.int / 100;
-					this.sumPrice = this.goodsPrice - this.deduction + this.freight;
-				}
-			});
-			uni.getStorage({
-				key: 'selectAddress',
-				success: (e) => {
-					this.recinfo = e.data;
-					uni.removeStorage({
-						key: 'selectAddress'
-					})
-				}
-			})
+			// uni.getStorage({
+			// 	key: 'buylist',
+			// 	success: (ret) => {
+			// 		this.buylist = ret.data;
+			// 		this.goodsPrice = 0;
+			// 		//合计
+			// 		let len = this.buylist.length;
+			// 		for (let i = 0; i < len; i++) {
+			// 			this.goodsPrice = this.goodsPrice + (this.buylist[i].number * this.buylist[i].price);
+			// 		}
+			// 		this.deduction = this.int / 100;
+			// 		this.sumPrice = this.goodsPrice - this.deduction + this.freight;
+			// 	}
+			// });
+			// uni.getStorage({
+			// 	key: 'selectAddress',
+			// 	success: (e) => {
+			// 		this.recinfo = e.data;
+			// 		uni.removeStorage({
+			// 			key: 'selectAddress'
+			// 		})
+			// 	}
+			// })
 		},
 		onHide() {
 
+		},
+		onLoad(option){
+			console.log(option)
+			if(option.self){
+				this.addrList=JSON.parse(option.self)
+				if(this.addrList.distance){
+					this.getgoods_name=true;
+				}
+			}
+			
+			
+			// 获取购买商品信息
+			
+			if(option.iscart==0){
+				this.goodsinfo.goods_spec=option.size;
+				
+				this.goodsinfo.goods_number=option.num;
+				this.goodsinfo.goods_id=option.id
+				this.goods.push(this.goodsinfo)
+			}
 		},
 		onBackPress() {
 			//页面后退时候，清除订单信息
@@ -139,12 +180,20 @@
 			}
 		},
 		methods: {
+			//选取送货方式
+			sendType(){
+				uni.navigateTo({
+					url:"/pages/sendType/sendType"
+				})
+			},
+			// 获取购买商品信息
+		
 			clearOrder() {
 				uni.removeStorage({
 					key: 'buylist',
 					success: (res) => {
 						this.buylist = [];
-						console.log('remove buylist success');
+						//console.log('remove buylist success');
 					}
 				});
 			},
@@ -181,13 +230,8 @@
 					})
 				}, 1000)
 
-			},
-			//选择收货地址
-			selectAddress() {
-				uni.navigateTo({
-					url: '../user/address/address?type=select'
-				})
 			}
+		
 		}
 	}
 </script>
@@ -256,6 +300,7 @@
 		display: flex;
 		flex-direction: column;
         margin-bottom: 20upx;
+		width:100%;
 		.sendgoods-info {
 			font-size: 32upx;
 			font-family: PingFang-SC-Bold;
@@ -268,32 +313,32 @@
 		.sendgoods-addr {
 			display: flex;
 			justify-content: space-between;
-
+            width:100%;
 			view {
 				display: flex;
 				flex-direction: column;
 
-				text:nth-child(1) {
+				 .getgoods-name {
 					font-size: 28upx;
 					font-family: PingFang-SC-Regular;
 					font-weight: 400;
 					color: rgba(51, 51, 51, 1);
 				}
 
-				text:nth-child(2) {
+				.getgoods-people{
 					font-size: 28upx;
 					font-family: PingFang-SC-Regular;
 					font-weight: 400;
 					color: rgba(102, 102, 102, 1);
-
+                    margin:20upx 0;
 				}
 
-				text:nth-child(3) {
+				.getgoods-addr {
 					font-size: 24upx;
 					font-family: PingFang-SC-Regular;
 					font-weight: 400;
 					color: rgba(153, 153, 153, 1);
-
+                    display: block
 				}
 
 			}
@@ -492,7 +537,7 @@
 		z-index: 5;
 
 		.settlement {
-
+             
 			height: 100%;
 			display: flex;
 			justify-content: flex-end;

@@ -95,42 +95,6 @@ var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/
         spec: '规格:S码',
         price: 127.5,
         number: 1,
-        selected: false },
-
-      {
-        id: 2,
-        img: '../../static/img/goods/p2.jpg',
-        name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
-        spec: '规格:S码',
-        price: 127.5,
-        number: 1,
-        selected: false },
-
-      {
-        id: 3,
-        img: '../../static/img/goods/p3.jpg',
-        name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
-        spec: '规格:S码',
-        price: 127.5,
-        number: 1,
-        selected: false },
-
-      {
-        id: 4,
-        img: '../../static/img/goods/p4.jpg',
-        name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
-        spec: '规格:S码',
-        price: 127.5,
-        number: 1,
-        selected: false },
-
-      {
-        id: 5,
-        img: '../../static/img/goods/p5.jpg',
-        name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
-        spec: '规格:S码',
-        price: 127.5,
-        number: 1,
         selected: false }],
 
 
@@ -153,6 +117,7 @@ var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/
     }, 1000);
   },
   onLoad: function onLoad() {
+    this.getCart();
     //兼容H5下结算条位置
 
 
@@ -162,6 +127,35 @@ var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/
 
   },
   methods: {
+    // 获取购物车信息
+    getCart: function getCart() {
+      var that = this;
+      uni.request({
+        method: "post",
+        data: {
+          token: this.token },
+
+        url: this.config.url + "member/car",
+        success: function success(res) {
+          // console.log("data",res.data);
+          if (res.data.code == 1) {
+            that.goodsList = res.data.data;
+            that.goodsList.forEach(function (item) {
+              item.spec = item.goods_spec;
+              item.img = item.logo;
+              item.name = item.title;
+              item.selected = false;
+            });
+          } else {
+            uni.showToast({
+              icon: 'none',
+              title: "请求失败" });
+
+          }
+
+        } });
+
+    },
     //加入商品 参数 goods:商品数据
     joinGoods: function joinGoods(goods) {
       /*
@@ -239,11 +233,11 @@ var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/
     //商品跳转
     toGoods: function toGoods(e) {
       uni.showToast({
-        title: '商品' + e.id,
+        title: '商品' + e.goods_id,
         icon: "none" });
 
       uni.navigateTo({
-        url: '../goods/goods' });
+        url: '../goods/goods?id=' + e.goods_id });
 
     },
     //跳转确认订单页面
@@ -285,10 +279,28 @@ var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/
       this.sum();
       this.oldIndex = null;
       this.theIndex = null;
+      // 删除购物车后台；
+      this.delCart(id);
     },
-    // 删除商品s
+    // 删除购物车
+    delCart: function delCart(id) {
+      uni.request({
+        method: "post",
+        data: {
+          token: this.token,
+          id: id },
+
+        url: this.config.url + "member/del_car",
+        success: function success(res) {
+          // console.log("res",res);
+        } });
+
+
+    },
+    // 删除商品
     deleteList: function deleteList() {
       var len = this.selectedList.length;
+      // console.log(this.selectedList);
       while (this.selectedList.length > 0) {
         this.deleteGoods(this.selectedList[0]);
       }
@@ -302,6 +314,9 @@ var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/
       var i = this.selectedList.indexOf(this.goodsList[index].id);
       i > -1 ? this.selectedList.splice(i, 1) : this.selectedList.push(this.goodsList[index].id);
       this.isAllselected = this.selectedList.length == this.goodsList.length;
+      if (this.selectedList.length == this.goodsList.length) {
+        this.isAllselected = true;
+      }
       this.sum();
     },
     //全选
@@ -314,7 +329,38 @@ var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/
       }
       this.selectedList = this.isAllselected ? [] : arr;
       this.isAllselected = this.isAllselected || this.goodsList.length == 0 ? false : true;
+      // console.log("this.selectedList",this.selectedList);
       this.sum();
+    },
+    // 改变数量
+    bindChange: function bindChange(index, row, val) {
+      // console.log("row.number",row.number);
+      // console.log("val",val);
+      //增加 
+      if (val > row.number) {
+        this.add(index);
+        this.changeNum(row.id, 1);
+      }
+      //减少 
+      if (val < row.number) {
+        this.sub(index);
+        this.changeNum(row.id, 2);
+      }
+    },
+    // 改变数量后台
+    changeNum: function changeNum(id, type) {
+      uni.request({
+        method: "post",
+        data: {
+          token: this.token,
+          id: id,
+          type: type },
+
+        url: this.config.url + "member/resume_car",
+        success: function success(res) {
+          console.log("res", res);
+        } });
+
     },
     // 减少数量
     sub: function sub(index) {
@@ -333,16 +379,21 @@ var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/
     sum: function sum(e, index) {
       this.sumPrice = 0;
       var len = this.goodsList.length;
+      // console.log("len",len);
+      // console.log("e",e);
+      // console.log("index",index);
       for (var _i5 = 0; _i5 < len; _i5++) {
         if (this.goodsList[_i5].selected) {
           if (e && _i5 == index) {
             this.sumPrice = this.sumPrice + e.detail.value * this.goodsList[_i5].price;
           } else {
             this.sumPrice = this.sumPrice + this.goodsList[_i5].number * this.goodsList[_i5].price;
+            // console.log("this.sumPrice",this.sumPrice);
           }
         }
       }
       this.sumPrice = this.sumPrice.toFixed(2);
+      // console.log(this.sumPrice)
     },
     discard: function discard() {
       //丢弃
@@ -413,7 +464,7 @@ var render = function() {
                     ? "close"
                     : ""
                 ],
-                attrs: { eventid: "3cd4c929-3-" + index },
+                attrs: { eventid: "3cd4c929-4-" + index },
                 on: {
                   touchstart: function($event) {
                     _vm.touchStart(index, $event)
@@ -429,16 +480,21 @@ var render = function() {
               [
                 _c(
                   "view",
-                  {
-                    staticClass: "checkbox-box",
-                    attrs: { eventid: "3cd4c929-1-" + index },
-                    on: {
-                      tap: function($event) {
-                        _vm.selected(index)
+                  { staticClass: "checkbox-box" },
+                  [
+                    _c("checkbox", {
+                      staticClass: "checkbox",
+                      attrs: {
+                        checked: row.selected,
+                        eventid: "3cd4c929-1-" + index
+                      },
+                      on: {
+                        tap: function($event) {
+                          _vm.selected(index)
+                        }
                       }
-                    }
-                  },
-                  [_c("checkbox", { staticClass: "checkbox" })],
+                    })
+                  ],
                   1
                 ),
                 _c("view", { staticClass: "goods-info" }, [
@@ -471,7 +527,17 @@ var render = function() {
                         { staticClass: "number" },
                         [
                           _c("uni-number-box", {
-                            attrs: { min: 1, mpcomid: "3cd4c929-0-" + index }
+                            attrs: {
+                              min: 1,
+                              value: row.number,
+                              eventid: "3cd4c929-3-" + index,
+                              mpcomid: "3cd4c929-0-" + index
+                            },
+                            on: {
+                              change: function($event) {
+                                _vm.bindChange(index, row, $event)
+                              }
+                            }
                           })
                         ],
                         1
@@ -487,24 +553,26 @@ var render = function() {
       2
     ),
     _c("view", { staticClass: "footer", style: { bottom: _vm.footerbottom } }, [
-      _c(
-        "view",
-        {
-          staticClass: "checkbox-box",
-          attrs: { eventid: "3cd4c929-4" },
-          on: { tap: _vm.allSelect }
-        },
-        [
-          _c("view", { staticClass: "checkbox" }, [_c("checkbox")], 1),
-          _c("view", { staticClass: "text" }, [_vm._v("全选")])
-        ]
-      ),
+      _c("view", { staticClass: "checkbox-box" }, [
+        _c(
+          "view",
+          { staticClass: "checkbox" },
+          [
+            _c("checkbox", {
+              attrs: { checked: _vm.isAllselected, eventid: "3cd4c929-5" },
+              on: { tap: _vm.allSelect }
+            })
+          ],
+          1
+        ),
+        _c("view", { staticClass: "text" }, [_vm._v("全选")])
+      ]),
       _vm.selectedList.length > 0
         ? _c(
             "view",
             {
               staticClass: "delBtn",
-              attrs: { eventid: "3cd4c929-5" },
+              attrs: { eventid: "3cd4c929-6" },
               on: { tap: _vm.deleteList }
             },
             [_vm._v("删除")]
@@ -521,7 +589,7 @@ var render = function() {
           "view",
           {
             staticClass: "btn",
-            attrs: { eventid: "3cd4c929-6" },
+            attrs: { eventid: "3cd4c929-7" },
             on: { tap: _vm.toConfirmation }
           },
           [_vm._v("去结算")]

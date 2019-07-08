@@ -2,7 +2,6 @@
   "pages": [
     "pages/tabBar/home",
     "pages/tabBar/category",
-    "pages/tabBar/cart",
     "pages/tabBar/user",
     "pages/goods/goods-list",
     "pages/goods/goods",
@@ -12,6 +11,7 @@
     "pages/order/confirmation",
     "pages/user/order_list/order_list",
     "pages/detail/detail",
+    "pages/tabBar/cart",
     "pages/viewsend/viewsend",
     "pages/user/setting/setting",
     "pages/user/myQR/myQR",
@@ -24,6 +24,7 @@
     "pages/user/service/service",
     "pages/user/address/edit/edit",
     "pages/user/address/address",
+    "pages/sendType/sendType",
     "pages/user/deposit/deposit",
     "pages/pay/payment/payment",
     "pages/pay/success/success",

@@ -82,62 +82,103 @@
 
 
 
+
+
+
 {
+
+  mounted: function mounted() {var _this = this;
+    uni.request({
+      url: this.config.url + "order/sure",
+      method: "post",
+      data: {
+        token: this.token,
+        goods: this.goods },
+
+      success: function success(res) {
+        //console.log(res)
+        if (res.data.code == 1) {
+          _this.buyList = res.data.data.goods;
+          _this.express = res.data.data.express;
+          _this.total = res.data.data.total;
+          _this.number = res.data.data.number;
+        }
+      } });
+
+  },
+  computed: {
+    totalmoney: function totalmoney() {
+      var totalNum = Number(this.total) + Number(this.express);
+
+      return totalNum;
+    } },
+
   data: function data() {
     return {
-      buylist: [], //订单列表
+      buyList: [], //订单列表
+      goodsinfo: {},
+      number: "", //购买商品总数量
       goodsPrice: 0.0, //商品合计价格
       sumPrice: 0.0, //用户付款价格
       freight: 12.00, //运费
       note: '', //备注
       int: 1200, //抵扣积分
       deduction: 0, //抵扣价格
-      recinfo: {
-        id: 1,
-        name: "大黑哥",
-        head: "大",
-        tel: "18816881688",
-        address: {
-          region: {
-            "label": "广东省-深圳市-福田区",
-            "value": [18, 2, 1],
-            "cityCode": "440304" },
-
-          detailed: '深南大道1111号无名摩登大厦6楼A2' },
-
-        isDefault: true } };
-
-
-
+      goods: [],
+      express: '',
+      total: "", //商品总价格
+      addrList: {}, //地址列表
+      getgoods_name: false //送货类型显示
+    };
   },
-  onShow: function onShow() {var _this = this;
+  onShow: function onShow() {
     //页面显示时，加载订单信息
-    uni.getStorage({
-      key: 'buylist',
-      success: function success(ret) {
-        _this.buylist = ret.data;
-        _this.goodsPrice = 0;
-        //合计
-        var len = _this.buylist.length;
-        for (var i = 0; i < len; i++) {
-          _this.goodsPrice = _this.goodsPrice + _this.buylist[i].number * _this.buylist[i].price;
-        }
-        _this.deduction = _this.int / 100;
-        _this.sumPrice = _this.goodsPrice - _this.deduction + _this.freight;
-      } });
-
-    uni.getStorage({
-      key: 'selectAddress',
-      success: function success(e) {
-        _this.recinfo = e.data;
-        uni.removeStorage({
-          key: 'selectAddress' });
-
-      } });
-
+    // uni.getStorage({
+    // 	key: 'buylist',
+    // 	success: (ret) => {
+    // 		this.buylist = ret.data;
+    // 		this.goodsPrice = 0;
+    // 		//合计
+    // 		let len = this.buylist.length;
+    // 		for (let i = 0; i < len; i++) {
+    // 			this.goodsPrice = this.goodsPrice + (this.buylist[i].number * this.buylist[i].price);
+    // 		}
+    // 		this.deduction = this.int / 100;
+    // 		this.sumPrice = this.goodsPrice - this.deduction + this.freight;
+    // 	}
+    // });
+    // uni.getStorage({
+    // 	key: 'selectAddress',
+    // 	success: (e) => {
+    // 		this.recinfo = e.data;
+    // 		uni.removeStorage({
+    // 			key: 'selectAddress'
+    // 		})
+    // 	}
+    // })
   },
   onHide: function onHide() {
 
+  },
+  onLoad: function onLoad(option) {
+    console.log(option);
+    if (option.self) {
+      this.addrList = JSON.parse(option.self);
+      if (this.addrList.distance) {
+        this.getgoods_name = true;
+      }
+    }
+
+
+    // 获取购买商品信息
+
+    if (option.iscart == 0) {
+      this.goodsinfo.goods_spec = option.size;
+
+      this.goodsinfo.goods_number = option.num;
+      this.goodsinfo.goods_id = option.id;
+      this.goods.push(this.goodsinfo);
+    }
   },
   onBackPress: function onBackPress() {
     //页面后退时候，清除订单信息
@@ -149,12 +190,20 @@
     } },
 
   methods: {
+    //选取送货方式
+    sendType: function sendType() {
+      uni.navigateTo({
+        url: "/pages/sendType/sendType" });
+
+    },
+    // 获取购买商品信息
+
     clearOrder: function clearOrder() {var _this2 = this;
       uni.removeStorage({
         key: 'buylist',
         success: function success(res) {
           _this2.buylist = [];
-          console.log('remove buylist success');
+          //console.log('remove buylist success');
         } });
 
     },
@@ -191,12 +240,6 @@
 
       }, 1000);
 
-    },
-    //选择收货地址
-    selectAddress: function selectAddress() {
-      uni.navigateTo({
-        url: '../user/address/address?type=select' });
-
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
@@ -229,61 +272,109 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("view", { staticClass: "confirm" }, [
-    _vm._m(0),
-    _c(
-      "view",
-      {
-        staticClass: "addr",
-        attrs: { eventid: "529a0904-0" },
-        on: { tap: _vm.selectAddress }
-      },
-      [
-        _c("view", { staticClass: "sendgoods-info" }, [_vm._v("配送信息")]),
-        _c("view", { staticClass: "sendgoods-addr" }, [
-          _c("view", [
-            _c("text", [_vm._v(_vm._s(_vm.recinfo.name))]),
-            _c("text", [_vm._v("姓名    1233344444")]),
-            _c("text", [
-              _vm._v("河南省郑州市高新区科学大道广告产业园9号9楼901")
-            ])
-          ]),
+    _c("view", { staticClass: "send" }, [
+      _c("view", { staticClass: "send-title" }, [_vm._v("配送方式")]),
+      _c(
+        "view",
+        {
+          staticClass: "send-type",
+          attrs: { eventid: "529a0904-0" },
+          on: {
+            click: function($event) {
+              _vm.sendType()
+            }
+          }
+        },
+        [
+          _c("text", [_vm._v("已选")]),
+          _c("text", [_vm._v(_vm._s(_vm.getgoods_name ? "自提" : "送货上门"))]),
           _c("image", {
             staticClass: "right-jiantou",
             attrs: { src: "../../static/img/category/youce-jiantou.png" }
           })
+        ]
+      )
+    ]),
+    _c("view", { staticClass: "addr" }, [
+      _c("view", { staticClass: "sendgoods-info" }, [_vm._v("配送信息")]),
+      _c("view", { staticClass: "sendgoods-addr" }, [
+        _c("view", [
+          _c(
+            "text",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.getgoods_name,
+                  expression: "getgoods_name"
+                }
+              ],
+              staticClass: "getgoods-name"
+            },
+            [_vm._v(_vm._s(_vm.addrList.name))]
+          ),
+          _c("text", { staticClass: "getgoods-people" }, [
+            _vm._v(
+              _vm._s(_vm.addrList.username) +
+                "    " +
+                _vm._s(_vm.addrList.phone)
+            )
+          ]),
+          _c("text", { staticClass: "getgoods-addr" }, [
+            _vm._v(
+              _vm._s(_vm.addrList.province_name) +
+                _vm._s(_vm.addrList.city_name) +
+                _vm._s(_vm.addrList.area_name) +
+                _vm._s(_vm.addrList.address_name) +
+                _vm._s(_vm.addrList.street_name)
+            )
+          ])
         ])
-      ]
-    ),
+      ])
+    ]),
     _c(
       "view",
       { staticClass: "buy-list" },
       [
-        _vm._l(_vm.buylist, function(row, index) {
-          return _c("view", { key: index, staticClass: "row" }, [
-            _c("view", { staticClass: "order-num" }, [_vm._v("23444444444")]),
+        _vm._l(_vm.buyList, function(buy, buyIndex) {
+          return _c("view", { key: buyIndex, staticClass: "row" }, [
             _c("view", { staticClass: "goods-info" }, [
               _c("view", { staticClass: "img" }, [
-                _c("image", { attrs: { src: row.img } })
+                _c("image", { attrs: { src: buy.goods_logo } })
               ]),
               _c("view", { staticClass: "info" }, [
                 _c("view", { staticClass: "title" }, [
-                  _vm._v(_vm._s(row.name))
+                  _vm._v(_vm._s(buy.goods_title))
                 ]),
                 _c("view", { staticClass: "spec" }, [
-                  _c("text", [_vm._v(_vm._s(row.spec))]),
-                  _c("text", [_vm._v(_vm._s(row.number))])
+                  _c("text", [_vm._v(_vm._s(buy.goods_spec))])
                 ]),
                 _c("view", { staticClass: "price-number" }, [
                   _c("view", { staticClass: "price" }, [
-                    _vm._v("￥" + _vm._s(row.price * row.number))
+                    _vm._v("￥" + _vm._s(buy.price_selling))
                   ]),
-                  _c("view", { staticClass: "number" }, [_vm._v("x1")])
+                  _c("view", { staticClass: "number" }, [
+                    _vm._v(_vm._s(buy.goods_number))
+                  ])
                 ])
               ])
             ])
           ])
         }),
-        _vm._m(1)
+        _c("view", { staticClass: "total-money" }, [
+          _c("view", { staticClass: "send-money" }, [
+            _c("text", [_vm._v("配送费")]),
+            _c("text", [_vm._v("￥" + _vm._s(_vm.express))])
+          ]),
+          _c("view", { staticClass: "total-pay-money" }, [
+            _c("text", [_vm._v("共" + _vm._s(_vm.number) + "件商品")]),
+            _c("view", { staticClass: "pay-money" }, [
+              _c("text", [_vm._v("合计：")]),
+              _c("text", [_vm._v("￥" + _vm._s(_vm.total))])
+            ])
+          ])
+        ])
       ],
       2
     ),
@@ -292,7 +383,7 @@ var render = function() {
         _c("view", { staticClass: "sum" }, [
           _vm._v("待支付:"),
           _c("view", { staticClass: "money" }, [
-            _vm._v("￥" + _vm._s(_vm._f("toFixed")(_vm.sumPrice)))
+            _vm._v("￥" + _vm._s(_vm.totalmoney))
           ])
         ]),
         _c(
@@ -308,42 +399,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "send" }, [
-      _c("view", { staticClass: "send-title" }, [_vm._v("配送方式")]),
-      _c("view", { staticClass: "send-type" }, [
-        _c("text", [_vm._v("已选")]),
-        _c("text", [_vm._v("ziti")]),
-        _c("image", {
-          staticClass: "right-jiantou",
-          attrs: { src: "../../static/img/category/youce-jiantou.png" }
-        })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "total-money" }, [
-      _c("view", { staticClass: "send-money" }, [
-        _c("text", [_vm._v("配送费")]),
-        _c("text", [_vm._v("6")])
-      ]),
-      _c("view", { staticClass: "total-pay-money" }, [
-        _c("text", [_vm._v("共几件商品")]),
-        _c("view", { staticClass: "pay-money" }, [
-          _c("text", [_vm._v("合计：")]),
-          _c("text", [_vm._v("1000")])
-        ])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
