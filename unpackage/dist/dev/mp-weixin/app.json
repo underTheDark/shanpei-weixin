@@ -41,7 +41,9 @@
     "navigationBarBackgroundColor": "#ffffff",
     "backgroundColor": "#ffffff",
     "backgroundColorTop": "#ffffff",
-    "backgroundColorBottom": "#ffffff"
+    "backgroundColorBottom": "#ffffff",
+    "onReachBottomDistance": 50,
+    "enablePullDownRefresh": true
   },
   "usingComponents": {},
   "tabBar": {

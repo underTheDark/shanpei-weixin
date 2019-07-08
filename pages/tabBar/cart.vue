@@ -18,12 +18,12 @@
 				<view class="carrier" :class="[theIndex==index?'open':oldIndex==index?'close':'']" @touchstart="touchStart(index,$event)"
 				 @touchmove="touchMove(index,$event)" @touchend="touchEnd(index,$event)">
 					<!-- checkbox -->
-					<view class="checkbox-box" @tap="selected(index)">
+					<view class="checkbox-box" >
 						<!-- <view class="checkbox">
 							<view :class="[row.selected?'on':'']"></view>
 						</view> -->
 
-						<checkbox class="checkbox"></checkbox>
+						<checkbox class="checkbox" @tap="selected(index)" :checked="row.selected" ></checkbox>
 
 					</view>
 					<!-- 商品信息 -->
@@ -37,7 +37,7 @@
 							<view class="price-number">
 								<view class="price">￥{{row.price}}</view>
 								<view class="number">
-									<uni-number-box :min="1"></uni-number-box>
+									<uni-number-box :min="1" :value="row.number" @change="bindChange(index,row,$event)"></uni-number-box>
 								</view>
 							</view>
 						</view>
@@ -47,9 +47,9 @@
 		</view>
 		<!-- 脚部菜单 -->
 		<view class="footer" :style="{bottom:footerbottom}">
-			<view class="checkbox-box" @tap="allSelect">
+			<view class="checkbox-box">
 				<view class="checkbox">
-					<checkbox></checkbox>
+					<checkbox :checked="isAllselected" @tap="allSelect"></checkbox>
 				</view>
 				<view class="text">全选</view>
 			</view>
@@ -86,42 +86,6 @@
 						price: 127.5,
 						number: 1,
 						selected: false
-					},
-					{
-						id: 2,
-						img: '../../static/img/goods/p2.jpg',
-						name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
-						spec: '规格:S码',
-						price: 127.5,
-						number: 1,
-						selected: false
-					},
-					{
-						id: 3,
-						img: '../../static/img/goods/p3.jpg',
-						name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
-						spec: '规格:S码',
-						price: 127.5,
-						number: 1,
-						selected: false
-					},
-					{
-						id: 4,
-						img: '../../static/img/goods/p4.jpg',
-						name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
-						spec: '规格:S码',
-						price: 127.5,
-						number: 1,
-						selected: false
-					},
-					{
-						id: 5,
-						img: '../../static/img/goods/p5.jpg',
-						name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
-						spec: '规格:S码',
-						price: 127.5,
-						number: 1,
-						selected: false
 					}
 				],
 				//控制滑动效果
@@ -143,6 +107,7 @@
 			}, 1000);
 		},
 		onLoad() {
+			this.getCart();
 			//兼容H5下结算条位置
 			// #ifdef H5
 			this.footerbottom = document.getElementsByTagName('uni-tabbar')[0].offsetHeight + 'px';
@@ -152,6 +117,35 @@
 			// #endif
 		},
 		methods: {
+			// 获取购物车信息
+			getCart(){
+				let that=this;
+				uni.request({
+					method:"post",
+					data:{
+						token:this.token
+					},
+					url:this.config.url+"member/car",
+					success:function(res){
+						// console.log("data",res.data);
+						if(res.data.code==1){
+							that.goodsList=res.data.data;
+							that.goodsList.forEach(item=>{
+								item.spec=item.goods_spec;
+								item.img=item.logo;
+								item.name=item.title;
+								item.selected=false;
+							})
+						}else{
+							uni.showToast({
+								icon:'none',
+								title:"请求失败"
+							})
+						}
+						
+					}
+				})
+			},
 			//加入商品 参数 goods:商品数据
 			joinGoods(goods) {
 				/*
@@ -229,11 +223,11 @@
 			//商品跳转
 			toGoods(e) {
 				uni.showToast({
-					title: '商品' + e.id,
+					title: '商品' + e.goods_id,
 					icon: "none"
 				});
 				uni.navigateTo({
-					url: '../goods/goods'
+					url: '../goods/goods?id='+e.goods_id,
 				});
 			},
 			//跳转确认订单页面
@@ -275,10 +269,28 @@
 				this.sum();
 				this.oldIndex = null;
 				this.theIndex = null;
+				// 删除购物车后台；
+				this.delCart(id);
 			},
-			// 删除商品s
+			// 删除购物车
+			delCart(id){
+					uni.request({
+						method:"post",
+						data:{
+							token:this.token,
+							id:id,
+						},
+						url:this.config.url+"member/del_car",
+						success:function(res){
+							// console.log("res",res);
+						},
+					})
+				
+			},
+			// 删除商品
 			deleteList() {
 				let len = this.selectedList.length;
+				// console.log(this.selectedList);
 				while (this.selectedList.length > 0) {
 					this.deleteGoods(this.selectedList[0]);
 				}
@@ -292,6 +304,9 @@
 				let i = this.selectedList.indexOf(this.goodsList[index].id);
 				i > -1 ? this.selectedList.splice(i, 1) : this.selectedList.push(this.goodsList[index].id);
 				this.isAllselected = this.selectedList.length == this.goodsList.length;
+				if(this.selectedList.length==this.goodsList.length){
+					this.isAllselected=true;
+				}
 				this.sum();
 			},
 			//全选
@@ -304,7 +319,38 @@
 				}
 				this.selectedList = this.isAllselected ? [] : arr;
 				this.isAllselected = this.isAllselected || this.goodsList.length == 0 ? false : true;
+				// console.log("this.selectedList",this.selectedList);
 				this.sum();
+			},
+			// 改变数量
+			bindChange(index,row,val){
+				// console.log("row.number",row.number);
+				// console.log("val",val);
+				//增加 
+				if(val>row.number){
+					this.add(index);
+					this.changeNum(row.id,1);
+				}
+				//减少 
+				if(val<row.number){
+					this.sub(index);
+					this.changeNum(row.id,2);
+				}
+			},
+			// 改变数量后台
+			changeNum(id,type){
+				uni.request({
+					method:"post",
+					data:{
+						token:this.token,
+						id:id,
+						type:type
+					},
+					url:this.config.url+"member/resume_car",
+					success:function(res){
+						console.log("res",res);
+					},
+				})
 			},
 			// 减少数量
 			sub(index) {
@@ -323,16 +369,21 @@
 			sum(e, index) {
 				this.sumPrice = 0;
 				let len = this.goodsList.length;
+				// console.log("len",len);
+				// console.log("e",e);
+				// console.log("index",index);
 				for (let i = 0; i < len; i++) {
 					if (this.goodsList[i].selected) {
 						if (e && i == index) {
 							this.sumPrice = this.sumPrice + (e.detail.value * this.goodsList[i].price);
 						} else {
 							this.sumPrice = this.sumPrice + (this.goodsList[i].number * this.goodsList[i].price);
+							// console.log("this.sumPrice",this.sumPrice);
 						}
 					}
 				}
 				this.sumPrice = this.sumPrice.toFixed(2);
+				// console.log(this.sumPrice)
 			},
 			discard() {
 				//丢弃

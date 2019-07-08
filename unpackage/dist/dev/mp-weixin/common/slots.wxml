@@ -1,9 +1,14 @@
 <import src="/components/uni-swipe-action/uni-swipe-action.vue.wxml" />
 <import src="/components/uni-number-box/uni-number-box.vue.wxml" />
+<<<<<<< HEAD
 <import src="/components/uni-steps/uni-steps.vue.wxml" />
 <import src="/components/mpvue-citypicker/mpvueCityPicker.vue.wxml" />
 <import src="/common/slots.wxml" />
 <import src="/components/uni-icon/uni-icon.vue.wxml" />
 
 <template name="M12794918-default-12794918-0-+index"><image src="{{row.logo}}" class="_image M12794918"></image><view class="_view M12794918 info"><view class="_view M12794918 title">{{row.title}}</view><view class="_view M12794918 evaluate"><view class="_view M12794918 evaluate-num">{{row.number_sales}}已购买</view><view class="_view M12794918 evaluate-good">{{ row.good_percent}}%好评</view></view><view class="_view M12794918 price-compare"><view class="_view M12794918 price">￥{{row.price}}</view><view class="_view M12794918 slogan">￥{{row.market_price}}</view></view></view></template>
+=======
+
+<template name="M02f51acc-default-02f51acc-0-+index"><image src="{{row.logo}}" class="_image M02f51acc"></image><view class="_view M02f51acc info"><view class="_view M02f51acc title">{{row.title}}</view><view class="_view M02f51acc evaluate"><view class="_view M02f51acc evaluate-num">{{row.number_sales}}已购买</view><view class="_view M02f51acc evaluate-good">{{ row.good_percent}}%好评</view></view><view class="_view M02f51acc price-compare"><view class="_view M02f51acc price">￥{{row.price}}</view><view class="_view M02f51acc slogan">￥{{row.market_price}}</view></view></view></template>
+>>>>>>> 0411b5533e301024b98f621e20d2fb3b92109c2a
 

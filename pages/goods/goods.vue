@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view classs='container'>
 		<view class="status" :style="{ opacity: afterHeaderOpacity }"></view>
 		<view class="header">
 			<!-- 头部-默认显示 -->
@@ -115,8 +115,8 @@
 					<view class="product-title">
 						<image :src="goodsData.logo" />
 						<view class="product-mes">
-							<text>{{goodsData.number_stock}}</text>
 							<text>{{goodsData.price}}</text>
+							<text>{{goodsData.number_stock}}</text>
 						</view>
 						<view class="hidden"  @tap="hideSpec">x</view>
 					</view>
@@ -124,7 +124,7 @@
 					<view class="pro-content" v-for="(gui,index) in guiList" :key="index">
 						    <h2 @click="addTitle(index)">{{gui.name}}</h2>
 					        <view  class="product-color">
-								<text @click="addColor(colorIndex)" v-for="(color,colorIndex) in gui.list" :key="colorIndex">
+								<text @click="addColor(gui,gui.list,color,colorIndex)" v-for="(color,colorIndex) in gui.list" :key="colorIndex" :class="{checked:color.checked}">
 									 {{color.name}}
 								</text>
 							</view>
@@ -133,22 +133,22 @@
 					<view class="product-num">
 						<text>数量</text>
 						<view>
-							<uni-number-box :min="1" :value="proNum"></uni-number-box>
+							<uni-number-box :min="1" :value="proNum" @change="bindChange"></uni-number-box>
 						</view>
 					</view>
 				</view>
 
 				<view class="spec-btn">
 					<view class="cancelB" @click="cancel()">加入购物车</view>
-					<view class="confirmB" @tap="confirm()">立即购买</view>
+					<view class="confirmB" @tap="buy()">立即购买</view>
 				</view>
 			</view>
 		</view>
 		<!-- 商品主图轮播 -->
 		<view class="swiper-box">
 			<swiper circular="true" autoplay="true" @change="swiperChange">
-				<swiper-item v-for="swiper in swiperList" :key="swiper.id">
-					<image :src="swiper.img" @tap="toSwiper(swiper)"></image>
+				<swiper-item v-for="(swiper,index) in swiperList" :key="index">
+					<image class="swiperimage" :src="swiper" @tap="toSwiper(swiper)"></image>
 				</swiper-item>
 			</swiper>
 			<view class="indicator">{{currentSwiper+1}}/{{swiperList.length}}</view>
@@ -223,7 +223,7 @@
 					{{goodsData.comment[0].comment_content}}
 				</view>
 				<view class="product-icon">
-					<view class="img" v-for="(src,index) in evaImg" :key="index">
+					<view class="img" v-for="(src,iconNum) in evaImg" :key="iconNum">
 						<image :src="src"></image>
 					</view>
 				</view>
@@ -232,14 +232,13 @@
 		<!-- 详情 -->
 		<view class="description">
 			<view class="title"> 商品详情 </view>
-			<!-- <view class="content"><rich-text :nodes="descriptionStr"></rich-text></view> -->
 			<view class="product-detail">
 				<view >
 					<text>产品</text>
 					<text>特点</text>
 				</view>
-				<view class="product-dec">
-
+				<view class="product-dec" v-html="detail">
+					<!-- <rich-text :nodes="detail"></rich-text> -->
 				</view>
 			</view>
 		</view>
@@ -306,23 +305,7 @@
                 tuiList:[], //推荐商品
                 guiList:[], //规格
 				//轮播主图数据
-				swiperList: [{
-						id: 1,
-						img: 'https://ae01.alicdn.com/kf/HTB1Mj7iTmzqK1RjSZFjq6zlCFXaP.jpg'
-					},
-					{
-						id: 2,
-						img: 'https://ae01.alicdn.com/kf/HTB1fbseTmzqK1RjSZFLq6An2XXaL.jpg'
-					},
-					{
-						id: 3,
-						img: 'https://ae01.alicdn.com/kf/HTB1dPUMThnaK1RjSZFtq6zC2VXa0.jpg'
-					},
-					{
-						id: 4,
-						img: 'https://ae01.alicdn.com/kf/HTB1OHZrTXzqK1RjSZFvq6AB7VXaw.jpg'
-					}
-				],
+				swiperList: [],
 				//轮播图下标
 				currentSwiper: 0,
 				anchorlist: [], //导航条锚点
@@ -331,12 +314,18 @@
 				specClass: '', //规格弹窗css类，控制开关动画
 				shareClass: '', //分享弹窗css类，控制开关动画
 				// 商品信息
-			    goodsData:null,
+			    goodsData:{},
 				selectSpec: null, //选中规格
 				isKeep: false, //收藏
-				//商品描述html
-				descriptionStr: '<div style="text-align:center;"><img width="100%" src="https://ae01.alicdn.com/kf/HTB1t0fUl_Zmx1VjSZFGq6yx2XXa5.jpg"/><img width="100%" src="https://ae01.alicdn.com/kf/HTB1LzkjThTpK1RjSZFKq6y2wXXaT.jpg"/><img width="100%" src="https://ae01.alicdn.com/kf/HTB18dkiTbvpK1RjSZPiq6zmwXXa8.jpg"/></div>'
-			   ,comment:[], //评论信息
+				// 商品详情信息
+				detail:'',
+			   comment:[], //评论信息
+			   // 商品明细
+			   goods_list:[],
+			   // 规格合集
+			   size_list:[],
+			   // 选中规格
+			   selected_size:'',
 			   
 			};
 		},
@@ -381,13 +370,21 @@
             	},
             	method: "post",
             	success: (res) => {
-                     console.log(res);
+                     console.log("res.data",res.data.data.goods_list);
             		this.goodsData =res.data.data;
             		this.comment=this.goodsData.comment;
 					//this.evaImg=this.goodsData.commit[0].comment_covers;
 					this.isKeep=this.goodsData.is_collect;
 					this.guiList=this.goodsData.specs;
-				       console.log(this.guiList)
+					// 轮播图
+					this.swiperList=res.data.data.image.split("|");
+					console.log(this.swiperList)
+					// 商品详情
+					this.detail=res.data.data.content;
+					console.log(this.detail);
+					// 商品明细
+					this.goods_list=res.data.data.goods_list;
+					
 					// for(var i=0; i<guiList.length;i++){
 					// 	this.colorList=guiList[i];
 					// 	this.sizeList=guiList[i]
@@ -406,37 +403,82 @@
 				},
 				method: "post",
 				success: (res) => {
-			        // console.log(res);
+			        // console.log('res1',res);
 					 this.tuiList=res.data.data.data
 					// this.goodsData =res.data.data;
 					// this.comment=this.goodsData.comment;
 					// this.evaImg=this.goodsData.commit[0].comment_covers;
 					// this.tuiList=this.goodsData.goods_list;
+					
 				}
 			
 			})
 		},
 		methods: {
+			// 购买数量
+			bindChange(val){
+				this.proNum=val;
+			},
 			addTitle(index){
 				console.log(index)
 			},
-			addColor(index){
-				console.log(index)
+			addColor(size,arr,color,index){
+				arr.forEach(item=>{
+					item.checked=false;
+				})
+				color.checked=true;
+				this.$forceUpdate();
+				let check=size.name+":"+color.name;
+				// 单个规格项的规格值
+				size.checked=check;
+				// 所有规格项的规格值
+				let all_check='';
+				this.guiList.forEach(item=>{
+					all_check+=";"+item.checked;
+				})
+				all_check=all_check.substr(1);
+				
+				console.log('all_check',all_check);
+				// 规格项跟商品对比goos_list显示选中
+				this.goods_list.forEach(item=>{
+					if(item.goods_spec==all_check){
+						this.goodsData.price=item.price_selling;
+						this.goodsData.number_stock=item.number_stock;
+						// 选中规格项
+						this.selected_size=item.goods_spec;
+					}
+				})
+				console.log("proNum",this.proNum);
 			},
 			//加入购物车
 			cancel(){
-				uni.request({
-					url:this.config.url+"goods/car",
-					method:"post",
-					data:{
-						token:this.token,
-						goods_id:this.id,
-						goods_spec:{
-							
+				// 判断加入购物车
+				if(this.selected_size && this.selected_size.indexOf('undefined')==-1){
+					uni.request({
+						url:this.config.url+"goods/car",
+						method:"post",
+						data:{
+							token:this.token,
+							goods_id:this.id,
+							goods_spec:this.selected_size,
+							number:this.proNum
 						},
-						number:this.proNum
-					}
-				})
+						success:function(data){
+							console.log("data",data);
+							if(data.data.code==1){
+								uni.showToast({
+									title: '加入成功',
+									icon:"none"
+								});
+							}
+						}
+					})
+				}else{
+					uni.showToast({
+						title: '请选中完整规格',
+						icon:"none"
+					});
+				}
 			},
 		//	跳转推荐详情
 		 gotui(index){
@@ -506,20 +548,27 @@
 			},
 			//立即购买
 			buy() {
-				if (this.selectSpec == null) {
+				if(this.selected_size && this.selected_size.indexOf('undefined')==-1){
+					uni.navigateTo({
+						url:"/pages/order/confirmation?id="+this.goodsData.id+'&price='+this.goodsData.price+'&size='+this.selected_size+'&num='+this.proNum+"&iscart=0",
+						
+					})
+					
+				}else{
+					uni.showToast({
+						title:"请选择完整规格",
+						icon:'none',
+					})
+				}
+				// 模板
+				/* if (this.selectSpec == null) {
 					return this.showSpec(() => {
 						this.toConfirmation();
 					});
 				}
-				this.toConfirmation();
+				 this.toConfirmation();*/
 			},
-			//商品评论
-			toRatings() {
-				uni.navigateTo({
-					url: 'ratings/ratings'
-				})
-			},
-			//跳转确认订单页面
+			//跳转确认订单页面（模板）
 			toConfirmation() {
 				let tmpList = [];
 				let goods = {
@@ -541,9 +590,15 @@
 					}
 				})
 			},
+			//商品评论
+			toRatings() {
+				uni.navigateTo({
+					url: 'ratings/ratings'
+				})
+			},
 			//跳转评论列表
 			showComments(goodsid) {
-
+			
 			},
 			//选择规格
 			setSelectSpec(index) {
@@ -598,7 +653,7 @@
 			},
 			//返回上一页
 			back() {
-				uni.navigateBack();
+				uni.navigateBack(1);
 			},
 			//服务弹窗
 			showService() {
@@ -640,6 +695,15 @@
 </script>
 
 <style lang="scss">
+	.container{
+		width:100vw;
+		height:100vh;
+		overflow: auto;
+	}
+	img{
+		width:100%;
+		height:100%;
+	}
 	page {
 		background-color: #f8f8f8;
 	}
@@ -926,7 +990,7 @@
 			swiper-item {
 				image {
 					width: 100%;
-					height: 100vw;
+					height: 100%;
 				}
 			}
 		}
@@ -1109,12 +1173,9 @@
 		}
 
 		.product-detail {
-			display: flex;
-			flex-direction: column;
-            justify-content: center;
-			align-items: center;
-			height: 300upx;
+			width: 100vw;
             view:nth-child(1){
+				margin: 30upx auto;
 				display:flex;
 				flex-direction: column;
 				justify-content: center;
@@ -1123,7 +1184,6 @@
 				height:100upx;
 				border-radius: 50%;
 				border: 1px dashed #aaa;
-				margin:30upx 0;
 				font-size: 24upx;
 			}
 			// text {
@@ -1136,9 +1196,18 @@
 			// }
 
 			.product-dec {
-				background: red;
-
-				height: 300upx;
+				width: 100vw;
+				div{
+					width: 100vw;
+					p{
+						width: 100vw;
+						img{
+							width: 100% !important;
+							height: auto;
+						}
+					}
+				}
+				
 			}
 		}
 	}
@@ -1434,13 +1503,18 @@ margin-right:20upx;
 				  flex-direction: column;
 				  h2{
 					  margin-top:20upx;
+					  margin-bottom:20upx;
 					  font-size:30upx;
 color:rgba(51,51,51,1);
 				  }
 				  .product-color {
 				  	display: flex;
 				  	font-size: 26upx;
-				  	
+				  	.checked{
+						color:rgba(20, 204, 33, 1);
+						background:rgba(20,204,33,.3);
+						border:1px solid #FF14CC21;
+					}
 				   
 				  	text {
 				  	    display: flex;
@@ -1451,6 +1525,7 @@ color:rgba(51,51,51,1);
 						height: 56upx;
 						color: rgba(51, 51, 51, 1);
 						margin-right:20upx;
+						border:1px solid rgba(245, 245, 245, 1);
 				  	}
 			
 				  }
