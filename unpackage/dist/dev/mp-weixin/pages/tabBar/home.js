@@ -156,7 +156,7 @@ var _default = {
     uni.request({
       url: 'http://shanpei.wsstreet.net/index', //仅为示例，并非真实接口地址。
       data: {
-        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NjA5MjQ3NjgsImV4cCI6MTU4Njg0NDc2OCwiZGF0YSI6eyJpZCI6Mywib3BlbmlkIjoib0lieWY0cER5Z0ZLcWNRT1h3OGhaclZFbnJTRSIsImhlYWRpbWciOiJodHRwczpcL1wvd3gucWxvZ28uY25cL21tb3BlblwvdmlfMzJcL1EwajRUd0dUZlRMMFpGR3QwNWliMTJVWnJoMkNidm1VOUcwOGJpYW5pYmtiOXViWXVWaWN5WkZFaWNQUE9JQ1dPZ041UEYyVmxPOTRQVkFEUVBCYzZWM3pxZUFcLzEzMiIsIm5pY2tuYW1lIjoiXHU1ZjIwXHU0ZTA5IiwicGhvbmUiOiIiLCJ1c2VybmFtZSI6IiIsInZpcF9sZXZlbCI6MCwidmlwX2RhdGUiOm51bGwsImNyZWF0ZV9hdCI6IjIwMTktMDYtMTkgMTQ6MTE6NTgifX0.B32WfMWQ-0QJ1VtEbhxXgtT-nBqc8GwJb3ANBhy8BxU" },
+        token: this.token },
 
       method: "post",
       success: function success(res) {
@@ -164,27 +164,35 @@ var _default = {
         _this.swiperList = res.data.data.banner;
         _this.categoryList = res.data.data.cate;
         _this.hotList = res.data.data.hot;
+        _this.limitList = res.data.data.limit_buy;
       } });
 
     // 首页为你推荐
     uni.request({
       url: 'http://shanpei.wsstreet.net/recommend', //仅为示例，并非真实接口地址。
       data: {
-        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NjA5MjQ3NjgsImV4cCI6MTU4Njg0NDc2OCwiZGF0YSI6eyJpZCI6Mywib3BlbmlkIjoib0lieWY0cER5Z0ZLcWNRT1h3OGhaclZFbnJTRSIsImhlYWRpbWciOiJodHRwczpcL1wvd3gucWxvZ28uY25cL21tb3BlblwvdmlfMzJcL1EwajRUd0dUZlRMMFpGR3QwNWliMTJVWnJoMkNidm1VOUcwOGJpYW5pYmtiOXViWXVWaWN5WkZFaWNQUE9JQ1dPZ041UEYyVmxPOTRQVkFEUVBCYzZWM3pxZUFcLzEzMiIsIm5pY2tuYW1lIjoiXHU1ZjIwXHU0ZTA5IiwicGhvbmUiOiIiLCJ1c2VybmFtZSI6IiIsInZpcF9sZXZlbCI6MCwidmlwX2RhdGUiOm51bGwsImNyZWF0ZV9hdCI6IjIwMTktMDYtMTkgMTQ6MTE6NTgifX0.B32WfMWQ-0QJ1VtEbhxXgtT-nBqc8GwJb3ANBhy8BxU",
-        "page": '1' },
+        token: this.token },
 
       method: "post",
       success: function success(res) {
+        var len;
         console.log(res);
         _this.totalList = res.data.data.data;
-        for (var i = 0; i < 10; i++) {
+        if (_this.totalList.length < 10) {
+          len = _this.totalList.length;
+        } else {
+          len = 10;
+        }
+        for (var i = 0; i < len; i++) {
           _this.productList.push(_this.totalList[i]);
+          //	console.log(this.productList)
         }
 
         _this.current_page = res.data.data.current_page;
         _this.last_page = res.data.data.data.last_page;
         _this.total = res.data.data.data.total;
       } });
+
 
   },
   data: function data() {
@@ -203,7 +211,8 @@ var _default = {
       Promotion: [],
       // 热销产品
       hotList: [],
-
+      //限制产品
+      limitList: [],
       //猜你喜欢列表
       productList: [],
 
@@ -211,7 +220,8 @@ var _default = {
       loadingText: '正在加载...',
       current_page: "",
       total: "",
-      last_page: "" };
+      last_page: "",
+      tishi: false };
 
   },
   onPageScroll: function onPageScroll(e) {
@@ -228,7 +238,10 @@ var _default = {
   },
   //上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
   onReachBottom: function onReachBottom() {
-
+    this.tishi = true;
+    setTimeout(function () {
+      this.tishi = false;
+    }, 500);
     var total = this.total;
     var last_page = this.last_page;
     var current_page = this.current_page;
@@ -236,7 +249,7 @@ var _default = {
       this.loadingText = '到底了';
       return false;
     }
-    // 演示,随机加入商品,生成环境请替换为ajax请求
+
 
 
     for (var i = 10; i < current_page * 10; i++) {
@@ -367,9 +380,20 @@ var _default = {
 
     },
     //搜索跳转
-    toSearch: function toSearch() {
-      uni.showToast({
-        title: '建议跳转到新页面做搜索功能' });
+    toSearch: function toSearch() {var _this4 = this;
+      // 搜索推荐
+      uni.request({
+        url: 'http://shanpei.wsstreet.net/keyword', //仅为示例，并非真实接口地址。
+        data: {
+          "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NjA5MjQ3NjgsImV4cCI6MTU4Njg0NDc2OCwiZGF0YSI6eyJpZCI6Mywib3BlbmlkIjoib0lieWY0cER5Z0ZLcWNRT1h3OGhaclZFbnJTRSIsImhlYWRpbWciOiJodHRwczpcL1wvd3gucWxvZ28uY25cL21tb3BlblwvdmlfMzJcL1EwajRUd0dUZlRMMFpGR3QwNWliMTJVWnJoMkNidm1VOUcwOGJpYW5pYmtiOXViWXVWaWN5WkZFaWNQUE9JQ1dPZ041UEYyVmxPOTRQVkFEUVBCYzZWM3pxZUFcLzEzMiIsIm5pY2tuYW1lIjoiXHU1ZjIwXHU0ZTA5IiwicGhvbmUiOiIiLCJ1c2VybmFtZSI6IiIsInZpcF9sZXZlbCI6MCwidmlwX2RhdGUiOm51bGwsImNyZWF0ZV9hdCI6IjIwMTktMDYtMTkgMTQ6MTE6NTgifX0.B32WfMWQ-0QJ1VtEbhxXgtT-nBqc8GwJb3ANBhy8BxU" },
+
+
+        method: "post",
+        success: function success(res) {
+
+          console.log(res);
+          _this4.searchList = res.data.data;
+        } });
 
 
     },
@@ -474,6 +498,7 @@ var render = function() {
           _c("view", { staticClass: "icon search" })
         ]),
         _c("view", { staticClass: "icon-btn" }, [
+          _c("view", { staticClass: "hongdian" }),
           _c("view", {
             staticClass: "icon tongzhi",
             attrs: { eventid: "0c1a97ce-1" },
@@ -656,13 +681,13 @@ var render = function() {
       _c(
         "view",
         { staticClass: "product-list" },
-        _vm._l(_vm.productList, function(product, index0) {
+        _vm._l(_vm.productList, function(product, index) {
           return _c(
             "view",
             {
-              key: product.goods_id,
+              key: index,
               staticClass: "product",
-              attrs: { eventid: "0c1a97ce-7-" + index0 },
+              attrs: { eventid: "0c1a97ce-7-" + index },
               on: {
                 tap: function($event) {
                   _vm.toGoods(product)
@@ -686,9 +711,21 @@ var render = function() {
           )
         })
       ),
-      _c("view", { staticClass: "loading-text" }, [
-        _vm._v(_vm._s(_vm.loadingText))
-      ])
+      _c(
+        "view",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.tishi,
+              expression: "tishi"
+            }
+          ],
+          staticClass: "loading-text"
+        },
+        [_vm._v(_vm._s(_vm.loadingText))]
+      )
     ])
   ])
 }
@@ -705,7 +742,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("view", [
+    return _c("view", { staticClass: "english" }, [
       _c("text", [_vm._v("FLASH")]),
       _c("text", [_vm._v("SALES")])
     ])
@@ -714,7 +751,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("view", [
+    return _c("view", { staticClass: "english" }, [
       _c("text", [_vm._v("HOT-SALE")]),
       _c("text", [_vm._v("PRODUCT")])
     ])

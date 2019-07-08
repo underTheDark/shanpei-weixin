@@ -53,53 +53,40 @@
 
 
 
+
+
 var _amapWx = _interopRequireDefault(__webpack_require__(/*! @/common/SDK/amap-wx.js */ "C:\\Users\\Administrator\\Desktop\\shanpei-weixin\\common\\SDK\\amap-wx.js"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //高德SDK
 var _default = {
+  mounted: function mounted() {var _this = this;
+
+    this.showCategoryIndex = 0;
+    uni.request({
+      url: this.config.url + 'category',
+      data: {
+        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NjA5MjQ3NjgsImV4cCI6MTU4Njg0NDc2OCwiZGF0YSI6eyJpZCI6Mywib3BlbmlkIjoib0lieWY0cER5Z0ZLcWNRT1h3OGhaclZFbnJTRSIsImhlYWRpbWciOiJodHRwczpcL1wvd3gucWxvZ28uY25cL21tb3BlblwvdmlfMzJcL1EwajRUd0dUZlRMMFpGR3QwNWliMTJVWnJoMkNidm1VOUcwOGJpYW5pYmtiOXViWXVWaWN5WkZFaWNQUE9JQ1dPZ041UEYyVmxPOTRQVkFEUVBCYzZWM3pxZUFcLzEzMiIsIm5pY2tuYW1lIjoiXHU1ZjIwXHU0ZTA5IiwicGhvbmUiOiIiLCJ1c2VybmFtZSI6IiIsInZpcF9sZXZlbCI6MCwidmlwX2RhdGUiOm51bGwsImNyZWF0ZV9hdCI6IjIwMTktMDYtMTkgMTQ6MTE6NTgifX0.B32WfMWQ-0QJ1VtEbhxXgtT-nBqc8GwJb3ANBhy8BxU" },
+
+
+      method: "post",
+      success: function success(res) {
+
+        console.log(res);
+        _this.categoryList = res.data.data;
+        _this.mingcheng = _this.categoryList[0].title;
+        _this.categoryChild = _this.categoryList[0].children;
+      } });
+
+
+  },
   data: function data() {
     return {
       showCategoryIndex: 0,
       headerPosition: "fixed",
       city: "北京",
       //分类列表
-      categoryList: [
-      { id: 1, title: '家用电器', banner: '../../static/img/category/banner.jpg', list: [
-        { name: '冰箱', img: '1.jpg' },
-        { name: '电视', img: '2.jpg' },
-        { name: '空调', img: '3.jpg' },
-        { name: '洗衣机', img: '4.jpg' },
-        { name: '风扇', img: '5.jpg' },
-        { name: '燃气灶', img: '6.jpg' },
-        { name: '热水器', img: '7.jpg' },
-        { name: '电吹风', img: '8.jpg' },
-        { name: '电饭煲', img: '9.jpg' }] },
-
-      { id: 2, title: '办公用品', banner: '../../static/img/category/banner.jpg', list: [
-        { name: '打印机', img: '1.jpg' },
-        { name: '路由器', img: '2.jpg' },
-        { name: '扫描仪', img: '3.jpg' },
-        { name: '投影仪', img: '4.jpg' },
-        { name: '墨盒', img: '5.jpg' },
-        { name: '纸类', img: '6.jpg' }] },
-
-      { id: 3, title: '日常用品', banner: '../../static/img/category/banner.jpg', list: [
-        { name: '茶具', img: '1.jpg' },
-        { name: '花瓶', img: '2.jpg' },
-        { name: '纸巾', img: '3.jpg' },
-        { name: '毛巾', img: '4.jpg' },
-        { name: '牙膏', img: '5.jpg' },
-        { name: '保鲜膜', img: '6.jpg' },
-        { name: '保鲜袋', img: '7.jpg' }] },
-
-      { id: 4, title: '蔬菜水果', banner: '../../static/img/category/banner.jpg', list: [
-        { name: '苹果', img: '1.jpg' },
-        { name: '芒果', img: '2.jpg' },
-        { name: '椰子', img: '3.jpg' },
-        { name: '橙子', img: '4.jpg' },
-        { name: '奇异果', img: '5.jpg' },
-        { name: '玉米', img: '6.jpg' },
-        { name: '百香果', img: '7.jpg' }] }] };
-
-
+      categoryList: [],
+      mingcheng: "",
+      categoryChild: [],
+      first: "" };
 
   },
   onPageScroll: function onPageScroll(e) {
@@ -110,7 +97,7 @@ var _default = {
       this.headerPosition = "absolute";
     }
   },
-  onLoad: function onLoad() {var _this = this;
+  onLoad: function onLoad() {var _this2 = this;
     this.amapPlugin = new _amapWx.default.AMapWX({
       //高德地图KEY，随时失效，请务必替换为自己的KEY，参考：http://ask.dcloud.net.cn/article/35070
       key: '7c235a9ac4e25e482614c6b8eac6fd8e' });
@@ -118,11 +105,20 @@ var _default = {
     //定位地址
     this.amapPlugin.getRegeo({
       success: function success(data) {
-        _this.city = data[0].regeocodeData.addressComponent.city.replace(/市/g, ''); //把"市"去掉
+        _this2.city = data[0].regeocodeData.addressComponent.city.replace(/市/g, ''); //把"市"去掉
       } });
 
   },
   methods: {
+    // 物品列表跳转
+    goodsList: function goodsList(index) {
+
+      var index1 = JSON.stringify(index);
+      var key1 = JSON.stringify(this.first);
+      uni.navigateTo({
+        url: "/pages/goods/goods-list?id=" + index1 + "&key=" + key1 });
+
+    },
     //消息列表
     toMsg: function toMsg() {
       uni.navigateTo({
@@ -130,23 +126,20 @@ var _default = {
 
     },
     //分类切换显示
-    showCategory: function showCategory(index) {
+    showCategory: function showCategory(index, key) {
+      console.log(index, key);
       this.showCategoryIndex = index;
+      this.first = key;
+      this.mingcheng = this.categoryList[index].title;
+      this.categoryChild = this.categoryList[index].children;
     },
-    toCategory: function toCategory(e) {
-      //uni.showToast({title: e.name,icon:"none"});
-      uni.navigateTo({
-        url: '../goods/goods-list?cid=' + e.id + '&name=' + e.name });
 
-    },
     //搜索跳转
     toSearch: function toSearch() {
-      uni.showToast({ title: "建议跳转到新页面做搜索功能" });
-    } },
+      uni.showToast({
+        title: "建议跳转到新页面做搜索功能" });
 
-  mounted: function mounted() {
-    this.showCategoryIndex = 0;
-  } };exports.default = _default;
+    } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
 /***/ }),
@@ -219,13 +212,13 @@ var render = function() {
             return _c(
               "view",
               {
-                key: category.id,
+                key: index,
                 staticClass: "row",
                 class: [index == _vm.showCategoryIndex ? "on" : ""],
                 attrs: { eventid: "8a036190-1-" + index },
                 on: {
                   tap: function($event) {
-                    _vm.showCategory(index)
+                    _vm.showCategory(index, category.id)
                   }
                 }
               },
@@ -240,55 +233,38 @@ var render = function() {
         _c(
           "scroll-view",
           { staticClass: "right", attrs: { "scroll-y": "true" } },
-          _vm._l(_vm.categoryList, function(category, index) {
-            return _c(
-              "view",
-              {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: index == _vm.showCategoryIndex,
-                    expression: "index==showCategoryIndex"
-                  }
-                ],
-                key: category.id,
-                staticClass: "category"
-              },
-              [
-                _c("view", { staticClass: "banner" }, [_vm._v("米面粮油")]),
-                _c(
-                  "view",
-                  { staticClass: "list" },
-                  _vm._l(category.list, function(box, i) {
-                    return _c(
-                      "view",
-                      {
-                        key: i,
-                        staticClass: "box",
-                        attrs: { eventid: "8a036190-2-" + index + "-" + i },
-                        on: {
-                          tap: function($event) {
-                            _vm.toCategory(box)
-                          }
+          [
+            _c("view", { staticClass: "category" }, [
+              _c("view", { staticClass: "banner" }, [
+                _vm._v(_vm._s(_vm.mingcheng))
+              ]),
+              _c(
+                "view",
+                { staticClass: "list" },
+                _vm._l(_vm.categoryChild, function(child, num) {
+                  return _c(
+                    "view",
+                    {
+                      key: num,
+                      staticClass: "box",
+                      attrs: { eventid: "8a036190-2-" + num },
+                      on: {
+                        click: function($event) {
+                          _vm.goodsList(num)
                         }
-                      },
-                      [
-                        _c("image", {
-                          attrs: {
-                            src: "../../static/img/category/list/" + box.img
-                          }
-                        }),
-                        _c("view", { staticClass: "text" }, [
-                          _vm._v(_vm._s(box.name))
-                        ])
-                      ]
-                    )
-                  })
-                )
-              ]
-            )
-          })
+                      }
+                    },
+                    [
+                      _c("image", { attrs: { src: child.logo } }),
+                      _c("view", { staticClass: "text" }, [
+                        _vm._v(_vm._s(child.title))
+                      ])
+                    ]
+                  )
+                })
+              )
+            ])
+          ]
         )
       ],
       1

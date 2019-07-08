@@ -52,6 +52,12 @@ page {
 .icon.xia:before {
     content: '\E689';
 }
+.hot .promotion-head-right {
+  font-size: 24rpx;
+  font-family: PingFang-SC-Regular;
+  font-weight: 400;
+  color: #999999;
+}
 .pullDown-effects {
   position: fixed;
   top: 0;
@@ -170,6 +176,17 @@ page {
     -webkit-justify-content: center;
         -ms-flex-pack: center;
             justify-content: center;
+    position: relative;
+}
+.header .icon-btn .hongdian {
+      width: 10rpx;
+      height: 10rpx;
+      -webkit-border-radius: 50%;
+              border-radius: 50%;
+      background: red;
+      position: absolute;
+      top: 7rpx;
+      right: 30rpx;
 }
 .header .icon-btn .icon {
       width: 60rpx;
@@ -241,10 +258,14 @@ page {
       -webkit-align-items: center;
           -ms-flex-align: center;
               align-items: center;
+      view-display: flex;
+      view-justify-content: center;
+      view-align-items: center;
 }
 .swiper .swiper-box .indicator view:nth-child(1) {
         color: #00C65D;
-        font-size: 34rpx;
+        font-size: 30rpx;
+        amrgin-right: 2rpx;
 }
 .swiper .swiper-box .indicator view:nth-child(2) {
         color: white;
@@ -370,8 +391,8 @@ page {
         color: #101010;
         height: 100%;
 }
-.promotion .promotion-head .promotion-head-left view {
-        margin-left: 20rpx;
+.promotion .promotion-head .promotion-head-left .english {
+        margin-left: 5rpx;
         display: -webkit-box;
         display: -webkit-flex;
         display: -ms-flexbox;
@@ -381,12 +402,12 @@ page {
         -webkit-flex-direction: column;
             -ms-flex-direction: column;
                 flex-direction: column;
-        -webkit-justify-content: space-around;
-            -ms-flex-pack: distribute;
-                justify-content: space-around;
+        -webkit-transform: scale(0.8);
+        -ms-transform: scale(0.6);
+            transform: scale(0.6);
 }
-.promotion .promotion-head .promotion-head-left view text {
-          font-size: 16rpx;
+.promotion .promotion-head .promotion-head-left .english text {
+          font-size: 7rpx;
           font-family: PingFang-SC-Medium;
           font-weight: 500;
           color: #555555;
@@ -512,9 +533,6 @@ page {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-justify-content: space-around;
-      -ms-flex-pack: distribute;
-          justify-content: space-around;
   -webkit-flex-wrap: wrap;
       -ms-flex-wrap: wrap;
           flex-wrap: wrap;
@@ -530,10 +548,6 @@ page {
     -webkit-flex-direction: column;
         -ms-flex-direction: column;
             flex-direction: column;
-    -webkit-box-align: start;
-    -webkit-align-items: flex-start;
-        -ms-flex-align: start;
-            align-items: flex-start;
     -webkit-flex-wrap: wrap;
         -ms-flex-wrap: wrap;
             flex-wrap: wrap;

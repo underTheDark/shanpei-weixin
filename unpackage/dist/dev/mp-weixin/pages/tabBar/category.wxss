@@ -182,7 +182,8 @@
   display: -ms-flexbox;
   display: flex;
 }
-.category-list .left, .category-list .right {
+.category-list .left,
+  .category-list .right {
     position: absolute;
     top: 100rpx;
     bottom: 0rpx;
@@ -251,19 +252,20 @@
 .category-list .right .category {
       width: 94%;
       padding: 20rpx 3%;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+          -ms-flex-direction: column;
+              flex-direction: column;
 }
 .category-list .right .category .banner {
         width: 100%;
-        height: 24.262vw;
-        -webkit-border-radius: 10rpx;
-                border-radius: 10rpx;
-        overflow: hidden;
-        -webkit-box-shadow: 0rpx 5rpx 20rpx rgba(0, 0, 0, 0.3);
-                box-shadow: 0rpx 5rpx 20rpx rgba(0, 0, 0, 0.3);
-}
-.category-list .right .category .banner image {
-          width: 100%;
-          height: 24.262vw;
+        font-size: 28rpx;
+        color: #333333;
 }
 .category-list .right .category .list {
         margin-top: 40rpx;

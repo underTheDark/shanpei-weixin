@@ -158,7 +158,7 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
 
 
 
@@ -205,6 +205,22 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 var _uniSwipeAction = _interopRequireDefault(__webpack_require__(/*! @/components/uni-swipe-action/uni-swipe-action.vue */ "C:\\Users\\Administrator\\Desktop\\shanpei-weixin\\components\\uni-swipe-action\\uni-swipe-action.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
 
 {
+  mounted: function mounted() {
+    var _this = this;
+    uni.request({
+
+      url: this.config.url + "member/collect",
+      method: "post",
+      data: {
+        token: this.token },
+
+
+      success: function success(res) {
+        console.log(res);
+        _this.goodsList = res.data.data.data;
+      } });
+
+  },
   components: {
     uniSwipeAction: _uniSwipeAction.default },
 
@@ -216,41 +232,31 @@ var _uniSwipeAction = _interopRequireDefault(__webpack_require__(/*! @/component
           backgroundColor: "rgba(255,84,31,1)" } }],
 
 
-      goodsList: [{
-        id: 1,
-        img: '/static/img/goods/p1.jpg',
-        name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
-        spec: '规格:S码',
-        price: 127.5,
-        number: 1,
-        selected: false },
-
-      {
-        id: 2,
-        img: '/static/img/goods/p2.jpg',
-        name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
-        spec: '规格:S码',
-        price: 127.5,
-        number: 1,
-        selected: false },
-
-      {
-        id: 3,
-        img: '/static/img/goods/p3.jpg',
-        name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
-        spec: '规格:S码',
-        price: 127.5,
-        number: 1,
-        selected: false }] };
-
+      goodsList: [] };
 
 
   },
   methods: {
-    bindClick: function bindClick(options) {
+
+    bindClick: function bindClick(options, id) {
+      var _this = this;
+      uni.request({
+        url: this.config.url + "goods/collect",
+        method: "POST",
+        data: {
+          goods_id: id,
+          token: this.token },
+
+        success: function success(res) {
+          console.log(res);
+          if (res.data.code == 1) {
+            _this.goodsList.splice(options, 1);
+          }
+        } });
+
       console.log(options);
-      this.goodsList = this.goodsList.splice(options, 2);
-      console.log(this.goodsList);
+      // this.goodsList=this.goodsList.splice(options,2)
+      // console.log(this.goodsList)
     },
     //控制左滑删除效果-begin
     touchStart: function touchStart(index, event) {
@@ -264,7 +270,7 @@ var _uniSwipeAction = _interopRequireDefault(__webpack_require__(/*! @/component
       //初始坐标
       this.initXY = [event.touches[0].pageX, event.touches[0].pageY];
     },
-    touchMove: function touchMove(index, event) {var _this = this;
+    touchMove: function touchMove(index, event) {var _this2 = this;
       //多点触控不触发
       if (event.touches.length > 1) {
         this.isStop = true;
@@ -291,7 +297,7 @@ var _uniSwipeAction = _interopRequireDefault(__webpack_require__(/*! @/component
           this.theIndex = null;
           this.isStop = true;
           setTimeout(function () {
-            _this.oldIndex = null;
+            _this2.oldIndex = null;
           }, 150);
         }
       }
@@ -314,6 +320,7 @@ var _uniSwipeAction = _interopRequireDefault(__webpack_require__(/*! @/component
       this.oldIndex = null;
       this.theIndex = null;
     } } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
 /***/ }),
 
@@ -463,13 +470,25 @@ var render = function() {
         "view",
         { staticClass: "sub-list goods" },
         [
-          _vm.goodsList.length == 0
-            ? _c("view", { staticClass: "tis" }, [_vm._v("没有数据~")])
-            : _vm._e(),
+          _c(
+            "view",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.goodsList.length == 0,
+                  expression: "goodsList.length == 0"
+                }
+              ],
+              staticClass: "tis"
+            },
+            [_vm._v("没有数据~")]
+          ),
           _vm._l(_vm.goodsList, function(row, index) {
             return _c(
               "view",
-              { key: index, staticClass: "row" },
+              { key: index, staticClass: "collectList" },
               [
                 _c(
                   "uni-swipe-action",
@@ -481,31 +500,31 @@ var render = function() {
                     },
                     on: {
                       click: function($event) {
-                        _vm.bindClick(index)
+                        _vm.bindClick(index, row.goods_id)
                       }
                     }
                   },
                   [
-                    _c("view", { staticClass: "img" }, [
-                      _c("image", { attrs: { src: row.img } })
-                    ]),
+                    _c("image", { attrs: { src: row.logo } }),
                     _c("view", { staticClass: "info" }, [
                       _c("view", { staticClass: "title" }, [
-                        _vm._v(
-                          "国产红心火龙果 4个装中果单果约300\n\t\t\t\t\t\t\t~400g 新鲜水果"
-                        )
+                        _vm._v(_vm._s(row.title))
                       ]),
                       _c("view", { staticClass: "evaluate" }, [
                         _c("view", { staticClass: "evaluate-num" }, [
-                          _vm._v("332已购买")
+                          _vm._v(_vm._s(row.number_sales) + "已购买")
                         ]),
                         _c("view", { staticClass: "evaluate-good" }, [
-                          _vm._v("100%好评")
+                          _vm._v(_vm._s(row.good_percent) + "%好评")
                         ])
                       ]),
                       _c("view", { staticClass: "price-compare" }, [
-                        _c("view", { staticClass: "price" }, [_vm._v("10000")]),
-                        _c("view", { staticClass: "slogan" }, [_vm._v("3333")])
+                        _c("view", { staticClass: "price" }, [
+                          _vm._v("￥" + _vm._s(row.price))
+                        ]),
+                        _c("view", { staticClass: "slogan" }, [
+                          _vm._v("￥" + _vm._s(row.market_price))
+                        ])
                       ])
                     ])
                   ]

@@ -43,21 +43,33 @@
 
 
 
+
 {
+  mounted: function mounted() {var _this = this;
+
+    uni.request({
+      url: this.config.url + "goods/lists",
+      data: {
+        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NjA5MjQ3NjgsImV4cCI6MTU4Njg0NDc2OCwiZGF0YSI6eyJpZCI6Mywib3BlbmlkIjoib0lieWY0cER5Z0ZLcWNRT1h3OGhaclZFbnJTRSIsImhlYWRpbWciOiJodHRwczpcL1wvd3gucWxvZ28uY25cL21tb3BlblwvdmlfMzJcL1EwajRUd0dUZlRMMFpGR3QwNWliMTJVWnJoMkNidm1VOUcwOGJpYW5pYmtiOXViWXVWaWN5WkZFaWNQUE9JQ1dPZ041UEYyVmxPOTRQVkFEUVBCYzZWM3pxZUFcLzEzMiIsIm5pY2tuYW1lIjoiXHU1ZjIwXHU0ZTA5IiwicGhvbmUiOiIiLCJ1c2VybmFtZSI6IiIsInZpcF9sZXZlbCI6MCwidmlwX2RhdGUiOm51bGwsImNyZWF0ZV9hdCI6IjIwMTktMDYtMTkgMTQ6MTE6NTgifX0.B32WfMWQ-0QJ1VtEbhxXgtT-nBqc8GwJb3ANBhy8BxU",
+        cate_id: this.key1,
+        sort: 1,
+        asc: 1 },
+
+
+      method: "post",
+      success: function success(res) {
+
+        console.log(res);
+        _this.goodsList = res.data.data.data;
+
+      } });
+
+
+  },
   data: function data() {
     return {
-      goodsList: [
-      { goods_id: 0, img: '../../static/img/goods/p1.jpg', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款', lprice: "$10", num: 100, good: "100%" },
-      { goods_id: 1, img: '../../static/img/goods/p2.jpg', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款', lprice: "$10", num: 100, good: "100%" },
-      { goods_id: 2, img: '../../static/img/goods/p3.jpg', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款', lprice: "$10", num: 100, good: "100%" },
-      { goods_id: 3, img: '../../static/img/goods/p4.jpg', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款', lprice: "$10", num: 100, good: "100%" },
-      { goods_id: 4, img: '../../static/img/goods/p5.jpg', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款', lprice: "$10", num: 100, good: "100%" },
-      { goods_id: 5, img: '../../static/img/goods/p6.jpg', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款', lprice: "$10", num: 100, good: "100%" },
-      { goods_id: 6, img: '../../static/img/goods/p7.jpg', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款', lprice: "$10", num: 100, good: "100%" },
-      { goods_id: 7, img: '../../static/img/goods/p8.jpg', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款', lprice: "$10", num: 100, good: "100%" },
-      { goods_id: 8, img: '../../static/img/goods/p9.jpg', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款', lprice: "$10", num: 100, good: "100%" },
-      { goods_id: 9, img: '../../static/img/goods/p10.jpg', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款', lprice: "$10", num: 100, good: "100%" }],
 
+      goodsList: [],
       loadingText: "正在加载...",
       headerTop: "0px",
       headerPosition: "fixed",
@@ -66,11 +78,14 @@
       { text: "销量", selected: false, orderbyicon: ['sheng', 'jiang'], orderby: 0 },
       { text: "价格", selected: false, orderbyicon: false, orderby: 0 }],
 
-      orderby: "sheng" };
+      orderby: "sheng",
+      id: "",
+      key1: "" };
 
   },
   onLoad: function onLoad(option) {//option为object类型，会序列化上个页面传递的参数
-    console.log(option.cid); //打印出上个页面传递的参数。
+
+    this.key1 = option.key;
     uni.setNavigationBarTitle({
       title: option.name });
 
@@ -96,9 +111,9 @@
     }
   },
   //下拉刷新，需要自己在page.json文件中配置开启页面下拉刷新 "enablePullDownRefresh": true
-  onPullDownRefresh: function onPullDownRefresh() {var _this = this;
+  onPullDownRefresh: function onPullDownRefresh() {var _this2 = this;
     setTimeout(function () {
-      _this.reload();
+      _this2.reload();
       uni.stopPullDownRefresh();
     }, 1000);
   },
@@ -133,9 +148,10 @@
     },
     //商品跳转
     toGoods: function toGoods(e) {
-      uni.showToast({ title: '商品' + e.goods_id, icon: "none" });
+      console.log(e);
+      var id = e.id;
       uni.navigateTo({
-        url: '../goods/goods' });
+        url: "/pages/goods/goods?id=" + id });
 
     },
     //排序类型
@@ -240,22 +256,24 @@ var render = function() {
               }
             },
             [
-              _c("image", { attrs: { mode: "widthFix", src: goods.img } }),
-              _c("view", { staticClass: "name" }, [_vm._v(_vm._s(goods.name))]),
+              _c("image", { attrs: { mode: "widthFix", src: goods.logo } }),
+              _c("view", { staticClass: "name" }, [
+                _vm._v(_vm._s(goods.title))
+              ]),
               _c("view", { staticClass: "info" }, [
                 _c("view", { staticClass: "price" }, [
                   _vm._v(_vm._s(goods.price))
                 ]),
                 _c("view", { staticClass: "slogan" }, [
-                  _vm._v(_vm._s(goods.lprice))
+                  _vm._v(_vm._s(goods.market_price))
                 ])
               ]),
               _c("view", { staticClass: "evaluate" }, [
                 _c("view", { staticClass: "evaluate-num" }, [
-                  _vm._v(_vm._s(goods.num))
+                  _vm._v(_vm._s(goods.comment_num) + "条评价")
                 ]),
                 _c("view", { staticClass: "evaluate-good" }, [
-                  _vm._v(_vm._s(goods.good))
+                  _vm._v(_vm._s(goods.good_percent) + "%好评")
                 ])
               ])
             ]

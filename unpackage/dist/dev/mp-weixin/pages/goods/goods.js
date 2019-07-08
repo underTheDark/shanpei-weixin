@@ -291,8 +291,11 @@
 
 
 
+
+
 var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/uni-number-box/uni-number-box.vue */ "C:\\Users\\Administrator\\Desktop\\shanpei-weixin\\components\\uni-number-box\\uni-number-box.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
 {
+
   components: {
     uniNumberBox: _uniNumberBox.default },
 
@@ -303,13 +306,15 @@ var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/
       afterHeaderzIndex: 10, //层级
       beforeHeaderOpacity: 1, //不透明度
       afterHeaderOpacity: 0, //不透明度
+      id: "", //商品id,
+      proNum: 1, //加入购物车数量
       //是否显示返回按钮
 
 
 
-
-
-
+      evaImg: [], //评价上传图片
+      tuiList: [], //推荐商品
+      guiList: [], //规格
       //轮播主图数据
       swiperList: [{
         id: 1,
@@ -336,40 +341,13 @@ var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/
       specClass: '', //规格弹窗css类，控制开关动画
       shareClass: '', //分享弹窗css类，控制开关动画
       // 商品信息
-      goodsData: {
-        id: 1,
-        name: "商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题",
-        price: "127.00",
-        number: 1,
-        num: 22,
-        good: "100%",
-        lprice: "333",
-        service: [{
-          name: "正品保证",
-          description: "此商品官方保证为正品" },
-
-        {
-          name: "极速退款",
-          description: "此商品享受退货极速退款服务" },
-
-        {
-          name: "7天退换",
-          description: "此商品享受7天无理由退换服务" }],
-
-
-        spec: ["XS", "S", "M", "L", "XL", "XXL"],
-        comment: {
-          number: 102,
-          userface: '../../static/img/face.jpg',
-          username: '大黑哥',
-          content: '很不错，之前买了很多次了，很好看，能放很久，和图片色差不大，值得购买！' } },
-
-
-
+      goodsData: null,
       selectSpec: null, //选中规格
       isKeep: false, //收藏
       //商品描述html
-      descriptionStr: '<div style="text-align:center;"><img width="100%" src="https://ae01.alicdn.com/kf/HTB1t0fUl_Zmx1VjSZFGq6yx2XXa5.jpg"/><img width="100%" src="https://ae01.alicdn.com/kf/HTB1LzkjThTpK1RjSZFKq6y2wXXaT.jpg"/><img width="100%" src="https://ae01.alicdn.com/kf/HTB18dkiTbvpK1RjSZPiq6zmwXXa8.jpg"/></div>' };
+      descriptionStr: '<div style="text-align:center;"><img width="100%" src="https://ae01.alicdn.com/kf/HTB1t0fUl_Zmx1VjSZFGq6yx2XXa5.jpg"/><img width="100%" src="https://ae01.alicdn.com/kf/HTB1LzkjThTpK1RjSZFKq6y2wXXaT.jpg"/><img width="100%" src="https://ae01.alicdn.com/kf/HTB18dkiTbvpK1RjSZPiq6zmwXXa8.jpg"/></div>',
+      comment: [] //评论信息
+    };
 
   },
   onLoad: function onLoad(option) {
@@ -378,7 +356,9 @@ var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/
     this.showBack = false;
 
     //option为object类型，会序列化上个页面传递的参数
-    console.log(option.cid); //打印出上个页面传递的参数。
+    console.log(option.id); //打印出上个页面传递的参数。
+    this.id = option.id;
+
   },
   onReady: function onReady() {
     this.calcAnchor(); //计算锚点高度，页面数据是ajax加载时，请把此行放在数据渲染完成事件中执行以保证高度计算正确
@@ -401,10 +381,79 @@ var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/
       title: '触发上拉加载' });
 
   },
-  mounted: function mounted() {
+  mounted: function mounted() {var _this = this;
+    uni.request({
+      url: this.config.url + "goods/detail",
+      data: {
+        token: this.token,
+        id: this.id },
+
+
+      method: "post",
+      success: function success(res) {
+        console.log(res);
+        _this.goodsData = res.data.data;
+        _this.comment = _this.goodsData.comment;
+        //this.evaImg=this.goodsData.commit[0].comment_covers;
+        _this.isKeep = _this.goodsData.is_collect;
+        _this.guiList = _this.goodsData.specs;
+        console.log(_this.guiList);
+        // for(var i=0; i<guiList.length;i++){
+        // 	this.colorList=guiList[i];
+        // 	this.sizeList=guiList[i]
+        // }
+      } });
+
+
+    // 推荐商品
+    uni.request({
+      url: this.config.url + "recommend",
+      data: {
+        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NjA5MjQ3NjgsImV4cCI6MTU4Njg0NDc2OCwiZGF0YSI6eyJpZCI6Mywib3BlbmlkIjoib0lieWY0cER5Z0ZLcWNRT1h3OGhaclZFbnJTRSIsImhlYWRpbWciOiJodHRwczpcL1wvd3gucWxvZ28uY25cL21tb3BlblwvdmlfMzJcL1EwajRUd0dUZlRMMFpGR3QwNWliMTJVWnJoMkNidm1VOUcwOGJpYW5pYmtiOXViWXVWaWN5WkZFaWNQUE9JQ1dPZ041UEYyVmxPOTRQVkFEUVBCYzZWM3pxZUFcLzEzMiIsIm5pY2tuYW1lIjoiXHU1ZjIwXHU0ZTA5IiwicGhvbmUiOiIiLCJ1c2VybmFtZSI6IiIsInZpcF9sZXZlbCI6MCwidmlwX2RhdGUiOm51bGwsImNyZWF0ZV9hdCI6IjIwMTktMDYtMTkgMTQ6MTE6NTgifX0.B32WfMWQ-0QJ1VtEbhxXgtT-nBqc8GwJb3ANBhy8BxU" },
+
+
+
+
+      method: "post",
+      success: function success(res) {
+        // console.log(res);
+        _this.tuiList = res.data.data.data;
+        // this.goodsData =res.data.data;
+        // this.comment=this.goodsData.comment;
+        // this.evaImg=this.goodsData.commit[0].comment_covers;
+        // this.tuiList=this.goodsData.goods_list;
+      } });
+
 
   },
   methods: {
+    addTitle: function addTitle(index) {
+      console.log(index);
+    },
+    addColor: function addColor(index) {
+      console.log(index);
+    },
+    //加入购物车
+    cancel: function cancel() {
+      uni.request({
+        url: this.config.url + "goods/car",
+        method: "post",
+        data: {
+          token: this.token,
+          goods_id: this.id,
+          goods_spec: {},
+
+
+          number: this.proNum } });
+
+
+    },
+    //	跳转推荐详情
+    gotui: function gotui(index) {
+      uni.navigateTo({
+        url: "/pages/goods/goods?id=" + index });
+
+    },
     //跳转购物车
     skipCart: function skipCart() {
       uni.switchTab({
@@ -431,15 +480,26 @@ var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/
     share: function share() {
       this.shareClass = 'show';
     },
-    hideShare: function hideShare() {var _this = this;
+    hideShare: function hideShare() {var _this2 = this;
       this.shareClass = 'hide';
       setTimeout(function () {
-        _this.shareClass = 'none';
+        _this2.shareClass = 'none';
       }, 150);
     },
     //收藏
     keep: function keep() {
       this.isKeep = this.isKeep ? false : true;
+      uni.request({
+        url: this.config.url + "goods/collect",
+        data: {
+          token: this.token,
+          goods_id: this.id },
+
+        method: "post",
+        success: function success(res) {
+          console.log(res);
+        } });
+
     },
     // 加入购物车
     joinCart: function joinCart() {
@@ -455,10 +515,10 @@ var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/
 
     },
     //立即购买
-    buy: function buy() {var _this2 = this;
+    buy: function buy() {var _this3 = this;
       if (this.selectSpec == null) {
         return this.showSpec(function () {
-          _this2.toConfirmation();
+          _this3.toConfirmation();
         });
       }
       this.toConfirmation();
@@ -519,7 +579,7 @@ var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/
 
     },
     //计算锚点高度
-    calcAnchor: function calcAnchor() {var _this3 = this;
+    calcAnchor: function calcAnchor() {var _this4 = this;
       this.anchorlist = [{
         name: '主图',
         top: 0 },
@@ -541,8 +601,8 @@ var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/
 
 
         var headerHeight = uni.upx2px(100);
-        _this3.anchorlist[1].top = data.top - headerHeight - statusbarHeight;
-        _this3.anchorlist[2].top = data.bottom - headerHeight - statusbarHeight;
+        _this4.anchorlist[1].top = data.top - headerHeight - statusbarHeight;
+        _this4.anchorlist[2].top = data.bottom - headerHeight - statusbarHeight;
 
       }).exec();
     },
@@ -556,10 +616,10 @@ var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/
       this.serviceClass = 'show';
     },
     //关闭服务弹窗
-    hideService: function hideService() {var _this4 = this;
+    hideService: function hideService() {var _this5 = this;
       this.serviceClass = 'hide';
       setTimeout(function () {
-        _this4.serviceClass = 'none';
+        _this5.serviceClass = 'none';
       }, 200);
     },
     //规格弹窗
@@ -572,14 +632,14 @@ var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/
       return;
     },
     //关闭规格弹窗
-    hideSpec: function hideSpec() {var _this5 = this;
+    hideSpec: function hideSpec() {var _this6 = this;
       this.specClass = 'hide';
       //回调
 
       this.selectSpec && this.specCallback && this.specCallback();
       this.specCallback = false;
       setTimeout(function () {
-        _this5.specClass = 'none';
+        _this6.specClass = 'none';
       }, 200);
     },
     discard: function discard() {
@@ -611,543 +671,8 @@ var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("view", [
-    _c("view", {
-      staticClass: "status",
-      style: { opacity: _vm.afterHeaderOpacity }
-    }),
-    _c("view", { staticClass: "header" }, [
-      _c(
-        "view",
-        {
-          staticClass: "after",
-          style: {
-            opacity: _vm.afterHeaderOpacity,
-            zIndex: _vm.afterHeaderzIndex
-          }
-        },
-        [
-          _c("view", { staticClass: "back" }, [
-            _vm.showBack
-              ? _c("view", {
-                  staticClass: "icon xiangqian",
-                  attrs: { eventid: "62af3366-0" },
-                  on: { tap: _vm.back }
-                })
-              : _vm._e()
-          ])
-        ]
-      )
-    ]),
-    _c("view", { staticClass: "footer" }, [
-      _c("view", { staticClass: "icons" }, [
-        _c(
-          "view",
-          {
-            staticClass: "box",
-            attrs: { eventid: "62af3366-1" },
-            on: { tap: _vm.keep }
-          },
-          [
-            _c("view", {
-              staticClass: "icon",
-              class: [_vm.isKeep ? "shoucangsel" : "shoucang"]
-            }),
-            _c("view", { staticClass: "text" }, [
-              _vm._v(_vm._s(_vm.isKeep ? "已" : "") + "收藏")
-            ])
-          ]
-        ),
-        _c(
-          "view",
-          {
-            staticClass: "box ",
-            attrs: { eventid: "62af3366-2" },
-            on: { click: _vm.skipCart }
-          },
-          [_vm._m(0), _c("view", { staticClass: "text" }, [_vm._v("购物车")])]
-        )
-      ]),
-      _c("view", { staticClass: "btn" }, [
-        _c(
-          "view",
-          {
-            staticClass: "joinCart",
-            attrs: { eventid: "62af3366-3" },
-            on: { tap: _vm.joinCart }
-          },
-          [_vm._v("加入购物车")]
-        ),
-        _c(
-          "view",
-          {
-            staticClass: "buy",
-            attrs: { eventid: "62af3366-4" },
-            on: { tap: _vm.buy }
-          },
-          [_vm._v("立即购买")]
-        )
-      ])
-    ]),
-    _c(
-      "view",
-      {
-        staticClass: "share",
-        class: _vm.shareClass,
-        attrs: { eventid: "62af3366-7" },
-        on: {
-          touchmove: function($event) {
-            $event.stopPropagation()
-            $event.preventDefault()
-            _vm.discard($event)
-          },
-          tap: _vm.hideShare
-        }
-      },
-      [
-        _c("view", { staticClass: "mask" }),
-        _c(
-          "view",
-          {
-            staticClass: "layer",
-            attrs: { eventid: "62af3366-6" },
-            on: {
-              tap: function($event) {
-                $event.stopPropagation()
-                _vm.discard($event)
-              }
-            }
-          },
-          [
-            _c("view", { staticClass: "h1" }, [_vm._v("分享")]),
-            _vm._m(1),
-            _c(
-              "view",
-              {
-                staticClass: "btn",
-                attrs: { eventid: "62af3366-5" },
-                on: { tap: _vm.hideShare }
-              },
-              [_vm._v("取消")]
-            )
-          ]
-        )
-      ]
-    ),
-    _c(
-      "view",
-      {
-        staticClass: "popup service",
-        class: _vm.serviceClass,
-        attrs: { eventid: "62af3366-10" },
-        on: {
-          touchmove: function($event) {
-            $event.stopPropagation()
-            $event.preventDefault()
-            _vm.discard($event)
-          },
-          tap: _vm.hideService
-        }
-      },
-      [
-        _c("view", { staticClass: "mask" }),
-        _c(
-          "view",
-          {
-            staticClass: "layer",
-            attrs: { eventid: "62af3366-9" },
-            on: {
-              tap: function($event) {
-                $event.stopPropagation()
-                _vm.discard($event)
-              }
-            }
-          },
-          [
-            _c(
-              "view",
-              { staticClass: "content" },
-              _vm._l(_vm.goodsData.service, function(item, index) {
-                return _c("view", { key: index, staticClass: "row" }, [
-                  _c("view", { staticClass: "title" }, [
-                    _vm._v(_vm._s(item.name))
-                  ]),
-                  _c("view", { staticClass: "description" }, [
-                    _vm._v(_vm._s(item.description))
-                  ])
-                ])
-              })
-            ),
-            _c("view", { staticClass: "btn" }, [
-              _c(
-                "view",
-                {
-                  staticClass: "button",
-                  attrs: { eventid: "62af3366-8" },
-                  on: { tap: _vm.hideService }
-                },
-                [_vm._v("完成")]
-              )
-            ])
-          ]
-        )
-      ]
-    ),
-    _c(
-      "view",
-      {
-        staticClass: "popup spec",
-        class: _vm.specClass,
-        attrs: { eventid: "62af3366-14" },
-        on: {
-          touchmove: function($event) {
-            $event.stopPropagation()
-            $event.preventDefault()
-            _vm.discard($event)
-          },
-          tap: _vm.hideSpec
-        }
-      },
-      [
-        _c("view", { staticClass: "mask" }),
-        _c(
-          "view",
-          {
-            staticClass: "layer",
-            attrs: { eventid: "62af3366-13" },
-            on: {
-              tap: function($event) {
-                $event.stopPropagation()
-                _vm.discard($event)
-              }
-            }
-          },
-          [
-            _c("view", { staticClass: "content" }, [
-              _c("view", { staticClass: "product-title" }, [
-                _c("image", { attrs: { src: "../../static/img/1.jpg" } }),
-                _vm._m(2),
-                _c(
-                  "view",
-                  {
-                    staticClass: "hidden",
-                    attrs: { eventid: "62af3366-11" },
-                    on: { tap: _vm.hideSpec }
-                  },
-                  [_vm._v("x")]
-                )
-              ]),
-              _vm._m(3),
-              _vm._m(4),
-              _c("view", { staticClass: "product-num" }, [
-                _c("text", [_vm._v("数量")]),
-                _c(
-                  "view",
-                  [
-                    _c("uni-number-box", {
-                      attrs: { min: 1, mpcomid: "62af3366-0" }
-                    })
-                  ],
-                  1
-                )
-              ])
-            ]),
-            _c("view", { staticClass: "btn" }, [
-              _c(
-                "view",
-                {
-                  staticClass: "button",
-                  attrs: { eventid: "62af3366-12" },
-                  on: { tap: _vm.hideSpec }
-                },
-                [_vm._v("完成")]
-              )
-            ])
-          ]
-        )
-      ]
-    ),
-    _c(
-      "view",
-      { staticClass: "swiper-box" },
-      [
-        _c(
-          "swiper",
-          {
-            attrs: {
-              circular: "true",
-              autoplay: "true",
-              eventid: "62af3366-16"
-            },
-            on: { change: _vm.swiperChange }
-          },
-          _vm._l(_vm.swiperList, function(swiper, index0) {
-            return _c(
-              "swiper-item",
-              { key: swiper.id, attrs: { mpcomid: "62af3366-1-" + index0 } },
-              [
-                _c("image", {
-                  attrs: { src: swiper.img, eventid: "62af3366-15-" + index0 },
-                  on: {
-                    tap: function($event) {
-                      _vm.toSwiper(swiper)
-                    }
-                  }
-                })
-              ]
-            )
-          })
-        ),
-        _c("view", { staticClass: "indicator" }, [
-          _vm._v(
-            _vm._s(_vm.currentSwiper + 1) + "/" + _vm._s(_vm.swiperList.length)
-          )
-        ])
-      ],
-      1
-    ),
-    _c("view", { staticClass: "info-box goods-info" }, [
-      _c("view", { staticClass: "title" }, [
-        _vm._v(_vm._s(_vm.goodsData.name))
-      ]),
-      _c("view", { staticClass: "product-info" }, [
-        _c("view", { staticClass: "info" }, [
-          _c("text", [_vm._v("￥" + _vm._s(_vm.goodsData.price))]),
-          _c("text", [_vm._v("￥" + _vm._s(_vm.goodsData.lprice))])
-        ]),
-        _c("view", { staticClass: "evaluate" }, [
-          _c("view", { staticClass: "evaluate-num" }, [
-            _vm._v(_vm._s(_vm.goodsData.num))
-          ]),
-          _c("view", { staticClass: "evaluate-good" }, [
-            _vm._v(_vm._s(_vm.goodsData.good))
-          ])
-        ])
-      ])
-    ]),
-    _c("view", { staticClass: "info-box spec" }, [
-      _vm._m(5),
-      _c(
-        "view",
-        {
-          staticClass: "row",
-          attrs: { eventid: "62af3366-17" },
-          on: {
-            tap: function($event) {
-              _vm.showSpec(false)
-            }
-          }
-        },
-        [
-          _c("view", { staticClass: "add-color" }, [_vm._v("规格")]),
-          _c("view", { staticClass: "icon xiangyou" })
-        ]
-      )
-    ]),
-    _c(
-      "view",
-      { staticClass: "info-box comments", attrs: { id: "comments" } },
-      [
-        _c("view", { staticClass: "row" }, [
-          _c("view", { staticClass: "text" }, [
-            _vm._v("评价 (" + _vm._s(_vm.goodsData.comment.number) + ")")
-          ]),
-          _c(
-            "view",
-            {
-              staticClass: "arrow",
-              attrs: { eventid: "62af3366-19" },
-              on: { tap: _vm.toRatings }
-            },
-            [
-              _c(
-                "view",
-                {
-                  staticClass: "show",
-                  attrs: { eventid: "62af3366-18" },
-                  on: {
-                    tap: function($event) {
-                      _vm.showComments(_vm.goodsData.id)
-                    }
-                  }
-                },
-                [_vm._v("更多")]
-              )
-            ]
-          )
-        ]),
-        _c(
-          "view",
-          {
-            staticClass: "comment",
-            attrs: { eventid: "62af3366-20" },
-            on: { tap: _vm.toRatings }
-          },
-          [
-            _c("view", { staticClass: "user-info" }, [
-              _c("view", { staticClass: "comment-user-info" }, [
-                _c("view", { staticClass: "people-icon" }, [
-                  _c("image", {
-                    staticClass: "people-icon",
-                    attrs: { src: _vm.goodsData.comment.userface }
-                  })
-                ]),
-                _c("view", { staticClass: "star" }, [
-                  _vm._v(_vm._s(_vm.goodsData.comment.username))
-                ])
-              ]),
-              _c("view", { staticClass: "comment-time" }, [_vm._v("时间")])
-            ]),
-            _c("view", { staticClass: "content" }, [
-              _vm._v(_vm._s(_vm.goodsData.comment.content))
-            ]),
-            _vm._m(6)
-          ]
-        )
-      ]
-    ),
-    _vm._m(7),
-    _vm._m(8),
-    _c(
-      "view",
-      {
-        staticClass: "people-service",
-        attrs: { eventid: "62af3366-21" },
-        on: { tap: _vm.toChat }
-      },
-      [_c("text", [_vm._v("咨询")]), _c("text", [_vm._v("客服")])]
-    )
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "icon" }, [
-      _c("image", { attrs: { src: "../../static/img/category/cart.png" } })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "list" }, [
-      _c("view", { staticClass: "box" }, [
-        _c("image", { attrs: { src: "../../static/img/share/wx.png" } }),
-        _c("view", { staticClass: "title" }, [_vm._v("微信好友")])
-      ]),
-      _c("view", { staticClass: "box" }, [
-        _c("image", { attrs: { src: "../../static/img/share/pyq.png" } }),
-        _c("view", { staticClass: "title" }, [_vm._v("朋友圈")])
-      ]),
-      _c("view", { staticClass: "box" }, [
-        _c("image", { attrs: { src: "../../static/img/share/wb.png" } }),
-        _c("view", { staticClass: "title" }, [_vm._v("新浪微博")])
-      ]),
-      _c("view", { staticClass: "box" }, [
-        _c("image", { attrs: { src: "../../static/img/share/qq.png" } }),
-        _c("view", { staticClass: "title" }, [_vm._v("QQ")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "product-mes" }, [
-      _c("text", [_vm._v("库存")]),
-      _c("text", [_vm._v("价格")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "product-color" }, [
-      _c("text", [_vm._v("颜色")]),
-      _c("view", [_vm._v("毛衣 （加厚班）")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "product-size product-color" }, [
-      _c("text", [_vm._v("颜色")]),
-      _c("view", [_vm._v("毛衣 （加厚班）")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "row" }, [
-      _c("view", { staticClass: "add-color" }, [_vm._v("库存")]),
-      _c("view", { staticClass: "resdius-num" }, [_vm._v("1000")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "product-icon" }, [
-      _c("image", { attrs: { src: "../../static/img/category/lunbo1.png" } })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "description" }, [
-      _c("view", { staticClass: "title" }, [_vm._v("商品详情")]),
-      _c("view", { staticClass: "product-detail" }, [
-        _c("view", [
-          _c("text", [_vm._v("产品")]),
-          _c("text", [_vm._v("特点")])
-        ]),
-        _c("view", { staticClass: "product-dec" })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "recomment" }, [
-      _c("view", { staticClass: "recomment-title " }, [_vm._v("推荐商品")]),
-      _c("view", { staticClass: "recomment-contain" }, [
-        _c("view", { staticClass: "recomment-list" }, [
-          _c("view", { staticClass: "recomment-list-left" }, [
-            _c("image", { attrs: { src: "../../static/img/1.jpg", mode: "" } })
-          ]),
-          _c("view", { staticClass: "recomment-list-right" }, [
-            _c("view", { staticClass: "product-name" }, [
-              _vm._v(
-                "国产红心火龙果 4个装中果单果约300\n\t\t\t\t\t\t\t~400g 新鲜水果"
-              )
-            ]),
-            _c("view", { staticClass: "product-eval" }, [
-              _c("view", { staticClass: "evaluate-num" }, [
-                _vm._v("652人已购买")
-              ]),
-              _c("view", { staticClass: "evaluate-good" }, [_vm._v("100%")])
-            ]),
-            _c("view", { staticClass: "product-info" }, [
-              _c("view", { staticClass: "price" }, [_vm._v("100")]),
-              _c("view", { staticClass: "slogan" }, [_vm._v("200")])
-            ])
-          ])
-        ])
-      ])
-    ])
-  }
-]
-render._withStripped = true
+var render = function () {}
+var staticRenderFns = []
 
 
 

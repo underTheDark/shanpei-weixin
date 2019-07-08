@@ -220,6 +220,8 @@ var _area = _interopRequireDefault(__webpack_require__(/*! ./city-data/area.js *
 
 
 
+
+
 var _mpvueCityPicker = _interopRequireDefault(__webpack_require__(/*! @/components/mpvue-citypicker/mpvueCityPicker.vue */ "C:\\Users\\Administrator\\Desktop\\shanpei-weixin\\components\\mpvue-citypicker\\mpvueCityPicker.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
 {
   components: {
@@ -232,10 +234,14 @@ var _mpvueCityPicker = _interopRequireDefault(__webpack_require__(/*! @/componen
       name: '',
       tel: '',
       detailed: '',
+      province: "",
+      city: "",
+      area: "",
+      street: "",
       isDefault: false,
       cityPickerValue: [0, 0, 1],
       themeColor: '#007AFF',
-      region: { label: "请点击选择地址", value: [], cityCode: "" } };
+      region: null };
 
   },
   methods: {
@@ -246,71 +252,74 @@ var _mpvueCityPicker = _interopRequireDefault(__webpack_require__(/*! @/componen
       this.$refs.mpvueCityPicker.show();
     },
     onConfirm: function onConfirm(e) {
-      this.region = e;
-      this.cityPickerValue = e.value;
+      console.log(e);
+
+      var addList = e.label.split("-");
+      this.province = addList[0];
+      this.city = addList[1];
+      this.area = addList[2];
+
     },
     isDefaultChange: function isDefaultChange(e) {
       this.isDefault = e.detail.value;
     },
 
     save: function save() {
-      var data = { "name": this.name, "head": this.name.substr(0, 1), "tel": this.tel, "address": { "region": this.region, "detailed": this.detailed }, "isDefault": this.isDefault };
-      if (this.editType == 'edit') {
-        data.id = this.id;
-      }
-      if (!data.name) {
+      console.log(this.tel, this.detailed);
+      var data = { "name": this.name, "phone": this.tel, id: this.id, token: this.token,
+        province: this.province, city: this.city, area: this.area, street: this.street,
+        "is_default": this.isDefault, address: this.detailed };
+
+      if (!this.name) {
         uni.showToast({ title: '请输入收件人姓名', icon: 'none' });
         return;
       }
-      if (!data.tel) {
+      if (!this.tel) {
         uni.showToast({ title: '请输入收件人电话号码', icon: 'none' });
         return;
       }
-      if (!data.address.detailed) {
+      if (!this.detailed) {
         uni.showToast({ title: '请输入收件人详细地址', icon: 'none' });
         return;
       }
-      if (data.address.region.value.length == 0) {
-        uni.showToast({ title: '请选择收件地址', icon: 'none' });
-        return;
-      }
-      uni.showLoading({
-        title: '正在提交' });
 
+      // uni.showLoading({
+      // 	title:'正在提交'
+      // })
       //实际应用中请提交ajax,模板定时器模拟提交效果
-      setTimeout(function () {
-        uni.setStorage({
-          key: 'saveAddress',
-          data: data,
-          success: function success() {
-            uni.hideLoading();
-            uni.navigateBack();
-          } });
+      uni.request({
+        url: this.config.url + "address/edit",
+        method: "post",
+        data: data,
+        success: function success(res) {
+          console.log(res);
+          if (res.data.code == 1) {
+            uni.showLoading({
+              title: '保存成功' });
 
-      }, 300);
+            setTimeout(function () {
+              uni.hideLoading();
+            }, 500);
+          }
+        } });
+
 
 
     } },
 
-  onLoad: function onLoad(e) {var _this = this;
+  onLoad: function onLoad(e) {
     //获取传递过来的参数
+    console.log(JSON.parse(e.type));
 
-    this.editType = e.type;
-    if (e.type == 'edit') {
-      uni.getStorage({
-        key: 'address',
-        success: function success(e) {
-          _this.id = e.data.id;
-          _this.name = e.data.name;
-          _this.tel = e.data.tel;
-          _this.detailed = e.data.address.detailed;
-          _this.isDefault = e.data.isDefault;
-          _this.cityPickerValue = e.data.address.region.value;
-          _this.region = e.data.address.region;
-        } });
-
-    }
-
+    this.region = JSON.parse(e.type);
+    this.name = this.region.name;
+    this.tel = this.region.phone;
+    this.detailed = this.region.address;
+    this.id = this.region.id;
+    this.province = this.region.province;
+    this.city = this.region.city;
+    this.area = this.region.area;
+    this.street = this.region.street;
   },
   onBackPress: function onBackPress() {
     if (this.$refs.mpvueCityPicker.showPicker) {
@@ -557,7 +566,7 @@ var render = function() {
               attrs: { eventid: "f1d01cb2-2" },
               on: { tap: _vm.chooseCity }
             },
-            [_vm._v(_vm._s(_vm.region.label))]
+            [_vm._v(_vm._s(_vm.province) + _vm._s(_vm.city) + _vm._s(_vm.area))]
           )
         ]),
         _c("view", { staticClass: "row" }, [
@@ -569,7 +578,7 @@ var render = function() {
               attrs: { eventid: "f1d01cb2-3" },
               on: { tap: _vm.chooseCity }
             },
-            [_vm._v(_vm._s(_vm.region.label))]
+            [_vm._v(_vm._s(_vm.street))]
           )
         ]),
         _c("view", { staticClass: "row detail-add" }, [

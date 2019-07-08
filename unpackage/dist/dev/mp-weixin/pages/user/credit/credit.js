@@ -8,7 +8,8 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default =
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default =
+
 
 
 
@@ -32,11 +33,31 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 {
   data: function data() {
-    return {};
+    return {
+      totalCredit: [],
+      credit: null };
 
 
   },
-  methods: {} };exports.default = _default;
+  methods: {},
+
+
+  mounted: function mounted() {
+    var _this = this;
+    uni.request({
+      url: this.config.url + "member/score",
+      data: {
+        token: this.token },
+
+      method: "POST",
+      success: function success(res) {
+        console.log(res);
+        _this.credit = res.data.data;
+        _this.totalCredit = res.data.data.recode.data;
+      } });
+
+  } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
 /***/ }),
 
@@ -66,31 +87,33 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "credit" }, [
-      _c("view", { staticClass: "total-credit" }, [
-        _c("text", [_vm._v("我的积分")]),
-        _c("text", [_vm._v("400")])
-      ]),
-      _c("view", { staticClass: "credit-main" }, [
+  return _c("view", { staticClass: "credit" }, [
+    _c("view", { staticClass: "total-credit" }, [
+      _c("text", [_vm._v("我的积分")]),
+      _c("text", [_vm._v(_vm._s(_vm.credit.score))])
+    ]),
+    _c(
+      "view",
+      { staticClass: "credit-main" },
+      [
         _c("view", { staticClass: "credit-title" }, [_vm._v("积分明细")]),
-        _c("view", { staticClass: "credit-recode" }, [
-          _c("view", { staticClass: "recode-left" }, [
-            _c("text", [_vm._v("消费赠送")]),
-            _c("text", [_vm._v("2333333")])
-          ]),
-          _c("view", { staticClass: "recode-right" }, [_vm._v("+222")])
-        ])
-      ])
-    ])
-  }
-]
+        _vm._l(_vm.totalCredit, function(row, index) {
+          return _c("view", { key: index, staticClass: "credit-recode" }, [
+            _c("view", { staticClass: "recode-left" }, [
+              _c("text", [_vm._v("消费赠送")]),
+              _c("text", [_vm._v(_vm._s(row.create_at))])
+            ]),
+            _c("view", { staticClass: "recode-right" }, [
+              _vm._v("+" + _vm._s(row.score))
+            ])
+          ])
+        })
+      ],
+      2
+    )
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 

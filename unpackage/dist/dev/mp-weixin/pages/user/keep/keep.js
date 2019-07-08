@@ -81,57 +81,24 @@
 
 
 {
+  mounted: function mounted() {
+    var _this = this;
+    uni.request({
+      url: this.config.url + "member/comment",
+      method: "post",
+      data: {
+        token: this.token,
+        type: this.subState },
+
+      success: function success(res) {
+        console.log(res);
+        _this.goodsList = res.data.data.data;
+      } });
+
+  },
   data: function data() {
     return {
-      goodsList: [{
-        id: 1,
-        img: '/static/img/goods/p1.jpg',
-        name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
-        spec: '规格:S码',
-        price: 127.5,
-        number: 1,
-        selected: false },
-
-      {
-        id: 2,
-        img: '/static/img/goods/p1.jpg',
-        name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
-        spec: '规格:S码',
-        price: 127.5,
-        number: 1,
-        selected: false },
-
-      {
-        id: 3,
-        img: '/static/img/goods/p1.jpg',
-        name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
-        spec: '规格:S码',
-        price: 127.5,
-        number: 1,
-        selected: false }],
-
-
-      shopList: [{
-        id: 1,
-        name: "冰鲜专卖店",
-        img: "/static/img/shop/1.jpg" },
-
-      {
-        id: 2,
-        name: "果蔬天下",
-        img: "/static/img/shop/2.jpg" },
-
-      {
-        id: 3,
-        name: "办公耗材用品店",
-        img: "/static/img/shop/3.jpg" },
-
-      {
-        id: 4,
-        name: "天天看好书",
-        img: "/static/img/shop/4.jpg" }],
-
-
+      goodsList: [],
       headerTop: 0,
       //控制滑动效果
       typeClass: 'goods',
@@ -223,181 +190,8 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("view", [
-    _c("view", { staticClass: "tabr", style: { top: _vm.headerTop } }, [
-      _c(
-        "view",
-        {
-          class: { on: _vm.typeClass == "goods" },
-          attrs: { eventid: "2ec82c3c-0" },
-          on: {
-            tap: function($event) {
-              _vm.switchType("goods")
-            }
-          }
-        },
-        [_vm._v("已评价")]
-      ),
-      _c(
-        "view",
-        {
-          class: { on: _vm.typeClass == "shop" },
-          attrs: { eventid: "2ec82c3c-1" },
-          on: {
-            tap: function($event) {
-              _vm.switchType("shop")
-            }
-          }
-        },
-        [_vm._v("待评价")]
-      ),
-      _c("view", { staticClass: "border", class: _vm.typeClass })
-    ]),
-    _c("view", { staticClass: "place" }),
-    _c("view", { staticClass: "keep-main" }, [
-      _c(
-        "view",
-        {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.subState == 1,
-              expression: "subState==1"
-            }
-          ],
-          staticClass: "list"
-        },
-        [
-          _vm._m(0),
-          _c("view", { staticClass: "list-two" }, [
-            _vm._v(
-              "非常非常棒，厨房里的好帮手，喜欢！非常非常棒，厨房里的好帮手，喜欢！非常非常棒，厨房里的好帮手，喜欢！"
-            )
-          ]),
-          _vm._m(1),
-          _vm._m(2)
-        ]
-      ),
-      _c(
-        "view",
-        {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.subState == 2,
-              expression: "subState==2"
-            }
-          ],
-          staticClass: "do-evaluate"
-        },
-        [
-          _vm._m(3),
-          _vm._m(4),
-          _c(
-            "view",
-            {
-              staticClass: "do-evaluate-three",
-              attrs: { eventid: "2ec82c3c-2" },
-              on: {
-                click: function($event) {
-                  _vm.sayFeel()
-                }
-              }
-            },
-            [_c("text", [_vm._v("去评价")])]
-          )
-        ]
-      )
-    ])
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "list-one" }, [
-      _c("view", { staticClass: "one-left" }, [
-        _c("image", {
-          attrs: { src: "../../../static/img/category/banner.jpg" }
-        }),
-        _c("view", { staticClass: "evaluate" }, [
-          _c("text", [_vm._v("姓名")]),
-          _c("text", [_vm._v("星星")])
-        ])
-      ]),
-      _c("view", { staticClass: "one-right" }, [_vm._v("222222--2222 12:00")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "list-three" }, [
-      _c("image", { attrs: { src: "../../../static/img/category/banner.jpg" } })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "list-four" }, [
-      _c("view", { staticClass: "four-left" }, [
-        _c("image", {
-          attrs: { src: "../../../static/img/category/banner.jpg" }
-        })
-      ]),
-      _c("view", { staticClass: "four-right" }, [
-        _c("text", [
-          _vm._v(
-            "非常非常棒，厨房里的好帮手，喜欢！非常非常棒，厨房里的好帮手，喜欢！非常非常棒，厨房里的好帮手，喜欢！"
-          )
-        ]),
-        _c("text", [_vm._v("价格")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "do-evaluate-one" }, [
-      _c("view", { staticClass: "evaluate-left" }, [
-        _vm._v("订单编号：2344444444")
-      ]),
-      _c("view", { staticClass: "evaluate-right" }, [_vm._v("已完成")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "do-evaluate-two" }, [
-      _c("image", {
-        attrs: { src: "../../../static/img/category/banner.jpg" }
-      }),
-      _c("view", { staticClass: "goods-dec" }, [
-        _c("text", { staticClass: "goods-title" }, [
-          _vm._v("国产红心火龙果 4个装中果 单果约300~400g 新鲜水果")
-        ]),
-        _c("view", { staticClass: "goods-price" }, [
-          _c("text", [_vm._v("共2件产品  合计：")]),
-          _c("view", { staticClass: "total-price" }, [
-            _c("text", [_vm._v("￥")]),
-            _c("text", [_vm._v("108")])
-          ])
-        ])
-      ])
-    ])
-  }
-]
-render._withStripped = true
+var render = function () {}
+var staticRenderFns = []
 
 
 

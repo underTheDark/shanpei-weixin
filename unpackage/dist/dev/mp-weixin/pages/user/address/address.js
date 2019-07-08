@@ -218,121 +218,98 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+
+
+
+
+
+
 var _uniPopup = _interopRequireDefault(__webpack_require__(/*! ../../../components/uni-popup/uni-popup.vue */ "C:\\Users\\Administrator\\Desktop\\shanpei-weixin\\components\\uni-popup\\uni-popup.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
 
 {
+  mounted: function mounted() {var _this = this;
+
+    // 自提点
+    uni.request({
+      url: this.config.url + "member/station",
+      method: "post",
+      data: {
+        token: this.token },
+
+      success: function success(res) {
+        console.log(res);
+        _this.selfList = res.data.data;
+      } });
+
+
+    //我的收货地址
+    uni.request({
+      url: this.config.url + "member/address",
+      method: "POST",
+      data: {
+        token: this.token },
+
+      success: function success(res) {
+        console.log(res);
+        _this.homeList = res.data.data;
+      } });
+
+  },
   components: {
     uniPopup: _uniPopup.default },
 
   data: function data() {
     return {
+      src1: '../../../static/img/address/y-duihao.png',
+      src2: '../../../static/img/address/n-duihao.png',
       typeClass: 'home',
       subState: 1,
       isSelect: false,
-      addressList: [{
-        id: 1,
-        name: "大黑哥",
-        head: "大",
-        tel: "18816881688",
-        address: {
-          region: {
-            "label": "广东省-深圳市-福田区",
-            "value": [18, 2, 1],
-            "cityCode": "440304" },
-
-          detailed: '深南大道1111号无名摩登大厦6楼A2' },
-
-        isDefault: true },
-
-      {
-        id: 2,
-        name: "大黑哥",
-        head: "大",
-        tel: "15812341234",
-        address: {
-          region: {
-            "label": "广东省-深圳市-福田区",
-            "value": [18, 2, 1],
-            "cityCode": "440304" },
-
-          detailed: '深北小道2222号有名公寓502' },
-
-        isDefault: false },
-
-      {
-        id: 3,
-        name: "老大哥",
-        head: "老",
-        tel: "18155467897",
-        address: {
-          region: {
-            "label": "广东省-深圳市-福田区",
-            "value": [18, 2, 1],
-            "cityCode": "440304" },
-
-          detailed: '深南大道1111号无名摩登大厦6楼A2' },
-
-        isDefault: false },
-
-      {
-        id: 4,
-        name: "王小妹",
-        head: "王",
-        tel: "13425654895",
-        address: {
-          region: {
-            "label": "广东省-深圳市-福田区",
-            "value": [18, 2, 1],
-            "cityCode": "440304" },
-
-          detailed: '深南大道1111号无名摩登大厦6楼A2' },
-
-        isDefault: false }] };
-
-
+      homeList: [],
+      selfList: [] };
 
   },
-  onShow: function onShow() {var _this = this;
+  onShow: function onShow() {
 
-    uni.getStorage({
-      key: 'delAddress',
-      success: function success(e) {
-        var len = _this.addressList.length;
-        if (e.data.hasOwnProperty('id')) {
-          for (var i = 0; i < len; i++) {
-            if (_this.addressList[i].id == e.data.id) {
-              _this.addressList.splice(i, 1);
-              break;
-            }
-          }
-        }
-        uni.removeStorage({
-          key: 'delAddress' });
-
-      } });
-
-    uni.getStorage({
-      key: 'saveAddress',
-      success: function success(e) {
-        var len = _this.addressList.length;
-        if (e.data.hasOwnProperty('id')) {
-          for (var i = 0; i < len; i++) {
-            if (_this.addressList[i].id == e.data.id) {
-              _this.addressList.splice(i, 1, e.data);
-              break;
-            }
-          }
-        } else {
-          var lastid = _this.addressList[len - 1];
-          lastid++;
-          e.data.id = lastid;
-          _this.addressList.push(e.data);
-        }
-        uni.removeStorage({
-          key: 'saveAddress' });
-
-      } });
-
+    // uni.getStorage({
+    // 	key: 'delAddress',
+    // 	success: (e) => {
+    // 		let len = this.addressList.length;
+    // 		if (e.data.hasOwnProperty('id')) {
+    // 			for (let i = 0; i < len; i++) {
+    // 				if (this.addressList[i].id == e.data.id) {
+    // 					this.addressList.splice(i, 1);
+    // 					break;
+    // 				}
+    // 			}
+    // 		}
+    // 		uni.removeStorage({
+    // 			key: 'delAddress'
+    // 		})
+    // 	}
+    // })
+    // uni.getStorage({
+    // 	key: 'saveAddress',
+    // 	success: (e) => {
+    // 		let len = this.addressList.length;
+    // 		if (e.data.hasOwnProperty('id')) {
+    // 			for (let i = 0; i < len; i++) {
+    // 				if (this.addressList[i].id == e.data.id) {
+    // 					this.addressList.splice(i, 1, e.data);
+    // 					break;
+    // 				}
+    // 			}
+    // 		} else {
+    // 			let lastid = this.addressList[len - 1];
+    // 			lastid++;
+    // 			e.data.id = lastid;
+    // 			this.addressList.push(e.data);
+    // 		}
+    // 		uni.removeStorage({
+    // 			key: 'saveAddress'
+    // 		})
+    // 	}
+    // })
   },
   onLoad: function onLoad(e) {
     if (e.type == 'select') {
@@ -340,32 +317,44 @@ var _uniPopup = _interopRequireDefault(__webpack_require__(/*! ../../../componen
     }
   },
   methods: {
-    // 删除
-    removeM: function removeM(index, id) {
-      console.log(2222);
-      var self = this;
-      console.log('点击删除');
-      uni.showModal({
-        title: '',
-        content: '确定要删除该信息吗？',
-        confirmText: '删除',
-        cancelColor: 'rgba(102,102,102,1)',
-        confirmColor: 'rgba(20,204,33,1)',
+    // 删除我的收货地址
+    removeH: function removeH(index, id) {
+      console.log(index, id);
+      uni.request({
+        url: this.config.url + "address/del",
+        data: {
+          token: this.token,
+          address_id: id },
+
+        method: "post",
         success: function success(res) {
-          if (res.confirm) {
-            console.log('用户点击确定');
-
-            uni.showToast({
-              icon: "success",
-              title: '操作成功!',
-              duration: 2000 });
-
-          } else if (res.cancel) {
-            console.log('用户点击取消');
-          }
+          console.log(res);
         } });
 
     },
+    // 删除自提点
+    removeS: function removeS(index, id) {
+
+      uni.request({
+        url: this.config.url + "station/del",
+        data: {
+          token: this.token,
+          address_id: id },
+
+        method: "post",
+        success: function success(res) {
+          console.log(res);
+        } });
+
+    },
+
+    // uni.showToast({
+    // 	icon: "success",
+    // 	title: '操作成功!',
+    // 	duration: 2000
+    // });
+
+
     switchType: function switchType(type) {
 
       this.typeClass = type;
@@ -377,14 +366,10 @@ var _uniPopup = _interopRequireDefault(__webpack_require__(/*! ../../../componen
       }
     },
     edit: function edit(row) {
-      uni.setStorage({
-        key: 'address',
-        data: row,
-        success: function success() {
-          uni.navigateTo({
-            url: "/pages/user/address/edit/edit?type=edit" });
+      var type = JSON.stringify(row);
 
-        } });
+      uni.navigateTo({
+        url: "/pages/user/address/edit/edit?type=" + type });
 
 
     },
@@ -527,12 +512,6 @@ var render = function() {
       "view",
       { staticClass: "list" },
       [
-        this.addressList.length == 0
-          ? _c("view", { staticClass: "noAdd" }, [
-              _vm._m(0),
-              _c("text", [_vm._v("赶快去添加收货地址吧！")])
-            ])
-          : _vm._e(),
         _c("view", { staticClass: "address-title" }, [
           _c(
             "view",
@@ -561,7 +540,28 @@ var render = function() {
             [_vm._v("常用自提点管理")]
           )
         ]),
-        _vm._l(_vm.addressList, function(row, index) {
+        _vm.homeList.length == 0 && _vm.subState == 1
+          ? _c("view", { staticClass: "noAdd" }, [
+              _vm._m(0),
+              _c("text", [_vm._v("赶快去添加收货地址吧！")])
+            ])
+          : _vm._e(),
+        _c(
+          "view",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.selfList.length == 0 && _vm.subState == 2,
+                expression: "selfList.length == 0 && subState==2"
+              }
+            ],
+            staticClass: "noAdd"
+          },
+          [_vm._m(1), _c("text", [_vm._v("赶快去添加收货地址吧！")])]
+        ),
+        _vm._l(_vm.homeList, function(row, index) {
           return _c(
             "view",
             {
@@ -577,9 +577,36 @@ var render = function() {
               staticClass: "row"
             },
             [
-              _vm._m(1, true),
+              _c("view", { staticClass: "row-top" }, [
+                _c("view", { staticClass: "top-one" }, [
+                  _c("text", [_vm._v(_vm._s(row.name))]),
+                  _c("text", [_vm._v(_vm._s(row.phone))])
+                ]),
+                _c("view", { staticClass: "top-two" }, [
+                  _vm._v(
+                    _vm._s(row.province) +
+                      _vm._s(row.city) +
+                      _vm._s(row.area) +
+                      _vm._s(row.street) +
+                      _vm._s(row.address)
+                  )
+                ])
+              ]),
               _c("view", { staticClass: "row-bottom" }, [
-                _vm._m(2, true),
+                _c("view", { staticClass: "left" }, [
+                  _c("image", {
+                    attrs: { src: row.is_default == 1 ? _vm.src1 : _vm.src2 }
+                  }),
+                  _c(
+                    "view",
+                    { class: row.is_default == 1 ? "selected" : "noSelect" },
+                    [
+                      _vm._v(
+                        _vm._s(row.is_default == 1 ? "默认地址" : "其他地址")
+                      )
+                    ]
+                  )
+                ]),
                 _c("view", { staticClass: "right" }, [
                   _c(
                     "view",
@@ -606,7 +633,7 @@ var render = function() {
                       attrs: { eventid: "d0c156a8-3-" + index },
                       on: {
                         click: function($event) {
-                          _vm.removeM()
+                          _vm.removeH(index, row.id)
                         }
                       }
                     },
@@ -622,7 +649,7 @@ var render = function() {
             ]
           )
         }),
-        _vm._l(_vm.addressList, function(row, index) {
+        _vm._l(_vm.selfList, function(row, index) {
           return _c(
             "view",
             {
@@ -636,7 +663,7 @@ var render = function() {
               ],
               key: index,
               staticClass: "row",
-              attrs: { eventid: "d0c156a8-6-" + index },
+              attrs: { eventid: "d0c156a8-5-" + index },
               on: {
                 tap: function($event) {
                   _vm.select(row)
@@ -644,36 +671,47 @@ var render = function() {
               }
             },
             [
-              _vm._m(3, true),
+              _c("view", { staticClass: "row-top" }, [
+                _c("view", { staticClass: "get-position" }, [
+                  _vm._v(_vm._s(row.store.name))
+                ]),
+                _c("view", { staticClass: "top-one" }, [
+                  _c("text", [_vm._v(_vm._s(row.store.username))]),
+                  _c("text", [_vm._v(_vm._s(row.store.phone))])
+                ]),
+                _c("view", { staticClass: "top-two" }, [
+                  _vm._v(
+                    _vm._s(row.store.province) +
+                      _vm._s(row.store.city) +
+                      _vm._s(row.store.area) +
+                      _vm._s(row.store.street) +
+                      _vm._s(row.store.address)
+                  )
+                ])
+              ]),
               _c("view", { staticClass: "row-bottom" }, [
-                _vm._m(4, true),
+                _c("view", { staticClass: "left" }, [
+                  _c("image", {
+                    attrs: { src: row.is_default == 1 ? _vm.src1 : _vm.src2 }
+                  }),
+                  _c(
+                    "view",
+                    { class: row.is_default == 1 ? "selected" : "noSelect" },
+                    [
+                      _vm._v(
+                        _vm._s(row.is_default == 1 ? "默认地址" : "其他地址")
+                      )
+                    ]
+                  )
+                ]),
                 _c("view", { staticClass: "right" }, [
                   _c(
                     "view",
                     {
-                      staticClass: "jianju",
                       attrs: { eventid: "d0c156a8-4-" + index },
                       on: {
-                        tap: function($event) {
-                          $event.stopPropagation()
-                          _vm.edit(row)
-                        }
-                      }
-                    },
-                    [
-                      _c("image", {
-                        attrs: { src: "../../../static/img/address/write.png" }
-                      }),
-                      _c("view", [_vm._v("编辑")])
-                    ]
-                  ),
-                  _c(
-                    "view",
-                    {
-                      attrs: { eventid: "d0c156a8-5-" + index },
-                      on: {
                         click: function($event) {
-                          _vm.removeM()
+                          _vm.removeS(index, row.id)
                         }
                       }
                     },
@@ -692,17 +730,31 @@ var render = function() {
       ],
       2
     ),
-    _c("view", { staticClass: "add" }, [
-      _c(
-        "view",
-        {
-          staticClass: "btn",
-          attrs: { eventid: "d0c156a8-7" },
-          on: { tap: _vm.add }
-        },
-        [_c("view", { staticClass: "icon tianjia" }), _vm._v("新增地址")]
-      )
-    ])
+    _c(
+      "view",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.subState == 1,
+            expression: "subState==1"
+          }
+        ],
+        staticClass: "add"
+      },
+      [
+        _c(
+          "view",
+          {
+            staticClass: "btn",
+            attrs: { eventid: "d0c156a8-6" },
+            on: { tap: _vm.add }
+          },
+          [_c("view", { staticClass: "icon tianjia" }), _vm._v("新增地址")]
+        )
+      ]
+    )
   ])
 }
 var staticRenderFns = [
@@ -718,51 +770,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "row-top" }, [
-      _c("view", { staticClass: "top-one" }, [
-        _c("text", [_vm._v("姓名")]),
-        _c("text", [_vm._v("手机号")])
-      ]),
-      _c("view", { staticClass: "top-two" }, [
-        _vm._v(
-          "河南省 郑州市 高新技术开发区 科学大道 广告产业园9号楼\n\t\t\t\t\t13楼1317室"
-        )
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "left" }, [
-      _c("image", { attrs: { src: "../../../static/img/address/duihao.png" } }),
-      _c("view", [_vm._v("其他地址")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "row-top" }, [
-      _c("view", { staticClass: "get-position" }, [_vm._v("大城小爱超市")]),
-      _c("view", { staticClass: "top-one" }, [
-        _c("text", [_vm._v("姓名")]),
-        _c("text", [_vm._v("手机号")])
-      ]),
-      _c("view", { staticClass: "top-two" }, [
-        _vm._v(
-          "河南省 郑州市 高新技术开发区 科学大道 广告产业园9号楼\n\t\t\t\t\t13楼1317室"
-        )
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "left" }, [
-      _c("image", { attrs: { src: "../../../static/img/address/duihao.png" } }),
-      _c("view", [_vm._v("其他地址")])
+    return _c("view", { staticClass: "img" }, [
+      _c("image", { attrs: { src: "../../../static/img/add-position.png" } })
     ])
   }
 ]
