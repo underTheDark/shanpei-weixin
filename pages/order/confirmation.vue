@@ -169,6 +169,7 @@
 				this.goodsinfo.goods_id=option.id
 				this.goods.push(this.goodsinfo)
 			}
+			
 		},
 		onBackPress() {
 			//页面后退时候，清除订单信息

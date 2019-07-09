@@ -167,10 +167,14 @@
 								title: '设置成功',
 								duration: 1000
 							});
-
-							uni.navigateBack({
+							// back不重载
+							uni.navigateTo({
 								url:"/pages/order/confirmation?self="+selfAddr
 							})
+							
+							// uni.navigateBack({
+							// 	url:"/pages/order/confirmation?self="+selfAddr
+							// })
 						}
 					}
 				})
