@@ -81,8 +81,8 @@ page {
   width: 100%;
 }
 .order-list .list {
-    width: 94%;
     margin: 0 auto;
+    border-top: 20rpx solid #F5F5F5;
 }
 .order-list .list .onorder {
       width: 100%;
@@ -134,10 +134,10 @@ page {
               border-radius: 10rpx;
       background-color: #fff;
       margin-bottom: 20rpx;
+      border-bottom: 1px solid #F5F5F5;
 }
 .order-list .list .row .type {
         font-size: 26rpx;
-        color: #ec652f;
         height: 50rpx;
         display: -webkit-box;
         display: -webkit-flex;
@@ -147,6 +147,18 @@ page {
         -webkit-align-items: center;
             -ms-flex-align: center;
                 align-items: center;
+        -webkit-box-pack: justify;
+        -webkit-justify-content: space-between;
+            -ms-flex-pack: justify;
+                justify-content: space-between;
+        border-bottom: 1px solid #F5F5F5;
+}
+.order-list .list .row .type .order-num {
+          font-size: 28rpx;
+          color: #333333;
+}
+.order-list .list .row .type .order-status {
+          color: #14CC21;
 }
 .order-list .list .row .order-info {
         width: 100%;
@@ -154,6 +166,8 @@ page {
         display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
+        padding: 20rpx 0;
+        border-bottom: 1px solid #F5F5F5;
 }
 .order-list .list .row .order-info .left {
           -webkit-flex-shrink: 0;
@@ -193,21 +207,19 @@ page {
             display: -webkit-flex;
             display: -ms-flexbox;
             display: flex;
-            -webkit-box-pack: end;
-            -webkit-justify-content: flex-end;
-                -ms-flex-pack: end;
-                    justify-content: flex-end;
+            -webkit-box-pack: justify;
+            -webkit-justify-content: space-between;
+                -ms-flex-pack: justify;
+                    justify-content: space-between;
             font-size: 22rpx;
             color: #333;
-            display: flex;
-            -webkit-box-align: end;
-            -webkit-align-items: flex-end;
-                -ms-flex-align: end;
-                    align-items: flex-end;
 }
 .order-list .list .row .order-info .right .price-number .price {
-              font-size: 24rpx;
-              margin-right: 5rpx;
+              font-size: 28rpx;
+}
+.order-list .list .row .order-info .right .price-number .number {
+              color: #ccc;
+              font-size: 23rpx;
 }
 .order-list .list .row .detail {
         display: -webkit-box;
@@ -218,12 +230,13 @@ page {
         -webkit-justify-content: flex-end;
             -ms-flex-pack: end;
                 justify-content: flex-end;
-        -webkit-box-align: end;
-        -webkit-align-items: flex-end;
-            -ms-flex-align: end;
-                align-items: flex-end;
-        height: 60rpx;
-        font-size: 26rpx;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+            -ms-flex-align: center;
+                align-items: center;
+        padding: 20rpx 0;
+        font-size: 22rpx;
+        color: #555555;
 }
 .order-list .list .row .detail .sum {
           padding: 0 8rpx;
@@ -231,13 +244,14 @@ page {
           display: -webkit-flex;
           display: -ms-flexbox;
           display: flex;
-          -webkit-box-align: end;
-          -webkit-align-items: flex-end;
-              -ms-flex-align: end;
-                  align-items: flex-end;
+          -webkit-box-align: center;
+          -webkit-align-items: center;
+              -ms-flex-align: center;
+                  align-items: center;
 }
 .order-list .list .row .detail .sum .price {
             font-size: 30rpx;
+            color: #333;
 }
 .order-list .list .row .btns {
         height: 80rpx;
@@ -280,7 +294,7 @@ page {
           color: #666;
 }
 .order-list .list .row .btns .pay {
-          border: solid 1rpx #ec652f;
-          color: #ec652f;
+          border: solid 1rpx #14CC21;
+          color: #14CC21;
 }
 

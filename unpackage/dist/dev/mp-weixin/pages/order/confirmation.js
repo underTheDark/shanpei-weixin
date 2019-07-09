@@ -88,6 +88,17 @@
 {
 
   mounted: function mounted() {var _this = this;
+    uni.getStorage({
+      key: "address",
+      success: function success(data) {
+        console.log(data, data.data);
+        _this.addrList = JSON.parse(data.data);
+        if (_this.addrList.distance) {
+          _this.getgoods_name = "1";
+        }
+      } });
+
+    //确认订单信息
     uni.request({
       url: this.config.url + "order/sure",
       method: "post",
@@ -128,46 +139,20 @@
       express: '',
       total: "", //商品总价格
       addrList: {}, //地址列表
-      getgoods_name: false //送货类型显示
+      getgoods_name: false, //送货类型显示
+      order_no: "" //订单编号
     };
+
   },
   onShow: function onShow() {
-    //页面显示时，加载订单信息
-    // uni.getStorage({
-    // 	key: 'buylist',
-    // 	success: (ret) => {
-    // 		this.buylist = ret.data;
-    // 		this.goodsPrice = 0;
-    // 		//合计
-    // 		let len = this.buylist.length;
-    // 		for (let i = 0; i < len; i++) {
-    // 			this.goodsPrice = this.goodsPrice + (this.buylist[i].number * this.buylist[i].price);
-    // 		}
-    // 		this.deduction = this.int / 100;
-    // 		this.sumPrice = this.goodsPrice - this.deduction + this.freight;
-    // 	}
-    // });
-    // uni.getStorage({
-    // 	key: 'selectAddress',
-    // 	success: (e) => {
-    // 		this.recinfo = e.data;
-    // 		uni.removeStorage({
-    // 			key: 'selectAddress'
-    // 		})
-    // 	}
-    // })
+
   },
   onHide: function onHide() {
 
   },
   onLoad: function onLoad(option) {
     console.log(option);
-    if (option.self) {
-      this.addrList = JSON.parse(option.self);
-      if (this.addrList.distance) {
-        this.getgoods_name = true;
-      }
-    }
+
 
 
     // 获取购买商品信息
@@ -209,36 +194,76 @@
     },
     toPay: function toPay() {var _this3 = this;
       //商品列表
-      var paymentOrder = [];
-      var goodsid = [];
-      var len = this.buylist.length;
-      for (var i = 0; i < len; i++) {
-        paymentOrder.push(this.buylist[i]);
-        goodsid.push(this.buylist[i].id);
-      }
-      if (paymentOrder.length == 0) {
-        uni.showToast({
-          title: '订单信息有误，请重新购买',
-          icon: 'none' });
+      uni.request({
+        url: this.config.url + "order/order",
+        method: "post",
+        data: {
+          token: this.token,
+          goods: this.goods,
+          order_type: this.getgoods_name,
+          address_id: this.addrList.id,
+          from_car: 0 },
 
-        return;
-      }
+        success: function success(res) {
+          console.log(res);
+          if (res.data.code == 1) {
+            _this3.order_no = res.data.data.order_no; //获取订单编号
+
+            //调起支付接口
+            uni.request({
+              url: _this3.config.url + "order/pay",
+              method: "POST",
+              data: {
+                token: _this3.token,
+                order_no: _this3.order_no },
+
+              success: function success(res) {
+                console.log(res);
+                if (res.data.code == 1) {
+                  var pay = res.data.data.data;
+                  uni.requestPayment({
+                    provider: 'wxpay',
+                    appid: pay.appId,
+                    timeStamp: pay.timeStamp,
+                    nonceStr: pay.nonceStr,
+                    package: pay.package,
+                    signType: pay.signType,
+                    paySign: pay.paySign,
+                    success: function success(res) {
+                      console.log('success:' + JSON.stringify(res));
+                    },
+                    fail: function fail(err) {
+                      console.log('fail:' + JSON.stringify(err));
+                    } });
+
+                }
+              } });
+
+          } else if (res.data.code == 0) {
+            uni.showToast({
+              title: "提交订单失败",
+              duration: 1000 });
+
+          }
+        } });
+
       //本地模拟订单提交UI效果
-      uni.showLoading({
-        title: '正在提交订单...' });
-
-      setTimeout(function () {
-        uni.setStorage({
-          key: 'paymentOrder',
-          data: paymentOrder,
-          success: function success() {
-            uni.hideLoading();
-            uni.redirectTo({
-              url: "../pay/payment/payment?amount=" + _this3.sumPrice });
-
-          } });
-
-      }, 1000);
+      // uni.showLoading({
+      // 	title: '正在提交订单...'
+      // })
+      // setTimeout(() => {
+      // 	uni.setStorage({
+      // 		key: 'paymentOrder',
+      // 		data: paymentOrder,
+      // 		success: () => {
+      // 			uni.hideLoading();
+      // 			uni.redirectTo({
+      // 				url: "../pay/payment/payment?amount=" + this.sumPrice
+      // 			})
+      // 			
+      // 		}
+      // 	})
+      // }, 1000)
 
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
@@ -287,7 +312,9 @@ var render = function() {
         },
         [
           _c("text", [_vm._v("已选")]),
-          _c("text", [_vm._v(_vm._s(_vm.getgoods_name ? "自提" : "送货上门"))]),
+          _c("text", [
+            _vm._v(_vm._s(_vm.getgoods_name == 1 ? "自提" : "送货上门"))
+          ]),
           _c("image", {
             staticClass: "right-jiantou",
             attrs: { src: "../../static/img/category/youce-jiantou.png" }

@@ -133,7 +133,7 @@
 				this.typeClass = type;
 				if (type == "home") {
 					this.subState = '1';
-					console.log(this.subState)
+					
 				} else if (type == "self") {
 					this.subState = '2';
 				}
@@ -145,14 +145,14 @@
 			},
 			//选取我的收货地址
 			selectHome(id) {
-				console.log(id)
+				//console.log(id)
 				this.checked = !this.checked;
 
 			},
 			//选取自提点地址
 			selectSelf(id,self) {
 				var selfAddr=JSON.stringify(self)
-				console.log(id,self)
+				//console.log(id,self)
 				uni.request({
 					url: this.config.url + "station/default",
 					method: "post",
@@ -167,9 +167,16 @@
 								title: '设置成功',
 								duration: 1000
 							});
-
+							
+                        uni.setStorage({
+							key:"address",
+							data:selfAddr,
+							success:function(){
+								//console.log("success")
+							}
+						})
 							uni.navigateBack({
-								url:"/pages/order/confirmation?self="+selfAddr
+								url:"/pages/order/confirmation"
 							})
 						}
 					}

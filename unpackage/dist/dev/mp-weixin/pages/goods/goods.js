@@ -520,32 +520,35 @@ var _default =
       console.log(index);
     },
     addColor: function addColor(size, arr, color, index) {var _this2 = this;
-      arr.forEach(function (item) {
-        item.checked = false;
-      });
-      color.checked = true;
-      this.$forceUpdate();
-      var check = size.name + ":" + color.name;
-      // 单个规格项的规格值
-      size.checked = check;
-      // 所有规格项的规格值
-      var all_check = '';
-      this.guiList.forEach(function (item) {
-        all_check += ";" + item.checked;
-      });
-      all_check = all_check.substr(1);
+      if (arr.length > 0) {
+        arr.forEach(function (item) {
+          item.checked = false;
+        });
+        color.checked = true;
+        this.$forceUpdate();
+        var check = size.name + ":" + color.name;
+        // 单个规格项的规格值
+        size.checked = check;
+        // 所有规格项的规格值
+        var all_check = '';
+        this.guiList.forEach(function (item) {
+          all_check += ";" + item.checked;
+        });
+        all_check = all_check.substr(1);
 
-      console.log('all_check', all_check);
-      // 规格项跟商品对比goos_list显示选中
-      this.goods_list.forEach(function (item) {
-        if (item.goods_spec == all_check) {
-          _this2.goodsData.price = item.price_selling;
-          _this2.goodsData.number_stock = item.number_stock;
-          // 选中规格项
-          _this2.selected_size = item.goods_spec;
-        }
-      });
-      console.log("proNum", this.proNum);
+        console.log('all_check', all_check);
+        // 规格项跟商品对比goos_list显示选中
+        this.goods_list.forEach(function (item) {
+          if (item.goods_spec == all_check) {
+            _this2.goodsData.price = item.price_selling;
+            _this2.goodsData.number_stock = item.number_stock;
+            // 选中规格项
+            _this2.selected_size = item.goods_spec;
+          }
+        });
+      }
+
+
     },
     //加入购物车
     cancel: function cancel() {

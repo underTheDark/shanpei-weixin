@@ -1,6 +1,6 @@
 {
-    "name" : "商城模板",
-    "appid" : "",
+    "name" : "闪配",
+    "appid" : "__UNI__F6C6B92",
     "description" : "",
     "versionName" : "1.1.1",
     "versionCode" : "100",
@@ -13,9 +13,10 @@
     /* 快应用特有相关 */
     "mp-weixin" : {
         /* 小程序特有相关 */
-        "appid" : "",
+        "appid" : "wxaa42e31b87197e9e",
         "setting" : {
-            "urlCheck" : true
+            "urlCheck" : true,
+            "es6" : true
         },
         "permission" : {}
     }
