@@ -143,7 +143,7 @@ var _default = {
       this.typeClass = type;
       if (type == "home") {
         this.subState = '1';
-        console.log(this.subState);
+
       } else if (type == "self") {
         this.subState = '2';
       }
@@ -155,14 +155,14 @@ var _default = {
     },
     //选取我的收货地址
     selectHome: function selectHome(id) {
-      console.log(id);
+      //console.log(id)
       this.checked = !this.checked;
 
     },
     //选取自提点地址
     selectSelf: function selectSelf(id, self) {
       var selfAddr = JSON.stringify(self);
-      console.log(id, self);
+      //console.log(id,self)
       uni.request({
         url: this.config.url + "station/default",
         method: "post",
@@ -177,9 +177,22 @@ var _default = {
               title: '设置成功',
               duration: 1000 });
 
+<<<<<<< HEAD
             // back不重载
             uni.navigateTo({
               url: "/pages/order/confirmation?self=" + selfAddr });
+=======
+
+            uni.setStorage({
+              key: "address",
+              data: selfAddr,
+              success: function success() {
+                //console.log("success")
+              } });
+
+            uni.navigateBack({
+              url: "/pages/order/confirmation" });
+>>>>>>> b4d2f6febcf334e2c50e5fb6674fcef0120e629c
 
 
             // uni.navigateBack({

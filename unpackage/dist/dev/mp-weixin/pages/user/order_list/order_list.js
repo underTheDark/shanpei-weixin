@@ -61,6 +61,29 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {
   data: function data() {
     return {
@@ -127,6 +150,19 @@
 
 
   },
+  mounted: function mounted() {
+    uni.request({
+      url: this.config.url + "member/order",
+      method: "post",
+      data: {
+        token: this.token,
+        type: this.tabbarIndex },
+
+      success: function success(res) {
+        console.log(res);
+      } });
+
+  },
   onPageScroll: function onPageScroll(e) {
     return;
     //兼容iOS端下拉时顶部漂移
@@ -137,10 +173,12 @@
       this.tabbarIndex = tbIndex;
       this.list = this.orderList[tbIndex];
     },
+    //去付款
     toPayment: function toPayment(row) {
       //本地模拟订单提交UI效果
       uni.showLoading({
         title: '正在获取订单...' });
+
 
       var paymentOrder = [];
       paymentOrder.push(row);
@@ -156,6 +194,22 @@
           } });
 
       }, 500);
+    },
+    //取消订单
+    cancelOrder: function cancelOrder() {
+
+    },
+    //确认收货
+    confirm: function confirm() {
+
+    },
+    //查看物流
+    viewSend: function viewSend() {
+
+    },
+    //申请售后
+    service: function service() {
+
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
@@ -236,7 +290,26 @@ var render = function() {
           _vm._l(_vm.list, function(row, index) {
             return _c("view", { key: index, staticClass: "row" }, [
               _c("view", { staticClass: "type" }, [
-                _vm._v(_vm._s(_vm.typeText[row.type]))
+                _c("text", { staticClass: "order-num" }, [
+                  _vm._v("订单编号：")
+                ]),
+                _c("text", { staticClass: "order-status" }, [
+                  _vm._v(
+                    _vm._s(
+                      row.status == 0
+                        ? "已取消"
+                        : row.status == 2
+                        ? "待付款"
+                        : row.status == 3
+                        ? "待发货"
+                        : row.status == 4
+                        ? "代签收"
+                        : row.status == 5
+                        ? "已完成"
+                        : ""
+                    )
+                  )
+                ])
               ]),
               _c("view", { staticClass: "order-info" }, [
                 _c("view", { staticClass: "left" }, [
@@ -246,17 +319,12 @@ var render = function() {
                   _c("view", { staticClass: "name" }, [
                     _vm._v(_vm._s(row.name))
                   ]),
-                  _c("view", { staticClass: "spec" }, [
-                    _vm._v(_vm._s(row.spec))
-                  ]),
                   _c("view", { staticClass: "price-number" }, [
-                    _vm._v("￥"),
                     _c("view", { staticClass: "price" }, [
-                      _vm._v(_vm._s(row.price))
+                      _vm._v("￥" + _vm._s(row.price))
                     ]),
-                    _vm._v("x"),
                     _c("view", { staticClass: "number" }, [
-                      _vm._v(_vm._s(row.numner))
+                      _vm._v("x" + _vm._s(row.numner))
                     ])
                   ])
                 ])
@@ -270,15 +338,176 @@ var render = function() {
                   _c("view", { staticClass: "price" }, [
                     _vm._v(_vm._s(row.payment))
                   ])
-                ]),
-                _c("view", { staticClass: "nominal" }, [
-                  _vm._v("(含运费 ￥" + _vm._s(row.freight) + ")")
                 ])
               ]),
               _c(
                 "view",
                 { staticClass: "btns" },
                 [
+<<<<<<< HEAD
+                  _c(
+                    "block",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: row.status == 2,
+                          expression: "row.status==2 "
+                        }
+                      ]
+                    },
+                    [
+                      _c("view", { staticClass: "default" }, [
+                        _vm._v("取消订单")
+                      ]),
+                      _c(
+                        "view",
+                        {
+                          staticClass: "pay",
+                          attrs: { eventid: "a0e8c0bc-1-" + index },
+                          on: {
+                            tap: function($event) {
+                              _vm.toPayment(row)
+                            }
+                          }
+                        },
+                        [_vm._v("去付款")]
+                      )
+                    ]
+                  ),
+                  _c(
+                    "block",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: row.status == 4,
+                          expression: "row.status==4"
+                        }
+                      ]
+                    },
+                    [
+                      _c(
+                        "view",
+                        {
+                          staticClass: "default",
+                          attrs: { eventid: "a0e8c0bc-2-" + index },
+                          on: {
+                            click: function($event) {
+                              _vm.viewSend()
+                            }
+                          }
+                        },
+                        [_vm._v("查看物流")]
+                      ),
+                      _c(
+                        "view",
+                        {
+                          staticClass: "default",
+                          attrs: { eventid: "a0e8c0bc-3-" + index },
+                          on: {
+                            click: function($event) {
+                              _vm.service()
+                            }
+                          }
+                        },
+                        [_vm._v("申请售后")]
+                      ),
+                      _c(
+                        "view",
+                        {
+                          staticClass: "pay",
+                          attrs: { eventid: "a0e8c0bc-4-" + index },
+                          on: {
+                            click: function($event) {
+                              _vm.confirm()
+                            }
+                          }
+                        },
+                        [_vm._v("确认收货")]
+                      )
+                    ]
+                  ),
+                  _c(
+                    "block",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: row.status == 3,
+                          expression: "row.status==3"
+                        }
+                      ]
+                    },
+                    [
+                      _c(
+                        "view",
+                        {
+                          staticClass: "default",
+                          attrs: { eventid: "a0e8c0bc-5-" + index },
+                          on: {
+                            click: function($event) {
+                              _vm.cancelOrder()
+                            }
+                          }
+                        },
+                        [_vm._v("取消订单")]
+                      )
+                    ]
+                  ),
+                  _c(
+                    "block",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: row.status == 5,
+                          expression: "row.status==5"
+                        }
+                      ]
+                    },
+                    [
+                      _c(
+                        "view",
+                        {
+                          staticClass: "pay",
+                          attrs: { eventid: "a0e8c0bc-6-" + index },
+                          on: {
+                            click: function($event) {
+                              _vm.evalute()
+                            }
+                          }
+                        },
+                        [_vm._v("去评价")]
+                      )
+                    ]
+                  ),
+                  _c(
+                    "block",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: row.status == 0,
+                          expression: "row.status==0"
+                        }
+                      ]
+                    },
+                    [
+                      _c(
+                        "view",
+                        {
+                          staticClass: "default",
+                          attrs: { eventid: "a0e8c0bc-7-" + index },
+                          on: {
+                            click: function($event) {
+                              _vm.deleteOrder()
+=======
                   row.type == "unpaid"
                     ? _c("block", [
                         _c("view", { staticClass: "default" }, [
@@ -293,61 +522,14 @@ var render = function() {
                               tap: function($event) {
                                 _vm.toPayment(row)
                               }
+>>>>>>> d59aff80761a48719a890a29f1ba7dca7fa99c11
                             }
-                          },
-                          [_vm._v("付款")]
-                        )
-                      ])
-                    : _vm._e(),
-                  row.type == "back"
-                    ? _c("block", [
-                        _c("view", { staticClass: "default" }, [
-                          _vm._v("提醒发货")
-                        ])
-                      ])
-                    : _vm._e(),
-                  row.type == "unreceived"
-                    ? _c("block", [
-                        _c("view", { staticClass: "default" }, [
-                          _vm._v("查看物流")
-                        ]),
-                        _c("view", { staticClass: "pay" }, [
-                          _vm._v("确认收货")
-                        ]),
-                        _c("view", { staticClass: "pay" }, [_vm._v("我要退货")])
-                      ])
-                    : _vm._e(),
-                  row.type == "received"
-                    ? _c("block", [
-                        _c("view", { staticClass: "default" }, [
-                          _vm._v("评价")
-                        ]),
-                        _c("view", { staticClass: "default" }, [
-                          _vm._v("再次购买")
-                        ])
-                      ])
-                    : _vm._e(),
-                  row.type == "completed"
-                    ? _c("block", [
-                        _c("view", { staticClass: "default" }, [
-                          _vm._v("再次购买")
-                        ])
-                      ])
-                    : _vm._e(),
-                  row.type == "refunds"
-                    ? _c("block", [
-                        _c("view", { staticClass: "default" }, [
-                          _vm._v("查看进度")
-                        ])
-                      ])
-                    : _vm._e(),
-                  row.type == "cancelled"
-                    ? _c("block", [
-                        _c("view", { staticClass: "default" }, [
-                          _vm._v("已取消")
-                        ])
-                      ])
-                    : _vm._e()
+                          }
+                        },
+                        [_vm._v("删除订单")]
+                      )
+                    ]
+                  )
                 ],
                 1
               )

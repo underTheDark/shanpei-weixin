@@ -7186,6 +7186,12 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 /***/ }),
 
+<<<<<<< HEAD
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js?!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/template.js!./node_modules/vue-loader/lib/index.js?!C:\\Users\\Administrator\\Desktop\\shanpei-weixin\\components\\uni-icon\\uni-icon.vue?vue&type=template&id=e5859bfc&":
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--17-0!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/template.js!./node_modules/vue-loader/lib??vue-loader-options!C:/Users/Administrator/Desktop/shanpei-weixin/components/uni-icon/uni-icon.vue?vue&type=template&id=e5859bfc& ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+=======
 /***/ "./node_modules/node-libs-browser/mock/process.js":
 /*!********************************************************!*\
   !*** ./node_modules/node-libs-browser/mock/process.js ***!
@@ -7467,6 +7473,10 @@ var substr = 'ab'.substr(-1) === 'b'
 /*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--17-0!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/template.js!./node_modules/vue-loader/lib??vue-loader-options!C:/Users/惠普2/Desktop/shanpei-weixin/shanpei-weixin/components/uni-icon/uni-icon.vue?vue&type=template&id=4c2512d6& ***!
   \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+<<<<<<< HEAD
+=======
+>>>>>>> d59aff80761a48719a890a29f1ba7dca7fa99c11
+>>>>>>> b4d2f6febcf334e2c50e5fb6674fcef0120e629c
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -7667,20 +7677,6 @@ function normalizeComponent (
 
 /***/ }),
 
-/***/ "./node_modules/webpack/buildin/amd-options.js":
-/*!****************************************!*\
-  !*** (webpack)/buildin/amd-options.js ***!
-  \****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
-module.exports = __webpack_amd_options__;
-
-/* WEBPACK VAR INJECTION */}.call(this, {}))
-
-/***/ }),
-
 /***/ "./node_modules/webpack/buildin/global.js":
 /*!***********************************!*\
   !*** (webpack)/buildin/global.js ***!
@@ -7724,6 +7720,15 @@ function AMapWX(a) {this.key = a.key, this.requestConfig = { key: a.key, s: "rsx
 
 /***/ }),
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+/***/ "C:\\Users\\Administrator\\Desktop\\shanpei-weixin\\components\\uni-icon\\uni-icon.vue":
+/*!**************************************************************************************!*\
+  !*** C:/Users/Administrator/Desktop/shanpei-weixin/components/uni-icon/uni-icon.vue ***!
+  \**************************************************************************************/
+=======
+>>>>>>> b4d2f6febcf334e2c50e5fb6674fcef0120e629c
 /***/ "C:\\Users\\惠普2\\Desktop\\shanpei-weixin\\shanpei-weixin\\common\\SDK\\md5.min.js":
 /*!********************************************************************************!*\
   !*** C:/Users/惠普2/Desktop/shanpei-weixin/shanpei-weixin/common/SDK/md5.min.js ***!
@@ -7751,6 +7756,10 @@ function AMapWX(a) {this.key = a.key, this.requestConfig = { key: a.key, s: "rsx
 /*!*******************************************************************************************!*\
   !*** C:/Users/惠普2/Desktop/shanpei-weixin/shanpei-weixin/components/uni-icon/uni-icon.vue ***!
   \*******************************************************************************************/
+<<<<<<< HEAD
+=======
+>>>>>>> d59aff80761a48719a890a29f1ba7dca7fa99c11
+>>>>>>> b4d2f6febcf334e2c50e5fb6674fcef0120e629c
 /*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 

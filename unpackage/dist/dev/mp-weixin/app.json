@@ -1,20 +1,16 @@
 {
   "pages": [
+    "pages/author/author",
     "pages/tabBar/home",
     "pages/tabBar/category",
     "pages/tabBar/user",
     "pages/goods/goods-list",
     "pages/goods/goods",
-    "pages/login/login",
-    "pages/login/register",
-    "pages/login/resetpasswd",
     "pages/order/confirmation",
     "pages/user/order_list/order_list",
     "pages/detail/detail",
     "pages/tabBar/cart",
     "pages/viewsend/viewsend",
-    "pages/user/setting/setting",
-    "pages/user/myQR/myQR",
     "pages/msg/msg",
     "pages/msg/chat/chat",
     "pages/user/keep/keep",
@@ -25,9 +21,6 @@
     "pages/user/address/edit/edit",
     "pages/user/address/address",
     "pages/sendType/sendType",
-    "pages/user/deposit/deposit",
-    "pages/pay/payment/payment",
-    "pages/pay/success/success",
     "pages/goods/ratings/ratings",
     "pages/confirm/confirm",
     "pages/serType/serType",
@@ -79,5 +72,6 @@
       }
     ]
   },
-  "permission": {}
+  "permission": {},
+  "sitemapLocation": "sitemap.json"
 }

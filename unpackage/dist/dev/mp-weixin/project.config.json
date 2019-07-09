@@ -1,4 +1,46 @@
 {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+	"description": "项目配置文件。",
+	"packOptions": {
+		"ignore": []
+	},
+	"setting": {
+		"urlCheck": false,
+		"es6": true,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true,
+		"autoAudits": false,
+		"checkInvalidKey": true
+	},
+	"compileType": "miniprogram",
+	"libVersion": "2.7.0",
+	"appid": "wxaa42e31b87197e9e",
+	"projectname": "闪配",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"current": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": -1,
+			"list": []
+		}
+	}
+=======
+>>>>>>> b4d2f6febcf334e2c50e5fb6674fcef0120e629c
   "description": "项目配置文件。",
   "packOptions": {
     "ignore": []
@@ -28,4 +70,8 @@
       "list": []
     }
   }
+<<<<<<< HEAD
+=======
+>>>>>>> d59aff80761a48719a890a29f1ba7dca7fa99c11
+>>>>>>> b4d2f6febcf334e2c50e5fb6674fcef0120e629c
 }

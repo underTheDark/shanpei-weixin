@@ -405,32 +405,35 @@
 				console.log(index)
 			},
 			addColor(size,arr,color,index){
-				arr.forEach(item=>{
-					item.checked=false;
-				})
-				color.checked=true;
-				this.$forceUpdate();
-				let check=size.name+":"+color.name;
-				// 单个规格项的规格值
-				size.checked=check;
-				// 所有规格项的规格值
-				let all_check='';
-				this.guiList.forEach(item=>{
-					all_check+=";"+item.checked;
-				})
-				all_check=all_check.substr(1);
+				if(arr.length>0){
+					arr.forEach(item=>{
+						item.checked=false;
+					})
+					color.checked=true;
+					this.$forceUpdate();
+					let check=size.name+":"+color.name;
+					// 单个规格项的规格值
+					size.checked=check;
+					// 所有规格项的规格值
+					let all_check='';
+					this.guiList.forEach(item=>{
+						all_check+=";"+item.checked;
+					})
+					all_check=all_check.substr(1);
+					
+					console.log('all_check',all_check);
+					// 规格项跟商品对比goos_list显示选中
+					this.goods_list.forEach(item=>{
+						if(item.goods_spec==all_check){
+							this.goodsData.price=item.price_selling;
+							this.goodsData.number_stock=item.number_stock;
+							// 选中规格项
+							this.selected_size=item.goods_spec;
+						}
+					})
+				}
 				
-				console.log('all_check',all_check);
-				// 规格项跟商品对比goos_list显示选中
-				this.goods_list.forEach(item=>{
-					if(item.goods_spec==all_check){
-						this.goodsData.price=item.price_selling;
-						this.goodsData.number_stock=item.number_stock;
-						// 选中规格项
-						this.selected_size=item.goods_spec;
-					}
-				})
-				console.log("proNum",this.proNum);
+				
 			},
 			//加入购物车
 			cancel(){

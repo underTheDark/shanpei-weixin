@@ -16,7 +16,13 @@
 					</view>
 				</view>
 				<view class="row" v-for="(row,index) in list" :key="index">
-					<view class="type">{{typeText[row.type]}}</view>
+					<view class="type">
+					     <text class="order-num">订单编号：</text>
+					     <text class="order-status">
+						     {{row.status==0?'已取消':row.status==2?'待付款':row.status==3?'待发货':
+							 row.status==4?'代签收':row.status==5?'已完成':""}}
+						 </text>
+					</view>
 					<view class="order-info">
 						<view class="left">
 							<image :src="row.img"></image>
@@ -25,25 +31,42 @@
 							<view class="name">
 								{{row.name}}
 							</view>
-							<view class="spec">{{row.spec}}</view>
+							
 							<view class="price-number">
-								￥<view class="price">{{row.price}}</view>
-								x<view class="number">{{row.numner}}</view>
+								<view class="price">￥{{row.price}}</view>
+								<view class="number">x{{row.numner}}</view>
 							</view>
 						</view>
 						
 					</view>
 					<view class="detail">
-						<view class="number">共{{row.numner}}件商品</view><view class="sum">合计￥<view class="price">{{row.payment}}</view></view><view class="nominal">(含运费 ￥{{row.freight}})</view>
+						<view class="number">共{{row.numner}}件商品</view>
+						<view class="sum">合计￥
+						     <view class="price">{{row.payment}}</view>
+						</view>
+						
 					</view>
 					<view class="btns">
-						<block v-if="row.type=='unpaid'"><view class="default">取消订单</view><view class="pay" @tap="toPayment(row)">付款</view></block>
-						<block v-if="row.type=='back'"><view class="default">提醒发货</view></block>
-						<block v-if="row.type=='unreceived'"><view class="default">查看物流</view><view class="pay">确认收货</view><view class="pay">我要退货</view></block>
-						<block v-if="row.type=='received'"><view class="default">评价</view><view class="default">再次购买</view></block>
-						<block v-if="row.type=='completed'"><view class="default">再次购买</view></block>
-						<block v-if="row.type=='refunds'"><view class="default">查看进度</view></block>
-						<block v-if="row.type=='cancelled'"><view class="default">已取消</view></block>
+						<block v-show="row.status==2 ">
+							<view class="default">取消订单</view>
+						    <view class="pay" @tap="toPayment(row)">去付款</view>
+						</block>
+						
+						<block  v-show="row.status==4">
+							<view class="default" @click="viewSend()">查看物流</view>
+							<view class="default" @click="service()">申请售后</view>
+							<view class="pay" @click="confirm()">确认收货</view>
+							
+						</block>
+							<block  v-show="row.status==3">
+							<view class="default" @click="cancelOrder()">取消订单</view>
+							
+							
+						</block>
+						<block  v-show="row.status==5"><view class="pay" @click="evalute()">去评价</view></block>
+						<!-- <block  v-show="row.status=='completed'"><view class="default">再次购买</view></block> -->
+						<!-- <block  v-show="row.status=='refunds'"><view class="default">查看进度</view></block> -->
+						<block v-show="row.status==0"><view class="default" @click="deleteOrder()">删除订单</view></block>
 					</view>
 				</view>
 			</view>
@@ -117,6 +140,19 @@
 				},1);
 			// #endif
 		},
+		mounted(){
+			uni.request({
+			    url:this.config.url+"member/order",
+				method:"post",
+				data:{
+					token:this.token,
+					type:this.tabbarIndex
+				},
+				success:(res) => {
+					console.log(res)
+				}
+			})
+		},
 		onPageScroll(e){
 			return;
 			//兼容iOS端下拉时顶部漂移
@@ -127,11 +163,13 @@
 				this.tabbarIndex = tbIndex;
 				this.list = this.orderList[tbIndex];
 			},
+			//去付款
 			toPayment(row){
 				//本地模拟订单提交UI效果
 				uni.showLoading({
 					title:'正在获取订单...'
 				})
+				
 				let paymentOrder = [];
 				paymentOrder.push(row);
 				setTimeout(()=>{
@@ -146,6 +184,22 @@
 						}
 					})
 				},500)
+			},
+			//取消订单
+		    cancelOrder(){
+				
+			},
+			//确认收货
+			confirm(){
+				
+			},
+			//查看物流
+			viewSend(){
+				
+			},
+			//申请售后
+			service(){
+				
 			}
 		}
 	}
@@ -189,8 +243,9 @@ page{
 	padding-top: 20upx;
 	width: 100%;
 	.list{
-		width: 94%;
+		
 		margin: 0 auto;
+		border-top:20upx solid #F5F5F5;
 		.onorder{
 			width: 100%;
 			height: 50vw;
@@ -219,16 +274,28 @@ page{
 			border-radius: 10upx;
 			background-color: #fff;
 			margin-bottom: 20upx;
+			border-bottom:1px solid #F5F5F5;
 			.type{
 				font-size: 26upx;
-				color: #ec652f;
+				
 				height: 50upx;
 				display: flex;
 				align-items: center;
+				justify-content: space-between;
+				border-bottom:1px solid #F5F5F5;
+				.order-num{
+					font-size:28upx;
+					color: #333333;
+				}
+				.order-status{
+					color:#14CC21;
+				}
 			}
 			.order-info{
 				width: 100%;
 				display: flex;
+				padding:20upx 0;
+				border-bottom: 1px solid #F5F5F5;
 				.left{
 					flex-shrink: 0;
 					width: 25vw;
@@ -261,31 +328,35 @@ page{
 						bottom: 0;
 						width: 100%;
 						display: flex;
-						justify-content: flex-end;
+						justify-content: space-between;
 						font-size: 22upx;
 						color: #333;
-						display: flex;
-						align-items: flex-end;
-						.price{
-							font-size: 24upx;
-							margin-right: 5upx;
-						}
 						
+						.price{
+							font-size: 28upx;
+						
+						}
+						.number{
+							color:#ccc;
+							font-size: 23upx;
+						}
 					}
 				}
 			}
 			.detail{
 				display: flex;
 				justify-content: flex-end;
-				align-items: flex-end;
-				height: 60upx;
-				font-size: 26upx;
+				align-items: center;
+				padding:20upx 0;
+				font-size: 22upx;
+				color:#555555;
 				.sum{
 					padding: 0 8upx;
 					display: flex;
-					align-items: flex-end;
+					align-items: center;
 					.price{
 						font-size: 30upx;
+						color:#333
 					}
 				}
 				
@@ -311,8 +382,8 @@ page{
 					color: #666;
 				}
 				.pay{
-					border: solid 1upx #ec652f;
-					color: #ec652f;
+					border: solid 1upx #14CC21;
+					color: #14CC21;
 				}
 			}
 		}
