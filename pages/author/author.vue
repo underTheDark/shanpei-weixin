@@ -14,7 +14,7 @@
 				<button class='bottom' type='primary' open-type="getUserInfo" withCredentials="true" lang="zh_CN" @getuserinfo="wxGetUserInfo">
 					授权登录
 				</button>
-				<button open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">获取手机号信息</button>
+				
 
 			</view>
 		</view>
@@ -36,7 +36,8 @@
 		methods: {
 			//第一授权获取用户信息===》按钮触发
 			wxGetUserInfo(detail) {
-				console.log("phone",detail)
+				console.log("phone",detail);
+				wx
 				let _this = this;
 				uni.getUserInfo({
 					provider: 'weixin',
@@ -53,12 +54,7 @@
 					fail(res) {}
 				});
 			},
-             getPhoneNumber (e) {
-				 console.log(e)
-    console.log(e.detail.errMsg)
-    console.log(e.detail.iv)
-    console.log(e.detail.encryptedData)
-  },
+   
 
    
       
@@ -132,8 +128,10 @@
 									console.log("用户信息保存成功")
 								}
 							})
-			                uni.reLaunch({
-			                    url: '/pages/tabBar/home'
+			                uni.navigateTo({
+			                	
+			                
+			                    url: '/pages/getphone/getphone'
 			                });
 			            }
 			        }

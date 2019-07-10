@@ -26,7 +26,8 @@
     "pages/serType/serType",
     "pages/applyReturn/applyReturn",
     "pages/applyChange/applyChange",
-    "pages/reSelect/reSelect"
+    "pages/reSelect/reSelect",
+    "pages/getphone/getphone"
   ],
   "subPackages": [],
   "window": {
@@ -72,6 +73,5 @@
       }
     ]
   },
-  "permission": {},
-  "sitemapLocation": "sitemap.json"
+  "permission": {}
 }

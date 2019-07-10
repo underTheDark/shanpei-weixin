@@ -269,7 +269,12 @@
 		}, {
 			"path": "pages/reSelect/reSelect",
 			"style": {}
+		},
+		{
+			"path": "pages/getphone/getphone",
+			"style": {}
 		}
+		
 
 
 
