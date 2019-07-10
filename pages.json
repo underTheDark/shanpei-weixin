@@ -5,12 +5,16 @@
 		}
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-
+        
 		{
-			"path": "pages/author/author",
-			"style": {}
+			"path": "pages/user/address/edit/edit",
+			"style": {
+				"navigationBarBackgroundColor": "#ffffff",
+				"navigationBarTitleText": "编辑收件人地址",
+				"backgroundColorTop": "#ffffff",
+				"backgroundColorBottom": "#ffffff"
+			}
 		},
-
 		{
 			"path": "pages/tabBar/home",
 			"style": {
@@ -24,6 +28,10 @@
 				}
 			}
 		},
+
+
+
+
 		{
 			"path": "pages/tabBar/category",
 			"style": {
@@ -72,7 +80,7 @@
 				}
 			}
 		},
-		
+
 
 		{
 			"path": "pages/order/confirmation",
@@ -119,7 +127,7 @@
 				"backgroundColorBottom": "#ffffff"
 			}
 		},
-		
+
 		{
 			"path": "pages/msg/msg",
 			"style": {
@@ -150,6 +158,10 @@
 					"bounce": "none"
 				}
 			}
+		},
+		{
+			"path": "pages/author/author",
+			"style": {}
 		},
 		{
 			"path": "pages/user/keep/sayFeel/sayFeel",
@@ -193,15 +205,8 @@
 					"bounce": "none"
 				}
 			}
-		}, {
-			"path": "pages/user/address/edit/edit",
-			"style": {
-				"navigationBarBackgroundColor": "#ffffff",
-				"navigationBarTitleText": "编辑收件人地址",
-				"backgroundColorTop": "#ffffff",
-				"backgroundColorBottom": "#ffffff"
-			}
-		}, {
+		},
+		{
 			"path": "pages/user/address/address",
 			"style": {
 				"navigationBarBackgroundColor": "#ffffff",
@@ -210,6 +215,7 @@
 				"backgroundColorBottom": "#ffffff"
 			}
 		},
+
 		{
 			"path": "pages/sendType/sendType",
 			"style": {
@@ -219,7 +225,7 @@
 				"backgroundColorBottom": "#ffffff"
 			}
 		},
-        {
+		{
 			"path": "pages/goods/ratings/ratings",
 			"style": {
 				"navigationBarTitleText": "商品评论",
@@ -273,6 +279,10 @@
 
 
 
+		, {
+			"path": "pages/getphone/getphone",
+			"style": {}
+		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

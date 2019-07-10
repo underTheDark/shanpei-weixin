@@ -1,90 +1,3 @@
-
-.pickerMask {
-  position: fixed;
-  z-index: 1000;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-}
-.mpvue-picker-content {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  -webkit-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-  -webkit-transform: translateY(100%);
-      -ms-transform: translateY(100%);
-          transform: translateY(100%);
-  z-index: 3000;
-}
-.mpvue-picker-view-show {
-  -webkit-transform: translateY(0);
-      -ms-transform: translateY(0);
-          transform: translateY(0);
-}
-.mpvue-picker__hd {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  padding: 9px 15px;
-  background-color: #fff;
-  position: relative;
-  text-align: center;
-  font-size: 17px;
-}
-.mpvue-picker__hd:after {
-  content: ' ';
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  height: 1px;
-  border-bottom: 1px solid #e5e5e5;
-  color: #e5e5e5;
-  -webkit-transform-origin: 0 100%;
-      -ms-transform-origin: 0 100%;
-          transform-origin: 0 100%;
-  -webkit-transform: scaleY(0.5);
-      -ms-transform: scaleY(0.5);
-          transform: scaleY(0.5);
-}
-.mpvue-picker__action {
-  display: block;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
-  color: #1aad19;
-}
-.mpvue-picker__action:first-child {
-  text-align: left;
-  color: #888;
-}
-.mpvue-picker__action:last-child {
-  text-align: right;
-}
-.picker-item {
-  text-align: center;
-  line-height: 40px;
-  -o-text-overflow: ellipsis;
-     text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 16px;
-}
-.mpvue-picker-view {
-  position: relative;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 238px;
-  background-color: rgba(255, 255, 255, 1);
-}
-
 @charset "UTF-8";
 /**
  * 这里是uni-app内置的常用样式变量
@@ -267,5 +180,189 @@
 .content .detail-add .add-content textarea {
         display: inline-block;
         width: 100%;
+}
+.map {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 100000;
+}
+.map .mask {
+    width: 100%;
+    height: 360rpx;
+    background: white;
+    padding: 30rpx 0;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    overflow: auto;
+}
+.map .mask .address {
+      height: 80rpx;
+      border-bottom: 1rpx solid #ccc;
+      border-top: 1rpx solid #ccc;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+          -ms-flex-pack: center;
+              justify-content: center;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+          -ms-flex-align: center;
+              align-items: center;
+}
+.pickbg {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 98;
+}
+.btn_c {
+  position: fixed;
+  bottom: 660rpx;
+  left: 0;
+  width: 90%;
+  height: 40rpx;
+  padding: 20rpx 5%;
+  background: #fff;
+  z-index: 99;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.picker_w {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 600rpx;
+  background: #fff;
+  z-index: 99;
+  padding: 30rpx 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.li_one, .li_two, .li_three {
+  height: 600rpx;
+  width: 33%;
+  padding: 0 20rpx;
+  overflow-y: auto;
+  text-align: center;
+}
+.sign {
+  background: #C49569;
+  font-size: 28rpx;
+  color: #fff;
+  padding: 8rpx 24rpx;
+  -webkit-border-radius: 10rpx;
+          border-radius: 10rpx;
+}
+.active {
+  color: #C49569;
+}
+.li_i {
+  font-size: 28rpx;
+  padding: 20rpx;
+}
+page {
+  background: #eee;
+}
+.page {
+  padding-top: 20rpx;
+  padding-bottom: 150rpx;
+}
+.ul {
+  background: #fff;
+  padding: 0 30rpx;
+}
+.li {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-align-content: center;
+      -ms-flex-line-pack: center;
+          align-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  padding: 30rpx 0;
+  border-bottom: solid 1rpx #ECECEC;
+}
+.li:last-child {
+  border: none;
+}
+.txt {
+  font-size: 16px;
+  color: #333;
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 30%;
+      -ms-flex: 0 0 30%;
+          flex: 0 0 30%;
+}
+.li input {
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 70%;
+      -ms-flex: 0 0 70%;
+          flex: 0 0 70%;
+}
+.sign_btn {
+  height: 90rpx;
+  background: #C49569;
+  -webkit-border-radius: 10rpx;
+          border-radius: 10rpx;
+  color: #fff;
+  font-size: 16px;
+  margin: 100rpx 30rpx 30rpx 30rpx;
+  text-align: center;
+  line-height: 90rpx;
 }
 

@@ -1,6 +1,6 @@
 {
   "pages": [
-    "pages/author/author",
+    "pages/user/address/edit/edit",
     "pages/tabBar/home",
     "pages/tabBar/category",
     "pages/tabBar/user",
@@ -14,11 +14,11 @@
     "pages/msg/msg",
     "pages/msg/chat/chat",
     "pages/user/keep/keep",
+    "pages/author/author",
     "pages/user/keep/sayFeel/sayFeel",
     "pages/user/credit/credit",
     "pages/user/collect/collect",
     "pages/user/service/service",
-    "pages/user/address/edit/edit",
     "pages/user/address/address",
     "pages/sendType/sendType",
     "pages/goods/ratings/ratings",
@@ -26,7 +26,8 @@
     "pages/serType/serType",
     "pages/applyReturn/applyReturn",
     "pages/applyChange/applyChange",
-    "pages/reSelect/reSelect"
+    "pages/reSelect/reSelect",
+    "pages/getphone/getphone"
   ],
   "subPackages": [],
   "window": {
@@ -72,6 +73,5 @@
       }
     ]
   },
-  "permission": {},
-  "sitemapLocation": "sitemap.json"
+  "permission": {}
 }

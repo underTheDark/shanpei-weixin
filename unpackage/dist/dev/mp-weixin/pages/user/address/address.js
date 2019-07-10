@@ -252,6 +252,7 @@ var _uniPopup = _interopRequireDefault(__webpack_require__(/*! ../../../componen
       success: function success(res) {
         console.log(res);
         _this.homeList = res.data.data;
+
       } });
 
   },
@@ -268,48 +269,10 @@ var _uniPopup = _interopRequireDefault(__webpack_require__(/*! ../../../componen
       homeList: [],
       selfList: [] };
 
+
   },
   onShow: function onShow() {
 
-    // uni.getStorage({
-    // 	key: 'delAddress',
-    // 	success: (e) => {
-    // 		let len = this.addressList.length;
-    // 		if (e.data.hasOwnProperty('id')) {
-    // 			for (let i = 0; i < len; i++) {
-    // 				if (this.addressList[i].id == e.data.id) {
-    // 					this.addressList.splice(i, 1);
-    // 					break;
-    // 				}
-    // 			}
-    // 		}
-    // 		uni.removeStorage({
-    // 			key: 'delAddress'
-    // 		})
-    // 	}
-    // })
-    // uni.getStorage({
-    // 	key: 'saveAddress',
-    // 	success: (e) => {
-    // 		let len = this.addressList.length;
-    // 		if (e.data.hasOwnProperty('id')) {
-    // 			for (let i = 0; i < len; i++) {
-    // 				if (this.addressList[i].id == e.data.id) {
-    // 					this.addressList.splice(i, 1, e.data);
-    // 					break;
-    // 				}
-    // 			}
-    // 		} else {
-    // 			let lastid = this.addressList[len - 1];
-    // 			lastid++;
-    // 			e.data.id = lastid;
-    // 			this.addressList.push(e.data);
-    // 		}
-    // 		uni.removeStorage({
-    // 			key: 'saveAddress'
-    // 		})
-    // 	}
-    // })
   },
   onLoad: function onLoad(e) {
     if (e.type == 'select') {
@@ -378,7 +341,7 @@ var _uniPopup = _interopRequireDefault(__webpack_require__(/*! ../../../componen
     },
     add: function add() {
       uni.navigateTo({
-        url: "edit/edit?type=add" });
+        url: "edit/edit" });
 
     },
     select: function select(row) {

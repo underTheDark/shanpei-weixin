@@ -2,7 +2,7 @@
 	<view id="address">
 
 		<view class="list">
-			
+
 			<view class="address-title">
 				<view :class="{on:typeClass=='home'}" @tap="switchType('home')">常用地址管理</view>
 				<view :class="{on:typeClass=='self'}" @tap="switchType('self')">常用自提点管理</view>
@@ -11,14 +11,14 @@
 				<view class="img">
 					<image src="../../../static/img/add-position.png"></image>
 				</view>
-			
+
 				<text>赶快去添加收货地址吧！</text>
 			</view>
 			<view v-show="selfList.length == 0 && subState==2" class="noAdd">
 				<view class="img">
 					<image src="../../../static/img/add-position.png"></image>
 				</view>
-			
+
 				<text>赶快去添加收货地址吧！</text>
 			</view>
 			<!-- 常用地址管理 -->
@@ -29,8 +29,8 @@
 						<text>{{row.phone}}</text>
 					</view>
 					<view class="top-two">
-        
-	{{row.province }}{{row.city}}{{row.area}}{{row.street}}{{row.address}}					
+
+						{{row.province }}{{row.city}}{{row.area}}{{row.street}}{{row.address}}
 
 					</view>
 				</view>
@@ -44,7 +44,7 @@
 							<image src="../../../static/img/address/write.png"></image>
 							<view>编辑</view>
 						</view>
-						<view  @click="removeH(index,row.id)">
+						<view @click="removeH(index,row.id)">
 							<image src="../../../static/img/address/delete.png"></image>
 							<view>删除</view>
 						</view>
@@ -61,7 +61,7 @@
 					</view>
 					<view class="top-two">
 
-		{{row.store.province }}{{row.store.city}}{{row.store.area}}{{row.store.street}}{{row.store.address}}
+						{{row.store.province }}{{row.store.city}}{{row.store.area}}{{row.store.street}}{{row.store.address}}
 
 					</view>
 				</view>
@@ -75,7 +75,7 @@
 							<image src="../../../static/img/address/write.png"></image>
 							<view>编辑</view>
 						</view> -->
-						<view  @click="removeS(index,row.id)">
+						<view @click="removeS(index,row.id)">
 							<image src="../../../static/img/address/delete.png"></image>
 							<view>删除</view>
 						</view>
@@ -96,34 +96,35 @@
 	</view>
 </template>
 <script>
-	import uniPopup  from "../../../components/uni-popup/uni-popup.vue"
+	import uniPopup from "../../../components/uni-popup/uni-popup.vue"
 
 	export default {
-		mounted(){
-			
+		mounted() {
+
 			// 自提点
 			uni.request({
-				url:this.config.url+"member/station",
-				method:"post",
-				data:{
-					token:this.token
+				url: this.config.url + "member/station",
+				method: "post",
+				data: {
+					token: this.token
 				},
-				success:(res)=>{
+				success: (res) => {
 					console.log(res)
-					this.selfList=res.data.data;
+					this.selfList = res.data.data;
 				}
-				
+
 			})
 			//我的收货地址
 			uni.request({
-				url:this.config.url+"member/address",
-				method:"POST",
-				data:{
-					token:this.token
+				url: this.config.url + "member/address",
+				method: "POST",
+				data: {
+					token: this.token
 				},
-				success:(res)=>{
+				success: (res) => {
 					console.log(res)
-					this.homeList=res.data.data;
+					this.homeList = res.data.data;
+
 				}
 			})
 		},
@@ -132,56 +133,18 @@
 		},
 		data() {
 			return {
-				src1:'../../../static/img/address/y-duihao.png' ,
+				src1: '../../../static/img/address/y-duihao.png',
 				src2: '../../../static/img/address/n-duihao.png',
 				typeClass: 'home',
 				subState: 1,
 				isSelect: false,
 				homeList: [],
-				selfList:[]
+				selfList: [],
+				
 			};
 		},
 		onShow() {
-            
-			// uni.getStorage({
-			// 	key: 'delAddress',
-			// 	success: (e) => {
-			// 		let len = this.addressList.length;
-			// 		if (e.data.hasOwnProperty('id')) {
-			// 			for (let i = 0; i < len; i++) {
-			// 				if (this.addressList[i].id == e.data.id) {
-			// 					this.addressList.splice(i, 1);
-			// 					break;
-			// 				}
-			// 			}
-			// 		}
-			// 		uni.removeStorage({
-			// 			key: 'delAddress'
-			// 		})
-			// 	}
-			// })
-			// uni.getStorage({
-			// 	key: 'saveAddress',
-			// 	success: (e) => {
-			// 		let len = this.addressList.length;
-			// 		if (e.data.hasOwnProperty('id')) {
-			// 			for (let i = 0; i < len; i++) {
-			// 				if (this.addressList[i].id == e.data.id) {
-			// 					this.addressList.splice(i, 1, e.data);
-			// 					break;
-			// 				}
-			// 			}
-			// 		} else {
-			// 			let lastid = this.addressList[len - 1];
-			// 			lastid++;
-			// 			e.data.id = lastid;
-			// 			this.addressList.push(e.data);
-			// 		}
-			// 		uni.removeStorage({
-			// 			key: 'saveAddress'
-			// 		})
-			// 	}
-			// })
+
 		},
 		onLoad(e) {
 			if (e.type == 'select') {
@@ -189,44 +152,44 @@
 			}
 		},
 		methods: {
-				// 删除我的收货地址
-			removeH(index,id) {
-			console.log(index,id)
-			uni.request({
-				url:this.config.url+"address/del",
-				data:{
-					token:this.token,
-					address_id:id,
-				},
-				method:"post",
-				success: (res) => {
-					console.log(res)
-				}
-			});
+			// 删除我的收货地址
+			removeH(index, id) {
+				console.log(index, id)
+				uni.request({
+					url: this.config.url + "address/del",
+					data: {
+						token: this.token,
+						address_id: id,
+					},
+					method: "post",
+					success: (res) => {
+						console.log(res)
+					}
+				});
 			},
-		// 删除自提点
-			removeS(index,id) {
-			
-			uni.request({
-				url:this.config.url+"station/del",
-				data:{
-					token:this.token,
-					address_id:id,
-				},
-				method:"post",
-				success: (res) => {
-					console.log(res)
-				}
-			});
+			// 删除自提点
+			removeS(index, id) {
+
+				uni.request({
+					url: this.config.url + "station/del",
+					data: {
+						token: this.token,
+						address_id: id,
+					},
+					method: "post",
+					success: (res) => {
+						console.log(res)
+					}
+				});
 			},
 
-							// uni.showToast({
-							// 	icon: "success",
-							// 	title: '操作成功!',
-							// 	duration: 2000
-							// });
-				
-			
+			// uni.showToast({
+			// 	icon: "success",
+			// 	title: '操作成功!',
+			// 	duration: 2000
+			// });
+
+
 			switchType(type) {
 
 				this.typeClass = type;
@@ -238,10 +201,10 @@
 				}
 			},
 			edit(row) {
-				var type=JSON.stringify(row)
-				
+				var type = JSON.stringify(row)
+
 				uni.navigateTo({
-					url: "/pages/user/address/edit/edit?type="+type
+					url: "/pages/user/address/edit/edit?type=" + type
 				});
 
 			},
@@ -250,7 +213,7 @@
 			},
 			add() {
 				uni.navigateTo({
-					url: "edit/edit?type=add"
+					url: "edit/edit"
 				})
 			},
 			select(row) {
@@ -333,7 +296,7 @@
 
 			width: 90%;
 			height: 80upx;
-            display: flex;
+			display: flex;
 			background: rgba(20, 204, 33, 1);
 			color: #fff;
 			justify-content: center;
@@ -443,9 +406,11 @@
 				.left {
 					display: flex;
 					color: rgba(153, 153, 153, 1);
-                    .selected{
-                    	color:#14cc21
-                    }
+
+					.selected {
+						color: #14cc21
+					}
+
 					image {
 						width: 36upx;
 						height: 36upx;

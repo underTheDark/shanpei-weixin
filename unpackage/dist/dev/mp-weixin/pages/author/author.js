@@ -33,6 +33,21 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {
   data: function data() {
     return {
@@ -40,18 +55,20 @@
       OpenId: '',
       nickName: null,
       avatarUrl: null,
-      isCanUse: uni.getStorageSync('isCanUse') || true //默认为true
-    };
+      isCanUse: uni.getStorageSync('isCanUse') || true, //默认为true
+      getphone: "1",
+      writePhone: false };
+
   },
   methods: {
     //第一授权获取用户信息===》按钮触发
     wxGetUserInfo: function wxGetUserInfo(detail) {
-      console.log("phone", detail);
+      //console.log("phone",detail)
       var _this = this;
       uni.getUserInfo({
         provider: 'weixin',
         success: function success(infoRes) {
-          console.log("phon", infoRes);
+          // console.log("phon",infoRes)
           _this.nickName = infoRes.userInfo.nickName; //昵称
           _this.avatarUrl = infoRes.userInfo.avatarUrl; //头像
 
@@ -63,14 +80,24 @@
         fail: function fail(res) {} });
 
     },
+
     getPhoneNumber: function getPhoneNumber(e) {
-      console.log(e);
-      console.log(e.detail.errMsg);
-      console.log(e.detail.iv);
-      console.log(e.detail.encryptedData);
+      var _this = this;
+      uni.getStorage({
+        key: "sessionkey",
+        success: function success(res) {
+
+        } });
+
+
+      if (e.detail.errMsg == 'getPhoneNumber:fail user deny') {
+        //  console.log('用户拒绝提供手机号');  
+      } else {
+        _this.writePhone = true;
+
+      }
+
     },
-
-
 
     //登录
     login: function login() {
@@ -91,12 +118,12 @@
             uni.getUserInfo({
               provider: 'weixin',
               success: function success(infoRes) {
-                console.log(infoRes);
+                //console.log(infoRes)
                 //获取用户信息后向调用信息更新方法
                 var nickName = infoRes.userInfo.nickName; //昵称
                 var avatarUrl = infoRes.userInfo.avatarUrl; //头像
 
-                _this.updateUserInfo(); //调用更新信息方法
+                //_this.updateUserInfo(); //调用更新信息方法
               } });
 
           }
@@ -110,8 +137,13 @@
             method: 'POST',
 
             success: function success(res) {
-              //console.log(res)
+              // console.log(res)
               _this.OpenId = res.data.data.openid;
+              _this.SessionKey = res.data.data.session_key;
+              uni.setStorage({
+                key: "sessionkey",
+                data: _this.SessionKey });
+
               //openId、或SessionKdy存储//隐藏loading
               uni.hideLoading();
             } });
@@ -142,9 +174,11 @@
                 console.log("用户信息保存成功");
               } });
 
-            uni.reLaunch({
-              url: '/pages/tabBar/home' });
-
+            _this.getphone = 2;
+            // uni.navigateTo({
+            // 
+            //     url: '/pages/getphone/getphone'
+            // });
           }
         } });
 
@@ -184,42 +218,102 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("view", [
+  return _c("view", { staticClass: "author" }, [
     _vm.isCanUse
       ? _c("view", [
           _c(
             "view",
             [
               _vm._m(0),
-              _vm._m(1),
+              _c("view", { staticClass: "content" }, [
+                _c("view", [_vm._v("申请获取以下权限")]),
+                _c("text", [
+                  _vm._v(
+                    _vm._s(
+                      _vm.getphone == 1
+                        ? "获得你的公开信息(昵称，头像、地区,等)"
+                        : _vm.getphone == 2
+                        ? "请填写要绑定的手机号"
+                        : ""
+                    )
+                  )
+                ])
+              ]),
               _c(
                 "button",
                 {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.getphone == 2,
+                      expression: "getphone==2"
+                    }
+                  ],
+                  attrs: {
+                    type: "primary",
+                    "open-type": "getPhoneNumber",
+                    eventid: "0d464f50-0"
+                  },
+                  on: { getphonenumber: _vm.getPhoneNumber }
+                },
+                [_vm._v("授权确认")]
+              ),
+              _c(
+                "button",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.getphone == 1,
+                      expression: "getphone==1"
+                    }
+                  ],
                   staticClass: "bottom",
                   attrs: {
                     type: "primary",
                     "open-type": "getUserInfo",
                     withCredentials: "true",
                     lang: "zh_CN",
-                    eventid: "0d464f50-0"
+                    eventid: "0d464f50-1"
                   },
                   on: { getuserinfo: _vm.wxGetUserInfo }
                 },
                 [_vm._v("授权登录")]
-              ),
-              _c(
-                "button",
-                {
-                  attrs: {
-                    "open-type": "getPhoneNumber",
-                    bindgetphonenumber: "getPhoneNumber"
-                  }
-                },
-                [_vm._v("获取手机号信息")]
               )
             ],
             1
           )
+        ])
+      : _vm._e(),
+    _vm.writePhone
+      ? _c("view", { staticClass: "writePhone" }, [
+          _c("view", { staticClass: "mask" }),
+          _c("view", { staticClass: "getphone" }, [
+            _c("text", [_vm._v("请输入绑定手机号")]),
+            _c("input", { attrs: { type: "text" } }),
+            _c("view", { staticClass: "btns" }, [
+              _c(
+                "text",
+                {
+                  staticClass: "cancel",
+                  attrs: { eventid: "0d464f50-2" },
+                  on: { click: _vm.cancel }
+                },
+                [_vm._v("取消")]
+              ),
+              _c(
+                "text",
+                {
+                  staticClass: "confim",
+                  attrs: { eventid: "0d464f50-3" },
+                  on: { tap: _vm.confim }
+                },
+                [_vm._v("确认")]
+              )
+            ])
+          ])
         ])
       : _vm._e()
   ])
@@ -231,15 +325,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("view", { staticClass: "header" }, [
       _c("image", { attrs: { src: "../../static/img/wx_login.png" } })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "content" }, [
-      _c("view", [_vm._v("申请获取以下权限")]),
-      _c("text", [_vm._v("获得你的公开信息(昵称，头像、地区等)")])
     ])
   }
 ]
