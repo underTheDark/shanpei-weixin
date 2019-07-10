@@ -1,156 +1,22 @@
 (global["webpackJsonp"] = global["webpackJsonp"] || []).push([["pages/user/address/edit/edit"],{
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+/***/ "./node_modules/babel-loader/lib/index.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js?!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js?!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/vue-loader/lib/index.js?!C:\\Users\\Administrator\\Desktop\\shanpei-weixin\\pages\\user\\address\\edit\\edit.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--12-1!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--18-0!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/vue-loader/lib??vue-loader-options!C:/Users/Administrator/Desktop/shanpei-weixin/pages/user/address/edit/edit.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+=======
+>>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
 /***/ "./node_modules/babel-loader/lib/index.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js?!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js?!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/vue-loader/lib/index.js?!C:\\Users\\惠普2\\Desktop\\shanpei-weixin\\shanpei-weixin\\components\\mpvue-citypicker\\mpvueCityPicker.vue?vue&type=script&lang=js&":
 /*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--12-1!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--18-0!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/vue-loader/lib??vue-loader-options!C:/Users/惠普2/Desktop/shanpei-weixin/shanpei-weixin/components/mpvue-citypicker/mpvueCityPicker.vue?vue&type=script&lang=js& ***!
   \**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var _province = _interopRequireDefault(__webpack_require__(/*! ./city-data/province.js */ "C:\\Users\\惠普2\\Desktop\\shanpei-weixin\\shanpei-weixin\\components\\mpvue-citypicker\\city-data\\province.js"));
-var _city = _interopRequireDefault(__webpack_require__(/*! ./city-data/city.js */ "C:\\Users\\惠普2\\Desktop\\shanpei-weixin\\shanpei-weixin\\components\\mpvue-citypicker\\city-data\\city.js"));
-var _area = _interopRequireDefault(__webpack_require__(/*! ./city-data/area.js */ "C:\\Users\\惠普2\\Desktop\\shanpei-weixin\\shanpei-weixin\\components\\mpvue-citypicker\\city-data\\area.js"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default2 =
-{
-  data: function data() {
-    return {
-      pickerValue: [0, 0, 0],
-      provinceDataList: [],
-      cityDataList: [],
-      areaDataList: [],
-      /* 是否显示控件 */
-      showPicker: false };
-
-  },
-  created: function created() {
-    this.init();
-  },
-  props: {
-    /* 默认值 */
-    pickerValueDefault: {
-      type: Array,
-      default: function _default() {
-        return [0, 0, 0];
-      } },
-
-    /* 主题色 */
-    themeColor: String },
-
-  watch: {
-    pickerValueDefault: function pickerValueDefault() {
-      this.init();
-    } },
-
-  methods: {
-    init: function init() {
-      this.handPickValueDefault(); // 对 pickerValueDefault 做兼容处理
-      this.provinceDataList = _province.default;
-      this.cityDataList = _city.default[this.pickerValueDefault[0]];
-      this.areaDataList = _area.default[this.pickerValueDefault[0]][this.pickerValueDefault[1]];
-      this.pickerValue = this.pickerValueDefault;
-    },
-    show: function show() {var _this = this;
-      setTimeout(function () {
-        _this.showPicker = true;
-      }, 0);
-    },
-    maskClick: function maskClick() {
-      this.pickerCancel();
-    },
-    pickerCancel: function pickerCancel() {
-      this.showPicker = false;
-      this._$emit('onCancel');
-    },
-    pickerConfirm: function pickerConfirm(e) {
-      this.showPicker = false;
-      this._$emit('onConfirm');
-    },
-    showPickerView: function showPickerView() {
-      this.showPicker = true;
-    },
-    handPickValueDefault: function handPickValueDefault() {
-      if (this.pickerValueDefault !== [0, 0, 0]) {
-        if (this.pickerValueDefault[0] > _province.default.length - 1) {
-          this.pickerValueDefault[0] = _province.default.length - 1;
-        }
-        if (this.pickerValueDefault[1] > _city.default[this.pickerValueDefault[0]].length - 1) {
-          this.pickerValueDefault[1] = _city.default[this.pickerValueDefault[0]].length - 1;
-        }
-        if (this.pickerValueDefault[2] > _area.default[this.pickerValueDefault[0]][this.pickerValueDefault[1]].length - 1) {
-          this.pickerValueDefault[2] = _area.default[this.pickerValueDefault[0]][this.pickerValueDefault[1]].length - 1;
-        }
-      }
-    },
-    pickerChange: function pickerChange(e) {
-      var changePickerValue = e.mp.detail.value;
-      if (this.pickerValue[0] !== changePickerValue[0]) {
-        // 第一级发生滚动
-        this.cityDataList = _city.default[changePickerValue[0]];
-        this.areaDataList = _area.default[changePickerValue[0]][0];
-        changePickerValue[1] = 0;
-        changePickerValue[2] = 0;
-      } else if (this.pickerValue[1] !== changePickerValue[1]) {
-        // 第二级滚动
-        this.areaDataList =
-        _area.default[changePickerValue[0]][changePickerValue[1]];
-        changePickerValue[2] = 0;
-      }
-      this.pickerValue = changePickerValue;
-      this._$emit('onChange');
-    },
-    _$emit: function _$emit(emitName) {
-      var pickObj = {
-        label: this._getLabel(),
-        value: this.pickerValue,
-        cityCode: this._getCityCode() };
-
-      this.$emit(emitName, pickObj);
-    },
-    _getLabel: function _getLabel() {
-      var pcikerLabel =
-      this.provinceDataList[this.pickerValue[0]].label +
-      '-' +
-      this.cityDataList[this.pickerValue[1]].label +
-      '-' +
-      this.areaDataList[this.pickerValue[2]].label;
-      return pcikerLabel;
-    },
-    _getCityCode: function _getCityCode() {
-      return this.areaDataList[this.pickerValue[2]].value;
-    } } };exports.default = _default2;
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js?!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js?!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/vue-loader/lib/index.js?!C:\\Users\\惠普2\\Desktop\\shanpei-weixin\\shanpei-weixin\\pages\\user\\address\\edit\\edit.vue?vue&type=script&lang=js&":
-/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--12-1!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--18-0!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/vue-loader/lib??vue-loader-options!C:/Users/惠普2/Desktop/shanpei-weixin/shanpei-weixin/pages/user/address/edit/edit.vue?vue&type=script&lang=js& ***!
-  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+<<<<<<< HEAD
+=======
+>>>>>>> 74844b26c6faa20a033c73c539753708e9a95e12
+>>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -182,6 +48,41 @@ var _area = _interopRequireDefault(__webpack_require__(/*! ./city-data/area.js *
 
 
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
+var _province = _interopRequireDefault(__webpack_require__(/*! ./city-data/province.js */ "C:\\Users\\惠普2\\Desktop\\shanpei-weixin\\shanpei-weixin\\components\\mpvue-citypicker\\city-data\\province.js"));
+var _city = _interopRequireDefault(__webpack_require__(/*! ./city-data/city.js */ "C:\\Users\\惠普2\\Desktop\\shanpei-weixin\\shanpei-weixin\\components\\mpvue-citypicker\\city-data\\city.js"));
+var _area = _interopRequireDefault(__webpack_require__(/*! ./city-data/area.js */ "C:\\Users\\惠普2\\Desktop\\shanpei-weixin\\shanpei-weixin\\components\\mpvue-citypicker\\city-data\\area.js"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default2 =
+{
+  data: function data() {
+    return {
+      pickerValue: [0, 0, 0],
+      provinceDataList: [],
+      cityDataList: [],
+      areaDataList: [],
+      /* 是否显示控件 */
+      showPicker: false };
+>>>>>>> 74844b26c6faa20a033c73c539753708e9a95e12
+
+
+
+
+
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
+/***/ "./node_modules/babel-loader/lib/index.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js?!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js?!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/vue-loader/lib/index.js?!C:\\Users\\惠普2\\Desktop\\shanpei-weixin\\shanpei-weixin\\pages\\user\\address\\edit\\edit.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--12-1!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--18-0!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/vue-loader/lib??vue-loader-options!C:/Users/惠普2/Desktop/shanpei-weixin/shanpei-weixin/pages/user/address/edit/edit.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+>>>>>>> 74844b26c6faa20a033c73c539753708e9a95e12
 
 
 
@@ -222,115 +123,300 @@ var _area = _interopRequireDefault(__webpack_require__(/*! ./city-data/area.js *
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<<<<<<< HEAD
+
+
+
+
+
+
+
+
+
+
+
+
+
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+
+
+//import mpvueCityPicker from '@/components/mpvue-citypicker/mpvueCityPicker.vue'
+var _default = {
+=======
+>>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
 var _mpvueCityPicker = _interopRequireDefault(__webpack_require__(/*! @/components/mpvue-citypicker/mpvueCityPicker.vue */ "C:\\Users\\惠普2\\Desktop\\shanpei-weixin\\shanpei-weixin\\components\\mpvue-citypicker\\mpvueCityPicker.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
 {
   components: {
     mpvueCityPicker: _mpvueCityPicker.default },
+>>>>>>> 74844b26c6faa20a033c73c539753708e9a95e12
 
   data: function data() {
     return {
       editType: 'edit',
+      ishow: 0, //地址框石佛显示  1显示
+      citynum: 0,
+      style1: '1',
+      style2: '0',
+      style3: '0',
+      isdisabled: false, //判断地址石佛填完
+      city_one: [], //省地址
+      city_two: [], //市地址
+      city_tree: [], //区地址
+      city_four: [], //街道地址
       id: '',
       name: '',
       tel: '',
       detailed: '',
-      province: "",
-      city: "",
-      area: "",
-      street: "",
+      address: "",
+      province: "河南省",
+      city: "郑州市",
+      area: "高新区",
+      street: "枫杨街",
       isDefault: false,
-      cityPickerValue: [0, 0, 1],
+      strId: "",
       themeColor: '#007AFF',
-      region: null };
+
+      visible: true };
+
 
   },
   methods: {
-    onCancel: function onCancel(e) {
-      console.log(e);
-    },
-    chooseCity: function chooseCity() {
-      this.$refs.mpvueCityPicker.show();
-    },
-    onConfirm: function onConfirm(e) {
-      console.log(e);
-
-      var addList = e.label.split("-");
-      this.province = addList[0];
-      this.city = addList[1];
-      this.area = addList[2];
+    //调取地址弹出框
+    selectAddr: function selectAddr() {
+      this.ishow = 1;
+      this.citynum = 0;
+      this.init(0, 1);
 
     },
-    isDefaultChange: function isDefaultChange(e) {
-      this.isDefault = e.detail.value;
+    showcity: function showcity(id, name) {
+      // this.pid=id
+      this.init(id, 2);
+      this.citynum = 1;
+      this.province = name;
+      // this.id1=id
+      this.style1 = id;
+      this.city_tree = [];
+      this.ciry_four = [];
+      this.isdisabled = false;
+
     },
+    showcitytwo: function showcitytwo(id, name) {
+      //this.pid=id
+      console.log(name);
+      this.init(id, 3);
+      this.citynum = 2;
+      this.city = name;
+      //this.id2=id
+      this.style2 = id;
+      this.isdisabled = false;
+    },
+    showcitythree: function showcitythree(id, name) {
+      //this.pid=id
+      //this.init(id)
+      this.area = name;
+      //this.id3=id
+      this.style3 = id;
+      this.isdisabled = true;
+      this.strId = id;
+    },
+    //获取街道
+    chooseStr: function chooseStr() {
+      this.init(this.strId, 4);
+      this.citynum == 4;
+      this.ishow == 2;
+    },
+    // 取消
+    cancel: function cancel() {
+      this.ishow = 0;
+    },
+    //确认
+    sure: function sure() {
+      if (this.isdisabled == true) {
+        console.log(this.province, this.city);
+        this.ishow = 0;
+        this.address = this.province + "-" + this.city + "-" + this.area;
+      } else {
+        uni.showToast({
+          title: "请选择区域",
+          icon: 'none' });
 
-    save: function save() {
-      console.log(this.tel, this.detailed);
-      var data = { "name": this.name, "phone": this.tel, id: this.id, token: this.token,
-        province: this.province, city: this.city, area: this.area, street: this.street,
-        "is_default": this.isDefault, address: this.detailed };
 
-      if (!this.name) {
-        uni.showToast({ title: '请输入收件人姓名', icon: 'none' });
-        return;
       }
-      if (!this.tel) {
-        uni.showToast({ title: '请输入收件人电话号码', icon: 'none' });
-        return;
-      }
-      if (!this.detailed) {
-        uni.showToast({ title: '请输入收件人详细地址', icon: 'none' });
-        return;
-      }
+    },
 
-      // uni.showLoading({
-      // 	title:'正在提交'
-      // })
-      //实际应用中请提交ajax,模板定时器模拟提交效果
+    init: function init(pid, level) {var _this = this;
+      // 获取
       uni.request({
-        url: this.config.url + "address/edit",
-        method: "post",
-        data: data,
+        url: this.config.url + 'area',
+        data: {
+          pid: pid,
+          token: this.token,
+          level: level },
+
+        method: 'POST',
         success: function success(res) {
           console.log(res);
-          if (res.data.code == 1) {
-            uni.showLoading({
-              title: '保存成功' });
-
-            setTimeout(function () {
-              uni.hideLoading();
-            }, 500);
+          if (_this.citynum == 0) {
+            _this.city_one = res.data.data;
+          } else if (_this.citynum == 1) {
+            _this.city_two = res.data.data;
+          } else if (_this.citynum == 2) {
+            _this.city_tree = res.data.data;
+          } else if (_this.citynum == 4) {
+            _this.city_four == res.data.data;
           }
         } });
 
+    },
+    //获取省份数组
+    getSiteData: function getSiteData() {var _this2 = this;
+      var that = this;
+      uni.request({
+        url: this.config.url + "area",
+        method: "post",
+        data: {
+          token: this.token,
+          pid: 0,
+          level: 1 },
+
+        success: function success(res) {
+          console.log(res);
+          var chinaData = res.data.data;
+          _this2.chinaData = chinaData;
+          var sheng = []; //  设置省数组
+
+          _this2.sheng = res.data.data;
+          console.log(_this2.sheng);
+          if (_this2.sheng.length > 0) {
+
+            _this2.map = true;
+          }
+          //that.getCity(); // 得到市
+        } });
+
+    }
 
 
-    } },
 
-  onLoad: function onLoad(e) {
+
+
+    // 			save() {
+    // 				console.log(this.tel, this.detailed)
+    // 				let data = {
+    // 					"name": this.name,
+    // 					"phone": this.tel,
+    // 					id: this.id,
+    // 					token: this.token,
+    // 					province: this.province,
+    // 					city: this.city,
+    // 					area: this.area,
+    // 					street: this.street,
+    // 					"is_default": this.isDefault,
+    // 					address: this.detailed
+    // 				}
+    // 
+    // 				if (!this.name) {
+    // 					uni.showToast({
+    // 						title: '请输入收件人姓名',
+    // 						icon: 'none'
+    // 					});
+    // 					return;
+    // 				}
+    // 				if (!this.tel) {
+    // 					uni.showToast({
+    // 						title: '请输入收件人电话号码',
+    // 						icon: 'none'
+    // 					});
+    // 					return;
+    // 				}
+    // 				if (!this.detailed) {
+    // 					uni.showToast({
+    // 						title: '请输入收件人详细地址',
+    // 						icon: 'none'
+    // 					});
+    // 					return;
+    // 				}
+    // 
+    // 				// uni.showLoading({
+    // 				// 	title:'正在提交'
+    // 				// })
+    // 				//实际应用中请提交ajax,模板定时器模拟提交效果
+    // 				uni.request({
+    // 					url: this.config.url + "address/edit",
+    // 					method: "post",
+    // 					data: data,
+    // 					success: (res) => {
+    // 						console.log(res)
+    // 						if (res.data.code == 1) {
+    // 							uni.showLoading({
+    // 								title: '保存成功'
+    // 							})
+    // 							setTimeout(function() {
+    // 								uni.hideLoading()
+    // 							}, 500)
+    // 						}
+    // 					}
+    // 				})
+    // 
+    // 
+    // 			}
+  },
+  onLoad: function onLoad(option) {
+    //this.getSiteData()
     //获取传递过来的参数
-    console.log(JSON.parse(e.type));
+    console.log(option);
+    // if (e.type) {
+    // 	this.region = JSON.parse(e.type)
+    // 	this.name = this.region.name;
+    // 	this.tel = this.region.phone;
+    // 	this.detailed = this.region.address;
+    // 	this.id = this.region.id;
+    // 	this.province = this.region.province;
+    // 	this.city = this.region.city;
+    // 	this.area = this.region.area;
+    // 	this.street = this.region.street;
+    // }
 
-    this.region = JSON.parse(e.type);
-    this.name = this.region.name;
-    this.tel = this.region.phone;
-    this.detailed = this.region.address;
-    this.id = this.region.id;
-    this.province = this.region.province;
-    this.city = this.region.city;
-    this.area = this.region.area;
-    this.street = this.region.street;
+
   },
-  onBackPress: function onBackPress() {
-    if (this.$refs.mpvueCityPicker.showPicker) {
-      this.$refs.mpvueCityPicker.pickerCancel();
-      return true;
-    }
-  },
-  onUnload: function onUnload() {
-    if (this.$refs.mpvueCityPicker.showPicker) {
-      this.$refs.mpvueCityPicker.pickerCancel();
-    }
+  mounted: function mounted() {
+    //加载默认地址
+    this.address = this.province + "-" + this.city + "-" + this.area;
+    this.street = this.street;
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
@@ -347,6 +433,15 @@ var _mpvueCityPicker = _interopRequireDefault(__webpack_require__(/*! @/componen
 
 /***/ }),
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js?!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/template.js!./node_modules/vue-loader/lib/index.js?!C:\\Users\\Administrator\\Desktop\\shanpei-weixin\\pages\\user\\address\\edit\\edit.vue?vue&type=template&id=f8ca2772&":
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--17-0!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/template.js!./node_modules/vue-loader/lib??vue-loader-options!C:/Users/Administrator/Desktop/shanpei-weixin/pages/user/address/edit/edit.vue?vue&type=template&id=f8ca2772& ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+=======
+>>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
 /***/ "./node_modules/mini-css-extract-plugin/dist/loader.js?!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js?!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!C:\\Users\\惠普2\\Desktop\\shanpei-weixin\\shanpei-weixin\\components\\mpvue-citypicker\\mpvueCityPicker.vue?vue&type=style&index=0&lang=css&":
 /*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/mini-css-extract-plugin/dist/loader.js??ref--6-oneOf-1-0!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--6-oneOf-1-1!./node_modules/css-loader??ref--6-oneOf-1-2!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-oneOf-1-3!./node_modules/vue-loader/lib??vue-loader-options!C:/Users/惠普2/Desktop/shanpei-weixin/shanpei-weixin/components/mpvue-citypicker/mpvueCityPicker.vue?vue&type=style&index=0&lang=css& ***!
@@ -362,6 +457,10 @@ var _mpvueCityPicker = _interopRequireDefault(__webpack_require__(/*! @/componen
 /*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--17-0!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/template.js!./node_modules/vue-loader/lib??vue-loader-options!C:/Users/惠普2/Desktop/shanpei-weixin/shanpei-weixin/components/mpvue-citypicker/mpvueCityPicker.vue?vue&type=template&id=6529158c& ***!
   \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+<<<<<<< HEAD
+=======
+>>>>>>> 74844b26c6faa20a033c73c539753708e9a95e12
+>>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -373,6 +472,82 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
+<<<<<<< HEAD
+  return _c("view", [
+    _c("view", { staticClass: "content" }, [
+      _c("view", { staticClass: "row" }, [
+        _c("view", { staticClass: "nominal" }, [_vm._v("收货人")]),
+        _c("view", { staticClass: "input" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.name,
+                expression: "name"
+              }
+            ],
+            attrs: {
+              placeholder: "请输入收件人",
+              type: "text",
+              eventid: "f1d01cb2-0"
+            },
+            domProps: { value: _vm.name },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.name = $event.target.value
+              }
+            }
+          })
+        ])
+      ]),
+      _c("view", { staticClass: "row" }, [
+        _c("view", { staticClass: "nominal" }, [_vm._v("手机号")]),
+        _c("view", { staticClass: "input" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.tel,
+                expression: "tel"
+              }
+            ],
+            attrs: {
+              placeholder: "请输入收件人电话号码",
+              type: "text",
+              eventid: "f1d01cb2-1"
+            },
+            domProps: { value: _vm.tel },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.tel = $event.target.value
+              }
+            }
+          })
+        ])
+      ]),
+      _c(
+        "view",
+        {
+          staticClass: "row",
+          attrs: { eventid: "f1d01cb2-2" },
+          on: { click: _vm.selectAddr }
+        },
+        [
+          _c("view", { staticClass: "nominal" }, [_vm._v("地区")]),
+          _c("view", { staticClass: "input" }, [_vm._v(_vm._s(_vm.address))])
+        ]
+      ),
+      _c("view", { staticClass: "row" }, [
+        _c("view", { staticClass: "nominal" }, [_vm._v("街道")]),
+=======
   return _c("div", { staticClass: "mpvue-picker" }, [
     _c("div", {
       class: { pickerMask: _vm.showPicker },
@@ -386,25 +561,162 @@ var render = function() {
         class: { "mpvue-picker-view-show": _vm.showPicker }
       },
       [
+>>>>>>> 74844b26c6faa20a033c73c539753708e9a95e12
         _c(
-          "div",
+          "view",
           {
-            staticClass: "mpvue-picker__hd",
-            attrs: { catchtouchmove: "true" }
+            staticClass: "input",
+            attrs: { eventid: "f1d01cb2-3" },
+            on: { tap: _vm.chooseStr }
           },
-          [
-            _c(
-              "div",
+          [_vm._v(_vm._s(_vm.street))]
+        )
+      ]),
+      _c("view", { staticClass: "row detail-add" }, [
+        _c("view", { staticClass: "nominal" }, [_vm._v("详细地址")]),
+        _c("view", { staticClass: "input add-content" }, [
+          _c("textarea", {
+            directives: [
               {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.detailed,
+                expression: "detailed"
+              }
+            ],
+            attrs: {
+              "auto-height": "true",
+              placeholder: "输入详细地址",
+              eventid: "f1d01cb2-4"
+            },
+            domProps: { value: _vm.detailed },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.detailed = $event.target.value
+              }
+            }
+          })
+        ])
+      ]),
+      _c("view", { staticClass: "add-border" }),
+      _c("view", { staticClass: "row last-row" }, [
+        _c("view", { staticClass: "nominal" }, [_vm._v("设置默认地址")]),
+        _c("view", { staticClass: "input switch" }, [
+          _c("switch", {
+            attrs: {
+              color: "rgba(20,204,33,1)",
+              checked: _vm.isDefault,
+              eventid: "f1d01cb2-5"
+            },
+            on: { change: _vm.isDefaultChange }
+          })
+        ])
+      ])
+    ]),
+    _c(
+      "view",
+      {
+        staticClass: "save",
+        attrs: { eventid: "f1d01cb2-6" },
+        on: { tap: _vm.save }
+      },
+      [_c("view", { staticClass: "btn" }, [_vm._v("保存地址")])]
+    ),
+    _vm.ishow == 1
+      ? _c("view", { staticClass: "picker_li" }, [
+          _c("view", { staticClass: "pickbg" }),
+          _c("view", { staticClass: "btn_c" }, [
+            _c(
+              "view",
+              {
+<<<<<<< HEAD
+                staticClass: "qx",
+                attrs: { eventid: "f1d01cb2-7" },
+                on: { tap: _vm.cancel }
+=======
                 staticClass: "mpvue-picker__action",
                 attrs: { eventid: "83bd76a8-1" },
                 on: { click: _vm.pickerCancel }
+>>>>>>> 74844b26c6faa20a033c73c539753708e9a95e12
               },
               [_vm._v("取消")]
             ),
             _c(
-              "div",
+              "view",
               {
+<<<<<<< HEAD
+                staticClass: "sign",
+                attrs: { disabled: _vm.isdisabled, eventid: "f1d01cb2-8" },
+                on: { tap: _vm.sure }
+              },
+              [_vm._v("确定")]
+            )
+          ]),
+          _c("view", { staticClass: "picker_w" }, [
+            _c(
+              "view",
+              { staticClass: "li_one" },
+              _vm._l(_vm.city_one, function(item, a) {
+                return _c(
+                  "view",
+                  {
+                    key: a,
+                    staticClass: "li_i",
+                    class: [_vm.style1 == item.id ? "active" : ""],
+                    attrs: { eventid: "f1d01cb2-9-" + a },
+                    on: {
+                      tap: function($event) {
+                        _vm.showcity(item.id, item.name)
+                      }
+                    }
+                  },
+                  [_vm._v(_vm._s(item.name))]
+                )
+              })
+            ),
+            _c(
+              "view",
+              { staticClass: "li_two" },
+              _vm._l(_vm.city_two, function(item, b) {
+                return _c(
+                  "view",
+                  {
+                    key: b,
+                    staticClass: "li_i",
+                    class: [_vm.style2 == item.id ? "active" : ""],
+                    attrs: { eventid: "f1d01cb2-10-" + b },
+                    on: {
+                      tap: function($event) {
+                        _vm.showcitytwo(item.id, item.name)
+                      }
+                    }
+                  },
+                  [_vm._v(_vm._s(item.name))]
+                )
+              })
+            ),
+            _c(
+              "view",
+              { staticClass: "li_three" },
+              _vm._l(_vm.city_tree, function(item, c) {
+                return _c(
+                  "view",
+                  {
+                    key: c,
+                    staticClass: "li_i",
+                    class: [_vm.style3 == item.id ? "active" : ""],
+                    attrs: { eventid: "f1d01cb2-11-" + c },
+                    on: {
+                      tap: function($event) {
+                        _vm.showcitythree(item.id, item.name)
+                      }
+                    }
+                  },
+                  [_vm._v(_vm._s(item.name))]
+=======
                 staticClass: "mpvue-picker__action",
                 style: { color: _vm.themeColor },
                 attrs: { eventid: "83bd76a8-2" },
@@ -461,10 +773,34 @@ var render = function() {
                       [_vm._v(_vm._s(item.label))]
                     )
                   })
+>>>>>>> 74844b26c6faa20a033c73c539753708e9a95e12
                 )
-              ],
-              1
+              })
             )
+<<<<<<< HEAD
+          ])
+        ])
+      : _vm._e(),
+    _vm.ishow == 2
+      ? _c("view", { staticClass: "picker_li" }, [
+          _c("view", { staticClass: "pickbg" }),
+          _c("view", { staticClass: "btn_c" }, [
+            _c(
+              "view",
+              {
+                staticClass: "qx",
+                attrs: { eventid: "f1d01cb2-12" },
+                on: { tap: _vm.cancel }
+              },
+              [_vm._v("取消")]
+            ),
+            _c(
+              "view",
+              {
+                staticClass: "sign",
+                attrs: { disabled: _vm.isdisabled, eventid: "f1d01cb2-13" },
+                on: { tap: _vm.sure }
+=======
           ],
           1
         )
@@ -619,11 +955,42 @@ var render = function() {
                 color: "rgba(20,204,33,1)",
                 checked: _vm.isDefault,
                 eventid: "10135b78-5"
+<<<<<<< HEAD
+=======
+>>>>>>> 74844b26c6faa20a033c73c539753708e9a95e12
+>>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
               },
-              on: { change: _vm.isDefaultChange }
-            })
+              [_vm._v("确定")]
+            )
+          ]),
+          _c("view", { staticClass: "picker_w" }, [
+            _c(
+              "view",
+              { staticClass: "li_four" },
+              _vm._l(_vm.city_four, function(item, d) {
+                return _c(
+                  "view",
+                  {
+                    key: d,
+                    staticClass: "li_i",
+                    class: [_vm.style4 == item.id ? "active" : ""],
+                    attrs: { eventid: "f1d01cb2-14-" + d },
+                    on: {
+                      tap: function($event) {
+                        _vm.showcityfour(item.id, item.name)
+                      }
+                    }
+                  },
+                  [_vm._v(_vm._s(item.name))]
+                )
+              })
+            )
           ])
         ])
+<<<<<<< HEAD
+      : _vm._e()
+  ])
+=======
       ]),
       _c(
         "view",
@@ -647,6 +1014,7 @@ var render = function() {
     ],
     1
   )
+>>>>>>> 74844b26c6faa20a033c73c539753708e9a95e12
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -655,6 +1023,15 @@ render._withStripped = true
 
 /***/ }),
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+/***/ "C:\\Users\\Administrator\\Desktop\\shanpei-weixin\\main.js?{\"page\":\"pages%2Fuser%2Faddress%2Fedit%2Fedit\"}":
+/*!*************************************************************************************************************!*\
+  !*** C:/Users/Administrator/Desktop/shanpei-weixin/main.js?{"page":"pages%2Fuser%2Faddress%2Fedit%2Fedit"} ***!
+  \*************************************************************************************************************/
+=======
+>>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
 /***/ "C:\\Users\\惠普2\\Desktop\\shanpei-weixin\\shanpei-weixin\\components\\mpvue-citypicker\\city-data\\area.js":
 /*!********************************************************************************************************!*\
   !*** C:/Users/惠普2/Desktop/shanpei-weixin/shanpei-weixin/components/mpvue-citypicker/city-data/area.js ***!
@@ -14966,6 +15343,10 @@ __webpack_require__.r(__webpack_exports__);
 /*!******************************************************************************************************************!*\
   !*** C:/Users/惠普2/Desktop/shanpei-weixin/shanpei-weixin/main.js?{"page":"pages%2Fuser%2Faddress%2Fedit%2Fedit"} ***!
   \******************************************************************************************************************/
+<<<<<<< HEAD
+=======
+>>>>>>> 74844b26c6faa20a033c73c539753708e9a95e12
+>>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 

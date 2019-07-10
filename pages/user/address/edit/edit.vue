@@ -17,40 +17,37 @@
 					<input placeholder="请输入收件人电话号码" type="text" v-model="tel" />
 				</view>
 			</view>
-			<view class="row">
-				<view class="nominal">
+			<view class="row" @click="selectAddr">
+				<view class="nominal" >
 					地区
 				</view>
-				<view class="input" @tap="chooseCity">
-					{{province}}{{city}}{{area}}
-				</view>
-				
+				<view class="input">{{address}}</view>
 			</view>
 			<view class="row">
 				<view class="nominal">
 					街道
 				</view>
-				<view class="input" @tap="chooseCity">
+				<view class="input" @tap="chooseStr">
 					{{street}}
 				</view>
-				
+
 			</view>
 			<view class="row detail-add">
 				<view class="nominal">
 					详细地址
 				</view>
 				<view class="input add-content">
-					<textarea  v-model="detailed" auto-height="true" placeholder="输入详细地址">
-						
+					<textarea v-model="detailed" auto-height="true" placeholder="输入详细地址">
+
 					</textarea>
 				</view>
 			</view>
 			<view class="add-border"></view>
 			<view class="row last-row">
-				<view class="nominal" >
+				<view class="nominal">
 					设置默认地址
 				</view>
-				<view class="input switch" >
+				<view class="input switch">
 					<switch color="rgba(20,204,33,1)" :checked="isDefault" @change=isDefaultChange />
 				</view>
 			</view>
@@ -60,129 +57,313 @@
 				保存地址
 			</view>
 		</view>
-		<mpvue-city-picker :themeColor="themeColor" ref="mpvueCityPicker" :pickerValueDefault="cityPickerValue" @onCancel="onCancel" @onConfirm="onConfirm"></mpvue-city-picker>
+		<!-- 地址弹出框 -->
+        <view class="picker_li" v-if="ishow==1">
+			<view class="pickbg"></view>
+			<view class="btn_c">
+				<view class="qx" @tap="cancel">取消</view>
+				<view class="sign" @tap="sure" :disabled="isdisabled">确定</view>
+			</view>
+			<view class="picker_w">
+				<view class="li_one" >
+					<view class="li_i" 
+						:class="[style1 == item.id ? 'active' : '' ]"
+						v-for="(item,a) in city_one" 
+						:key="a" 
+						@tap="showcity(item.id,item.name)">
+						{{item.name}}
+					</view>
+				</view>
+				<view class="li_two">
+					<view class="li_i" 
+						:class="[style2 == item.id ? 'active' : '' ]"
+						v-for="(item,b) in city_two" 
+						:key="b" 
+						@tap="showcitytwo(item.id,item.name)">
+						{{item.name}}
+					</view>
+				</view>
+				<view class="li_three">
+					<view class="li_i"
+						:class="[style3 == item.id ? 'active' : '' ]"
+						v-for="(item,c) in city_tree" 
+						:key="c"
+						@tap="showcitythree(item.id,item.name)">
+						{{item.name}}
+					</view>
+				</view>
+			</view>
+		</view>
+			<!-- 街道地址弹出框 -->
+		<view class="picker_li" v-if="ishow==2">
+			<view class="pickbg"></view>
+			<view class="btn_c">
+				<view class="qx" @tap="cancel">取消</view>
+				<view class="sign" @tap="sure" :disabled="isdisabled">确定</view>
+			</view>
+			<view class="picker_w">
+				<view class="li_four" >
+					<view class="li_i" 
+						:class="[style4 == item.id ? 'active' : '' ]"
+						v-for="(item,d) in city_four" 
+						:key="d" 
+						@tap="showcityfour(item.id,item.name)">
+						{{item.name}}
+					</view>
+				</view>
+				
+			</view>
+		</view>
 	</view>
 </template>
 
 <script>
-	import mpvueCityPicker from '@/components/mpvue-citypicker/mpvueCityPicker.vue'
+	//import mpvueCityPicker from '@/components/mpvue-citypicker/mpvueCityPicker.vue'
 	export default {
-		components: {
-			mpvueCityPicker
-		},
+
 		data() {
 			return {
-				editType:'edit',
-				id:'',
-				name:'',
-				tel:'',
-				detailed:'',
-				province:"",
-				city:"",
-				area:"",
-				street:"",
-				isDefault:false,
-				cityPickerValue: [0, 0, 1],
+				editType: 'edit',
+				ishow:0,   //地址框石佛显示  1显示
+				citynum:0,
+				style1:'1',
+				style2:'0',
+				style3:'0',
+				isdisabled:false, //判断地址石佛填完
+				city_one:[],  //省地址
+				city_two:[],  //市地址
+				city_tree:[],  //区地址
+				city_four:[],  //街道地址
+				id: '',
+				name: '',
+				tel: '',
+				detailed: '',
+				address:"",
+				province: "河南省",
+				city: "郑州市",
+				area: "高新区",
+				street: "枫杨街",
+				isDefault: false,
+				strId:"",
 				themeColor: '#007AFF',
-				region:null,
-			};
+				
+				visible: true,
+				
+			}
 		},
 		methods: {
-			onCancel(e) {
-				console.log(e)
-			},
-			chooseCity() {
-				this.$refs.mpvueCityPicker.show()
-			},
-			onConfirm(e) {
-				console.log(e)
-			    
-				var addList=e.label.split("-")
-			    this.province=addList[0];
-				this.city=addList[1];
-				this.area=addList[2];
+			//调取地址弹出框
+			selectAddr(){
+				this.ishow=1;
+				this.citynum=0;
+				this.init(0,1)
 				
 			},
-			isDefaultChange(e){
-				this.isDefault = e.detail.value;
+			showcity(id,name){
+				// this.pid=id
+				this.init(id,2)
+				this.citynum=1
+			    this.province=name
+				// this.id1=id
+				 this.style1=id
+			     this.city_tree=[]
+				 this.ciry_four=[]
+				 this.isdisabled = false;
+				 	
+			},
+			showcitytwo(id,name){
+				//this.pid=id
+				console.log(name)
+				this.init(id,3)
+				this.citynum=2
+				this.city=name
+				//this.id2=id
+				this.style2=id
+				this.isdisabled = false;
+			},
+			showcitythree(id,name){
+				//this.pid=id
+				 //this.init(id)
+				this.area=name;
+				//this.id3=id
+				this.style3=id
+				this.isdisabled = true;
+				this.strId=id;
+			},
+			//获取街道
+			chooseStr(){
+				this.init(this.strId,4)
+				this.citynum==4;
+				this.ishow==2;
+			},
+			// 取消
+			cancel(){
+				this.ishow=0
+			},
+			//确认
+			sure(){
+				if(this.isdisabled==true){
+					console.log(this.province,this.city)
+					this.ishow=0
+					this.address=this.province+"-"+this.city+"-"+this.area;
+				}else{
+					uni.showToast({
+						title:"请选择区域",
+						icon:'none'
+					})
+					
+				}
 			},
 			
-			save(){
-				console.log(this.tel,this.detailed)
-				let data={"name":this.name,"phone":this.tel,id:this.id,token:this.token,
-				province:this.province,city:this.city,area:this.area,street:this.street,
-				"is_default":this.isDefault,address:this.detailed}
-				
-				if(!this.name){
-					uni.showToast({title:'请输入收件人姓名',icon:'none'});
-					return ;
-				}
-				if(!this.tel){
-					uni.showToast({title:'请输入收件人电话号码',icon:'none'});
-					return ;
-				}
-				if(!this.detailed){
-					uni.showToast({title:'请输入收件人详细地址',icon:'none'});
-					return ;
-				}
-				
-				// uni.showLoading({
-				// 	title:'正在提交'
-				// })
-				//实际应用中请提交ajax,模板定时器模拟提交效果
-			 uni.request({
-			 	url:this.config.url+"address/edit",
-				method:"post",
-				data:data,
-				success:(res)=>{
-					console.log(res)
-					if(res.data.code==1){
-						 uni.showLoading({
-							title:'保存成功'
-						})
-						setTimeout(function() {
-							uni.hideLoading()
-						}, 500);
+			init(pid,level){
+				// 获取
+				uni.request({
+					url: this.config.url+'area',
+					data: {
+						pid:pid,
+						token:this.token,
+						level:level
+					},
+					method: 'POST',
+					success: (res) => {
+						console.log(res)
+						if(this.citynum==0){
+							this.city_one=res.data.data
+						}else if(this.citynum==1){
+							this.city_two=res.data.data
+						}else if(this.citynum==2){
+							this.city_tree=res.data.data
+						}else if(this.citynum==4){
+							this.city_four==res.data.data;
+						}
+					},
+				})
+			},
+			//获取省份数组
+			getSiteData: function() {
+				var that = this;
+				uni.request({
+					url: this.config.url + "area",
+					method: "post",
+					data: {
+						token: this.token,
+						pid: 0,
+						level: 1
+					},
+					success: res => {
+						console.log(res);
+						var chinaData = res.data.data;
+						this.chinaData = chinaData;
+						var sheng = []; //  设置省数组
+						
+						this.sheng=res.data.data
+						console.log(this.sheng)
+						if(this.sheng.length>0){
+							
+							this.map=true;
+						}
+						//that.getCity(); // 得到市
 					}
-				}
-			 })
-				
-				
-			}
+				})
+			},
+		
+
+
+
+
+			// 			save() {
+			// 				console.log(this.tel, this.detailed)
+			// 				let data = {
+			// 					"name": this.name,
+			// 					"phone": this.tel,
+			// 					id: this.id,
+			// 					token: this.token,
+			// 					province: this.province,
+			// 					city: this.city,
+			// 					area: this.area,
+			// 					street: this.street,
+			// 					"is_default": this.isDefault,
+			// 					address: this.detailed
+			// 				}
+			// 
+			// 				if (!this.name) {
+			// 					uni.showToast({
+			// 						title: '请输入收件人姓名',
+			// 						icon: 'none'
+			// 					});
+			// 					return;
+			// 				}
+			// 				if (!this.tel) {
+			// 					uni.showToast({
+			// 						title: '请输入收件人电话号码',
+			// 						icon: 'none'
+			// 					});
+			// 					return;
+			// 				}
+			// 				if (!this.detailed) {
+			// 					uni.showToast({
+			// 						title: '请输入收件人详细地址',
+			// 						icon: 'none'
+			// 					});
+			// 					return;
+			// 				}
+			// 
+			// 				// uni.showLoading({
+			// 				// 	title:'正在提交'
+			// 				// })
+			// 				//实际应用中请提交ajax,模板定时器模拟提交效果
+			// 				uni.request({
+			// 					url: this.config.url + "address/edit",
+			// 					method: "post",
+			// 					data: data,
+			// 					success: (res) => {
+			// 						console.log(res)
+			// 						if (res.data.code == 1) {
+			// 							uni.showLoading({
+			// 								title: '保存成功'
+			// 							})
+			// 							setTimeout(function() {
+			// 								uni.hideLoading()
+			// 							}, 500)
+			// 						}
+			// 					}
+			// 				})
+			// 
+			// 
+			// 			}
 		},
-		onLoad(e) {
+		onLoad(option) {
+			//this.getSiteData()
 			//获取传递过来的参数
-			console.log(JSON.parse(e.type))
-			
-			this.region=JSON.parse(e.type)
-		   this.name=this.region.name;
-		   this.tel=this.region.phone;
-		   this.detailed=this.region.address;
-			this.id=this.region.id;
-			this.province=this.region.province;
-			this.city=this.region.city;
-			this.area=this.region.area;
-			this.street=this.region.street;
+			console.log(option)
+			// if (e.type) {
+			// 	this.region = JSON.parse(e.type)
+			// 	this.name = this.region.name;
+			// 	this.tel = this.region.phone;
+			// 	this.detailed = this.region.address;
+			// 	this.id = this.region.id;
+			// 	this.province = this.region.province;
+			// 	this.city = this.region.city;
+			// 	this.area = this.region.area;
+			// 	this.street = this.region.street;
+			// }
+
+
 		},
-		onBackPress() {
-			if (this.$refs.mpvueCityPicker.showPicker) {
-				this.$refs.mpvueCityPicker.pickerCancel();
-				return true;
-			}
-		},
-		onUnload() {
-			if (this.$refs.mpvueCityPicker.showPicker) {
-				this.$refs.mpvueCityPicker.pickerCancel()
-			}
+		mounted(){
+			//加载默认地址
+			this.address=this.province+"-"+this.city+"-"+this.area;
+			this.street=this.street;
 		}
-	};
+
+	}
 </script>
 <style lang="scss">
-
-.save{
-		view{
+	.save {
+		view {
 			display: flex;
 		}
+
 		position: fixed;
 		bottom: 60upx;
 		width: 100%;
@@ -190,98 +371,245 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		.btn{
-			
+
+		.btn {
+
 			width: 90%;
 			height: 80upx;
-			
-			background:rgba(20,204,33,1);
+
+			background: rgba(20, 204, 33, 1);
 
 			color: #fff;
 			justify-content: center;
 			align-items: center;
-			.icon{
+
+			.icon {
 				height: 80upx;
 				color: #fff;
 				font-size: 30upx;
 				justify-content: center;
 				align-items: center;
 			}
+
 			font-size: 30upx;
 		}
 	}
-	.content{
+
+	.content {
 		display: flex;
 		flex-wrap: wrap;
-		background:white;
-		view{
+		background: white;
+
+		view {
 			display: flex;
 		}
-		.add-border{
-			width:100%;
-			height:0;
-			border-bottom: 20upx solid rgba(247,247,247,1);
+
+		.add-border {
+			width: 100%;
+			height: 0;
+			border-bottom: 20upx solid rgba(247, 247, 247, 1);
 		}
-		.row{
+
+		.row {
 			width: 96%;
 			display: flex;
-			
+
 			margin: 0 2%;
 			border-top: solid 1upx #eee;
-			.nominal{
+
+			.nominal {
 				width: 30%;
 				height: 120upx;
 				font-weight: 200;
 				font-size: 30upx;
 				align-items: center;
 			}
-			.input{
-				
-				
+
+			.input {
+
+
 				align-items: center;
 				font-size: 30upx;
-				&.switch{
+
+				&.switch {
 					justify-content: flex-end;
 				}
-				.textarea{
-					
+
+				.textarea {
+
 					min-height: 120upx;
-					height:360upx;
+					height: 360upx;
 				}
 			}
-			
+
 		}
-		.last-row{
+
+		.last-row {
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
-			padding:20upx 0;
-			
-		}
-	.detail-add{
-		display: flex;
-		flex-direction: column;
-		
-		.nominal{
-			height:60upx;
-			display: flex;
-			
-			align-items: center
-		}
-		.add-content{
-			
-			display: flex;
-			height:100upx;
-			textarea{
-				display: inline-block;
-				
-				width:100%;
-				}
+			padding: 20upx 0;
+
 		}
 
-		
+		.detail-add {
+			display: flex;
+			flex-direction: column;
+
+			.nominal {
+				height: 60upx;
+				display: flex;
+
+				align-items: center
+			}
+
+			.add-content {
+
+				display: flex;
+				height: 100upx;
+
+				textarea {
+					display: inline-block;
+
+					width: 100%;
+				}
+			}
+
+
+		}
+
+	}
+	.map{
+		position: fixed;
+		left:0;
+		top:0;
+		width:100vw;
+		height:100vh;
+		background:rgba(0,0,0,0.4);
+		z-index:100000;
+		.mask{
+			width:100%;
+			height:360upx;
+			background:white;
+			padding:30upx 0;
+			position: absolute;
+			left:0;
+			bottom:0;
+			overflow: auto;
+			.address{
+				
+				height:80upx;
+				border-bottom:1upx solid #ccc;
+				border-top:1upx solid #ccc;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				
+			}
+		}
 	}
 	
-}
+	 //地址选出框
+	 .pickbg{
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0,0,0,0.5);
+		z-index: 98;
+	}
+	.btn_c{
+		position: fixed;
+		bottom:660upx;
+		left: 0;
+		width:90%;
+		height: 40upx;
+		padding:20upx 5%;
+		background: #fff;
+		z-index: 99;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.picker_w{
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height:600upx;
+		background: #fff;
+		z-index: 99;
+		padding:30upx 0;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+	}
+	.li_one,.li_two,.li_three{
+		height:600upx;
+		width: 33%;
+		padding: 0 20upx;
+		overflow-y: auto;
+		text-align: center;
+	}
+	.sign{
+		background: #C49569;
+		font-size: 28upx;
+		color: #fff;
+		padding:8upx 24upx;
+		border-radius: 10upx;
+	}
+	.active{
+		color:#C49569;
+	}
+	.li_i{
+		font-size: 28upx;
+		padding: 20upx;
+	}
+	page {
+		background: #eee;
+	}
+
+	.page {
+		padding-top: 20upx;
+		padding-bottom: 150upx;
+	}
+
+	.ul {
+		background: #fff;
+		padding: 0 30upx;
+	}
+	.li{
+		display: flex;
+		flex-direction: row;
+		align-content: center;
+		align-items: center;
+		justify-content: flex-start;
+		padding: 30upx 0;
+		border-bottom: solid 1upx #ECECEC;
+	}
+	.li:last-child{
+		border: none;
+	}
+	.txt{
+		font-size: 16px;
+		color: #333;
+		flex: 0 0 30%;
+	}
+	.li input{
+		flex: 0 0 70%;
+	}
+	.sign_btn{
+		height:90upx;
+		background:#C49569;
+		border-radius:10upx;
+		color: #fff;
+		font-size: 16px;
+		margin:100upx 30upx 30upx 30upx;
+		text-align: center;
+		line-height: 90upx;
+	}
 	
 </style>

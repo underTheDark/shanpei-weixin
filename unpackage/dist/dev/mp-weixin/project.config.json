@@ -1,4 +1,7 @@
 {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
 	"description": "项目配置文件。",
 	"packOptions": {
 		"ignore": []
@@ -24,13 +27,59 @@
 			"current": -1,
 			"list": []
 		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
 		"game": {
 			"current": -1,
 			"list": []
 		},
 		"miniprogram": {
-			"current": -1,
-			"list": []
+			"current": 0,
+			"list": [
+				{
+					"id": -1,
+					"name": "123",
+					"pathName": "pages/user/address/edit/edit",
+					"scene": null
+				}
+			]
 		}
 	}
+=======
+>>>>>>> b4d2f6febcf334e2c50e5fb6674fcef0120e629c
+  "description": "项目配置文件。",
+  "packOptions": {
+    "ignore": []
+  },
+  "setting": {
+    "urlCheck": true
+  },
+  "compileType": "miniprogram",
+  "libVersion": "2.7.0",
+  "appid": "touristappid",
+  "projectname": "商城模板",
+  "condition": {
+    "search": {
+      "current": -1,
+      "list": []
+    },
+    "conversation": {
+      "current": -1,
+      "list": []
+    },
+    "game": {
+      "current": -1,
+      "list": []
+    },
+    "miniprogram": {
+      "current": -1,
+      "list": []
+    }
+  }
+<<<<<<< HEAD
+=======
+>>>>>>> d59aff80761a48719a890a29f1ba7dca7fa99c11
+>>>>>>> b4d2f6febcf334e2c50e5fb6674fcef0120e629c
 }

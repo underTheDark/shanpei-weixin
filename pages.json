@@ -5,13 +5,30 @@
 		}
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+<<<<<<< HEAD
+        
+=======
 
+<<<<<<< HEAD
+>>>>>>> 74844b26c6faa20a033c73c539753708e9a95e12
 		{
-			"path": "pages/author/author",
-			"style": {}
+			"path": "pages/user/address/edit/edit",
+			"style": {
+				"navigationBarBackgroundColor": "#ffffff",
+				"navigationBarTitleText": "编辑收件人地址",
+				"backgroundColorTop": "#ffffff",
+				"backgroundColorBottom": "#ffffff"
+			}
 		},
-
 		{
+=======
+		
+		
+
+	   
+		{    
+
+>>>>>>> d59aff80761a48719a890a29f1ba7dca7fa99c11
 			"path": "pages/tabBar/home",
 			"style": {
 				"navigationBarTextStyle": "black",
@@ -24,6 +41,10 @@
 				}
 			}
 		},
+
+
+
+
 		{
 			"path": "pages/tabBar/category",
 			"style": {
@@ -72,7 +93,7 @@
 				}
 			}
 		},
-		
+
 
 		{
 			"path": "pages/order/confirmation",
@@ -119,7 +140,7 @@
 				"backgroundColorBottom": "#ffffff"
 			}
 		},
-		
+
 		{
 			"path": "pages/msg/msg",
 			"style": {
@@ -150,6 +171,10 @@
 					"bounce": "none"
 				}
 			}
+		},
+		{
+			"path": "pages/author/author",
+			"style": {}
 		},
 		{
 			"path": "pages/user/keep/sayFeel/sayFeel",
@@ -193,15 +218,8 @@
 					"bounce": "none"
 				}
 			}
-		}, {
-			"path": "pages/user/address/edit/edit",
-			"style": {
-				"navigationBarBackgroundColor": "#ffffff",
-				"navigationBarTitleText": "编辑收件人地址",
-				"backgroundColorTop": "#ffffff",
-				"backgroundColorBottom": "#ffffff"
-			}
-		}, {
+		},
+		{
 			"path": "pages/user/address/address",
 			"style": {
 				"navigationBarBackgroundColor": "#ffffff",
@@ -210,6 +228,7 @@
 				"backgroundColorBottom": "#ffffff"
 			}
 		},
+
 		{
 			"path": "pages/sendType/sendType",
 			"style": {
@@ -219,7 +238,7 @@
 				"backgroundColorBottom": "#ffffff"
 			}
 		},
-        {
+		{
 			"path": "pages/goods/ratings/ratings",
 			"style": {
 				"navigationBarTitleText": "商品评论",
@@ -278,6 +297,10 @@
 
 
 
+		, {
+			"path": "pages/getphone/getphone",
+			"style": {}
+		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

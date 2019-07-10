@@ -1,6 +1,6 @@
 <template>
-	<view>
-		<!-- #ifdef MP-WEIXIN -->
+	<view class="author">
+		
 		<view v-if="isCanUse">
 			<view>
 				<view class='header'>
@@ -8,17 +8,32 @@
 				</view>
 				<view class='content'>
 					<view>申请获取以下权限</view>
-					<text>获得你的公开信息(昵称，头像、地区等)</text>
+					<text>
+					 {{getphone==1 ? "获得你的公开信息(昵称，头像、地区,等)" : getphone==2?"请填写要绑定的手机号":""}}
+					</text>
 				</view>
-
-				<button class='bottom' type='primary' open-type="getUserInfo" withCredentials="true" lang="zh_CN" @getuserinfo="wxGetUserInfo">
+                <button v-show="getphone==2" type='primary' open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">授权确认</button>
+                
+				<button v-show="getphone==1" class='bottom' type='primary' open-type="getUserInfo" withCredentials="true" lang="zh_CN" @getuserinfo="wxGetUserInfo">
 					授权登录
 				</button>
 				
 
 			</view>
 		</view>
-		<!-- #endif -->
+		
+		 <view class="writePhone" v-if="writePhone">
+		    <view class="mask"></view>
+			<view class="getphone">
+				<text>请输入绑定手机号</text>
+				<input type="text" />
+				<view class="btns">
+					<text class="cancel" @click="cancel">取消</text>
+					<text class="confim" @tap="confim">确认</text>
+				</view>
+			</view>
+		</view>
+		
 	</view>
 </template>
 
@@ -30,19 +45,25 @@
 				OpenId: '',
 				nickName: null,
 				avatarUrl: null,
-				isCanUse: uni.getStorageSync('isCanUse') || true //默认为true
+				isCanUse: uni.getStorageSync('isCanUse') || true ,//默认为true
+			    getphone:"1",
+				writePhone:false
 			};
 		},
 		methods: {
 			//第一授权获取用户信息===》按钮触发
 			wxGetUserInfo(detail) {
+<<<<<<< HEAD
 				console.log("phone",detail);
 				wx
+=======
+				//console.log("phone",detail)
+>>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
 				let _this = this;
 				uni.getUserInfo({
 					provider: 'weixin',
 					success: function(infoRes) {
-					   console.log("phon",infoRes)
+					  // console.log("phon",infoRes)
 						_this.nickName = infoRes.userInfo.nickName; //昵称
 						_this.avatarUrl = infoRes.userInfo.avatarUrl; //头像
 							
@@ -54,9 +75,29 @@
 					fail(res) {}
 				});
 			},
+<<<<<<< HEAD
    
 
+=======
+>>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
    
+             getPhoneNumber (e) {
+            	  var _this=this;
+            	  uni.getStorage({
+            	  	  key:"sessionkey",
+            		  success:function(res){
+            			  
+            		  }
+            	  })
+            		   
+               if (e.detail.errMsg == 'getPhoneNumber:fail user deny') {    
+                  //  console.log('用户拒绝提供手机号');  
+                } else {  
+            		_this.writePhone=true;
+                    
+                }
+               
+            },
       
 			//登录
 			login() {
@@ -77,12 +118,12 @@
 							uni.getUserInfo({
 								provider: 'weixin',
 								success: function(infoRes) {
-									console.log(infoRes)
+									//console.log(infoRes)
 									//获取用户信息后向调用信息更新方法
 									let nickName = infoRes.userInfo.nickName; //昵称
 									let avatarUrl = infoRes.userInfo.avatarUrl; //头像
 									
-									_this.updateUserInfo(); //调用更新信息方法
+									//_this.updateUserInfo(); //调用更新信息方法
 								}
 							});
 						}
@@ -96,8 +137,13 @@
 							method: 'POST',
 
 							success: (res) => {
-								//console.log(res)
+								// console.log(res)
 								_this.OpenId=res.data.data.openid;
+								_this.SessionKey=res.data.data.session_key;
+								uni.setStorage({
+									key:"sessionkey",
+									data:_this.SessionKey
+								})
 								//openId、或SessionKdy存储//隐藏loading
 								uni.hideLoading();
 							}
@@ -128,11 +174,19 @@
 									console.log("用户信息保存成功")
 								}
 							})
+<<<<<<< HEAD
 			                uni.navigateTo({
 			                	
 			                
 			                    url: '/pages/getphone/getphone'
 			                });
+=======
+							_this.getphone=2;
+			                // uni.navigateTo({
+			                // 
+			                //     url: '/pages/getphone/getphone'
+			                // });
+>>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
 			            }
 			        }
 			       
@@ -146,13 +200,19 @@
 </script>
 
 <style lang="scss">
+	.author{
+		position: relative;
+		width:100%;
+		height:100vh;
+		box-sizing: border-box;
+	}
 	.header {
 		margin: 90rpx 0 90rpx 50rpx;
 		border-bottom: 1px solid #ccc;
 		text-align: center;
 		width: 650rpx;
 		height: 300rpx;
-		line-height: 450rpx;
+		line-height: 300rpx;
 	}
 
 	.header image {
@@ -175,5 +235,50 @@
 		border-radius: 80rpx;
 		margin: 70rpx 50rpx;
 		font-size: 35rpx;
+	}
+	
+   .writePhone{
+		width:100vw;
+		height:100vh;
+	    display: flex;
+	    align-content: center;
+	   justify-content: center;
+	   position: absolute;
+	   left:0;
+	   top:0;
+	   background:rgba(0,0,0,0.4);
+	   z-index:10000;
+	}
+	.getPhone{
+		     width:240upx;
+			 height:240upx;
+	         background: white;
+	         padding:30upx;
+			 display: flex;
+			 justify-content: center;
+			 align-items: center;
+			 box-shadow: 0 5upx 10upx #ccc;
+			 position:absolute;
+			 left:50%;
+			 top:50%;
+			 z-index:100000;
+	}
+	// .mask{
+	// 	width:100%;
+	// 	height:100%;
+	// 	
+	// }
+	.btns{
+		margin-top:40upx;
+		display: flex;
+		justify-content: space-between;
+		width:100%;
+	}
+	.btns .cancel,.confim{
+		width:50%;
+		height:40upx;
+		display: flex;
+		align-items: center;
+		justify-content: cneter;
 	}
 </style>

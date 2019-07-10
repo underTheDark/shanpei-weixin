@@ -1,4 +1,20 @@
 <import src="/components/uni-swipe-action/uni-swipe-action.vue.wxml" />
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<import src="/components/uni-load-more/uni-load-more.vue.wxml" />
+<import src="/components/uni-number-box/uni-number-box.vue.wxml" />
+<import src="/components/uni-rate/uni-rate.vue.wxml" />
+<import src="/components/uni-steps/uni-steps.vue.wxml" />
+<import src="/components/mpvue-citypicker/mpvueCityPicker.vue.wxml" />
+<import src="/common/slots.wxml" />
+<import src="/components/uni-icon/uni-icon.vue.wxml" />
+>>>>>>> b4d2f6febcf334e2c50e5fb6674fcef0120e629c
+>>>>>>> 74844b26c6faa20a033c73c539753708e9a95e12
+>>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
 
 <template name="M1436f329-default-1436f329-0-+index"><image src="{{row.logo}}" class="_image M1436f329"></image><view class="_view M1436f329 info"><view class="_view M1436f329 title">{{row.title}}</view><view class="_view M1436f329 evaluate"><view class="_view M1436f329 evaluate-num">{{row.number_sales}}已购买</view><view class="_view M1436f329 evaluate-good">{{ row.good_percent}}%好评</view></view><view class="_view M1436f329 price-compare"><view class="_view M1436f329 price">￥{{row.price}}</view><view class="_view M1436f329 slogan">￥{{row.market_price}}</view></view></view></template>
 
