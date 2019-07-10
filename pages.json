@@ -5,12 +5,10 @@
 		}
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-<<<<<<< HEAD
-        
-=======
-
-<<<<<<< HEAD
->>>>>>> 74844b26c6faa20a033c73c539753708e9a95e12
+        {
+        	"path": "pages/author/author",
+        	"style": {}
+        },
 		{
 			"path": "pages/user/address/edit/edit",
 			"style": {
@@ -20,15 +18,14 @@
 				"backgroundColorBottom": "#ffffff"
 			}
 		},
-		{
-=======
+
 		
 		
 
 	   
 		{    
 
->>>>>>> d59aff80761a48719a890a29f1ba7dca7fa99c11
+
 			"path": "pages/tabBar/home",
 			"style": {
 				"navigationBarTextStyle": "black",
@@ -172,10 +169,7 @@
 				}
 			}
 		},
-		{
-			"path": "pages/author/author",
-			"style": {}
-		},
+		
 		{
 			"path": "pages/user/keep/sayFeel/sayFeel",
 			"style": {
@@ -294,13 +288,6 @@
 			"style": {}
 		}
 		
-
-
-
-		, {
-			"path": "pages/getphone/getphone",
-			"style": {}
-		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

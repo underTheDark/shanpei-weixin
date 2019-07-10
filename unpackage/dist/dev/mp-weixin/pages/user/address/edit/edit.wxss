@@ -181,42 +181,6 @@
         display: inline-block;
         width: 100%;
 }
-.map {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 100000;
-}
-.map .mask {
-    width: 100%;
-    height: 360rpx;
-    background: white;
-    padding: 30rpx 0;
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    overflow: auto;
-}
-.map .mask .address {
-      height: 80rpx;
-      border-bottom: 1rpx solid #ccc;
-      border-top: 1rpx solid #ccc;
-      display: -webkit-box;
-      display: -webkit-flex;
-      display: -ms-flexbox;
-      display: flex;
-      -webkit-box-pack: center;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-box-align: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
-}
 .pickbg {
   position: fixed;
   bottom: 0;
@@ -284,6 +248,11 @@
   height: 600rpx;
   width: 33%;
   padding: 0 20rpx;
+  overflow-y: auto;
+  text-align: center;
+}
+.li_four {
+  height: 600rpx;
   overflow-y: auto;
   text-align: center;
 }

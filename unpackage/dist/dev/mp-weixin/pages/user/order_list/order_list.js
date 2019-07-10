@@ -344,7 +344,6 @@ var render = function() {
                 "view",
                 { staticClass: "btns" },
                 [
-<<<<<<< HEAD
                   _c(
                     "block",
                     {
@@ -507,22 +506,6 @@ var render = function() {
                           on: {
                             click: function($event) {
                               _vm.deleteOrder()
-=======
-                  row.type == "unpaid"
-                    ? _c("block", [
-                        _c("view", { staticClass: "default" }, [
-                          _vm._v("取消订单")
-                        ]),
-                        _c(
-                          "view",
-                          {
-                            staticClass: "pay",
-                            attrs: { eventid: "162bb8f3-1-" + index },
-                            on: {
-                              tap: function($event) {
-                                _vm.toPayment(row)
-                              }
->>>>>>> d59aff80761a48719a890a29f1ba7dca7fa99c11
                             }
                           }
                         },

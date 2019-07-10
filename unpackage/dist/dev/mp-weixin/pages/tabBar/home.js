@@ -1,47 +1,77 @@
 (global["webpackJsonp"] = global["webpackJsonp"] || []).push([["pages/tabBar/home"],{
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
 /***/ "./node_modules/babel-loader/lib/index.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js?!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js?!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/vue-loader/lib/index.js?!C:\\Users\\惠普2\\Desktop\\shanpei-weixin\\shanpei-weixin\\components\\uni-load-more\\uni-load-more.vue?vue&type=script&lang=js&":
 /*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--12-1!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--18-0!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/vue-loader/lib??vue-loader-options!C:/Users/惠普2/Desktop/shanpei-weixin/shanpei-weixin/components/uni-load-more/uni-load-more.vue?vue&type=script&lang=js& ***!
   \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-<<<<<<< HEAD
-=======
-=======
-/***/ "./node_modules/babel-loader/lib/index.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js?!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js?!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/vue-loader/lib/index.js?!C:\\Users\\惠普2\\Desktop\\shanpei-weixin\\shanpei-weixin\\pages\\tabBar\\home.vue?vue&type=script&lang=js&":
-/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--12-1!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--18-0!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/vue-loader/lib??vue-loader-options!C:/Users/惠普2/Desktop/shanpei-weixin/shanpei-weixin/pages/tabBar/home.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
->>>>>>> b4d2f6febcf334e2c50e5fb6674fcef0120e629c
->>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-throw new Error("Module build failed (from ./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js):\nSyntaxError: unknown: Unexpected token (193:26)\n\n  191 | \t\t// 首页为你推荐\n  192 | \n> 193 | \tcomponents: {uniLoadMore},\n      | \t                         ^\n  194 | \tmounted() {\n  195 | \t\t//系统消息\n  196 | \t\tuni.request({\n    at _class.raise (D:\\搜狗高速下载\\HBuilderX.1.1.0.20181030\\HBuilderX\\plugins\\uniapp-cli\\node_modules\\@babel\\parser\\lib\\index.js:4051:15)\n    at _class.unexpected (D:\\搜狗高速下载\\HBuilderX.1.1.0.20181030\\HBuilderX\\plugins\\uniapp-cli\\node_modules\\@babel\\parser\\lib\\index.js:5382:16)\n    at _class.parseExprAtom (D:\\搜狗高速下载\\HBuilderX.1.1.0.20181030\\HBuilderX\\plugins\\uniapp-cli\\node_modules\\@babel\\parser\\lib\\index.js:6541:20)\n    at _class.parseExprSubscripts (D:\\搜狗高速下载\\HBuilderX.1.1.0.20181030\\HBuilderX\\plugins\\uniapp-cli\\node_modules\\@babel\\parser\\lib\\index.js:6104:21)\n    at _class.parseMaybeUnary (D:\\搜狗高速下载\\HBuilderX.1.1.0.20181030\\HBuilderX\\plugins\\uniapp-cli\\node_modules\\@babel\\parser\\lib\\index.js:6083:21)\n    at _class.parseMaybeUnary (D:\\搜狗高速下载\\HBuilderX.1.1.0.20181030\\HBuilderX\\plugins\\uniapp-cli\\node_modules\\@babel\\parser\\lib\\index.js:10675:54)\n    at _class.parseExprOps (D:\\搜狗高速下载\\HBuilderX.1.1.0.20181030\\HBuilderX\\plugins\\uniapp-cli\\node_modules\\@babel\\parser\\lib\\index.js:5968:21)\n    at _class.parseMaybeConditional (D:\\搜狗高速下载\\HBuilderX.1.1.0.20181030\\HBuilderX\\plugins\\uniapp-cli\\node_modules\\@babel\\parser\\lib\\index.js:5940:21)\n    at _class.parseMaybeAssign (D:\\搜狗高速下载\\HBuilderX.1.1.0.20181030\\HBuilderX\\plugins\\uniapp-cli\\node_modules\\@babel\\parser\\lib\\index.js:5887:21)\n    at _class.parseMaybeAssign (D:\\搜狗高速下载\\HBuilderX.1.1.0.20181030\\HBuilderX\\plugins\\uniapp-cli\\node_modules\\@babel\\parser\\lib\\index.js:10631:87)\n    at _class.parseExpression (D:\\搜狗高速下载\\HBuilderX.1.1.0.20181030\\HBuilderX\\plugins\\uniapp-cli\\node_modules\\@babel\\parser\\lib\\index.js:5840:21)\n    at _class.parseStatementContent (D:\\搜狗高速下载\\HBuilderX.1.1.0.20181030\\HBuilderX\\plugins\\uniapp-cli\\node_modules\\@babel\\parser\\lib\\index.js:7619:21)\n    at _class.parseStatementContent (D:\\搜狗高速下载\\HBuilderX.1.1.0.20181030\\HBuilderX\\plugins\\uniapp-cli\\node_modules\\@babel\\parser\\lib\\index.js:10378:58)\n    at _class.parseStatement (D:\\搜狗高速下载\\HBuilderX.1.1.0.20181030\\HBuilderX\\plugins\\uniapp-cli\\node_modules\\@babel\\parser\\lib\\index.js:7505:17)\n    at _class.parseBlockOrModuleBlockBody (D:\\搜狗高速下载\\HBuilderX.1.1.0.20181030\\HBuilderX\\plugins\\uniapp-cli\\node_modules\\@babel\\parser\\lib\\index.js:8073:23)\n    at _class.parseBlockBody (D:\\搜狗高速下载\\HBuilderX.1.1.0.20181030\\HBuilderX\\plugins\\uniapp-cli\\node_modules\\@babel\\parser\\lib\\index.js:8060:10)");
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default2 =
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{
+  name: "uni-load-more",
+  props: {
+    status: {
+      //上拉的状态：more-loading前；loading-loading中；noMore-没有更多了
+      type: String,
+      default: 'more' },
+
+    showIcon: {
+      type: Boolean,
+      default: true },
+
+    color: {
+      type: String,
+      default: "#777777" },
+
+    contentText: {
+      type: Object,
+      default: function _default() {
+        return {
+          contentdown: "上拉显示更多",
+          contentrefresh: "正在加载...",
+          contentnomore: "没有更多数据了" };
+
+      } } },
+
+
+  data: function data() {
+    return {};
+  } };exports.default = _default2;
 
 /***/ }),
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
 /***/ "./node_modules/babel-loader/lib/index.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js?!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js?!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/vue-loader/lib/index.js?!C:\\Users\\惠普2\\Desktop\\shanpei-weixin\\shanpei-weixin\\pages\\tabBar\\home.vue?vue&type=script&lang=js&":
 /*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--12-1!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--18-0!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/vue-loader/lib??vue-loader-options!C:/Users/惠普2/Desktop/shanpei-weixin/shanpei-weixin/pages/tabBar/home.vue?vue&type=script&lang=js& ***!
   \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-<<<<<<< HEAD
-=======
-=======
-<<<<<<< HEAD
-/***/ "./node_modules/babel-loader/lib/index.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js?!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js?!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/vue-loader/lib/index.js?!C:\\Users\\Administrator\\Desktop\\shanpei-weixin\\pages\\tabBar\\home.vue?vue&type=script&lang=js&":
-/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--12-1!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--18-0!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/vue-loader/lib??vue-loader-options!C:/Users/Administrator/Desktop/shanpei-weixin/pages/tabBar/home.vue?vue&type=script&lang=js& ***!
-  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
->>>>>>> b4d2f6febcf334e2c50e5fb6674fcef0120e629c
->>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -186,14 +216,39 @@ throw new Error("Module build failed (from ./node_modules/@dcloudio/webpack-uni-
 
 
 
+
+
+
+
+
+
+
+
 var _uniLoadMore = _interopRequireDefault(__webpack_require__(/*! @/components/uni-load-more/uni-load-more.vue */ "C:\\Users\\惠普2\\Desktop\\shanpei-weixin\\shanpei-weixin\\components\\uni-load-more\\uni-load-more.vue"));
 
 
 
-var _amapWx = _interopRequireDefault(__webpack_require__(/*! @/common/SDK/amap-wx.js */ "C:\\Users\\惠普2\\Desktop\\shanpei-weixin\\shanpei-weixin\\common\\SDK\\amap-wx.js"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var ttt = 0; //高德SDK
+var _amapWx = _interopRequireDefault(__webpack_require__(/*! @/common/SDK/amap-wx.js */ "C:\\Users\\惠普2\\Desktop\\shanpei-weixin\\shanpei-weixin\\common\\SDK\\amap-wx.js"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var ttt = 0; //高德SDK
 var _default = {
+
   components: { uniLoadMore: _uniLoadMore.default },
   mounted: function mounted() {var _this = this;
+    // 轮播,热销
+    uni.request({
+      url: 'http://shanpei.wsstreet.net/index', //仅为示例，并非真实接口地址。
+      data: {
+        token: this.token },
+
+      method: "post",
+      success: function success(res) {
+        //console.log(res);
+        _this.swiperList = res.data.data.banner;
+        _this.categoryList = res.data.data.cate;
+        _this.hotList = res.data.data.hot;
+        _this.limitList = res.data.data.limit_buy;
+      } });
+
+
     //系统消息
     uni.request({
       url: this.config.url + "member/message",
@@ -211,30 +266,15 @@ var _default = {
         }
       } });
 
-
-    // 轮播,热销
-    uni.request({
-      url: 'http://shanpei.wsstreet.net/index', //仅为示例，并非真实接口地址。
-      data: {
-        token: this.token },
-
-      method: "post",
-      success: function success(res) {
-        console.log("res.data", res.data);
-        _this.swiperList = res.data.data.banner;
-        _this.categoryList = res.data.data.cate;
-        _this.hotList = res.data.data.hot;
-        _this.limitList = res.data.data.limit_buy;
-      } });
-
-
   },
-  data: function data() {
-    return {
+
+  data: function data() {var _ref;
+    return _ref = {
       msg: "", //系统消息显示
       msgList: [], //系统信息列表
       showIcon: false,
       status: "more",
+
       afterHeaderOpacity: 1, //不透明度
       headerPosition: 'fixed',
       headerTop: null,
@@ -254,10 +294,16 @@ var _default = {
       productList: [],
       totalList: [],
       loadingText: '正在加载...',
-      current_page: 0,
+
+      current_page: "",
       total: "",
-      last_page: "1",
-      tishi: false };
+      last_page: "" }, _defineProperty(_ref, "current_page",
+
+    0), _defineProperty(_ref, "total",
+    ""), _defineProperty(_ref, "last_page",
+    "1"), _defineProperty(_ref, "tishi",
+
+    false), _ref;
 
   },
   onPageScroll: function onPageScroll(e) {
@@ -274,11 +320,17 @@ var _default = {
   },
   //上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
   onReachBottom: function onReachBottom() {
+
+
+    this.count++;
+    console.log(count);
+
     // 调用获取推荐列表接口
     // 当前页小于最后一页才调用
     if (this.current_page < this.last_page) {
       this.getRecommendList();
     }
+
   },
   onLoad: function onLoad() {var _this2 = this;
 
@@ -501,28 +553,10 @@ var _default = {
 
 /***/ }),
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-/***/ "./node_modules/mini-css-extract-plugin/dist/loader.js?!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js?!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/lib/loader.js?!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js?!./node_modules/vue-loader/lib/index.js?!C:\\Users\\Administrator\\Desktop\\shanpei-weixin\\pages\\tabBar\\home.vue?vue&type=style&index=0&lang=scss&":
-/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/mini-css-extract-plugin/dist/loader.js??ref--8-oneOf-1-0!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--8-oneOf-1-1!./node_modules/css-loader??ref--8-oneOf-1-2!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--8-oneOf-1-3!./node_modules/sass-loader/lib/loader.js??ref--8-oneOf-1-4!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--8-oneOf-1-5!./node_modules/vue-loader/lib??vue-loader-options!C:/Users/Administrator/Desktop/shanpei-weixin/pages/tabBar/home.vue?vue&type=style&index=0&lang=scss& ***!
-  \*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-=======
->>>>>>> b4d2f6febcf334e2c50e5fb6674fcef0120e629c
->>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
 /***/ "./node_modules/mini-css-extract-plugin/dist/loader.js?!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js?!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/lib/loader.js?!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js?!./node_modules/vue-loader/lib/index.js?!C:\\Users\\惠普2\\Desktop\\shanpei-weixin\\shanpei-weixin\\pages\\tabBar\\home.vue?vue&type=style&index=0&lang=scss&":
 /*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/mini-css-extract-plugin/dist/loader.js??ref--8-oneOf-1-0!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--8-oneOf-1-1!./node_modules/css-loader??ref--8-oneOf-1-2!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--8-oneOf-1-3!./node_modules/sass-loader/lib/loader.js??ref--8-oneOf-1-4!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--8-oneOf-1-5!./node_modules/vue-loader/lib??vue-loader-options!C:/Users/惠普2/Desktop/shanpei-weixin/shanpei-weixin/pages/tabBar/home.vue?vue&type=style&index=0&lang=scss& ***!
   \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
->>>>>>> d59aff80761a48719a890a29f1ba7dca7fa99c11
->>>>>>> b4d2f6febcf334e2c50e5fb6674fcef0120e629c
->>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -530,10 +564,6 @@ var _default = {
 
 /***/ }),
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js?!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/template.js!./node_modules/vue-loader/lib/index.js?!C:\\Users\\惠普2\\Desktop\\shanpei-weixin\\shanpei-weixin\\components\\uni-load-more\\uni-load-more.vue?vue&type=template&id=7985cf95&":
 /*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--17-0!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/template.js!./node_modules/vue-loader/lib??vue-loader-options!C:/Users/惠普2/Desktop/shanpei-weixin/shanpei-weixin/components/uni-load-more/uni-load-more.vue?vue&type=template&id=7985cf95& ***!
@@ -608,11 +638,6 @@ render._withStripped = true
 
 /***/ }),
 
-<<<<<<< HEAD
-=======
-=======
->>>>>>> b4d2f6febcf334e2c50e5fb6674fcef0120e629c
->>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js?!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/template.js!./node_modules/vue-loader/lib/index.js?!C:\\Users\\惠普2\\Desktop\\shanpei-weixin\\shanpei-weixin\\pages\\tabBar\\home.vue?vue&type=template&id=89340614&":
 /*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--17-0!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/template.js!./node_modules/vue-loader/lib??vue-loader-options!C:/Users/惠普2/Desktop/shanpei-weixin/shanpei-weixin/pages/tabBar/home.vue?vue&type=template&id=89340614& ***!
@@ -913,15 +938,7 @@ var render = function() {
         attrs: {
           status: _vm.status,
           showIcon: _vm.showIcon,
-<<<<<<< HEAD
-          mpcomid: "3cd742e8-1"
-=======
-<<<<<<< HEAD
-          mpcomid: "3cd742e8-1"
-=======
           mpcomid: "3cd742e8-2"
->>>>>>> b4d2f6febcf334e2c50e5fb6674fcef0120e629c
->>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
         }
       })
     ],
@@ -962,10 +979,6 @@ render._withStripped = true
 
 /***/ }),
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
 /***/ "C:\\Users\\惠普2\\Desktop\\shanpei-weixin\\shanpei-weixin\\components\\uni-load-more\\uni-load-more.vue":
 /*!*****************************************************************************************************!*\
   !*** C:/Users/惠普2/Desktop/shanpei-weixin/shanpei-weixin/components/uni-load-more/uni-load-more.vue ***!
@@ -1056,11 +1069,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-<<<<<<< HEAD
-=======
-=======
->>>>>>> b4d2f6febcf334e2c50e5fb6674fcef0120e629c
->>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
 /***/ "C:\\Users\\惠普2\\Desktop\\shanpei-weixin\\shanpei-weixin\\main.js?{\"page\":\"pages%2FtabBar%2Fhome\"}":
 /*!***************************************************************************************************!*\
   !*** C:/Users/惠普2/Desktop/shanpei-weixin/shanpei-weixin/main.js?{"page":"pages%2FtabBar%2Fhome"} ***!

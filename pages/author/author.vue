@@ -53,12 +53,8 @@
 		methods: {
 			//第一授权获取用户信息===》按钮触发
 			wxGetUserInfo(detail) {
-<<<<<<< HEAD
-				console.log("phone",detail);
-				wx
-=======
-				//console.log("phone",detail)
->>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
+
+
 				let _this = this;
 				uni.getUserInfo({
 					provider: 'weixin',
@@ -70,16 +66,13 @@
 						try {
 							uni.setStorageSync('isCanUse', false); //记录是否第一次授权  false:表示不是第一次授权
 							_this.updateUserInfo();
+							_this.getphone=2;
 						} catch (e) {}
 					},
 					fail(res) {}
 				});
 			},
-<<<<<<< HEAD
-   
 
-=======
->>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
    
              getPhoneNumber (e) {
             	  var _this=this;
@@ -174,19 +167,7 @@
 									console.log("用户信息保存成功")
 								}
 							})
-<<<<<<< HEAD
-			                uni.navigateTo({
-			                	
-			                
-			                    url: '/pages/getphone/getphone'
-			                });
-=======
-							_this.getphone=2;
-			                // uni.navigateTo({
-			                // 
-			                //     url: '/pages/getphone/getphone'
-			                // });
->>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
+
 			            }
 			        }
 			       
@@ -238,30 +219,46 @@
 	}
 	
    .writePhone{
-		width:100vw;
-		height:100vh;
-	    display: flex;
-	    align-content: center;
-	   justify-content: center;
-	   position: absolute;
-	   left:0;
-	   top:0;
-	   background:rgba(0,0,0,0.4);
-	   z-index:10000;
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
 	}
-	.getPhone{
-		     width:240upx;
-			 height:240upx;
-	         background: white;
-	         padding:30upx;
+	.mask{
+		position:fixed;
+		left:0;
+		top:0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0,0,0,0.5);
+		z-index: 98;
+	}
+	.getphone{
+		 
 			 display: flex;
+			 flex-direction: column;
 			 justify-content: center;
 			 align-items: center;
 			 box-shadow: 0 5upx 10upx #ccc;
-			 position:absolute;
-			 left:50%;
-			 top:50%;
-			 z-index:100000;
+			 position:fixed;
+			 
+			 
+			 z-index:100;
+			 width:60%;
+			 padding:0 10%;
+			 height:300upx;
+			 background:white;
+			 .btns{
+				 display: flex;
+				 justify-content: center;
+				 align-items: center;
+				 .confirm,.cancel{
+					 display: flex;
+					 align-items: center;
+					 width:50%;
+					 justify-content: center;
+				 }
+				 
+			 }
 	}
 	// .mask{
 	// 	width:100%;

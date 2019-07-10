@@ -51,8 +51,6 @@
   margin: 70rpx 50rpx;
   font-size: 35rpx;
 }
-<<<<<<< HEAD
-=======
 .writePhone {
   width: 100vw;
   height: 100vh;
@@ -130,5 +128,4 @@
   height: 50rpx;
   border: 1px solid #ccc;
 }
->>>>>>> 4354f193ba35595d03011d9375adc1f56cf629cc
 

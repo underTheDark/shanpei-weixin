@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/author/author",
     "pages/user/address/edit/edit",
     "pages/tabBar/home",
     "pages/tabBar/category",
@@ -14,7 +15,6 @@
     "pages/msg/msg",
     "pages/msg/chat/chat",
     "pages/user/keep/keep",
-    "pages/author/author",
     "pages/user/keep/sayFeel/sayFeel",
     "pages/user/credit/credit",
     "pages/user/collect/collect",

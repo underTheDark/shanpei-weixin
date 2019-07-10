@@ -155,24 +155,6 @@
 
 		 components: {uniLoadMore},
 		mounted() {
-			
-			
-			
-			
-			
-			//获取地理位置
-			// uni.authorize({
-			// 	scope: 'scope.userLocation',
-			// 	success() {
-			// 		uni.getLocation()
-			// 	}
-			// });
-			uni.getLocation({
-				type: 'wgs84',
-				success: function(res) {
-					console.log(res)
-				}
-			});
 			// 轮播,热销
 			uni.request({
 				url: 'http://shanpei.wsstreet.net/index', //仅为示例，并非真实接口地址。
@@ -188,73 +170,26 @@
 					this.limitList = res.data.data.limit_buy;
 				}
 			});
-			// 首页为你推荐
-
-		components: {uniLoadMore},
-		mounted() {
-			//系统消息
-			uni.request({
-				url:this.config.url+"member/message",
-				method:"POST",
-				data:{
-					token:this.token
-				},
-				success:(res)=>{
-					console.log(res)
-					if(res.data.data.data.length >0){
-						this.msg=true;
-					}
-					if(res.data.code==1){
-						this.msgList=res.data.data.data
-					}
-				}
-			})
 			
-			// 轮播,热销
-
-			uni.request({
-				url: 'http://shanpei.wsstreet.net/index', //仅为示例，并非真实接口地址。
-				data: {
-					token: this.token
-				},
-				method: "post",
-				success: (res) => {
-
-					var len;
-					console.log(res);
-					this.totalList = res.data.data.data;
-					if (this.totalList.length < 10) {
-						len = this.totalList.length;
-					} else {
-						len = 10;
-					}
-					for (var i = 0; i < len; i++) {
-						this.productList.push(this.totalList[i])
-						//	console.log(this.productList)
-					}
-
-					this.current_page = res.data.data.current_page;
-					this.last_page = res.data.data.data.last_page;
-					this.total = res.data.data.data.total;
-				}
-			});
-
+           	//系统消息
+           uni.request({
+           	url:this.config.url+"member/message",
+           	method:"POST",
+           	data:{
+           		token:this.token
+           	},
+           	success:(res)=>{
+           		console.log(res)
+           		if(res.data.data.data.length >0){
+           			this.msg=true;
+           		}
+           		if(res.data.code==1){
+           			this.msgList=res.data.data.data
+           		}
+           	}
+           })
 		},
-		data() {
-			return {
-				showIcon:false,
-				more:"more",
-				count:0,
-
-				    console.log("res.data",res.data);
-					this.swiperList = res.data.data.banner;
-					this.categoryList = res.data.data.cate;
-					this.hotList = res.data.data.hot;
-					this.limitList = res.data.data.limit_buy;
-				}
-			});
-			
-		},
+		
 		data() {
 			return {
 				msg:"", //系统消息显示
@@ -291,7 +226,7 @@
 				last_page: "1",
 
 				tishi: false
-			};
+			}
 		},
 		onPageScroll(e) {
 			//兼容iOS端下拉时顶部漂移

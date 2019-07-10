@@ -248,23 +248,7 @@
           }
         } });
 
-      //本地模拟订单提交UI效果
-      // uni.showLoading({
-      // 	title: '正在提交订单...'
-      // })
-      // setTimeout(() => {
-      // 	uni.setStorage({
-      // 		key: 'paymentOrder',
-      // 		data: paymentOrder,
-      // 		success: () => {
-      // 			uni.hideLoading();
-      // 			uni.redirectTo({
-      // 				url: "../pay/payment/payment?amount=" + this.sumPrice
-      // 			})
-      // 			
-      // 		}
-      // 	})
-      // }, 1000)
+
 
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))

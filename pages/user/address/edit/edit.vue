@@ -95,7 +95,7 @@
 			</view>
 		</view>
 			<!-- 街道地址弹出框 -->
-		<view class="picker_li" v-if="ishow==2">
+		<view class="picker_li" v-if="ishow==3">
 			<view class="pickbg"></view>
 			<view class="btn_c">
 				<view class="qx" @tap="cancel">取消</view>
@@ -189,12 +189,25 @@
 				this.style3=id
 				this.isdisabled = true;
 				this.strId=id;
+				this.citynum=4
+			},
+			showcityfour(id,name){
+				//this.pid=id
+				 //this.init(id)
+				 console.log(id)
+				this.street=name;
+				//this.id3=id
+				this.style4=id
+				this.isdisabled = true;
+				
+				
 			},
 			//获取街道
 			chooseStr(){
+				
+				this.ishow=3;
 				this.init(this.strId,4)
-				this.citynum==4;
-				this.ishow==2;
+				
 			},
 			// 取消
 			cancel(){
@@ -203,7 +216,7 @@
 			//确认
 			sure(){
 				if(this.isdisabled==true){
-					console.log(this.province,this.city)
+					
 					this.ishow=0
 					this.address=this.province+"-"+this.city+"-"+this.area;
 				}else{
@@ -227,6 +240,7 @@
 					method: 'POST',
 					success: (res) => {
 						console.log(res)
+							
 						if(this.citynum==0){
 							this.city_one=res.data.data
 						}else if(this.citynum==1){
@@ -234,42 +248,13 @@
 						}else if(this.citynum==2){
 							this.city_tree=res.data.data
 						}else if(this.citynum==4){
-							this.city_four==res.data.data;
-						}
-					},
-				})
-			},
-			//获取省份数组
-			getSiteData: function() {
-				var that = this;
-				uni.request({
-					url: this.config.url + "area",
-					method: "post",
-					data: {
-						token: this.token,
-						pid: 0,
-						level: 1
-					},
-					success: res => {
-						console.log(res);
-						var chinaData = res.data.data;
-						this.chinaData = chinaData;
-						var sheng = []; //  设置省数组
-						
-						this.sheng=res.data.data
-						console.log(this.sheng)
-						if(this.sheng.length>0){
 							
-							this.map=true;
+						this.city_four=res.data.data;
+							
 						}
-						//that.getCity(); // 得到市
-					}
+					},
 				})
 			},
-		
-
-
-
 
 			// 			save() {
 			// 				console.log(this.tel, this.detailed)
@@ -479,35 +464,7 @@
 		}
 
 	}
-	.map{
-		position: fixed;
-		left:0;
-		top:0;
-		width:100vw;
-		height:100vh;
-		background:rgba(0,0,0,0.4);
-		z-index:100000;
-		.mask{
-			width:100%;
-			height:360upx;
-			background:white;
-			padding:30upx 0;
-			position: absolute;
-			left:0;
-			bottom:0;
-			overflow: auto;
-			.address{
-				
-				height:80upx;
-				border-bottom:1upx solid #ccc;
-				border-top:1upx solid #ccc;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				
-			}
-		}
-	}
+
 	
 	 //地址选出框
 	 .pickbg{
@@ -551,6 +508,12 @@
 		height:600upx;
 		width: 33%;
 		padding: 0 20upx;
+		overflow-y: auto;
+		text-align: center;
+	}
+	.li_four{
+		height:600upx;
+		
 		overflow-y: auto;
 		text-align: center;
 	}

@@ -238,23 +238,7 @@
 						}
 					}
 				})
-				//本地模拟订单提交UI效果
-				// uni.showLoading({
-				// 	title: '正在提交订单...'
-				// })
-				// setTimeout(() => {
-				// 	uni.setStorage({
-				// 		key: 'paymentOrder',
-				// 		data: paymentOrder,
-				// 		success: () => {
-				// 			uni.hideLoading();
-				// 			uni.redirectTo({
-				// 				url: "../pay/payment/payment?amount=" + this.sumPrice
-				// 			})
-				// 			
-				// 		}
-				// 	})
-				// }, 1000)
+		
 
 			}
 
