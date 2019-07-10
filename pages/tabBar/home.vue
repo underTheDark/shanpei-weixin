@@ -16,7 +16,11 @@
 			</view>
 			<!-- 右侧图标按钮 -->
 			<view class="icon-btn">
+
+				<view class="hongdian"></view>
+
 				<view class="hongdian" v-show="msg"></view>
+
 				<view class="icon tongzhi" @tap="toMsg"></view>
 			</view>
 		</view>
@@ -133,7 +137,11 @@
 			</view>
 			<!-- <view class="loading-text" v-show="tishi">{{ loadingText }}</view> -->
 		</view>
+
+		<uni-load-more :status="more" :showIcon="showIcon"></uni-load-more>
+
 		<uni-load-more :status="status" :showIcon="showIcon"></uni-load-more>
+
 	</view>
 </template>
 
@@ -144,6 +152,44 @@
 	//高德SDK
 	import amap from '@/common/SDK/amap-wx.js';
 	export default {
+
+		 components: {uniLoadMore},
+		mounted() {
+			
+			
+			
+			
+			
+			//获取地理位置
+			// uni.authorize({
+			// 	scope: 'scope.userLocation',
+			// 	success() {
+			// 		uni.getLocation()
+			// 	}
+			// });
+			uni.getLocation({
+				type: 'wgs84',
+				success: function(res) {
+					console.log(res)
+				}
+			});
+			// 轮播,热销
+			uni.request({
+				url: 'http://shanpei.wsstreet.net/index', //仅为示例，并非真实接口地址。
+				data: {
+					token: this.token
+				},
+				method: "post",
+				success: (res) => {
+					//console.log(res);
+					this.swiperList = res.data.data.banner;
+					this.categoryList = res.data.data.cate;
+					this.hotList = res.data.data.hot;
+					this.limitList = res.data.data.limit_buy;
+				}
+			});
+			// 首页为你推荐
+
 		components: {uniLoadMore},
 		mounted() {
 			//系统消息
@@ -165,6 +211,7 @@
 			})
 			
 			// 轮播,热销
+
 			uni.request({
 				url: 'http://shanpei.wsstreet.net/index', //仅为示例，并非真实接口地址。
 				data: {
@@ -172,6 +219,33 @@
 				},
 				method: "post",
 				success: (res) => {
+
+					var len;
+					console.log(res);
+					this.totalList = res.data.data.data;
+					if (this.totalList.length < 10) {
+						len = this.totalList.length;
+					} else {
+						len = 10;
+					}
+					for (var i = 0; i < len; i++) {
+						this.productList.push(this.totalList[i])
+						//	console.log(this.productList)
+					}
+
+					this.current_page = res.data.data.current_page;
+					this.last_page = res.data.data.data.last_page;
+					this.total = res.data.data.data.total;
+				}
+			});
+
+		},
+		data() {
+			return {
+				showIcon:false,
+				more:"more",
+				count:0,
+
 				    console.log("res.data",res.data);
 					this.swiperList = res.data.data.banner;
 					this.categoryList = res.data.data.cate;
@@ -187,6 +261,7 @@
 				msgList:[], //系统信息列表
 				showIcon:false,
 				status:"more",
+
 				afterHeaderOpacity: 1, //不透明度
 				headerPosition: 'fixed',
 				headerTop: null,
@@ -206,9 +281,15 @@
 				productList: [],
 				totalList: [],
 				loadingText: '正在加载...',
+
+				current_page: "",
+				total: "",
+				last_page: "",
+
 				current_page: 0,
 				total: "",
 				last_page: "1",
+
 				tishi: false
 			};
 		},
@@ -226,11 +307,17 @@
 		},
 		//上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
 		onReachBottom() {
+
+			
+			this.count++
+			console.log(count)
+
 			// 调用获取推荐列表接口
 			// 当前页小于最后一页才调用
 			if(this.current_page<this.last_page){
 				this.getRecommendList();
 			}
+
 		},
 		onLoad() {
 			// #ifdef APP-PLUS

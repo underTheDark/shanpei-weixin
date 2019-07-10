@@ -167,6 +167,11 @@
 								title: '设置成功',
 								duration: 1000
 							});
+<<<<<<< HEAD
+							// back不重载
+							uni.navigateTo({
+								url:"/pages/order/confirmation?self="+selfAddr
+=======
 							
                         uni.setStorage({
 							key:"address",
@@ -177,7 +182,12 @@
 						})
 							uni.navigateBack({
 								url:"/pages/order/confirmation"
+>>>>>>> b4d2f6febcf334e2c50e5fb6674fcef0120e629c
 							})
+							
+							// uni.navigateBack({
+							// 	url:"/pages/order/confirmation?self="+selfAddr
+							// })
 						}
 					}
 				})

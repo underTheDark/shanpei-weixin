@@ -1,2 +1,2 @@
 <import src="./viewsend.vue.wxml" />
-    <template is="17ce6118" data="{{ ...$root['0'], $root }}"/>
+    <template is="1aba58a7" data="{{ ...$root['0'], $root }}"/>
