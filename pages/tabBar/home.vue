@@ -150,11 +150,19 @@
 	
 	var ttt = 0;
 	//高德SDK
-	import amap from '@/common/SDK/amap-wx.js';
+	import amap from '../../common/SDK/amap-wx.js';
 	export default {
 
 		 components: {uniLoadMore},
 		mounted() {
+			
+			uni.getLocation({
+    type: 'wgs84',
+    success: function (res) {
+        console.log('当前位置的经度：' + res.longitude);
+        console.log('当前位置的纬度：' + res.latitude);
+    }
+});
 			// 轮播,热销
 			uni.request({
 				url: 'http://shanpei.wsstreet.net/index', //仅为示例，并非真实接口地址。
@@ -258,12 +266,12 @@
 			// #ifdef APP-PLUS
 			this.statusHeight = plus.navigator.getStatusbarHeight();
 			// #endif
-			this.amapPlugin = new amap.AMapWX({
+			var amapPlugin = new amap.AMapWX({
 				//高德地图KEY，随时失效，请务必替换为自己的KEY，参考：http://ask.dcloud.net.cn/article/35070
 				key: '5b9b64be2413fc19c26683fcf0de890f'
 			});
 			//定位地址
-			this.amapPlugin.getRegeo({
+			  amapPlugin.getRegeo({
 				success: data => {
 					console.log(data)
 					this.city = data[0].regeocodeData.addressComponent.city.replace(/市/g, ''); //把"市"去掉
@@ -801,7 +809,7 @@
 					margin-left: 5upx;
 					display: flex;
 					flex-direction: column;
-					-webkit-transform: scale(0.8);
+					-webkit-transform: scale(1);
 					transform: scale(0.6);
 
 					text {

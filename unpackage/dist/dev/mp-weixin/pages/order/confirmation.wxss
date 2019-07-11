@@ -116,6 +116,7 @@
     width: 100%;
 }
 .addr .sendgoods-addr view {
+      width: 100%;
       display: -webkit-box;
       display: -webkit-flex;
       display: -ms-flexbox;
@@ -137,10 +138,14 @@
         font-family: PingFang-SC-Regular;
         font-weight: 400;
         color: #666666;
-        margin: 20rpx 0;
+        margin: 10rpx 0;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
 }
 .addr .sendgoods-addr view .getgoods-addr {
-        font-size: 24rpx;
+        font-size: 28rpx;
         font-family: PingFang-SC-Regular;
         font-weight: 400;
         color: #999999;

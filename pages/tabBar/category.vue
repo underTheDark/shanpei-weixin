@@ -59,7 +59,7 @@
 				method: "post",
 				success: (res) => {
 
-					console.log(res);
+					//console.log(res);
 					this.categoryList = res.data.data;
                     this.mingcheng = this.categoryList[0].title; 
 					this.categoryChild=this.categoryList[0].children;
@@ -118,7 +118,7 @@
 			},
 			//分类切换显示
 			showCategory(index,key) {
-				console.log(index,key)
+				//console.log(index,key)
 				this.showCategoryIndex = index;
 				this.first=key;
 				this.mingcheng = this.categoryList[index].title;

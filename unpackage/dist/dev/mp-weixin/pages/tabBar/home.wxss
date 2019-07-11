@@ -574,7 +574,7 @@ page {
         -webkit-flex-direction: column;
             -ms-flex-direction: column;
                 flex-direction: column;
-        -webkit-transform: scale(0.8);
+        -webkit-transform: scale(1);
         -ms-transform: scale(0.6);
             transform: scale(0.6);
 }

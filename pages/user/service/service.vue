@@ -36,6 +36,16 @@
 		},
 		methods: {
 
+		},
+		mounted(){
+			// uni.request({
+			// 	url:this.config.url+"order/service",
+			// 	method:"POST",
+			// 	data:{
+			// 		token:this.token,
+			// 		order_no:
+			// 	}
+			// })
 		}
 	}
 </script>

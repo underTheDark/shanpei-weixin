@@ -1,9 +1,5 @@
 {
-	"permission": {
-		"scope.userLocation": {
-			"desc": "你的位置信息将用于小程序位置接口的效果展示"
-		}
-	},
+	
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
         {
         	"path": "pages/author/author",
@@ -79,7 +75,7 @@
 			"path": "pages/goods/goods",
 			"style": {
 				"navigationBarTitleText": "",
-				"navigationBarBackgroundColor": "#f1f1f1",
+				"navigationBarBackgroundColor": "white",
 				"onReachBottomDistance": 50,
 				"h5": {
 					"titleNView": false
@@ -329,7 +325,11 @@
 				"text": "我的"
 			}
 		]
-	}
-
+	},
+    "permission": {
+    	"scope.userLocation": {
+    		"desc": "你的位置信息将用于小程序位置接口的效果展示"
+    	}
+    }
 
 }

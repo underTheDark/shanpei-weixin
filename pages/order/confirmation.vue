@@ -15,10 +15,11 @@
 			<view class="sendgoods-info">配送信息</view>
 			<view class="sendgoods-addr">
 				<view>
-					<text class="getgoods-name" v-show="getgoods_name">{{addrList.name}}</text>
-					<text class="getgoods-people">{{addrList.username}} &nbsp;&nbsp;&nbsp;{{addrList.phone}}</text>
+					<text class="getgoods-name" v-show="getgoods_name==1">{{addrList.name}}</text>
+					<text class="getgoods-people">{{addrList.username}}{{addrList.name}} &nbsp;&nbsp;&nbsp;{{addrList.phone}}</text>
 					<text class="getgoods-addr">
-						{{addrList.province_name}}{{addrList.city_name}}{{addrList.area_name}}{{addrList.address_name}}{{addrList.street_name}}
+						{{addrList.province_name}}{{addrList.city_name}}{{addrList.area_name}} {{addrList.street_name}} {{addrList.address_name}}
+					    {{addrList.province}}{{addrList.city}}{{addrList.area}}{{addrList.street}}{{addrList.address}}
 					</text>
 				</view>
 				<!-- <image class="right-jiantou" src="../../static/img/category/youce-jiantou.png"></image> -->
@@ -41,7 +42,7 @@
 						<view class="price-number">
 							<view class="price">￥{{buy.price_selling}}</view>
 							<view class="number">
-								{{buy.goods_number}}
+								x{{buy.goods_number}}
 							</view>
 						</view>
 					</view>
@@ -79,13 +80,16 @@
 
 		mounted() {
 			uni.getStorage({
-				key: "address",
+				key: "product",
 				success: (data) => {
 					console.log(data, data.data)
-					this.addrList = JSON.parse(data.data)
-					if (this.addrList.distance) {
-						this.getgoods_name = "1";
-					}
+					// this.addrList = JSON.parse(data.data)
+					// console.log(this.addrList,this.addrList.distance)
+					// if (this.addrList.distance) {
+					// 	this.getgoods_name = 1;
+					// }else{
+					// 	this.getgoods_name=2;
+					// }
 				}
 			})
 			//确认订单信息
@@ -97,7 +101,7 @@
 					goods: this.goods
 				},
 				success: (res) => {
-					//console.log(res)
+					 console.log("sure",res)
 					if (res.data.code == 1) {
 						this.buyList = res.data.data.goods;
 						this.express = res.data.data.express;
@@ -121,10 +125,7 @@
 				number: "", //购买商品总数量
 				goodsPrice: 0.0, //商品合计价格
 				sumPrice: 0.0, //用户付款价格
-				freight: 12.00, //运费
-				note: '', //备注
-				int: 1200, //抵扣积分
-				deduction: 0, //抵扣价格
+				
 				goods: [],
 				express: '',
 				total: "", //商品总价格
@@ -134,16 +135,10 @@
 
 			};
 		},
-		onShow() {
-
-		},
-		onHide() {
-
-		},
 		onLoad(option) {
 			console.log(option)
-
-
+            
+            
 
 			// 获取购买商品信息
 
@@ -153,6 +148,13 @@
 				this.goodsinfo.goods_number = option.num;
 				this.goodsinfo.goods_id = option.id
 				this.goods.push(this.goodsinfo)
+				uni.setStorage({
+					key:"product",
+					data:this.goods,
+					success:function(res){
+						console.log("chneg")
+					}
+				})
 			}
 			
 		},
@@ -328,6 +330,7 @@
 			width: 100%;
 
 			view {
+				width:100%;
 				display: flex;
 				flex-direction: column;
 
@@ -343,11 +346,13 @@
 					font-family: PingFang-SC-Regular;
 					font-weight: 400;
 					color: rgba(102, 102, 102, 1);
-					margin: 20upx 0;
+					margin: 10upx 0;
+					display: flex;
+					
 				}
 
 				.getgoods-addr {
-					font-size: 24upx;
+					font-size: 28upx;
 					font-family: PingFang-SC-Regular;
 					font-weight: 400;
 					color: rgba(153, 153, 153, 1);
