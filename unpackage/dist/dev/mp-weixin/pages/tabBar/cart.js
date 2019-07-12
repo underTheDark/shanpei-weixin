@@ -256,12 +256,13 @@ var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/
 
         return;
       }
+      console.log("tmplist", tmpList);
       uni.setStorage({
         key: 'buylist',
         data: tmpList,
         success: function success() {
           uni.navigateTo({
-            url: '../order/confirmation' });
+            url: '../order/confirmation?iscart=1' });
 
         } });
 

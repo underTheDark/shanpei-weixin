@@ -82,7 +82,7 @@
 				</view>
 			</view>
 		</view>
-		<!-- 规格-模态层弹窗 -->
+		<!-- 规格-   模态层弹窗 -->
 		<view class="popup spec" :class="specClass" @touchmove.stop.prevent="discard" @tap="hideSpec">
 			<!-- 遮罩层 -->
 
@@ -367,10 +367,7 @@
 					// 商品明细
 					this.goods_list=res.data.data.goods_list;
 					
-					// for(var i=0; i<guiList.length;i++){
-					// 	this.colorList=guiList[i];
-					// 	this.sizeList=guiList[i]
-					// }
+				
             	}
             
             });
@@ -465,8 +462,8 @@
 					});
 				}
 			},
-		//	跳转推荐详情
-		 gotui(index){
+		 //	跳转推荐详情
+		  gotui(index){
 			 uni.navigateTo({
 			 	url:"/pages/goods/goods?id="+index
 			 })
@@ -536,9 +533,21 @@
 				if(this.selected_size && this.selected_size.indexOf('undefined')==-1){
 				var goods=JSON.stringify(this.goodsDetail)
 					//跳转到结算面
-					uni.navigateTo({
-						url:"/pages/order/confirmation?id="+this.goodsData.id+'&goodsDetail='+goods+'&price='+this.goodsData.price+'&size='+this.selected_size+'&num='+this.proNum+"&iscart=0"
+				
+				    goods=this.goodsData;
+					goods.iscart=0;
+					goods.goods_spec=this.selected_size;
+					goods.goods_number=this.proNum;
 						
+					uni.setStorage({
+						key:"quick",
+						data:goods,
+						success: () => {
+							
+						}
+					})
+					uni.navigateTo({
+						url:"/pages/order/confirmation"
 					})
 					
 				}else{
@@ -547,35 +556,30 @@
 						icon:'none',
 					})
 				}
-				// 模板
-				/* if (this.selectSpec == null) {
-					return this.showSpec(() => {
-						this.toConfirmation();
-					});
-				}
-				 this.toConfirmation();*/
+
 			},
 			//跳转确认订单页面（模板）
 			toConfirmation() {
-				let tmpList = [];
-				let goods = {
-					id: this.goodsData.id,
-					img: '../../static/img/goods/p1.jpg',
-					name: this.goodsData.name,
-					spec: '规格:' + this.goodsData.spec[this.selectSpec],
-					price: this.goodsData.price,
-					number: this.goodsData.number
-				};
-				tmpList.push(goods);
-				uni.setStorage({
-					key: 'buylist',
-					data: tmpList,
-					success: () => {
-						uni.navigateTo({
-							url: '../order/confirmation'
-						})
-					}
-				})
+				// let tmpList = [];
+				// let goods = {
+				// 	id: this.goodsData.id,
+				// 	title:this.goodsData.title,
+				// 	img: '../../static/img/goods/p1.jpg',
+				// 	name: this.goodsData.name,
+				// 	spec: '规格:' + this.goodsData.spec[this.selectSpec],
+				// 	price: this.goodsData.price,
+				// 	number: this.goodsData.number
+				// };
+				// tmpList.push(goods);
+				// uni.setStorage({
+				// 	key: 'buylist',
+				// 	data: ,
+				// 	success: () => {
+				// 		uni.navigateTo({
+				// 			url: '../order/confirmation'
+				// 		})
+				// 	}
+				// })
 			},
 			//商品评论
 			toRatings() {

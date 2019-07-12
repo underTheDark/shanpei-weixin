@@ -1,22 +1,22 @@
 <template>
 	<view id="address">
 
-		<view class="list">
 
-			<view class="address-title">
-				<view :class="{on:typeClass=='home'}" @tap="switchType('home')">常用地址管理</view>
-				<view :class="{on:typeClass=='self'}" @tap="switchType('self')">常用自提点管理</view>
-			</view>
-		
+
+		<view class="address-title">
+			<view :class="{on:typeClass=='home'}" @tap="switchType('home')">常用地址管理</view>
+			<view :class="{on:typeClass=='self'}" @tap="switchType('self')">常用自提点管理</view>
+		</view>
+		<view class="list">
 			<!-- 常用地址管理 -->
 
-			<view v-show= "subState==1" class="address-msg">
+			<view v-show="subState==1" class="address-msg">
 				<!-- 图标显示 -->
 				<view v-show="homeLen <1" class="noAdd">
 					<view class="img">
 						<image src="../../../static/img/add-position.png"></image>
 					</view>
-				
+
 					<text>赶快去添加收货地址吧！</text>
 				</view>
 				<!-- 地址列表 -->
@@ -51,14 +51,14 @@
 				</view>
 			</view>
 			<!-- 常用自提点管理 -->
-			<view v-show= "subState==2" class="address-msg">
-					<!-- 无地址显示图标 -->
-				
+			<view v-show="subState==2" class="address-msg">
+				<!-- 无地址显示图标 -->
+
 				<view v-show="selfLen <1 " class="noAdd">
 					<view class="img">
 						<image src="../../../static/img/add-position.png"></image>
 					</view>
-				
+
 					<text>赶快去添加收货地址吧！</text>
 				</view>
 				<!-- 地址列表 -->
@@ -113,15 +113,17 @@
 
 			// 自提点
 			uni.request({
+				
 				url: this.config.url + "member/station",
 				method: "post",
 				data: {
 					token: this.token
 				},
 				success: (res) => {
-					console.log(res,res.data.data.length,"zi")
+				console.log(111111111)
 					this.selfList = res.data.data;
-					 this.selfLen=res.data.data.length;
+					this.selfLen = res.data.data.length;
+						console.log(res, res.data.data.length, "zi")
 				}
 
 			})
@@ -133,9 +135,10 @@
 					token: this.token
 				},
 				success: (res) => {
-					console.log(res,res.data.data.length,"wo")
+					console.log(11111111221)
+					console.log(res, res.data.data.length, "wo")
 					this.homeList = res.data.data;
-                    this.homeLen=res.data.data.length;
+					this.homeLen = res.data.data.length;
 				}
 			})
 		},
@@ -151,82 +154,83 @@
 				isSelect: false,
 				homeList: [],
 				selfList: [],
-                homeLen:"",
-				selfLen:""
+				homeLen: "",
+				selfLen: ""
 			};
 		},
 		onLoad(e) {
 			if (e.type == 'select') {
 				this.isSelect = true;
+				console.log(11111)
 			}
 		},
 		onReady() {
 			console.log("ready")
 		},
 		methods: {
-			
+
 			// 删除我的收货地址
-			removeH(row,id){
-				var _this=this;
-				  uni.showModal({
+			removeH(row, id) {
+				var _this = this;
+				uni.showModal({
 					title: '提示',
 					content: '确定要删除收货地址',
-					
+
 					cancelText: '取消',
 					confirmText: '确认',
-					confirmColor:"#14CC21",
+					confirmColor: "#14CC21",
 					success: res => {
-						   var home=_this.homeList;
-						   console.log("hoem",home)
-						   this.homeList=home.splice(row,1)
-							uni.request({
-								url: this.config.url + "address/del",
-								data: {
-									token: this.token,
-									address_id: id,
-								},
-								method: "post",
-								success: (res) => {
-									if(res.data.code==1){
-									
-									}
+						var home = _this.homeList;
+						console.log("hoem", home)
+						this.homeList = home.splice(row, 1)
+						uni.request({
+							url: this.config.url + "address/del",
+							data: {
+								token: this.token,
+								address_id: id,
+							},
+							method: "post",
+							success: (res) => {
+								if (res.data.code == 1) {
+
 								}
-							});
-						
+							}
+						});
+
 					},
-					
+
 				});
 			},
-		
+
 			// 删除自提点
 			removeS(row, id) {
-                uni.showModal({
-                	title: '提示',
-                	content: '确定要删除收货地址',
-                	
-                	cancelText: '取消',
-                	confirmText: '确认',
-                	confirmColor:"#14CC21",
-                	success: res => {
-                		
-                			uni.request({
-                				url: this.config.url + "station/del",
-                				data: {
-                					token: this.token,
-                					address_id: id,
-                				},
-                				method: "post",
-                				success: (res) => {
-                					if(res.data.code==1){
-                						var self=this.selfList;
-                						this.selfList=self.splice(row,1)
-                					}
-                				}
-                			});
-                		
-                	},
-                	
-                });
+				uni.showModal({
+					title: '提示',
+					content: '确定要删除收货地址',
+
+					cancelText: '取消',
+					confirmText: '确认',
+					confirmColor: "#14CC21",
+					success: res => {
+
+						uni.request({
+							url: this.config.url + "station/del",
+							data: {
+								token: this.token,
+								address_id: id,
+							},
+							method: "post",
+							success: (res) => {
+								if (res.data.code == 1) {
+									var self = this.selfList;
+									this.selfList = self.splice(row, 1)
+								}
+							}
+						});
+
+					},
+
+				});
 			},
 
 			switchType(type) {
@@ -234,14 +238,16 @@
 				this.typeClass = type;
 				if (type == "home") {
 					this.subState = 1;
+					console.log("home",this.homeLen)
 
 				} else if (type == "self") {
 					this.subState = 2;
+					console.log("se",this.selfLen)
 				}
 			},
 			edit(row) {
 				var type = JSON.stringify(row)
-                
+
 				uni.navigateTo({
 					url: "/pages/user/address/edit/edit?type=" + type
 				});
@@ -306,9 +312,7 @@
 		}
 	}
 
-	#address {
-		background: white;
-	}
+	
 
 	#address .on {
 
@@ -356,13 +360,31 @@
 	#address {
 		width: 100%;
 		height: 100%;
+		display: flex;
+		flex-direction: column;
+			background: white;
+	}
+
+	.address-title {
+		display: flex;
+		border-bottom: 20upx solid rgba(245, 245, 245, 1);
+		justify-content: space-around;
+		align-items: center;
+
+		view {
+			color: rgba(51, 51, 51, 1);
+			font-size: 30upx;
+			padding: 20upx 0;
+
+
+		}
 	}
 
 	.list {
 		width: 100%;
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
+		
 
 
 		.noAdd {
@@ -388,21 +410,6 @@
 			width: 100%;
 			display: flex;
 			flex-direction: column;
-		}
-
-		.address-title {
-			display: flex;
-			border-bottom: 20upx solid rgba(245, 245, 245, 1);
-			justify-content: space-around;
-			align-items: center;
-
-			view {
-				color: rgba(51, 51, 51, 1);
-				font-size: 30upx;
-				padding: 20upx 0;
-
-
-			}
 		}
 
 		.row {

@@ -228,18 +228,14 @@ var _uniLoadMore = _interopRequireDefault(__webpack_require__(/*! @/components/u
 
 
 
-var _amapWx = _interopRequireDefault(__webpack_require__(/*! ../../common/SDK/amap-wx.js */ "C:\\Users\\Administrator\\Desktop\\shanpei-weixin\\common\\SDK\\amap-wx.js"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var ttt = 0; //高德SDK
-var _default = {
+var _amapWx = _interopRequireDefault(__webpack_require__(/*! ../../common/SDK/amap-wx.js */ "C:\\Users\\Administrator\\Desktop\\shanpei-weixin\\common\\SDK\\amap-wx.js"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
+{
 
-  components: { uniLoadMore: _uniLoadMore.default },
+  components: {
+    uniLoadMore: _uniLoadMore.default },
+
   mounted: function mounted() {var _this = this;
 
-    uni.getLocation({
-      type: 'wgs84',
-      success: function success(res) {
-        console.log('当前位置的经度：' + res.longitude);
-        console.log('当前位置的纬度：' + res.latitude);
-      } });
 
     // 轮播,热销
     uni.request({
@@ -249,7 +245,7 @@ var _default = {
 
       method: "post",
       success: function success(res) {
-        //console.log(res);
+        console.log("hoem", res);
         _this.swiperList = res.data.data.banner;
         _this.categoryList = res.data.data.cate;
         _this.hotList = res.data.data.hot;
@@ -265,7 +261,7 @@ var _default = {
         token: this.token },
 
       success: function success(res) {
-        console.log(res);
+        //console.log("mesg",res)
         if (res.data.data.data.length > 0) {
           _this.msg = true;
         }
@@ -342,8 +338,6 @@ var _default = {
   },
   onLoad: function onLoad() {var _this2 = this;
 
-
-
     var amapPlugin = new _amapWx.default.AMapWX({
       //高德地图KEY，随时失效，请务必替换为自己的KEY，参考：http://ask.dcloud.net.cn/article/35070
       key: '5b9b64be2413fc19c26683fcf0de890f' });
@@ -351,14 +345,12 @@ var _default = {
     //定位地址
     amapPlugin.getRegeo({
       success: function success(data) {
-        console.log(data);
+        //console.log(data)
         _this2.city = data[0].regeocodeData.addressComponent.city.replace(/市/g, ''); //把"市"去掉
       } });
 
-    //开启定时器
-    this.Timer();
-    //加载活动专区
-    this.loadPromotion();
+
+
   },
   methods: {
     // 获取推荐列表
@@ -399,98 +391,8 @@ var _default = {
 
 
     },
-    //加载Promotion 并设定倒计时,,实际应用中应该是ajax加载此数据。
-    loadPromotion: function loadPromotion() {
-      var cutTime = new Date();
-      var yy = cutTime.getFullYear(),
-      mm = cutTime.getMonth() + 1,
-      dd = cutTime.getDate();
-      var tmpcountdown = yy + '/' + mm + '/' + dd + ' 23:59:59';
-      var tmpPromotion = [{
-        title: '整点秒杀',
-        ad: '整天秒杀专区',
-        img: '../../static/img/s1.jpg',
-        countdown: false },
 
-      {
-        title: '限时抢购',
-        ad: '每天23点上线',
-        img: '../../static/img/s2.jpg',
-        countdown: tmpcountdown
-        //countdown为目标时间，程序会获取当前时间倒数
-      }];
-      //检查倒计时
-      for (var i = 0; i < tmpPromotion.length; i++) {
-        var row = tmpPromotion[i];
-        if (row.countdown) {
-          var h = '00',
-          m = '00',
-          s = '00';
-          var currentTime = new Date();
-          var cutoffTime = new Date(tmpcountdown);
-          if (!(currentTime >= cutoffTime)) {
-            var countTime = parseInt(
-            (cutoffTime.getTime() - currentTime.getTime()) / 1000);
 
-            h = parseInt(countTime / 3600);
-            m = parseInt(countTime % 3600 / 60);
-            s = countTime % 60;
-            h = h < 10 ? '0' + h : h;
-            m = m < 10 ? '0' + m : m;
-            s = s < 10 ? '0' + s : s;
-          }
-          tmpPromotion[i].countdown = {
-            h: h,
-            m: m,
-            s: s };
-
-        }
-      }
-      this.Promotion = tmpPromotion;
-    },
-    //定时器
-    Timer: function Timer() {var _this4 = this;
-      setInterval(function () {
-        if (_this4.Promotion.length > 0) {
-          for (var i = 0; i < _this4.Promotion.length; i++) {
-            var row = _this4.Promotion[i];
-            if (row.countdown) {
-              if (
-              !(
-              row.countdown.h == 0 &&
-              row.countdown.m == 0 &&
-              row.countdown.s == 0))
-
-              {
-                if (row.countdown.s > 0) {
-                  row.countdown.s--;
-                  row.countdown.s =
-                  row.countdown.s < 10 ?
-                  '0' + row.countdown.s :
-                  row.countdown.s;
-                } else if (row.countdown.m > 0) {
-                  row.countdown.m--;
-                  row.countdown.m =
-                  row.countdown.m < 10 ?
-                  '0' + row.countdown.m :
-                  row.countdown.m;
-                  row.countdown.s = 59;
-                } else if (row.countdown.h > 0) {
-                  row.countdown.h--;
-                  row.countdown.h =
-                  row.countdown.h < 10 ?
-                  '0' + row.countdown.h :
-                  row.countdown.h;
-                  row.countdown.m = 59;
-                  row.countdown.s = 59;
-                }
-                _this4.Promotion[i].countdown = row.countdown;
-              }
-            }
-          }
-        }
-      }, 1000);
-    },
     //消息列表
     toMsg: function toMsg() {
       uni.navigateTo({
@@ -498,7 +400,7 @@ var _default = {
 
     },
     //搜索跳转
-    toSearch: function toSearch() {var _this5 = this;
+    toSearch: function toSearch() {var _this4 = this;
       // 搜索推荐
       uni.request({
         url: 'http://shanpei.wsstreet.net/keyword', //仅为示例，并非真实接口地址。
@@ -510,7 +412,7 @@ var _default = {
         success: function success(res) {
 
           console.log(res);
-          _this5.searchList = res.data.data;
+          _this4.searchList = res.data.data;
         } });
 
 
@@ -937,16 +839,9 @@ var render = function() {
       ]),
       _c("uni-load-more", {
         attrs: {
-          status: _vm.more,
-          showIcon: _vm.showIcon,
-          mpcomid: "0c1a97ce-1"
-        }
-      }),
-      _c("uni-load-more", {
-        attrs: {
           status: _vm.status,
           showIcon: _vm.showIcon,
-          mpcomid: "0c1a97ce-2"
+          mpcomid: "0c1a97ce-1"
         }
       })
     ],

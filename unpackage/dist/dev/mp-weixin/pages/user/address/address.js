@@ -241,15 +241,17 @@ var _uniPopup = _interopRequireDefault(__webpack_require__(/*! ../../../componen
 
     // 自提点
     uni.request({
+
       url: this.config.url + "member/station",
       method: "post",
       data: {
         token: this.token },
 
       success: function success(res) {
-        console.log(res, res.data.data.length, "zi");
+        console.log(111111111);
         _this2.selfList = res.data.data;
         _this2.selfLen = res.data.data.length;
+        console.log(res, res.data.data.length, "zi");
       } });
 
 
@@ -261,6 +263,7 @@ var _uniPopup = _interopRequireDefault(__webpack_require__(/*! ../../../componen
         token: this.token },
 
       success: function success(res) {
+        console.log(11111111221);
         console.log(res, res.data.data.length, "wo");
         _this2.homeList = res.data.data;
         _this2.homeLen = res.data.data.length;
@@ -286,6 +289,7 @@ var _uniPopup = _interopRequireDefault(__webpack_require__(/*! ../../../componen
   onLoad: function onLoad(e) {
     if (e.type == 'select') {
       this.isSelect = true;
+      console.log(11111);
     }
   },
   onReady: function onReady() {
@@ -362,9 +366,11 @@ var _uniPopup = _interopRequireDefault(__webpack_require__(/*! ../../../componen
       this.typeClass = type;
       if (type == "home") {
         this.subState = 1;
+        console.log("home", this.homeLen);
 
       } else if (type == "self") {
         this.subState = 2;
+        console.log("se", this.selfLen);
       }
     },
     edit: function edit(row) {
@@ -510,35 +516,35 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("view", { attrs: { id: "address" } }, [
+    _c("view", { staticClass: "address-title" }, [
+      _c(
+        "view",
+        {
+          class: { on: _vm.typeClass == "home" },
+          attrs: { eventid: "d0c156a8-0" },
+          on: {
+            tap: function($event) {
+              _vm.switchType("home")
+            }
+          }
+        },
+        [_vm._v("常用地址管理")]
+      ),
+      _c(
+        "view",
+        {
+          class: { on: _vm.typeClass == "self" },
+          attrs: { eventid: "d0c156a8-1" },
+          on: {
+            tap: function($event) {
+              _vm.switchType("self")
+            }
+          }
+        },
+        [_vm._v("常用自提点管理")]
+      )
+    ]),
     _c("view", { staticClass: "list" }, [
-      _c("view", { staticClass: "address-title" }, [
-        _c(
-          "view",
-          {
-            class: { on: _vm.typeClass == "home" },
-            attrs: { eventid: "d0c156a8-0" },
-            on: {
-              tap: function($event) {
-                _vm.switchType("home")
-              }
-            }
-          },
-          [_vm._v("常用地址管理")]
-        ),
-        _c(
-          "view",
-          {
-            class: { on: _vm.typeClass == "self" },
-            attrs: { eventid: "d0c156a8-1" },
-            on: {
-              tap: function($event) {
-                _vm.switchType("self")
-              }
-            }
-          },
-          [_vm._v("常用自提点管理")]
-        )
-      ]),
       _c(
         "view",
         {

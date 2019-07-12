@@ -85,7 +85,7 @@
               		lng: this.lng,
               },
               	success: (res) => {
-              		//console.log("zi",res.data)
+              		console.log("zi",res.data)
               		if (res.data.code == 1) {
               			this.selfList = res.data.data.data
               		} else {
@@ -104,7 +104,7 @@
 
 				},
 				success: (res) => {
-					//console.log(res.data.data, res)
+					console.log("wo",res.data.data, res)
 					if (res.data.code == 1) {
 						this.homeList = res.data.data
 					} else {

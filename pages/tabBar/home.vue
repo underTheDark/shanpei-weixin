@@ -138,7 +138,7 @@
 			<!-- <view class="loading-text" v-show="tishi">{{ loadingText }}</view> -->
 		</view>
 
-		<uni-load-more :status="more" :showIcon="showIcon"></uni-load-more>
+		<!-- <uni-load-more :status="more" :showIcon="showIcon"></uni-load-more> -->
 
 		<uni-load-more :status="status" :showIcon="showIcon"></uni-load-more>
 
@@ -147,22 +147,18 @@
 
 <script>
 	import uniLoadMore from "@/components/uni-load-more/uni-load-more.vue"
-	
-	var ttt = 0;
+
+
 	//高德SDK
 	import amap from '../../common/SDK/amap-wx.js';
 	export default {
 
-		 components: {uniLoadMore},
+		components: {
+			uniLoadMore
+		},
 		mounted() {
-			
-			uni.getLocation({
-    type: 'wgs84',
-    success: function (res) {
-        console.log('当前位置的经度：' + res.longitude);
-        console.log('当前位置的纬度：' + res.latitude);
-    }
-});
+
+
 			// 轮播,热销
 			uni.request({
 				url: 'http://shanpei.wsstreet.net/index', //仅为示例，并非真实接口地址。
@@ -171,39 +167,39 @@
 				},
 				method: "post",
 				success: (res) => {
-					//console.log(res);
+					console.log("hoem", res);
 					this.swiperList = res.data.data.banner;
 					this.categoryList = res.data.data.cate;
 					this.hotList = res.data.data.hot;
 					this.limitList = res.data.data.limit_buy;
 				}
-			});
-			
-           	//系统消息
-           uni.request({
-           	url:this.config.url+"member/message",
-           	method:"POST",
-           	data:{
-           		token:this.token
-           	},
-           	success:(res)=>{
-           		console.log(res)
-           		if(res.data.data.data.length >0){
-           			this.msg=true;
-           		}
-           		if(res.data.code==1){
-           			this.msgList=res.data.data.data
-           		}
-           	}
-           })
+			})
+
+			//系统消息
+			uni.request({
+				url: this.config.url + "member/message",
+				method: "POST",
+				data: {
+					token: this.token
+				},
+				success: (res) => {
+					//console.log("mesg",res)
+					if (res.data.data.data.length > 0) {
+						this.msg = true;
+					}
+					if (res.data.code == 1) {
+						this.msgList = res.data.data.data
+					}
+				}
+			})
 		},
-		
+
 		data() {
 			return {
-				msg:"", //系统消息显示
-				msgList:[], //系统信息列表
-				showIcon:false,
-				status:"more",
+				msg: "", //系统消息显示
+				msgList: [], //系统信息列表
+				showIcon: false,
+				status: "more",
 
 				afterHeaderOpacity: 1, //不透明度
 				headerPosition: 'fixed',
@@ -251,52 +247,48 @@
 		//上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
 		onReachBottom() {
 
-			
+
 			this.count++
 			console.log(count)
 
 			// 调用获取推荐列表接口
 			// 当前页小于最后一页才调用
-			if(this.current_page<this.last_page){
+			if (this.current_page < this.last_page) {
 				this.getRecommendList();
 			}
 
 		},
 		onLoad() {
-			// #ifdef APP-PLUS
-			this.statusHeight = plus.navigator.getStatusbarHeight();
-			// #endif
+		
 			var amapPlugin = new amap.AMapWX({
 				//高德地图KEY，随时失效，请务必替换为自己的KEY，参考：http://ask.dcloud.net.cn/article/35070
 				key: '5b9b64be2413fc19c26683fcf0de890f'
 			});
 			//定位地址
-			  amapPlugin.getRegeo({
+			amapPlugin.getRegeo({
 				success: data => {
-					console.log(data)
+					//console.log(data)
 					this.city = data[0].regeocodeData.addressComponent.city.replace(/市/g, ''); //把"市"去掉
 				}
 			});
-			//开启定时器
-			this.Timer();
-			//加载活动专区
-			this.loadPromotion();
+
+
 		},
 		methods: {
 			// 获取推荐列表
-			getRecommendList(){
-				this.status="loading";
+			getRecommendList() {
+				this.status = "loading";
 				// 首页为你推荐
 				uni.request({
 					url: 'http://shanpei.wsstreet.net/recommend', //仅为示例，并非真实接口地址。
 					data: {
 						token: this.token,
-						page:Number(this.current_page)+1,
+						page: Number(this.current_page) + 1,
 					},
 					method: "post",
 					success: (res) => {
 						var len;
-						console.log("res.data",res.data);
+						console.log("res.data", res.data);
 						// 商品列表
 						this.totalList = res.data.data.data;
 						//每页10 
@@ -309,110 +301,20 @@
 							this.productList.push(this.totalList[i])
 							//	console.log(this.productList)
 						}
-						
+
 						this.current_page = res.data.data.current_page;
 						this.last_page = res.data.data.last_page;
 						this.total = res.data.data.data.total;
-						this.status="more";
-						if(this.current_page>=this.last_page){
-							this.status="noMore";
+						this.status = "more";
+						if (this.current_page >= this.last_page) {
+							this.status = "noMore";
 						}
 					}
 				});
-				
+
 			},
-			//加载Promotion 并设定倒计时,,实际应用中应该是ajax加载此数据。
-			loadPromotion() {
-				let cutTime = new Date();
-				let yy = cutTime.getFullYear(),
-					mm = cutTime.getMonth() + 1,
-					dd = cutTime.getDate();
-				let tmpcountdown = yy + '/' + mm + '/' + dd + ' 23:59:59';
-				let tmpPromotion = [{
-						title: '整点秒杀',
-						ad: '整天秒杀专区',
-						img: '../../static/img/s1.jpg',
-						countdown: false
-					},
-					{
-						title: '限时抢购',
-						ad: '每天23点上线',
-						img: '../../static/img/s2.jpg',
-						countdown: tmpcountdown
-					} //countdown为目标时间，程序会获取当前时间倒数
-				];
-				//检查倒计时
-				for (let i = 0; i < tmpPromotion.length; i++) {
-					let row = tmpPromotion[i];
-					if (row.countdown) {
-						let h = '00',
-							m = '00',
-							s = '00';
-						let currentTime = new Date();
-						let cutoffTime = new Date(tmpcountdown);
-						if (!(currentTime >= cutoffTime)) {
-							let countTime = parseInt(
-								(cutoffTime.getTime() - currentTime.getTime()) / 1000
-							);
-							h = parseInt(countTime / 3600);
-							m = parseInt((countTime % 3600) / 60);
-							s = countTime % 60;
-							h = h < 10 ? '0' + h : h;
-							m = m < 10 ? '0' + m : m;
-							s = s < 10 ? '0' + s : s;
-						}
-						tmpPromotion[i].countdown = {
-							h: h,
-							m: m,
-							s: s
-						};
-					}
-				}
-				this.Promotion = tmpPromotion;
-			},
-			//定时器
-			Timer() {
-				setInterval(() => {
-					if (this.Promotion.length > 0) {
-						for (let i = 0; i < this.Promotion.length; i++) {
-							let row = this.Promotion[i];
-							if (row.countdown) {
-								if (
-									!(
-										row.countdown.h == 0 &&
-										row.countdown.m == 0 &&
-										row.countdown.s == 0
-									)
-								) {
-									if (row.countdown.s > 0) {
-										row.countdown.s--;
-										row.countdown.s =
-											row.countdown.s < 10 ?
-											'0' + row.countdown.s :
-											row.countdown.s;
-									} else if (row.countdown.m > 0) {
-										row.countdown.m--;
-										row.countdown.m =
-											row.countdown.m < 10 ?
-											'0' + row.countdown.m :
-											row.countdown.m;
-										row.countdown.s = 59;
-									} else if (row.countdown.h > 0) {
-										row.countdown.h--;
-										row.countdown.h =
-											row.countdown.h < 10 ?
-											'0' + row.countdown.h :
-											row.countdown.h;
-										row.countdown.m = 59;
-										row.countdown.s = 59;
-									}
-									this.Promotion[i].countdown = row.countdown;
-								}
-							}
-						}
-					}
-				}, 1000);
-			},
+
+
 			//消息列表
 			toMsg() {
 				uni.navigateTo({
@@ -425,7 +327,7 @@
 				uni.request({
 					url: 'http://shanpei.wsstreet.net/keyword', //仅为示例，并非真实接口地址。
 					data: {
-                       token:this.token
+						token: this.token
 
 					},
 					method: "post",
@@ -469,7 +371,7 @@
 				this.currentSwiper = event.detail.current;
 			}
 		}
-	};
+	}
 </script>
 <style lang="scss">
 	page {
@@ -810,10 +712,10 @@
 					display: flex;
 					flex-direction: column;
 					-webkit-transform: scale(1);
-					transform: scale(0.6);
+					transform: scale(1);
 
 					text {
-						font-size: 7upx;
+						font-size: 14upx;
 						font-family: PingFang-SC-Medium;
 						font-weight: 500;
 						color: rgba(85, 85, 85, 1);
@@ -978,8 +880,8 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-            font-weight: 800;
-		color:rgba(16,16,16,1);
+			font-weight: 800;
+			color: rgba(16, 16, 16, 1);
 			font-size: 30upx;
 			margin: 0 0 20upx 0;
 			background: url("../../static/img/category/title-bg.png") no-repeat center;

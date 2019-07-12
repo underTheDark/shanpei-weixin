@@ -89,36 +89,54 @@
 {
 
   mounted: function mounted() {var _this = this;
+    //获取收货地址
     uni.getStorage({
-      key: "product",
-      success: function success(data) {
-        console.log(data, data.data);
-        // this.addrList = JSON.parse(data.data)
-        // console.log(this.addrList,this.addrList.distance)
-        // if (this.addrList.distance) {
-        // 	this.getgoods_name = 1;
-        // }else{
-        // 	this.getgoods_name=2;
-        // }
-      } });
-
-    //确认订单信息
-    uni.request({
-      url: this.config.url + "order/sure",
-      method: "post",
-      data: {
-        token: this.token,
-        goods: this.goods },
-
+      key: "address",
       success: function success(res) {
-        console.log("sure", res);
-        if (res.data.code == 1) {
-          _this.buyList = res.data.data.goods;
-          _this.express = res.data.data.express;
-          _this.total = res.data.data.total;
-          _this.number = res.data.data.number;
+        console.log("address", res);
+        var addr = JSON.parse(res.data);
+
+        if (addr.distance) {
+          console.log(addr.distance);
+          _this.getgoods_name = true;
+        } else {
+          console.log(1);
+          _this.addrList = addr;
+          _this.getgoods_name = false;
         }
+
       } });
+
+    //立即购买商品缓存
+    uni.getStorage({
+      key: "quick",
+      success: function success(res) {
+        console.log("pro", res);
+        var quick = { goods_id: res.data.id, goods_number: res.data.goods_number, goods_spec: res.data.goods_spec };
+
+        _this.goods.push(quick);
+
+        //确认订单信息
+        uni.request({
+          url: _this.config.url + "order/sure",
+          method: "post",
+          data: {
+            token: _this.token,
+            goods: _this.goods },
+
+          success: function success(res) {
+            //	 console.log("sure",res)
+            if (res.data.code == 1) {
+              _this.buyList = res.data.data.goods; //商品列表
+              _this.express = res.data.data.express;
+              _this.total = res.data.data.total;
+              _this.number = res.data.data.number;
+              _this.getgoods_name = res.data.data.order_type; //提交记录
+            }
+          } });
+
+      } });
+
 
   },
   computed: {
@@ -135,37 +153,19 @@
       number: "", //购买商品总数量
       goodsPrice: 0.0, //商品合计价格
       sumPrice: 0.0, //用户付款价格
-
+      address: 9, //地址是否显示
+      addrList: {}, //选中地址信息
       goods: [],
       express: '',
       total: "", //商品总价格
-      addrList: {}, //地址列表
+      iscart: "",
       getgoods_name: false, //送货类型显示
       order_no: "" //订单编号
     };
 
   },
   onLoad: function onLoad(option) {
-    console.log(option);
 
-
-
-    // 获取购买商品信息
-
-    if (option.iscart == 0) {
-      this.goodsinfo.goods_spec = option.size;
-
-      this.goodsinfo.goods_number = option.num;
-      this.goodsinfo.goods_id = option.id;
-      this.goods.push(this.goodsinfo);
-      uni.setStorage({
-        key: "product",
-        data: this.goods,
-        success: function success(res) {
-          console.log("chneg");
-        } });
-
-    }
 
   },
   onBackPress: function onBackPress() {
@@ -184,7 +184,7 @@
         url: "/pages/sendType/sendType" });
 
     },
-    // 获取购买商品信息
+
 
     clearOrder: function clearOrder() {var _this2 = this;
       uni.removeStorage({
@@ -299,9 +299,7 @@ var render = function() {
         },
         [
           _c("text", [_vm._v("已选")]),
-          _c("text", [
-            _vm._v(_vm._s(_vm.getgoods_name == 1 ? "自提" : "送货上门"))
-          ]),
+          _c("text", [_vm._v(_vm._s(_vm.getgoods_name ? "自提" : "送货上门"))]),
           _c("image", {
             staticClass: "right-jiantou",
             attrs: { src: "../../static/img/category/youce-jiantou.png" }
@@ -311,50 +309,42 @@ var render = function() {
     ]),
     _c("view", { staticClass: "addr" }, [
       _c("view", { staticClass: "sendgoods-info" }, [_vm._v("配送信息")]),
-      _c("view", { staticClass: "sendgoods-addr" }, [
-        _c("view", [
-          _c(
-            "text",
-            {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.getgoods_name == 1,
-                  expression: "getgoods_name==1"
-                }
-              ],
-              staticClass: "getgoods-name"
-            },
-            [_vm._v(_vm._s(_vm.addrList.name))]
-          ),
-          _c("text", { staticClass: "getgoods-people" }, [
-            _vm._v(
-              _vm._s(_vm.addrList.username) +
-                _vm._s(_vm.addrList.name) +
-                "    " +
-                _vm._s(_vm.addrList.phone)
-            )
-          ]),
-          _c("text", { staticClass: "getgoods-addr" }, [
-            _vm._v(
-              _vm._s(_vm.addrList.province_name) +
-                _vm._s(_vm.addrList.city_name) +
-                _vm._s(_vm.addrList.area_name) +
-                " " +
-                _vm._s(_vm.addrList.street_name) +
-                " " +
-                _vm._s(_vm.addrList.address_name) +
-                "\n\t\t\t\t    " +
-                _vm._s(_vm.addrList.province) +
-                _vm._s(_vm.addrList.city) +
-                _vm._s(_vm.addrList.area) +
-                _vm._s(_vm.addrList.street) +
-                _vm._s(_vm.addrList.address)
-            )
+      _vm.address
+        ? _c("view", { staticClass: "sendgoods-addr" }, [
+            _c("view", [
+              _vm.getgoods_name
+                ? _c("text", { staticClass: "getgoods-name" }, [
+                    _vm._v(_vm._s(_vm.addrList.name))
+                  ])
+                : _vm._e(),
+              _c("text", { staticClass: "getgoods-people" }, [
+                _vm._v(
+                  _vm._s(_vm.addrList.username) +
+                    _vm._s(_vm.addrList.name) +
+                    "    " +
+                    _vm._s(_vm.addrList.phone)
+                )
+              ]),
+              _c("text", { staticClass: "getgoods-addr" }, [
+                _vm._v(
+                  _vm._s(_vm.addrList.province_name) +
+                    _vm._s(_vm.addrList.city_name) +
+                    _vm._s(_vm.addrList.area_name) +
+                    " " +
+                    _vm._s(_vm.addrList.street_name) +
+                    " " +
+                    _vm._s(_vm.addrList.address_name) +
+                    "\n\t\t\t\t    " +
+                    _vm._s(_vm.addrList.province) +
+                    _vm._s(_vm.addrList.city) +
+                    _vm._s(_vm.addrList.area) +
+                    _vm._s(_vm.addrList.street) +
+                    _vm._s(_vm.addrList.address)
+                )
+              ])
+            ])
           ])
-        ])
-      ])
+        : _vm._e()
     ]),
     _c(
       "view",

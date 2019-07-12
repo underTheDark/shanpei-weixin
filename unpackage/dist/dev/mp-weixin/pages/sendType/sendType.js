@@ -95,7 +95,7 @@ var _default = {
         lng: this.lng },
 
       success: function success(res) {
-        //console.log("zi",res.data)
+        console.log("zi", res.data);
         if (res.data.code == 1) {
           _this3.selfList = res.data.data.data;
         } else {
@@ -114,7 +114,7 @@ var _default = {
 
 
       success: function success(res) {
-        //console.log(res.data.data, res)
+        console.log("wo", res.data.data, res);
         if (res.data.code == 1) {
           _this3.homeList = res.data.data;
         } else {

@@ -16,8 +16,6 @@
 	"libVersion": "2.7.0",
 	"appid": "wxaa42e31b87197e9e",
 	"projectname": "闪配",
-	"simulatorType": "wechat",
-	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,
@@ -36,54 +34,12 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 6,
+			"current": 0,
 			"list": [
 				{
 					"id": -1,
-					"name": "sendType",
-					"pathName": "pages/sendType/sendType",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "edit",
-					"pathName": "pages/user/address/edit/edit",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "confirm-order",
+					"name": "confirm",
 					"pathName": "pages/order/confirmation",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "my-address",
-					"pathName": "pages/user/address/address",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "service",
-					"pathName": "pages/user/service/service",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "myorder",
-					"pathName": "pages/user/order_list/order_list",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "myorder",
-					"pathName": "pages/tabBar/user",
 					"scene": null
 				}
 			]

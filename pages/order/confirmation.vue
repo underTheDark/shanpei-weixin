@@ -5,7 +5,7 @@
 			<view class="send-title">配送方式</view>
 			<view class="send-type" @click="sendType()">
 				<text>已选</text>
-				<text>{{getgoods_name==1?"自提":"送货上门"}}</text>
+				<text>{{getgoods_name?"自提":"送货上门"}}</text>
 				<image class="right-jiantou" src="../../static/img/category/youce-jiantou.png"></image>
 			</view>
 		</view>
@@ -13,16 +13,16 @@
 		<view class="addr">
 
 			<view class="sendgoods-info">配送信息</view>
-			<view class="sendgoods-addr">
-				<view>
-					<text class="getgoods-name" v-show="getgoods_name==1">{{addrList.name}}</text>
+			<view class="sendgoods-addr" v-if="address">
+				<view >
+					<text class="getgoods-name" v-if="getgoods_name">{{addrList.name}}</text>
 					<text class="getgoods-people">{{addrList.username}}{{addrList.name}} &nbsp;&nbsp;&nbsp;{{addrList.phone}}</text>
 					<text class="getgoods-addr">
 						{{addrList.province_name}}{{addrList.city_name}}{{addrList.area_name}} {{addrList.street_name}} {{addrList.address_name}}
 					    {{addrList.province}}{{addrList.city}}{{addrList.area}}{{addrList.street}}{{addrList.address}}
 					</text>
 				</view>
-				<!-- <image class="right-jiantou" src="../../static/img/category/youce-jiantou.png"></image> -->
+				
 			</view>
 		</view>
 		<!-- 购买商品列表 -->
@@ -37,7 +37,7 @@
 						<view class="title">{{buy.goods_title}}</view>
 						<view class="spec">
 							<text>{{buy.goods_spec}} </text>
-							<!-- <text>{{goodsinfo.num}}</text> -->
+							
 						</view>
 						<view class="price-number">
 							<view class="price">￥{{buy.price_selling}}</view>
@@ -72,44 +72,62 @@
 				<view class="btn" @tap="toPay">去结算</view>
 			</view>
 		</view>
-	</view>
+	</view> 
 </template>
 
 <script>
 	export default {
 
 		mounted() {
-			uni.getStorage({
-				key: "product",
-				success: (data) => {
-					console.log(data, data.data)
-					// this.addrList = JSON.parse(data.data)
-					// console.log(this.addrList,this.addrList.distance)
-					// if (this.addrList.distance) {
-					// 	this.getgoods_name = 1;
-					// }else{
-					// 	this.getgoods_name=2;
-					// }
-				}
-			})
-			//确认订单信息
-			uni.request({
-				url: this.config.url + "order/sure",
-				method: "post",
-				data: {
-					token: this.token,
-					goods: this.goods
-				},
-				success: (res) => {
-					 console.log("sure",res)
-					if (res.data.code == 1) {
-						this.buyList = res.data.data.goods;
-						this.express = res.data.data.express;
-						this.total = res.data.data.total;
-						this.number = res.data.data.number;
+	         //获取收货地址
+			 uni.getStorage({
+			 	key:"address",
+				success:(res)=>{
+					console.log("address",res)
+					var addr=JSON.parse(res.data)
+					
+					if(addr.distance){
+						 console.log(addr.distance)
+							this.getgoods_name=true
+					}else{
+						console.log(1)
+					      this.addrList=addr;
+						  this.getgoods_name=false;
 					}
+					
+				}
+			 })
+			//立即购买商品缓存
+			uni.getStorage({
+				key:"quick",
+				success:(res)=>{
+					console.log("pro",res)
+					var quick={goods_id:res.data.id,goods_number:res.data.goods_number,goods_spec:res.data.goods_spec}
+				   
+					this.goods.push(quick)
+					
+					//确认订单信息
+					uni.request({
+						url: this.config.url + "order/sure",
+						method: "post",
+						data: {
+							token: this.token,
+							goods: this.goods
+						},
+						success: (res) => {
+						//	 console.log("sure",res)
+							if (res.data.code == 1) {
+								this.buyList = res.data.data.goods;  //商品列表
+								this.express = res.data.data.express;
+								this.total = res.data.data.total;
+								this.number = res.data.data.number;
+								this.getgoods_name=res.data.data.order_type; //提交记录
+							}
+						}
+					})
 				}
 			})
+			
 		},
 		computed: {
 			totalmoney() {
@@ -125,38 +143,20 @@
 				number: "", //购买商品总数量
 				goodsPrice: 0.0, //商品合计价格
 				sumPrice: 0.0, //用户付款价格
-				
+				address:9,  //地址是否显示
+				addrList:{}, //选中地址信息
 				goods: [],
 				express: '',
 				total: "", //商品总价格
-				addrList: {}, //地址列表
+				iscart:"",
 				getgoods_name: false, //送货类型显示
 				order_no: "", //订单编号
-
-			};
+                
+			}
 		},
 		onLoad(option) {
-			console.log(option)
-            
-            
-
-			// 获取购买商品信息
-
-			if (option.iscart == 0) {
-				this.goodsinfo.goods_spec = option.size;
-
-				this.goodsinfo.goods_number = option.num;
-				this.goodsinfo.goods_id = option.id
-				this.goods.push(this.goodsinfo)
-				uni.setStorage({
-					key:"product",
-					data:this.goods,
-					success:function(res){
-						console.log("chneg")
-					}
-				})
-			}
 			
+
 		},
 		onBackPress() {
 			//页面后退时候，清除订单信息
@@ -174,7 +174,7 @@
 					url: "/pages/sendType/sendType"
 				})
 			},
-			// 获取购买商品信息
+			
 
 			clearOrder() {
 				uni.removeStorage({

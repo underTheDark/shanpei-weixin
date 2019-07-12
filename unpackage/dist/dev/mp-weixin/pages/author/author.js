@@ -132,7 +132,7 @@
 
           }
 
-          //2.将用户登录code传递到后台置换用户SessionKey、OpenId等信息
+          //	2.将用户登录code传递到后台置换用户SessionKey、OpenId等信息
           uni.request({
             url: "http://shanpei.wsstreet.net/getOpenid",
             data: {
@@ -141,7 +141,7 @@
             method: 'POST',
 
             success: function success(res) {
-              // console.log("res",res)
+              console.log("res", res);
               _this.OpenId = res.data.data.openid;
               _this.SessionKey = res.data.data.session_key;
               uni.setStorage({
@@ -246,6 +246,7 @@
 
       },
       fail: function fail() {
+
         _this2.login();
       } });
 
