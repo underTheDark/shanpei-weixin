@@ -1,2 +1,2 @@
 <import src="./credit.vue.wxml" />
-    <template is="dbad993c" data="{{ ...$root['0'], $root }}"/>
+    <template is="2687a49a" data="{{ ...$root['0'], $root }}"/>

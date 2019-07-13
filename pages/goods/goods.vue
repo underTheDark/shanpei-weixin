@@ -25,8 +25,8 @@
 				</view>
 			</view>
 			<view class="btn">
-				<view class="joinCart" @tap="joinCart">加入购物车</view>
-				<view class="buy" @tap="buy()">立即购买</view>
+				<view class="joinCart" @tap="joinCart">选择规格</view>
+				<!-- <view class="buy" @tap="buy()">立即购买</view> -->
 			</view>
 		</view>
 		<!-- share弹窗 -->

@@ -157,7 +157,7 @@
 			uniLoadMore
 		},
 		mounted() {
-
+			uni.hideLoading();
 
 			// 轮播,热销
 			uni.request({
@@ -258,8 +258,15 @@
 			}
 
 		},
+		onReady(){
+			 
+		   
+		},
 		onLoad() {
-		
+			 uni.showLoading({
+				title: '加载中'
+			});
+		   console.log(22)
 			var amapPlugin = new amap.AMapWX({
 				//高德地图KEY，随时失效，请务必替换为自己的KEY，参考：http://ask.dcloud.net.cn/article/35070
 				key: '5b9b64be2413fc19c26683fcf0de890f'

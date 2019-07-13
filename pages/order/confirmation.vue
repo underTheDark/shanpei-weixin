@@ -5,7 +5,7 @@
 			<view class="send-title">配送方式</view>
 			<view class="send-type" @click="sendType()">
 				<text>已选</text>
-				<text>{{getgoods_name?"自提":"送货上门"}}</text>
+				<text>{{getgoods_name==1?"自提":"送货上门"}}</text>
 				<image class="right-jiantou" src="../../static/img/category/youce-jiantou.png"></image>
 			</view>
 		</view>
@@ -15,7 +15,7 @@
 			<view class="sendgoods-info">配送信息</view>
 			<view class="sendgoods-addr" v-if="address">
 				<view >
-					<text class="getgoods-name" v-if="getgoods_name">{{addrList.name}}</text>
+					<text class="getgoods-name" v-show="getgoods_name==1">{{addrList.name}}</text>
 					<text class="getgoods-people">{{addrList.username}}{{addrList.name}} &nbsp;&nbsp;&nbsp;{{addrList.phone}}</text>
 					<text class="getgoods-addr">
 						{{addrList.province_name}}{{addrList.city_name}}{{addrList.area_name}} {{addrList.street_name}} {{addrList.address_name}}
@@ -80,19 +80,21 @@
 
 		mounted() {
 	         //获取收货地址
+			 
 			 uni.getStorage({
 			 	key:"address",
 				success:(res)=>{
-					console.log("address",res)
-					var addr=JSON.parse(res.data)
 					
+					var addr=JSON.parse(res.data)
+					console.log("address",res,addr)
 					if(addr.distance){
+						console.log(2)
 						 console.log(addr.distance)
-							this.getgoods_name=true
+							this.getgoods_name=1
 					}else{
 						console.log(1)
 					      this.addrList=addr;
-						  this.getgoods_name=false;
+						  this.getgoods_name=2;
 					}
 					
 				}
@@ -121,7 +123,7 @@
 								this.express = res.data.data.express;
 								this.total = res.data.data.total;
 								this.number = res.data.data.number;
-								this.getgoods_name=res.data.data.order_type; //提交记录
+								//this.getgoods_name=res.data.data.order_type; //提交记录
 							}
 						}
 					})

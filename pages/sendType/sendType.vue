@@ -104,7 +104,7 @@
 
 				},
 				success: (res) => {
-					console.log("wo",res.data.data, res)
+					//console.log("wo",res.data.data, res)
 					if (res.data.code == 1) {
 						this.homeList = res.data.data
 					} else {
@@ -151,6 +151,7 @@
 				
 				var homeAddr=JSON.stringify(home)
 				console.log(id, home, this.checked)
+				uni.setStorage({key: "selectHome",data:1});
                 uni.setStorage({
                 		key: "address",
                 		data: homeAddr,

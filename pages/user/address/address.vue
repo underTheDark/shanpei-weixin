@@ -10,9 +10,9 @@
 		<view class="list">
 			<!-- 常用地址管理 -->
 
-			<view v-show="subState==1" class="address-msg">
+			<view v-if="subState==1" class="address-msg">
 				<!-- 图标显示 -->
-				<view v-show="homeLen <1" class="noAdd">
+				<view v-if="homeList.length ==0" class="noAdd">
 					<view class="img">
 						<image src="../../../static/img/add-position.png"></image>
 					</view>
@@ -51,10 +51,10 @@
 				</view>
 			</view>
 			<!-- 常用自提点管理 -->
-			<view v-show="subState==2" class="address-msg">
+			<view v-if="subState==2" class="address-msg">
 				<!-- 无地址显示图标 -->
 
-				<view v-show="selfLen <1 " class="noAdd">
+				<view v-if="selfList.length ==0 " class="noAdd">
 					<view class="img">
 						<image src="../../../static/img/add-position.png"></image>
 					</view>
@@ -182,7 +182,7 @@
 					success: res => {
 						var home = _this.homeList;
 						console.log("hoem", home)
-						this.homeList = home.splice(row, 1)
+						this.homeList.splice(row, 1)
 						uni.request({
 							url: this.config.url + "address/del",
 							data: {
