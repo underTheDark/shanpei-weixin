@@ -9,40 +9,42 @@
 		<!-- 考虑非APP端长列表和复杂的DOM使用scroll-view会卡顿，所以漂浮顶部选项卡使用page本身的滑动 -->
 		<view class="order-list">
 			<view class="list">
-				<view class="onorder" v-if="list.length==0">
+				<view class="onorder" v-if="orderList.length==0">
 					<image src="../../../static/img/noorder.png"></image>
 					<view class="text">
 						没有相关订单
 					</view>
 				</view>
-				<view class="row" v-for="(row,index) in list" :key="index">
+				<view class="row" v-for="(row,index) in orderList" :key="index">
 					<view class="type">
-					     <text class="order-num">订单编号：</text>
+					     <text class="order-num">订单编号：{{row.order_no}}</text>
 					     <text class="order-status">
 						     {{row.status==0?'已取消':row.status==2?'待付款':row.status==3?'待发货':
 							 row.status==4?'代签收':row.status==5?'已完成':""}}
 						 </text>
 					</view>
-					<view class="order-info">
-						<view class="left">
-							<image :src="row.img"></image>
-						</view>
-						<view class="right">
-							<view class="name">
-								{{row.name}}
+					<view class="order-list">
+						<view class="order-info" v-for="(item,itemNum) in row.order_list" :key="itemNum">
+							<view class="left">
+								<image :src="item.goods_logo"></image>
+							</view>
+							<view class="right">
+								<view class="name">
+									{{item.goods_title}}
+								</view>
+								
+								<view class="price-number">
+									<view class="price">￥{{item.price_selling}}</view>
+									<view class="number">x{{item.number}}</view>
+								</view>
 							</view>
 							
-							<view class="price-number">
-								<view class="price">￥{{row.price}}</view>
-								<view class="number">x{{row.numner}}</view>
-							</view>
 						</view>
-						
 					</view>
 					<view class="detail">
-						<view class="number">共{{row.numner}}件商品</view>
+						<view class="number">共{{}}件商品</view>
 						<view class="sum">合计￥
-						     <view class="price">{{row.payment}}</view>
+						     <view class="price">{{row.price_total}}</view>
 						</view>
 						
 					</view>
@@ -58,7 +60,7 @@
 							<view class="pay" @click="confirm()">确认收货</view>
 							
 						</block>
-							<block  v-show="row.status==3">
+						<block  v-show="row.status==3">
 							<view class="default" @click="cancelOrder()">取消订单</view>
 							
 							
@@ -90,35 +92,7 @@
 				},
 				orderType: ['全部','待付款','待发货','待收货','已完成'],
 				//订单列表 演示数据
-				orderList:[
-					[
-						{ type:"unpaid",ordersn:0,goods_id: 0, img: '/static/img/goods/p1.jpg', name: '商品名称商品名称商品名称商品名称商品名称', price: '168.00',payment:168.00,freight:12.00,spec:'规格:S码',numner:1 },
-						{ type:"unpaid",ordersn:1,goods_id: 1, img: '/static/img/goods/p2.jpg', name: '商品名称商品名称商品名称商品名称商品名称', price: '168.00',payment:168.00,freight:12.00,spec:'规格:S码',numner:1 },
-						{ type:"back",ordersn:1,goods_id: 1, img: '/static/img/goods/p3.jpg', name: '商品名称商品名称商品名称商品名称商品名称', price: '168.00',payment:168.00,freight:12.00,spec:'规格:S码',numner:1 },
-						{ type:"unreceived",ordersn:1,goods_id: 1, img: '/static/img/goods/p4.jpg', name: '商品名称商品名称商品名称商品名称商品名称', price: '168.00',payment:168.00,freight:12.00,spec:'规格:S码',numner:1 },
-						{ type:"received",ordersn:1,goods_id: 1, img: '/static/img/goods/p5.jpg', name: '商品名称商品名称商品名称商品名称商品名称', price: '168.00',payment:168.00,freight:12.00,spec:'规格:S码',numner:1 },
-						{ type:"completed",ordersn:1,goods_id: 1, img: '/static/img/goods/p6.jpg', name: '商品名称商品名称商品名称商品名称商品名称', price: '168.00',payment:168.00,freight:12.00,spec:'规格:S码',numner:1 },
-						{ type:"refunds",ordersn:1,goods_id: 1, img: '/static/img/goods/p5.jpg', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168',payment:168.00,freight:12.00,spec:'规格:S码',numner:1 },
-						{ type:"cancelled",ordersn:1,goods_id: 1, img: '/static/img/goods/p5.jpg', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168',payment:168.00,freight:12.00,spec:'规格:S码',numner:1 }
-					],
-					[
-						{ type:"unpaid",ordersn:0,goods_id: 0, img: '/static/img/goods/p1.jpg', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168',payment:168.00,freight:12.00,spec:'规格:S码',numner:1 },
-						{ type:"unpaid",ordersn:1,goods_id: 1, img: '/static/img/goods/p2.jpg', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168',payment:168.00,freight:12.00,spec:'规格:S码',numner:1 }
-					],
-					[
-						//无
-					],
-					[
-						{ type:"unreceived",ordersn:1,goods_id: 1, img: '/static/img/goods/p4.jpg', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168',payment:168.00,freight:12.00,spec:'规格:S码',numner:1 }
-					],
-					[
-						{ type:"received",ordersn:1,goods_id: 1, img: '/static/img/goods/p5.jpg', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168',payment:168.00,freight:12.00,spec:'规格:S码',numner:1 }
-					],
-					[
-						{ type:"refunds",ordersn:1,goods_id: 1, img: '/static/img/goods/p5.jpg', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168',payment:168.00,freight:12.00,spec:'规格:S码',numner:1 }
-					]
-					
-				],
+				orderList:[],
 				list:[],
 				tabbarIndex:0
 			};
@@ -127,7 +101,7 @@
 			//option为object类型，会序列化上个页面传递的参数
 			console.log("option: " + JSON.stringify(option));
 			let tbIndex = parseInt(option.tbIndex)+1;
-			this.list = this.orderList[tbIndex];
+			
 			this.tabbarIndex = tbIndex;
 			//兼容H5下排序栏位置
 			// #ifdef H5
@@ -149,7 +123,11 @@
 					type:this.tabbarIndex
 				},
 				success:(res) => {
-					console.log(res)
+					console.log("moun",res)
+					if(res.data.code==1){
+						
+						this.orderList=res.data.data.data
+					}
 				}
 			})
 		},
@@ -165,25 +143,7 @@
 			},
 			//去付款
 			toPayment(row){
-				//本地模拟订单提交UI效果
-				uni.showLoading({
-					title:'正在获取订单...'
-				})
-				
-				let paymentOrder = [];
-				paymentOrder.push(row);
-				setTimeout(()=>{
-					uni.setStorage({
-						key:'paymentOrder',
-						data:paymentOrder,
-						success: () => {
-							uni.hideLoading();
-							uni.navigateTo({
-								url:'../../pay/payment/payment?amount='+row.payment
-							})
-						}
-					})
-				},500)
+		
 			},
 			//取消订单
 		    cancelOrder(){
@@ -290,6 +250,11 @@ page{
 				.order-status{
 					color:#14CC21;
 				}
+			}
+			.order-list{
+				display: flex;
+				flex-direction: column;
+				width:100%;
 			}
 			.order-info{
 				width: 100%;

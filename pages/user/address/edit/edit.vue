@@ -27,7 +27,7 @@
 				<view class="nominal">
 					街道
 				</view>
-				<view class="input" @tap="chooseStr">
+				<view class="input addwidth" @tap="chooseStr">
 					{{street}}
 				</view>
 
@@ -129,24 +129,25 @@
 				style1:'1',
 				style2:'0',
 				style3:'0',
+				style4:"0",
 				isdisabled:false, //判断地址石佛填完
 				city_one:[],  //省地址
 				city_two:[],  //市地址
 				city_tree:[],  //区地址
 				city_four:[],  //街道地址
 				id: '',
-				name: '',
-				tel: '',
-				detailed: '',
+				name: '',          //用户名
+				tel: '',         //手机号
+				detailed: '',   //详细地址
 				address:"",
 				province: "河南省",
 				city: "郑州市",
 				area: "高新区",
 				street: "枫杨街",
-				isDefault: false,
+				isDefault: 0,  //设置为默认地址 1
 				strId:"",
 				themeColor: '#007AFF',
-				
+				region:null,  //编辑地址对象
 				visible: true,
 				
 			}
@@ -157,7 +158,7 @@
 				this.ishow=1;
 				this.citynum=0;
 				this.init(0,1)
-				
+				console.log(222)
 			},
 			showcity(id,name){
 				// this.pid=id
@@ -255,83 +256,104 @@
 					},
 				})
 			},
-
-			// 			save() {
-			// 				console.log(this.tel, this.detailed)
-			// 				let data = {
-			// 					"name": this.name,
-			// 					"phone": this.tel,
-			// 					id: this.id,
-			// 					token: this.token,
-			// 					province: this.province,
-			// 					city: this.city,
-			// 					area: this.area,
-			// 					street: this.street,
-			// 					"is_default": this.isDefault,
-			// 					address: this.detailed
-			// 				}
-			// 
-			// 				if (!this.name) {
-			// 					uni.showToast({
-			// 						title: '请输入收件人姓名',
-			// 						icon: 'none'
-			// 					});
-			// 					return;
-			// 				}
-			// 				if (!this.tel) {
-			// 					uni.showToast({
-			// 						title: '请输入收件人电话号码',
-			// 						icon: 'none'
-			// 					});
-			// 					return;
-			// 				}
-			// 				if (!this.detailed) {
-			// 					uni.showToast({
-			// 						title: '请输入收件人详细地址',
-			// 						icon: 'none'
-			// 					});
-			// 					return;
-			// 				}
-			// 
-			// 				// uni.showLoading({
-			// 				// 	title:'正在提交'
-			// 				// })
-			// 				//实际应用中请提交ajax,模板定时器模拟提交效果
-			// 				uni.request({
-			// 					url: this.config.url + "address/edit",
-			// 					method: "post",
-			// 					data: data,
-			// 					success: (res) => {
-			// 						console.log(res)
-			// 						if (res.data.code == 1) {
-			// 							uni.showLoading({
-			// 								title: '保存成功'
-			// 							})
-			// 							setTimeout(function() {
-			// 								uni.hideLoading()
-			// 							}, 500)
-			// 						}
-			// 					}
-			// 				})
-			// 
-			// 
-			// 			}
+			
+			//设置默认地址
+			isDefaultChange(e){
+				console.log(e.detail.value)
+				if(e.detail.value){
+					this.isDefault=1;
+				}else{
+					this.isDefault=0;
+				}
+			},
+                //  新建/修改地址提交
+						save() {
+							console.log(this.tel, this.detailed)
+							let data = {
+								"name": this.name,
+								"phone": this.tel,
+								id: this.id,
+								token: this.token,
+								province: this.province,
+								city: this.city,
+								area: this.area,
+								street: this.street,
+								"is_default": this.isDefault,
+								address: this.detailed
+							}
+			
+							if (!this.name) {
+								uni.showToast({
+									title: '请输入收件人姓名',
+									icon: 'none'
+								});
+								return;
+							}
+							if (!this.tel) {
+								uni.showToast({
+									title: '请输入收件人电话号码',
+									icon: 'none'
+								});
+								return;
+							}
+							if (!this.detailed) {
+								uni.showToast({
+									title: '请输入收件人详细地址',
+									icon: 'none'
+								});
+								return;
+							}
+			
+							// uni.showLoading({
+							// 	title:'正在提交'
+							// })
+							//实际应用中请提交ajax,模板定时器模拟提交效果
+							uni.request({
+								url: this.config.url + "address/edit",
+								method: "post",
+								data: data,
+								success: (res) => {
+									console.log(res)
+									if (res.data.code == 1) {
+										uni.showToast({
+											title:res.data.info,
+											duration:1000,
+										})
+										uni.navigateTo({
+											url:"/pages/user/address/address"
+										})
+									}else if(res.data.code==0){
+										uni.showToast({
+											title:res.data.info,
+											duration:1000,
+										})
+									}
+								}
+							})
+			
+			
+						}
 		},
 		onLoad(option) {
 			//this.getSiteData()
 			//获取传递过来的参数
-			console.log(option)
-			// if (e.type) {
-			// 	this.region = JSON.parse(e.type)
-			// 	this.name = this.region.name;
-			// 	this.tel = this.region.phone;
-			// 	this.detailed = this.region.address;
-			// 	this.id = this.region.id;
-			// 	this.province = this.region.province;
-			// 	this.city = this.region.city;
-			// 	this.area = this.region.area;
-			// 	this.street = this.region.street;
-			// }
+			 if(option.type){
+				  this.region=JSON.parse(option.type)
+			 }
+			
+			 console.log(option,this.region)
+			if (this.region) {
+			
+				this.name = this.region.name;
+				this.tel = this.region.phone;
+				this.detailed = this.region.address;
+				this.id = this.region.id;
+				this.province = this.region.province;
+				this.city = this.region.city;
+				this.area = this.region.area;
+				this.street = this.region.street;
+				this.isDefault=this.region.is_default;
+			}
 
 
 		},
@@ -409,7 +431,10 @@
 				font-size: 30upx;
 				align-items: center;
 			}
-
+            .addwidth{
+				display: flex;
+				flex:1
+			}
 			.input {
 
 
@@ -516,6 +541,9 @@
 		
 		overflow-y: auto;
 		text-align: center;
+		.li_i{
+			width:100%;
+		}
 	}
 	.sign{
 		background: #C49569;

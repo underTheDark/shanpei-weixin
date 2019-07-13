@@ -1,14 +1,10 @@
 {
-	"permission": {
-		"scope.userLocation": {
-			"desc": "你的位置信息将用于小程序位置接口的效果展示"
-		}
-	},
+
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-        {
-        	"path": "pages/author/author",
-        	"style": {}
-        },
+		{
+			"path": "pages/author/author",
+			"style": {}
+		},
 		{
 			"path": "pages/user/address/edit/edit",
 			"style": {
@@ -19,11 +15,11 @@
 			}
 		},
 
-		
-		
 
-	   
-		{    
+
+
+
+		{
 
 
 			"path": "pages/tabBar/home",
@@ -46,7 +42,7 @@
 			"path": "pages/tabBar/category",
 			"style": {
 				"navigationBarTextStyle": "black",
-				"navigationBarTitleText": "分类",
+				"navigationBarTitleText": "",
 				"app-plus": {
 					"titleNView": false, //禁用原生导航栏
 					"bounce": "none"
@@ -79,7 +75,7 @@
 			"path": "pages/goods/goods",
 			"style": {
 				"navigationBarTitleText": "",
-				"navigationBarBackgroundColor": "#f1f1f1",
+				"navigationBarBackgroundColor": "white",
 				"onReachBottomDistance": 50,
 				"h5": {
 					"titleNView": false
@@ -169,7 +165,7 @@
 				}
 			}
 		},
-		
+
 		{
 			"path": "pages/user/keep/sayFeel/sayFeel",
 			"style": {
@@ -287,7 +283,7 @@
 			"path": "pages/getphone/getphone",
 			"style": {}
 		}
-		
+
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
@@ -329,7 +325,11 @@
 				"text": "我的"
 			}
 		]
+	},
+	"permission": {
+		"scope.userLocation": {
+			"desc": "你的位置信息将用于小程序位置接口的效果展示"
+		}
 	}
-
 
 }

@@ -1,88 +1,98 @@
 <template>
 	<view id="address">
 
+
+
+		<view class="address-title">
+			<view :class="{on:typeClass=='home'}" @tap="switchType('home')">常用地址管理</view>
+			<view :class="{on:typeClass=='self'}" @tap="switchType('self')">常用自提点管理</view>
+		</view>
 		<view class="list">
-
-			<view class="address-title">
-				<view :class="{on:typeClass=='home'}" @tap="switchType('home')">常用地址管理</view>
-				<view :class="{on:typeClass=='self'}" @tap="switchType('self')">常用自提点管理</view>
-			</view>
-			<view v-if="homeList.length == 0 && subState==1" class="noAdd">
-				<view class="img">
-					<image src="../../../static/img/add-position.png"></image>
-				</view>
-
-				<text>赶快去添加收货地址吧！</text>
-			</view>
-			<view v-show="selfList.length == 0 && subState==2" class="noAdd">
-				<view class="img">
-					<image src="../../../static/img/add-position.png"></image>
-				</view>
-
-				<text>赶快去添加收货地址吧！</text>
-			</view>
 			<!-- 常用地址管理 -->
-			<view v-show="subState==1" class="row" v-for="(row,index) in homeList" :key="index">
-				<view class="row-top">
-					<view class="top-one">
-						<text>{{row.name}}</text>
-						<text>{{row.phone}}</text>
-					</view>
-					<view class="top-two">
 
-						{{row.province }}{{row.city}}{{row.area}}{{row.street}}{{row.address}}
-
+			<view v-show="subState==1" class="address-msg">
+				<!-- 图标显示 -->
+				<view v-show="homeLen <1" class="noAdd">
+					<view class="img">
+						<image src="../../../static/img/add-position.png"></image>
 					</view>
+
+					<text>赶快去添加收货地址吧！</text>
 				</view>
-				<view class="row-bottom">
-					<view class="left">
-						<image :src="row.is_default==1 ?src1:src2"></image>
-						<view :class="row.is_default==1?'selected':'noSelect'">{{row.is_default==1?"默认地址":"其他地址"}}</view>
-					</view>
-					<view class="right">
-						<view class="jianju" @tap.stop="edit(row)">
-							<image src="../../../static/img/address/write.png"></image>
-							<view>编辑</view>
+				<!-- 地址列表 -->
+				<view class="row" v-for="(row,index) in homeList" :key="index">
+					<view class="row-top">
+						<view class="top-one">
+							<text>{{row.name}}</text>
+							<text>{{row.phone}}</text>
 						</view>
-						<view @click="removeH(index,row.id)">
-							<image src="../../../static/img/address/delete.png"></image>
-							<view>删除</view>
+						<view class="top-two">
+
+							{{row.province }}{{row.city}}{{row.area}}{{row.street}}{{row.address}}
+
+						</view>
+					</view>
+					<view class="row-bottom">
+						<view class="left">
+							<image :src="row.is_default==1 ?src1:src2"></image>
+							<view :class="row.is_default==1?'selected':'noSelect'">{{row.is_default==1?"默认地址":"其他地址"}}</view>
+						</view>
+						<view class="right">
+							<view class="jianju" @tap.stop="edit(row)">
+								<image src="../../../static/img/address/write.png"></image>
+								<view>编辑</view>
+							</view>
+							<view @click="removeH(index,row.id)">
+								<image src="../../../static/img/address/delete.png"></image>
+								<view>删除</view>
+							</view>
 						</view>
 					</view>
 				</view>
 			</view>
 			<!-- 常用自提点管理 -->
-			<view v-show="subState==2" class="row" v-for="(row,index) in selfList" :key="index" @tap="select(row)">
-				<view class="row-top">
-					<view class="get-position">{{row.store.name}}</view>
-					<view class="top-one">
-						<text>{{row.store.username}}</text>
-						<text>{{row.store.phone}}</text>
-					</view>
-					<view class="top-two">
+			<view v-show="subState==2" class="address-msg">
+				<!-- 无地址显示图标 -->
 
-						{{row.store.province }}{{row.store.city}}{{row.store.area}}{{row.store.street}}{{row.store.address}}
-
+				<view v-show="selfLen <1 " class="noAdd">
+					<view class="img">
+						<image src="../../../static/img/add-position.png"></image>
 					</view>
+
+					<text>赶快去添加收货地址吧！</text>
 				</view>
-				<view class="row-bottom">
-					<view class="left">
-						<image :src="row.is_default==1 ?src1:src2"></image>
-						<view :class="row.is_default==1?'selected':'noSelect'">{{row.is_default==1?"默认地址":"其他地址"}}</view>
+				<!-- 地址列表 -->
+				<view class="row" v-for="(row,index) in selfList" :key="index" @tap="select(row)">
+					<view class="row-top">
+						<view class="get-position">{{row.store.name}}</view>
+						<view class="top-one">
+							<text>{{row.store.username}}</text>
+							<text>{{row.store.phone}}</text>
+						</view>
+						<view class="top-two">
+
+							{{row.store.province }}{{row.store.city}}{{row.store.area}}{{row.store.street}}{{row.store.address}}
+
+						</view>
 					</view>
-					<view class="right">
-						<!-- <view class="jianju" @tap.stop="edit(row)">
+					<view class="row-bottom">
+						<view class="left">
+							<image :src="row.is_default==1 ?src1:src2"></image>
+							<view :class="row.is_default==1?'selected':'noSelect'">{{row.is_default==1?"默认地址":"其他地址"}}</view>
+						</view>
+						<view class="right">
+							<!-- <view class="jianju" @tap.stop="edit(row)">
 							<image src="../../../static/img/address/write.png"></image>
 							<view>编辑</view>
 						</view> -->
-						<view @click="removeS(index,row.id)">
-							<image src="../../../static/img/address/delete.png"></image>
-							<view>删除</view>
+							<view @click="removeS(index,row.id)">
+								<image src="../../../static/img/address/delete.png"></image>
+								<view>删除</view>
+							</view>
 						</view>
 					</view>
 				</view>
 			</view>
-
 		</view>
 
 		<view class="add" v-show="subState==1">
@@ -103,14 +113,17 @@
 
 			// 自提点
 			uni.request({
+				
 				url: this.config.url + "member/station",
 				method: "post",
 				data: {
 					token: this.token
 				},
 				success: (res) => {
-					console.log(res)
+				console.log(111111111)
 					this.selfList = res.data.data;
+					this.selfLen = res.data.data.length;
+						console.log(res, res.data.data.length, "zi")
 				}
 
 			})
@@ -122,9 +135,10 @@
 					token: this.token
 				},
 				success: (res) => {
-					console.log(res)
+					console.log(11111111221)
+					console.log(res, res.data.data.length, "wo")
 					this.homeList = res.data.data;
-
+					this.homeLen = res.data.data.length;
 				}
 			})
 		},
@@ -140,64 +154,95 @@
 				isSelect: false,
 				homeList: [],
 				selfList: [],
-				
+				homeLen: "",
+				selfLen: ""
 			};
-		},
-		onShow() {
-
 		},
 		onLoad(e) {
 			if (e.type == 'select') {
 				this.isSelect = true;
+				console.log(11111)
 			}
 		},
+		onReady() {
+			console.log("ready")
+		},
 		methods: {
+
 			// 删除我的收货地址
-			removeH(index, id) {
-				console.log(index, id)
-				uni.request({
-					url: this.config.url + "address/del",
-					data: {
-						token: this.token,
-						address_id: id,
+			removeH(row, id) {
+				var _this = this;
+				uni.showModal({
+					title: '提示',
+					content: '确定要删除收货地址',
+
+					cancelText: '取消',
+					confirmText: '确认',
+					confirmColor: "#14CC21",
+					success: res => {
+						var home = _this.homeList;
+						console.log("hoem", home)
+						this.homeList = home.splice(row, 1)
+						uni.request({
+							url: this.config.url + "address/del",
+							data: {
+								token: this.token,
+								address_id: id,
+							},
+							method: "post",
+							success: (res) => {
+								if (res.data.code == 1) {
+
+								}
+							}
+						});
+
 					},
-					method: "post",
-					success: (res) => {
-						console.log(res)
-					}
+
 				});
 			},
+
 			// 删除自提点
-			removeS(index, id) {
+			removeS(row, id) {
+				uni.showModal({
+					title: '提示',
+					content: '确定要删除收货地址',
 
-				uni.request({
-					url: this.config.url + "station/del",
-					data: {
-						token: this.token,
-						address_id: id,
+					cancelText: '取消',
+					confirmText: '确认',
+					confirmColor: "#14CC21",
+					success: res => {
+
+						uni.request({
+							url: this.config.url + "station/del",
+							data: {
+								token: this.token,
+								address_id: id,
+							},
+							method: "post",
+							success: (res) => {
+								if (res.data.code == 1) {
+									var self = this.selfList;
+									this.selfList = self.splice(row, 1)
+								}
+							}
+						});
+
 					},
-					method: "post",
-					success: (res) => {
-						console.log(res)
-					}
+
 				});
 			},
-
-			// uni.showToast({
-			// 	icon: "success",
-			// 	title: '操作成功!',
-			// 	duration: 2000
-			// });
-
 
 			switchType(type) {
 
 				this.typeClass = type;
 				if (type == "home") {
 					this.subState = 1;
+					console.log("home",this.homeLen)
 
 				} else if (type == "self") {
 					this.subState = 2;
+					console.log("se",this.selfLen)
 				}
 			},
 			edit(row) {
@@ -267,9 +312,7 @@
 		}
 	}
 
-	#address {
-		background: white;
-	}
+	
 
 	#address .on {
 
@@ -317,13 +360,31 @@
 	#address {
 		width: 100%;
 		height: 100%;
+		display: flex;
+		flex-direction: column;
+			background: white;
+	}
+
+	.address-title {
+		display: flex;
+		border-bottom: 20upx solid rgba(245, 245, 245, 1);
+		justify-content: space-around;
+		align-items: center;
+
+		view {
+			color: rgba(51, 51, 51, 1);
+			font-size: 30upx;
+			padding: 20upx 0;
+
+
+		}
 	}
 
 	.list {
 		width: 100%;
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
+		
 
 
 		.noAdd {
@@ -345,19 +406,10 @@
 			}
 		}
 
-		.address-title {
+		.address-msg {
+			width: 100%;
 			display: flex;
-			border-bottom: 20upx solid rgba(245, 245, 245, 1);
-			justify-content: space-around;
-			align-items: center;
-
-			view {
-				color: rgba(51, 51, 51, 1);
-				font-size: 30upx;
-				padding: 20upx 0;
-
-
-			}
+			flex-direction: column;
 		}
 
 		.row {

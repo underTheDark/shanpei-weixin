@@ -246,12 +246,13 @@
 					});
 					return;
 				}
+				console.log("tmplist",tmpList)
 				uni.setStorage({
 					key: 'buylist',
 					data: tmpList,
 					success: () => {
 						uni.navigateTo({
-							url: '../order/confirmation'
+							url: '../order/confirmation?iscart=1'
 						})
 					}
 				})

@@ -157,9 +157,6 @@ view {
 .icon.tianjia:before {
       content: "\E81A";
 }
-#address {
-  background: white;
-}
 #address .on {
   border-bottom: 5rpx solid #14cc21;
   font-weight: bold;
@@ -222,6 +219,35 @@ view {
 #address {
   width: 100%;
   height: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background: white;
+}
+.address-title {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  border-bottom: 20rpx solid whitesmoke;
+  -webkit-justify-content: space-around;
+      -ms-flex-pack: distribute;
+          justify-content: space-around;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.address-title view {
+    color: #333333;
+    font-size: 30rpx;
+    padding: 20rpx 0;
 }
 .list {
   width: 100%;
@@ -234,10 +260,6 @@ view {
   -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
 }
 .list .noAdd {
     padding-top: 50%;
@@ -268,24 +290,17 @@ view {
       font-size: 28rpx;
       color: #666666;
 }
-.list .address-title {
+.list .address-msg {
+    width: 100%;
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    border-bottom: 20rpx solid whitesmoke;
-    -webkit-justify-content: space-around;
-        -ms-flex-pack: distribute;
-            justify-content: space-around;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
-}
-.list .address-title view {
-      color: #333333;
-      font-size: 30rpx;
-      padding: 20rpx 0;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
 }
 .list .row {
     display: -webkit-box;

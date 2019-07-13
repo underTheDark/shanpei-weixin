@@ -574,12 +574,12 @@ page {
         -webkit-flex-direction: column;
             -ms-flex-direction: column;
                 flex-direction: column;
-        -webkit-transform: scale(0.8);
-        -ms-transform: scale(0.6);
-            transform: scale(0.6);
+        -webkit-transform: scale(1);
+        -ms-transform: scale(1);
+            transform: scale(1);
 }
 .promotion .promotion-head .promotion-head-left .english text {
-          font-size: 7rpx;
+          font-size: 14rpx;
           font-family: PingFang-SC-Medium;
           font-weight: 500;
           color: #555555;

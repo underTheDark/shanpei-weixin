@@ -3,23 +3,25 @@
 		<view class="send-type">
 			<!-- <view>自提</view>
 			<view>送货上门</view> -->
-			<view :class="{on:typeClass=='home'}" @tap="switchType('home')">自提</view>
-			<view :class="{on:typeClass=='self'}" @tap="switchType('self')">送货上门</view>
+			<view :class="{on:typeClass=='self'}" @tap="switchType('self')">自提</view>
+			<view :class="{on:typeClass=='home'}" @tap="switchType('home')">送货上门</view>
 		</view>
 		<view class="send-add">
 			<!-- 送货上门 -->
-			<view class="add-list" v-show="subState==2" @tap="selectHome(home.id,home)" v-for="(home,homeIndex) in homeList" :key="homeIndex">
-				<view class="add-left">
-					<checkbox :checked="checked"></checkbox>
-				</view>
-				<view class="add-right">
-					<view class="address-user-top">
-						<text>{{home.name}}</text>
-						<text>{{home.phone}}</text>
+			<view v-show="subState==2">
+				<view class="add-list" @tap="selectHome(home.id,home)" v-for="(home,homeIndex) in homeList" :key="homeIndex">
+					<view class="add-left">
+						<checkbox class="checkbox" :checked="home.id==homeNum"></checkbox>
 					</view>
-					<view class="address-user-bottom">
-						{{home.province}}{{home.city}}
-						{{home.area}}{{home.address}}{{home.street}}
+					<view class="add-right">
+						<view class="address-user-top">
+							<text>{{home.name}}</text>
+							<text>{{home.phone}}</text>
+						</view>
+						<view class="address-user-bottom">
+							{{home.province}}{{home.city}}
+							{{home.area}}{{home.address}}{{home.street}}
+						</view>
 					</view>
 				</view>
 			</view>
@@ -55,46 +57,42 @@
 			// #ifdef APP-PLUS
 			this.statusHeight = plus.navigator.getStatusbarHeight();
 			// #endif
-			this.amapPlugin = new amap.AMapWX({
+			var amapPlugin = new amap.AMapWX({
 				//高德地图KEY，随时失效，请务必替换为自己的KEY，参考：http://ask.dcloud.net.cn/article/35070
 				key: '5b9b64be2413fc19c26683fcf0de890f'
 			});
 			//定位地址
-			this.amapPlugin.getRegeo({
+			amapPlugin.getRegeo({
 				success: (data) => {
-					//console.log(data)
+					//	console.log(data)
 					this.city = data[0].regeocodeData.addressComponent.city.replace(/市/g, ''); //把"市"去掉
 
-					var lat = data[0].latitude; //纬度
-					var lng = data[0].longitude; //经度
-
-
-					// 自提点列表
-					uni.request({
-						url: this.config.url + "order/store",
-						method: "post",
-						data: {
-							token: this.token,
-							lat: lat,
-							lng: lng,
-
-						},
-						success: (res) => {
-							console.log(res.data)
-							if (res.data.code == 1) {
-								this.selfList = res.data.data.data
-							} else {
-                              
-							}
-						}
-					})
-				}
+					this.lat = data[0].latitude; //纬度
+					this.lng = data[0].longitude; //经度
+                }
 			});
 
 
 		},
 		mounted() {
-
+              // 自提点列表
+              uni.request({
+              	url: this.config.url + "order/store",
+              	method: "post",
+              	data: {
+              		token: this.token,
+              		lat: this.lat,
+              		lng: this.lng,
+              },
+              	success: (res) => {
+              		console.log("zi",res.data)
+              		if (res.data.code == 1) {
+              			this.selfList = res.data.data.data
+              		} else {
+              
+              		}
+              	}
+              }),
 
 
 			//我的收获地址
@@ -106,7 +104,7 @@
 
 				},
 				success: (res) => {
-					//console.log(res.data.data, res)
+					console.log("wo",res.data.data, res)
 					if (res.data.code == 1) {
 						this.homeList = res.data.data
 					} else {
@@ -117,14 +115,16 @@
 		},
 		data() {
 			return {
-
-				subState: "1",
-				typeClass: 'home',
+                homeNum:0,  //选中我的收货地址下标
+				subState: 1,
+				typeClass: 'self',
 				city: "",
 				addr: {},
 				selfList: [],
 				homeList: [],
-				checked: ""
+				checked: "",
+				lat:"" , //纬度
+				lng:"",  //经度
 			}
 		},
 		methods: {
@@ -132,65 +132,74 @@
 
 				this.typeClass = type;
 				if (type == "home") {
-					this.subState = '1';
-					
+					this.subState = 2;
+
 				} else if (type == "self") {
-					this.subState = '2';
+					this.subState = 1;
 				}
 			},
+			//跳转新增地址页面
 			add() {
 				uni.navigateTo({
-					url: "edit/edit?type=add"
+					url: "/pages/user/address/edit/edit"
 				})
 			},
 			//选取我的收货地址
-			selectHome(id) {
-				//console.log(id)
-				this.checked = !this.checked;
-
+			selectHome(id, home) {
+				
+                this.homeNum=id;
+				
+				var homeAddr=JSON.stringify(home)
+				console.log(id, home, this.checked)
+                uni.setStorage({
+                		key: "address",
+                		data: homeAddr,
+                		success: function() {
+                			//console.log("success")
+                		}
+                	})
+                	uni.navigateTo({
+                		url: "/pages/order/confirmation"
+                
+                	})
 			},
 			//选取自提点地址
-			selectSelf(id,self) {
-				var selfAddr=JSON.stringify(self)
+			selectSelf(id, self) {
+				var selfAddr = JSON.stringify(self)
 				//console.log(id,self)
-				uni.request({
-					url: this.config.url + "station/default",
-					method: "post",
-					data: {
-						token: this.token,
-						station_id: id
-					},
-					success: (res) => {
-						
-						if (res.data.code == 1) {
-							uni.showToast({
-								title: '设置成功',
-								duration: 1000
-							});
-
-							
-                        uni.setStorage({
-							key:"address",
-							data:selfAddr,
-							success:function(){
-								//console.log("success")
-							}
-						})
-							uni.navigateBack({
-								url:"/pages/order/confirmation"
-
+		         		uni.setStorage({
+								key: "address",
+								data: selfAddr,
+								success: function() {
+									//console.log("success")
+								}
 							})
-							
-						
-						}
-					}
-				})
-			}
+						uni.navigateTo({
+							url: "/pages/order/confirmation"
+						                
+						})
+            }
 		}
 	}
 </script>
 
 <style lang="scss">
+	
+	
+		/* #ifdef APP-PLUS || MP-WEIXIN */
+	      checkbox .wx-checkbox-input {
+	   			
+	   			border-radius: 50%;
+	   		}
+	    checkbox .wx-checkbox-input.wx-checkbox-input-checked{
+	      color:#fff!important;
+	      background: green;
+	   }
+	   checkbox .wx-checkbox-input.wx-checkbox-input-checked::before{
+	   		  font-size: 30upx;
+	   }
+	/* #endif */
+	
 	.sendType {
 
 		background: rgba(245, 245, 245, 1);
@@ -208,7 +217,11 @@
 
 		view {
 			font-size: 30upx;
-
+			width: 50%;
+			height: 100upx;
+			display: flex;
+			justify-content: center;
+			align-items: center;
 			color: rgba(51, 51, 51, 1);
 		}
 
@@ -246,7 +259,8 @@
 					align-items: center;
 					font-size: 32upx;
 
-					color: rgba(51, 51, 51, 1) text {
+					color: rgba(51, 51, 51, 1) ;
+					text {
 						margin-right: 30upx;
 					}
 				}
