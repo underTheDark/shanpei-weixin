@@ -154,8 +154,7 @@ page {
 .list .list-one .one-left image {
         width: 86rpx;
         height: 86rpx;
-        -webkit-border-radius: 86rpx;
-                border-radius: 86rpx;
+        border-radius: 86rpx;
         border: 1px solid #3699ff;
 }
 .list .list-one .one-left .evaluate {
@@ -397,7 +396,6 @@ page {
     font-weight: 400;
     color: #14cc21;
     border: 1px solid #14cc21;
-    -webkit-border-radius: 56rpx;
-            border-radius: 56rpx;
+    border-radius: 56rpx;
 }
 

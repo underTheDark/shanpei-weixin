@@ -183,8 +183,7 @@
       width: 5px;
       height: 5px;
       background-color: #969799;
-      -webkit-border-radius: 50%;
-              border-radius: 50%;
+      border-radius: 50%;
 }
 .uni-steps-item-line {
       background-color: #ebedf0;
@@ -339,8 +338,7 @@
 .people .people-left image {
       width: 84rpx;
       height: 84rpx;
-      -webkit-border-radius: 84rpx;
-              border-radius: 84rpx;
+      border-radius: 84rpx;
       margin-right: 30rpx;
 }
 .people .people-left .people-msg {
@@ -376,5 +374,32 @@
 }
 .goods-status {
   margin: 60rpx 0 0 60rpx;
+}
+/deep/.uni-steps-item-circle {
+  width: 20rpx;
+  height: 20rpx;
+}
+/deep/.uni-steps-items.uni-steps-column .uni-steps-item-line {
+  width: 6rpx;
+  left: -26rpx;
+}
+/deep/.uni-icon-checkbox-filled:before {
+  margin-left: 5rpx;
+}
+/deep/.uni-steps-items {
+  overflow: visible;
+}
+/deep/.uni-steps-items.uni-steps-column .uni-steps-item-desc {
+  margin-left: -150rpx;
+  margin-top: -60rpx;
+  width: 100rpx;
+  height: 80rpx;
+}
+/deep/.uni-steps {
+  margin-left: 100rpx;
+  overflow: visible;
+}
+/deep/.uni-steps-item-title-container {
+  margin-bottom: 80rpx;
 }
 

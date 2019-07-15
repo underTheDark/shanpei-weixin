@@ -3,24 +3,23 @@
 	<view id="serType">
 		<view class="service-one">
 			<view class="order-num">
-				订单编号：3233333
+				订单编号：{{goods.order_no}}
 			</view>
-			<view class="product">
-				<image src="../../static/img/1.jpg" ></image>
-				<view class="product-right">
-					<view class="product-title">
-						
-                            kai/贝印 日本进口面粉筛 手持糖粉筛 筛
-网滤网 筛粉杯子 ...
-                        
-					</view>
-					<view class="product-size">
-						<text>M</text>
-						<text>颜色</text>
-					</view>
-					<view class="product-price">
-						<text>价钱</text>
-						<text>数量</text>
+			<view class="list">
+				<view class="product" v-for="(item,index) in goods.order_list" :key="index">
+					<image :src="item.goods_logo"></image>
+					<view class="product-right">
+						<view class="product-title">
+				               {{item.goods_item}}
+						</view>
+						<view class="product-size">
+							<text>{{item.goods_spec}}</text>
+							
+						</view>
+						<view class="product-price">
+							<text>{{item.price_selling}}</text>
+							<text>{{item.number}}</text>
+						</view>
 					</view>
 				</view>
 			</view>
@@ -48,7 +47,7 @@
 	export default {
 		data() {
 			return {
-				
+				goods:{}
 			}
 		},
 		methods: {
@@ -62,6 +61,18 @@
 					url:"/pages/applyChange/applyChange"
 				})
 			}
+		},
+		onLoad(option) {
+			//console.log(option)
+		},
+		mounted() {
+			uni.getStorage({
+				key:"regoods",
+				success:(res)=>{
+					console.log("regoods",res)
+					this.goods=res.regoods;
+				}
+			})
 		}
 	}
 </script>
@@ -83,6 +94,10 @@
 	  background:white;
 	  display: flex;
 	  flex-direction: column;
+	  .list{
+		  display: flex;
+		  flex-direction: column;
+	  }
 	  .order-num{
 		  padding:20upx;
 		  font-size: 28upx;

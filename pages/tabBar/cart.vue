@@ -57,7 +57,7 @@
 			<view class="settlement">
 				<view class="sum">合计:<view class="money">￥{{sumPrice}}</view>
 				</view>
-				<view class="btn" @tap="toConfirmation">去结算</view>
+				<view class="btn" @tap="toConfirmation"> 提交订单</view>
 			</view>
 		</view>
 	</view>
@@ -78,28 +78,19 @@
 				statusTop: null,
 				selectedList: [],
 				isAllselected: false,
-				goodsList: [{
-						id: 1,
-						img: '../../static/img/goods/p1.jpg',
-						name: '商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',
-						spec: '规格:S码',
-						price: 127.5,
-						number: 1,
-						selected: false
-					}
-				],
+				goodsList: [],
 				//控制滑动效果
 				theIndex: null,
 				oldIndex: null,
 				isStop: false
 			}
 		},
-		onPageScroll(e) {
-			//兼容iOS端下拉时顶部漂移
-			this.headerPosition = e.scrollTop >= 0 ? "fixed" : "absolute";
-			this.headerTop = e.scrollTop >= 0 ? null : 0;
-			this.statusTop = e.scrollTop >= 0 ? null : -this.statusHeight + 'px';
-		},
+		// onPageScroll(e) {
+		// 	//兼容iOS端下拉时顶部漂移
+		// 	this.headerPosition = e.scrollTop >= 0 ? "fixed" : "absolute";
+		// 	this.headerTop = e.scrollTop >= 0 ? null : 0;
+		// 	this.statusTop = e.scrollTop >= 0 ? null : -this.statusHeight + 'px';
+		// },
 		//下拉刷新，需要自己在page.json文件中配置开启页面下拉刷新 "enablePullDownRefresh": true
 		onPullDownRefresh() {
 			setTimeout(function() {
@@ -107,7 +98,7 @@
 			}, 1000);
 		},
 		onLoad() {
-			this.getCart();
+			
 			//兼容H5下结算条位置
 			// #ifdef H5
 			this.footerbottom = document.getElementsByTagName('uni-tabbar')[0].offsetHeight + 'px';
@@ -117,35 +108,8 @@
 			// #endif
 		},
 		methods: {
-			// 获取购物车信息
-			getCart(){
-				let that=this;
-				uni.request({
-					method:"post",
-					data:{
-						token:this.token
-					},
-					url:this.config.url+"member/car",
-					success:function(res){
-						// console.log("data",res.data);
-						if(res.data.code==1){
-							that.goodsList=res.data.data;
-							that.goodsList.forEach(item=>{
-								item.spec=item.goods_spec;
-								item.img=item.logo;
-								item.name=item.title;
-								item.selected=false;
-							})
-						}else{
-							uni.showToast({
-								icon:'none',
-								title:"请求失败"
-							})
-						}
-						
-					}
-				})
-			},
+			
+		
 			//加入商品 参数 goods:商品数据
 			joinGoods(goods) {
 				/*
@@ -232,30 +196,32 @@
 			},
 			//跳转确认订单页面
 			toConfirmation() {
-				let tmpList = [];
-				let len = this.goodsList.length;
-				for (let i = 0; i < len; i++) {
-					if (this.goodsList[i].selected) {
-						tmpList.push(this.goodsList[i]);
-					}
-				}
-				if (tmpList.length < 1) {
-					uni.showToast({
-						title: '请选择商品结算',
-						icon: 'none'
-					});
-					return;
-				}
-				console.log("tmplist",tmpList)
-				uni.setStorage({
-					key: 'buylist',
-					data: tmpList,
-					success: () => {
-						uni.navigateTo({
-							url: '../order/confirmation?iscart=1'
-						})
-					}
-				})
+			     console.log(this.goodsList)
+				 let data={};
+				 let arr=[]
+				 this.goodsList.forEach(item=>{
+					 if(item.selected){
+						 let obj={
+							 goods_id:item.goods_id,
+							 goods_number:item.number,
+							 goods_spec:item.goods_spec,
+						 }
+						 arr.push(obj);
+					 }
+				 })
+				 console.log("data",data);
+				 data.isCart = 1;
+				 data.goods = arr;
+				 uni.setStorage({
+				 	key:"cart",
+				 	data:data,
+				 	success: () => {
+				 		console.log("success");
+				 	}
+				 })
+				 uni.navigateTo({
+				 	url:"/pages/order/confirmation?iscart=2"
+				 })
 			},
 			//删除商品
 			deleteGoods(id) {
@@ -389,8 +355,38 @@
 			discard() {
 				//丢弃
 			}
-
-
+			
+        },
+		mounted() {
+			// 获取购物车信息
+			
+			let that=this;
+			uni.request({
+				method:"post",
+				data:{
+					token:this.token
+				},
+				url:this.config.url+"member/car",
+				success:function(res){
+					 console.log("data",res.data);
+					if(res.data.code==1){
+						that.goodsList=res.data.data;
+						that.goodsList.forEach(item=>{
+							item.spec=item.goods_spec;
+							item.img=item.logo;
+							item.name=item.title;
+							item.selected=false;
+						})
+						
+					}else{
+						uni.showToast({
+							icon:'none',
+							title:"请求失败"
+						})
+					}
+					
+				}
+			})
 		}
 	}
 </script>
@@ -484,14 +480,7 @@
 	}
 
 
-// 	.place {
-// 
-// 		background-color: #ffffff;
-// 		height: 100upx;
-// 		/*  #ifdef  APP-PLUS  */
-// 		margin-top: var(--status-bar-height);
-// 		/*  #endif  */
-// 	}
+
 
 	.goods-list {
 		width: 100%;
@@ -668,40 +657,7 @@
 								justify-content: center;
 								margin-right:3upx;
                                    
-// 								.input {
-// 									width: 60upx;
-// 									height: 60upx;
-// 									margin: 0 10upx;
-// 									background-color: #f3f3f3;
-// 
-// 									input {
-// 										width: 60upx;
-// 										height: 60upx;
-// 										display: flex;
-// 										justify-content: center;
-// 										align-items: center;
-// 										text-align: center;
-// 										font-size: 26upx;
-// 									}
-// 								}
 
-// 								.sub,
-// 								.add {
-// 									width: 45upx;
-// 									height: 45upx;
-// 									background-color: #f3f3f3;
-// 									border-radius: 5upx;
-// 
-// 									.icon {
-// 										font-size: 22upx;
-// 										width: 45upx;
-// 										height: 45upx;
-// 										display: flex;
-// 										justify-content: center;
-// 										align-items: center;
-// 
-// 									}
-// 								}
 							}
 						}
 					}

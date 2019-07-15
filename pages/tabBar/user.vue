@@ -1,41 +1,17 @@
 <template>
 	<view>
-		<view class="status" :style="{position:headerPosition,top:statusTop}"></view>
-		<!-- <view class="header" :style="{position:headerPosition,top:headerTop}">
-			<view class="addr"></view>
-			<view class="input-box">
-
-			</view>
-			<view class="icon-btn">
-				<view class="icon tongzhi" @tap="toMsg"></view>
-				<view class="icon setting" @tap="toSetting"></view>
-			</view>
-		</view> -->
-		<!-- 占位 -->
-		<view class="place"></view>
+	
 		<!-- 用户信息 -->
-		<view class="user">
+		<view class="user" >
 			<!-- 头像 -->
 			<view class="left">
 				<image :src="user.face" @tap="toSetting"></image>
 				<view class="username" @tap="toLogin">{{user.username}}</view>
 			</view>
 			
-			
-			<!-- 二维码按钮 -->
-			<!-- <view class="erweima" @tap="toMyQR">
-				<view class="icon qr"></view>
-			</view> -->
+		    
 		</view>
-		<!-- VIP banner -->
-		<!-- <view class="VIP">
-			<view class="img">
-				<image src="../../static/img/VIP.png"></image>
-			</view>
-			<view class="title">开通VIP会员</view>
-			<view class="tis">会员特权</view>
-		</view> -->
-		<!-- 订单-余额 -->
+		
 
 
     <view class="order">
@@ -58,31 +34,6 @@
 				</view>
 			</view>
 
-
-			<!--	<view class="balance-info">
-				<view class="left">
-					<view class="box">
-						<view class="num">{{user.integral}}</view>
-						<view class="text">积分</view>
-					</view>
-					<view class="box">
-						<view class="num">{{user.envelope}}</view>
-						<view class="text">佣金</view>
-					</view>
-					<view class="box">
-						<view class="num">{{user.balance}}</view>
-						<view class="text">余额</view>
-					</view>
-				</view>
-				<view class="right">
-					<view class="box" @tap="toDeposit">
-						<view class="img">
-							<view class="icon chongzhi"></view>
-						</view>
-						<view class="text">充值</view>
-					</view>
-				</view>
-			</view> -->
 		</view>
     </view>
 
@@ -103,14 +54,16 @@
 	</view>
 </template>
 <script>
-	export default {
 	
+	export default {
+	   
 		data() {
 			return {
 				isfirst: true,
 				headerPosition: "fixed",
 				headerTop: null,
 				statusTop: null,
+				
 				//个人信息,
 				user: {
 					username: '游客1002',
@@ -168,8 +121,7 @@
 						img: '../../static/img/user/addr.png'
 					},
 				
-					// {text:'客服',img:'../../static/img/user/kefu.png'},
-					// {text:'签到',img:'../../static/img/user/mingxi.png'}
+
 
 				]
 			}
@@ -191,6 +143,8 @@
 			// #ifdef APP-PLUS
 			this.statusHeight = plus.navigator.getStatusbarHeight();
 			// #endif
+		
+		
 		},
 		onReady() {
 			//此处，演示,每次页面初次渲染都把登录状态重置
@@ -268,7 +222,8 @@
 				uni.navigateTo({
 					url: url
 				})
-			}
+			},
+		
 		}
 	}
 </script>
@@ -406,10 +361,9 @@
 		padding: 0 4%;
 		display: flex;
 		align-items: center;
-		// position: relative;
-		background-color: #f06c7a;
+		
 		padding-bottom: 120upx;
-
+        
 		.left {
 			
 			

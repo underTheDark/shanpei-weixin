@@ -49,7 +49,7 @@ page {
   height: 235rpx;
 }
 .total-credit text:nth-child(1) {
-    font-size: 18rpx;
+    font-size: 30rpx;
     color: white;
 }
 .total-credit text:nth-child(2) {

@@ -27,57 +27,7 @@
 page {
   background-color: #f3f3f3;
 }
-.topTabBar {
-  width: 100%;
-  position: fixed;
-  top: 0;
-  z-index: 10;
-  background-color: #f8f8f8;
-  height: 80rpx;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-justify-content: space-around;
-      -ms-flex-pack: distribute;
-          justify-content: space-around;
-}
-.topTabBar .grid {
-    width: 20%;
-    height: 80rpx;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-pack: center;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
-    color: #444;
-    font-size: 28rpx;
-}
-.topTabBar .grid .text {
-      height: 76rpx;
-      display: -webkit-box;
-      display: -webkit-flex;
-      display: -ms-flexbox;
-      display: flex;
-      -webkit-box-align: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
-}
-.topTabBar .grid .text.on {
-        color: #f06c7a;
-        border-bottom: solid 4rpx #f06c7a;
-}
 .order-list {
-  margin-top: 80rpx;
-  padding-top: 20rpx;
   width: 100%;
 }
 .order-list .list {
@@ -105,8 +55,7 @@ page {
 .order-list .list .onorder image {
         width: 20vw;
         height: 20vw;
-        -webkit-border-radius: 100%;
-                border-radius: 100%;
+        border-radius: 100%;
 }
 .order-list .list .onorder .text {
         width: 100%;
@@ -127,11 +76,9 @@ page {
                 align-items: center;
 }
 .order-list .list .row {
-      width: -webkit-calc(100% - 40rpx);
       width: calc(100% - 40rpx);
       padding: 10rpx 20rpx;
-      -webkit-border-radius: 10rpx;
-              border-radius: 10rpx;
+      border-radius: 10rpx;
       background-color: #fff;
       margin-bottom: 20rpx;
       border-bottom: 1px solid #F5F5F5;
@@ -191,8 +138,7 @@ page {
 .order-list .list .row .order-info .left image {
             width: 25vw;
             height: 25vw;
-            -webkit-border-radius: 10rpx;
-                    border-radius: 10rpx;
+            border-radius: 10rpx;
 }
 .order-list .list .row .order-info .right {
           width: 100%;
@@ -284,8 +230,7 @@ page {
           min-width: 120rpx;
           height: 50rpx;
           padding: 0 20rpx;
-          -webkit-border-radius: 50rpx;
-                  border-radius: 50rpx;
+          border-radius: 50rpx;
           display: -webkit-box;
           display: -webkit-flex;
           display: -ms-flexbox;
@@ -308,5 +253,45 @@ page {
 .order-list .list .row .btns .pay {
           border: solid 1rpx #14CC21;
           color: #14CC21;
+}
+.menu_mask {
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 1000000;
+  width: 100vw;
+  height: 100vh;
+}
+.menu_mask .menu_list {
+    width: 100vw;
+    height: 410rpx;
+    overflow: auto;
+    background-color: #fff;
+    position: absolute;
+    bottom: 0;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+    padding: 0 42rpx;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+}
+.menu_mask .menu_list .menu_item {
+      display: block;
+      width: 100%;
+      height: 106rpx;
+      font-size: 29rpx;
+      -webkit-box-sizing: border-box;
+              box-sizing: border-box;
+      border-bottom: 1px solid #d8d8d8;
+      color: #666;
+      line-height: 106rpx;
 }
 

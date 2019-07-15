@@ -53,8 +53,7 @@
   margin-top: 40rpx;
 }
 .bottom {
-  -webkit-border-radius: 80rpx;
-          border-radius: 80rpx;
+  border-radius: 80rpx;
   margin: 70rpx 50rpx;
   font-size: 35rpx;
 }

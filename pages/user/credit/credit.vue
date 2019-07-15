@@ -25,7 +25,7 @@
 		data() {
 			return {
 				totalCredit:[],
-				credit:null,
+				credit:{},
 				
 			}
 		},
@@ -40,10 +40,13 @@
 					token:this.token
 				},
 				method:"POST",
-				success(res) {
+				success:(res)=> {
 					console.log(res)
-					_this.credit=res.data.data
-					_this.totalCredit=res.data.data.recode.data
+					if(res.data.code==1){
+						_this.credit=res.data.data
+						_this.totalCredit=res.data.data.recode.data
+					}
+					
 				}
 			})
 		}
@@ -62,7 +65,7 @@
 	  background: green;
 	  height:235upx;
 	  text:nth-child(1){
-		  font-size: 18upx;
+		  font-size: 30upx;
 		  color:white;
 	  }
 	  text:nth-child(2){

@@ -2,24 +2,23 @@
 	<view id="applyreturn">
 		<view class="service-one">
 			<view class="order-num">
-				订单编号：3233333
+				订单编号：{{goods.order_no}}
 			</view>
-			<view class="product">
-				<image src="../../static/img/1.jpg"></image>
-				<view class="product-right">
-					<view class="product-title">
-
-						kai/贝印 日本进口面粉筛 手持糖粉筛 筛
-						网滤网 筛粉杯子 ...
-
-					</view>
-					<view class="product-size">
-						<text>M</text>
-						<text>颜色</text>
-					</view>
-					<view class="product-price">
-						<text>价钱</text>
-						<text>数量</text>
+			<view class="list" v-for="(item,index) in goods.order_list" :key="index">
+				<view class="product" >
+					<image :src="item.goods_logo"></image>
+					<view class="product-right">
+						<view class="product-title">
+				               {{item.goods_item}}
+						</view>
+						<view class="product-size">
+							<text>{{item.goods_spec}}</text>
+							
+						</view>
+						<view class="product-price">
+							<text>{{item.price_selling}}</text>
+							<text>{{item.number}}</text>
+						</view>
 					</view>
 				</view>
 			</view>
@@ -27,7 +26,7 @@
 		</view>
 		<view class="return-reason">
 			<view class="reason-title">退款原因</view>
-			<textarea placeholder="请输入换货原因"></textarea>
+			<textarea placeholder="请输入换货原因" v-model="reason"></textarea>
 		</view>
 		<view class="upload-photo">
 			<view class="upload-title">上传凭证</view>
@@ -36,7 +35,7 @@
 				<text>添加图片</text>
 			</view>
 		</view>
-		<view class="submit">
+		<view class="submit" @click="applyReturn(goods.order_no)">
 			<view>提交</view>
 		</view>
 	</view>
@@ -46,11 +45,37 @@
 	export default {
 		data() {
 			return {
-
+                  goods:{},
+				  reason:""   //退货原因
 			}
 		},
 		methods: {
-
+            applyReturn(order){
+				uni.request({
+					url:this.config.url+"order/refund",
+					method:"POST",
+					data:{
+						token:this.token,
+						order_no:order,
+						refund_type:1,
+						refund_desc:this.reason,
+						refund_covers:""
+						
+					},
+					success: (res) => {
+						console.log("return",res)
+					}
+				})
+			}
+		},
+		mounted() {
+			uni.getStorage({
+				key:"regoods",
+				success:(res)=>{
+					console.log("regoods",res)
+					this.goods=res.regoods;
+				}
+			})
 		}
 	}
 </script>
@@ -69,7 +94,10 @@
 		background: white;
 		display: flex;
 		flex-direction: column;
-
+           .list{
+         		  display: flex;
+         		  flex-direction: column;
+         }
 		.order-num {
 			padding: 20upx;
 			font-size: 28upx;

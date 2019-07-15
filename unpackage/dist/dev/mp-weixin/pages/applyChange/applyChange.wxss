@@ -32,42 +32,6 @@
   padding: 0 4% 30rpx;
   width: 92%;
 }
-.reselect {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  padding: 20rpx 4%;
-}
-.reselect .select-left {
-    font-size: 28rpx;
-    font-family: PingFang-SC-Regular;
-    font-weight: 400;
-    color: #333333;
-}
-.reselect .select-right {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-}
-.reselect .select-right text {
-      color: #666666;
-      font-size: 24rpx;
-      margin-right: 20rpx;
-}
-.reselect .select-right image {
-      width: 14rpx;
-      height: 24rpx;
-}
 .service-one {
   background: white;
   display: -webkit-box;
@@ -79,6 +43,53 @@
   -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
+}
+.service-one .list {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+}
+.service-one .list .reselect {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+          -ms-flex-pack: justify;
+              justify-content: space-between;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+          -ms-flex-align: center;
+              align-items: center;
+      padding: 20rpx 4%;
+}
+.service-one .list .reselect .select-left {
+        font-size: 28rpx;
+        font-family: PingFang-SC-Regular;
+        font-weight: 400;
+        color: #333333;
+}
+.service-one .list .reselect .select-right {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+}
+.service-one .list .reselect .select-right text {
+          color: #666666;
+          font-size: 24rpx;
+          margin-right: 20rpx;
+}
+.service-one .list .reselect .select-right image {
+          width: 14rpx;
+          height: 24rpx;
 }
 .service-one .order-num {
     padding: 20rpx;
@@ -258,8 +269,7 @@
             align-items: center;
     width: 90%;
     height: 90rpx;
-    -webkit-border-radius: 90rpx;
-            border-radius: 90rpx;
+    border-radius: 90rpx;
     background: #00c65d;
 }
 

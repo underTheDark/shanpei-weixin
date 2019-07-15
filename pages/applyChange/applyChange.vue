@@ -2,41 +2,41 @@
 	<view id="applyreturn">
 		<view class="service-one">
 			<view class="order-num">
-				订单编号：3233333
+				订单编号：{{goods.order_no}}
 			</view>
-			<view class="product">
-				<image src="../../static/img/1.jpg"></image>
-				<view class="product-right">
-					<view class="product-title">
+			<view class="list" v-for="(item,index) in goods.order_list" :key="index">
+				<view class="product" >
+					<image :src="item.goods_logo"></image>
+					<view class="product-right">
+						<view class="product-title">
+							{{item.goods_item}}
+						</view>
+						<view class="product-size">
+							<text>{{item.goods_spec}}</text>
 
-						kai/贝印 日本进口面粉筛 手持糖粉筛 筛
-						网滤网 筛粉杯子 ...
-
+						</view>
+						<view class="product-price">
+							<text>{{item.price_selling}}</text>
+							<text>{{item.number}}</text>
+						</view>
 					</view>
-					<view class="product-size">
-						<text>M</text>
-						<text>颜色</text>
-					</view>
-					<view class="product-price">
-						<text>价钱</text>
-						<text>数量</text>
+				</view>
+				<view class="reselect" >
+					<view class="select-left">重新选择商品信息</view>
+					<view class="select-right">
+						<text>{{item.goods_spec}}</text>
+						<text>{{item.number}}</text>
+						<!-- <text>22</text> -->
+						<image :src="item.goods_logo"></image>
 					</view>
 				</view>
 			</view>
 
 		</view>
-		<view class="reselect">
-			<view class="select-left">重新选择商品信息</view>
-			<view class="select-right">
-				<text>22</text>
-				<text>22</text>
-				<text>22</text>
-				<image src="../../static/img/youce-jiantou.png"></image>
-			</view>
-		</view>
+		
 		<view class="return-reason">
 			<view class="reason-title">退款原因</view>
-			<textarea placeholder="请输入换货原因"></textarea>
+			<textarea placeholder="请输入换货原因" v-model="reason"></textarea>
 		</view>
 		<view class="upload-photo">
 			<view class="upload-title">上传凭证</view>
@@ -45,7 +45,7 @@
 				<text>添加图片</text>
 			</view>
 		</view>
-		<view class="submit">
+		<view class="submit" @click="applyChange(goods.order_no)">
 			<view>提交</view>
 		</view>
 	</view>
@@ -55,11 +55,37 @@
 	export default {
 		data() {
 			return {
-
+                goods:{},
+                reason:""   //退货原因
 			}
 		},
 		methods: {
-
+              applyChange(order){
+             	uni.request({
+             		url:this.config.url+"order/refund",
+             		method:"POST",
+             		data:{
+             			token:this.token,
+             			order_no:order,
+             			refund_type:2,
+             			refund_desc:this.reason,
+             			refund_covers:""
+             			
+             		},
+             		success: (res) => {
+             			console.log("return",res)
+             		}
+             	})
+             }
+		},
+		mounted() {
+			uni.getStorage({
+				key:"regoods",
+				success:(res)=>{
+					console.log("regoods",res)
+					this.goods=res.regoods;
+				}
+			})
 		}
 	}
 </script>
@@ -68,40 +94,52 @@
 	.service-one,
 	.return-reason,
 	.upload-photo,
-	.reselect{
+	.reselect {
 		border-bottom: 20upx solid rgba(245, 245, 245, 1);
 		padding: 0 4% 30upx;
 		width: 92%;
 	}
-    .reselect{
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding:20upx 4%;
-		.select-left{
-			font-size:28upx;
-font-family:PingFang-SC-Regular;
-font-weight:400;
-color:rgba(51,51,51,1);
-		}
-		.select-right{
-			display: flex;
-			text{
-				color:rgba(102,102,102,1);
-				font-size: 24upx;
-				margin-right:20upx;
-			}
-			image{
-				width:14upx;
-				height:24upx;
-			}
-		}
-	}
+
+
 	.service-one {
 
 		background: white;
 		display: flex;
 		flex-direction: column;
+
+		.list {
+			display: flex;
+			flex-direction: column;
+				.reselect {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 20upx 4%;
+			
+				.select-left {
+					font-size: 28upx;
+					font-family: PingFang-SC-Regular;
+					font-weight: 400;
+					color: rgba(51, 51, 51, 1);
+				}
+			
+				.select-right {
+					display: flex;
+			
+					text {
+						color: rgba(102, 102, 102, 1);
+						font-size: 24upx;
+						margin-right: 20upx;
+					}
+			
+					image {
+						width: 14upx;
+						height: 24upx;
+					}
+				}
+			}
+			
+		}
 
 		.order-num {
 			padding: 20upx;
@@ -168,7 +206,8 @@ color:rgba(51,51,51,1);
 	.return-reason {
 		display: flex;
 		flex-direction: column;
-        height:232upx;
+		height: 232upx;
+
 		.reason-title {
 			padding: 20upx 0;
 			font-size: 28upx;
@@ -209,20 +248,22 @@ color:rgba(51,51,51,1);
 			}
 		}
 	}
-	.submit{
+
+	.submit {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		margin-top:130upx;
-		color:white;
-		view{
+		margin-top: 130upx;
+		color: white;
+
+		view {
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			width:90%;
-			height:90upx;
-			border-radius:90upx;
-			background:rgba(0,198,93,1);
+			width: 90%;
+			height: 90upx;
+			border-radius: 90upx;
+			background: rgba(0, 198, 93, 1);
 		}
 	}
 </style>

@@ -274,8 +274,7 @@
   font-size: 28rpx;
   color: #fff;
   padding: 8rpx 24rpx;
-  -webkit-border-radius: 10rpx;
-          border-radius: 10rpx;
+  border-radius: 10rpx;
 }
 .active {
   color: #C49569;
@@ -339,8 +338,7 @@ page {
 .sign_btn {
   height: 90rpx;
   background: #C49569;
-  -webkit-border-radius: 10rpx;
-          border-radius: 10rpx;
+  border-radius: 10rpx;
   color: #fff;
   font-size: 16px;
   margin: 100rpx 30rpx 30rpx 30rpx;

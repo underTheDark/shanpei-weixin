@@ -99,36 +99,7 @@
 					
 				}
 			 })
-			//立即购买商品缓存
-			uni.getStorage({
-				key:"quick",
-				success:(res)=>{
-					console.log("pro",res)
-					var quick={goods_id:res.data.id,goods_number:res.data.goods_number,goods_spec:res.data.goods_spec}
-				   
-					this.goods.push(quick)
-					
-					//确认订单信息
-					uni.request({
-						url: this.config.url + "order/sure",
-						method: "post",
-						data: {
-							token: this.token,
-							goods: this.goods
-						},
-						success: (res) => {
-						//	 console.log("sure",res)
-							if (res.data.code == 1) {
-								this.buyList = res.data.data.goods;  //商品列表
-								this.express = res.data.data.express;
-								this.total = res.data.data.total;
-								this.number = res.data.data.number;
-								//this.getgoods_name=res.data.data.order_type; //提交记录
-							}
-						}
-					})
-				}
-			})
+			
 			
 		},
 		computed: {
@@ -157,8 +128,70 @@
 			}
 		},
 		onLoad(option) {
-			
-
+			console.log(option);
+				//立即购买商品缓存
+				uni.getStorage({
+					key:"cart",
+					success:(res)=>{
+						console.log("liji",res)
+						this.iscart=res.data.isCart;
+						if(res.data.isCart == 0){
+						var quick={goods_id:res.data.goods.id,goods_number:res.data.goods.goods_number,goods_spec:res.data.goods.goods_spec}
+					   
+						this.goods.push(quick)
+						
+						//确认订单信息
+						uni.request({
+							url: this.config.url + "order/sure",
+							method: "post",
+							data: {
+								token: this.token,
+								goods: this.goods
+							},
+							success: (res) => {
+							//	 console.log("sure",res)
+								if (res.data.code == 1) {
+									this.buyList = res.data.data.goods;  //商品列表
+									this.express = res.data.data.express;
+									this.total = res.data.data.total;
+									this.number = res.data.data.number;
+									//this.getgoods_name=res.data.data.order_type; //提交记录
+								}
+							}
+						})
+						
+						}else{
+							
+							//购物车购买商品缓存
+							// var quick={goods_id:res.data.id,goods_number:res.data.goods_number,goods_spec:res.data.goods_spec}
+							this.goods=res.data.goods;
+							//确认订单信息
+							uni.request({
+								url: this.config.url + "order/sure",
+								method: "post",
+								data: {
+									token: this.token,
+									goods: this.goods
+								},
+								success: (res) => {
+									console.log("cart",res)
+									if (res.data.code == 1) {
+										this.buyList = res.data.data.goods;  //商品列表
+										this.express = res.data.data.express;
+										this.total = res.data.data.total;
+										this.number = res.data.data.number;
+										//this.getgoods_name=res.data.data.order_type; //提交记录
+									}
+								}
+							})
+							
+						}
+					
+					
+					
+					},
+				})
+		
 		},
 		onBackPress() {
 			//页面后退时候，清除订单信息
@@ -197,7 +230,7 @@
 						goods: this.goods,
 						order_type: this.getgoods_name,
 						address_id: this.addrList.id,
-						from_car: 0
+						from_car: this.iscart
 					},
 					success: (res) => {
 						console.log(res)
@@ -226,9 +259,21 @@
 											paySign: pay.paySign,
 											success: function(res) {
 												console.log('success:' + JSON.stringify(res));
+												uni.navigateTo({
+													url:"/pages/user/order_list/order_list?tbIndex=2"
+												})
+												
 											},
 											fail: function(err) {
 												console.log('fail:' + JSON.stringify(err));
+												uni.switchTab({
+													
+							
+													url:"/pages/tabBar/home"
+												})
+												uni.showToast({
+													title:"支付失败"
+												})
 											}
 										});
 									}

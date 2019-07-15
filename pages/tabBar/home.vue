@@ -1,5 +1,5 @@
 <template>
-	<view class="home">
+	<view class="home" v-if="true">
 		<!-- 状态栏 -->
 		<view class="status" :style="{ position: headerPosition,top:statusTop,opacity: afterHeaderOpacity}"></view>
 		<!-- 顶部导航栏 -->
@@ -65,28 +65,16 @@
 						<text>SALES</text>
 					</view>
 				</view>
-				<view class="promotion-head-right">
-
-				</view>
 			</view>
-			<view class="list">
-				<view class="column" v-for="(row, index) in Promotion" @tap="toPromotion(row)" :key="index">
-					<view class="top">
-						<view class="title">{{ row.title }}</view>
-						<view class="countdown" v-if="row.countdown">
-							<view>{{ row.countdown.h }}</view>
-							:
-							<view>{{ row.countdown.m }}</view>
-							:
-							<view>{{ row.countdown.s }}</view>
-						</view>
+			<view class="hot-list">
+				<view class="hot-list-item" v-for="(row, index) in limitList" @tap="toGoods(row)" :key="index">
+					<view class="item-img">
+						<image :src="row.logo" />
 					</view>
-					<view class="left">
-						<view class="ad">{{ row.ad }}</view>
-						<view class="into">点击进入</view>
-					</view>
-					<view class="right">
-						<image :src="row.img"></image>
+					<view class="item-title">{{row.title}}</view>
+					<view class="item-price">
+						<text>{{row.price}}</text>
+						<text>{{row.market_price}}</text>
 					</view>
 				</view>
 			</view>
@@ -101,12 +89,12 @@
 						<text>PRODUCT</text>
 					</view>
 				</view>
-				<view class="promotion-head-right">
+				<view class="promotion-head-right" @click="moreLoad">
 					更多
 				</view>
 			</view>
 			<view class="hot-list">
-				<view class="hot-list-item" v-for="(row, index) in hotList" @tap="toPromotion(row)" :key="index">
+				<view class="hot-list-item" v-for="(row, index) in hotList" @tap="toGoods(row)" :key="index">
 					<view class="item-img">
 						<image :src="row.logo" />
 					</view>
@@ -152,46 +140,11 @@
 	//高德SDK
 	import amap from '../../common/SDK/amap-wx.js';
 	export default {
-
 		components: {
 			uniLoadMore
 		},
 		mounted() {
-			uni.hideLoading();
-
-			// 轮播,热销
-			uni.request({
-				url: 'http://shanpei.wsstreet.net/index', //仅为示例，并非真实接口地址。
-				data: {
-					token: this.token
-				},
-				method: "post",
-				success: (res) => {
-					console.log("hoem", res);
-					this.swiperList = res.data.data.banner;
-					this.categoryList = res.data.data.cate;
-					this.hotList = res.data.data.hot;
-					this.limitList = res.data.data.limit_buy;
-				}
-			})
-
-			//系统消息
-			uni.request({
-				url: this.config.url + "member/message",
-				method: "POST",
-				data: {
-					token: this.token
-				},
-				success: (res) => {
-					//console.log("mesg",res)
-					if (res.data.data.data.length > 0) {
-						this.msg = true;
-					}
-					if (res.data.code == 1) {
-						this.msgList = res.data.data.data
-					}
-				}
-			})
+			this.init();		
 		},
 
 		data() {
@@ -200,7 +153,6 @@
 				msgList: [], //系统信息列表
 				showIcon: false,
 				status: "more",
-
 				afterHeaderOpacity: 1, //不透明度
 				headerPosition: 'fixed',
 				headerTop: null,
@@ -220,16 +172,14 @@
 				productList: [],
 				totalList: [],
 				loadingText: '正在加载...',
-
-				current_page: "",
-				total: "",
-				last_page: "",
-
+	
+				
 				current_page: 0,
 				total: "",
 				last_page: "1",
-
-				tishi: false
+				tishi: false,
+				hot:[],
+				home:false
 			}
 		},
 		onPageScroll(e) {
@@ -246,11 +196,6 @@
 		},
 		//上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
 		onReachBottom() {
-
-
-			this.count++
-			console.log(count)
-
 			// 调用获取推荐列表接口
 			// 当前页小于最后一页才调用
 			if (this.current_page < this.last_page) {
@@ -260,34 +205,94 @@
 		},
 		onReady(){
 			 
-		   
 		},
 		onLoad() {
-			 uni.showLoading({
-				title: '加载中'
-			});
-		   console.log(22)
-			var amapPlugin = new amap.AMapWX({
-				//高德地图KEY，随时失效，请务必替换为自己的KEY，参考：http://ask.dcloud.net.cn/article/35070
-				key: '5b9b64be2413fc19c26683fcf0de890f'
-			});
-			//定位地址
-			amapPlugin.getRegeo({
-				success: data => {
-					//console.log(data)
-					this.city = data[0].regeocodeData.addressComponent.city.replace(/市/g, ''); //把"市"去掉
-				}
-			});
-
-
+			this.first_load();
 		},
 		methods: {
+			//加载更多热销产品
+			moreLoad(){
+				this.hotList=this.hot;
+			},
+			init(){
+				uni.hideLoading();
+				
+					
+			},
+			first_load(){
+				 uni.showLoading({
+					title: '加载中'
+				});
+				
+				var amapPlugin = new amap.AMapWX({
+					//高德地图KEY，随时失效，请务必替换为自己的KEY，参考：http://ask.dcloud.net.cn/article/35070
+					key: '5b9b64be2413fc19c26683fcf0de890f'
+				});
+				//定位地址
+				amapPlugin.getRegeo({
+					success: data => {
+						//console.log(data)
+						this.city = data[0].regeocodeData.addressComponent.city.replace(/市/g, ''); //把"市"去掉
+					}
+				});
+				
+				//系统消息
+				uni.request({
+					url: this.config.url + "member/message",
+					method: "POST",
+					data: {
+						token: this.token
+					},
+					success: (res) => {
+						//console.log("mesg",res)
+						
+						if (res.data.code == 1) {
+							this.msgList = res.data.data.data;
+							if (res.data.data.data.length > 0) {
+								this.msg = true;
+							}
+						}
+					}
+				})
+				uni.request({
+					url: this.config.url+'index', //仅为示例，并非真实接口地址。
+					data: {
+						token: this.token
+					},
+					method: "post",
+					success: (res) => {
+				        console.log("hoem", res);
+						var num;
+						if(res.data.code==1){
+							this.swiperList = res.data.data.banner;
+							this.categoryList = res.data.data.cate;
+							
+							this.limitList = res.data.data.limit_buy;
+							this.hot = res.data.data.hot;
+							
+							if (this.hotList.length < 10) {
+								num = this.totalList.length;
+							} else {
+								num = 10;
+							}
+							for (var i = 0; i < num; i++) {
+								this.hotList.push(this.hot[i])
+								//	console.log(this.productList)
+							}
+						    this.home=true;
+						}
+						
+					}
+				})
+			},
+			
+			
 			// 获取推荐列表
 			getRecommendList() {
 				this.status = "loading";
 				// 首页为你推荐
 				uni.request({
-					url: 'http://shanpei.wsstreet.net/recommend', //仅为示例，并非真实接口地址。
+					url: this.config.url+'recommend', //仅为示例，并非真实接口地址。
 					data: {
 						token: this.token,
 						page: Number(this.current_page) + 1,
@@ -295,7 +300,7 @@
 					method: "post",
 					success: (res) => {
 						var len;
-						console.log("res.data", res.data);
+						// console.log("res.data", res.data);
 						// 商品列表
 						this.totalList = res.data.data.data;
 						//每页10 
@@ -332,7 +337,7 @@
 			toSearch() {
 				// 搜索推荐
 				uni.request({
-					url: 'http://shanpei.wsstreet.net/keyword', //仅为示例，并非真实接口地址。
+					url: this.config.url+'keyword', //仅为示例，并非真实接口地址。
 					data: {
 						token: this.token
 
@@ -353,25 +358,16 @@
 			},
 			//分类跳转
 			toCategory(e) {
-
+				console.log(e);
 				uni.navigateTo({
-					// url: '../goods/goods-list?cid=' + e.id + '&name=' + e.name
-				});
-			},
-			//推荐商品跳转
-			toPromotion(e) {
-				uni.showToast({
-
-				});
+					url:"/pages/goods/goods-list?id="+e.id+"&title="+e.title
+				})
 			},
 			//商品跳转
 			toGoods(e) {
-				uni.showToast({
-
-				});
 				uni.navigateTo({
-
-				});
+					url: "/pages/goods/goods?id="+e.id
+				})
 			},
 			//轮播图指示器
 			swiperChange(event) {

@@ -55,9 +55,9 @@
 			"path": "pages/tabBar/user",
 			"style": {
 				"enablePullDownRefresh": true,
-				"navigationBarBackgroundColor": "#f06c7a",
-				"backgroundColorTop": "#f06c7a",
-				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "个人中心",
+				
 				"app-plus": {
 					"titleNView": false //禁用原生导航栏
 
@@ -278,13 +278,10 @@
 		}, {
 			"path": "pages/reSelect/reSelect",
 			"style": {}
-		},
-		{
-			"path": "pages/getphone/getphone",
-			"style": {}
 		}
 
-	],
+	   
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "",
@@ -297,7 +294,7 @@
 	},
 	"tabBar": {
 		"color": "#333333",
-		"selectedColor": "#f06c7a",
+		"selectedColor": "#14CC21",
 		"borderStyle": "black",
 		"backgroundColor": "#ffffff",
 		"list": [{

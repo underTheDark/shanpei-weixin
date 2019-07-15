@@ -32,8 +32,8 @@
     {title:'卖家发货',desc:'2018-11-12'},
     {title:'买家签收',desc:'2018-11-13'},
     {title:'交易完成',desc:'2018-11-14'}]"
-			 direction="column" :active="2"
-			 active-color="rgba(22,208,255,0.15)"
+			 direction="column" :active="0"
+			 active-color="#14CC21"
 			 >
 			</uni-steps>
 		</view>
@@ -49,96 +49,7 @@
 		},
 		data() {
 			return {
-				goodsList: [{
-						goods_id: 0,
-						img: '../../static/img/goods/p1.jpg',
-						name: '商品名称商品名称商品名称商品名称商品名称',
-						price: '￥168',
-						slogan: '1235人付款',
-						lprice: "$10",
-						num: 100,
-						good: "100%"
-					},
-					{
-						goods_id: 1,
-						img: '../../static/img/goods/p2.jpg',
-						name: '商品名称商品名称商品名称商品名称商品名称',
-						price: '￥168',
-						slogan: '1235人付款',
-						lprice: "$10",
-						num: 100,
-						good: "100%"
-					},
-					{
-						goods_id: 2,
-						img: '../../static/img/goods/p3.jpg',
-						name: '商品名称商品名称商品名称商品名称商品名称',
-						price: '￥168',
-						slogan: '1235人付款',
-						lprice: "$10",
-						num: 100,
-						good: "100%"
-					},
-					{
-						goods_id: 3,
-						img: '../../static/img/goods/p4.jpg',
-						name: '商品名称商品名称商品名称商品名称商品名称',
-						price: '￥168',
-						slogan: '1235人付款',
-						lprice: "$10",
-						num: 100,
-						good: "100%"
-					},
-					{
-						goods_id: 4,
-						img: '../../static/img/goods/p5.jpg',
-						name: '商品名称商品名称商品名称商品名称商品名称',
-						price: '￥168',
-						slogan: '1235人付款',
-						lprice: "$10",
-						num: 100,
-						good: "100%"
-					},
-					{
-						goods_id: 5,
-						img: '../../static/img/goods/p6.jpg',
-						name: '商品名称商品名称商品名称商品名称商品名称',
-						price: '￥168',
-						slogan: '1235人付款',
-						lprice: "$10",
-						num: 100,
-						good: "100%"
-					},
-					{
-						goods_id: 6,
-						img: '../../static/img/goods/p7.jpg',
-						name: '商品名称商品名称商品名称商品名称商品名称',
-						price: '￥168',
-						slogan: '1235人付款',
-						lprice: "$10",
-						num: 100,
-						good: "100%"
-					},
-					{
-						goods_id: 7,
-						img: '../../static/img/goods/p8.jpg',
-						name: '商品名称商品名称商品名称商品名称商品名称',
-						price: '￥168',
-						slogan: '1235人付款',
-						lprice: "$10",
-						num: 100,
-						good: "100%"
-					},
-					{
-						goods_id: 8,
-						img: '../../static/img/goods/p9.jpg',
-						name: '商品名称商品名称商品名称商品名称商品名称',
-						price: '￥168',
-						slogan: '1235人付款',
-						lprice: "$10",
-						num: 100,
-						good: "100%"
-					},
+				goodsList: [
 					{
 						goods_id: 9,
 						img: '../../static/img/goods/p10.jpg',
@@ -265,5 +176,32 @@
 	}
 	.goods-status{
 		margin:60upx 0 0 60upx;
+	}
+	/deep/.uni-steps-item-circle{
+		width:20upx;
+		height:20upx;
+	}
+	/deep/.uni-steps-items.uni-steps-column .uni-steps-item-line{
+		width:6upx;
+		left:-26upx;
+	}
+	/deep/.uni-icon-checkbox-filled:before{
+		margin-left:5upx;
+	}
+	/deep/.uni-steps-items{
+		overflow: visible;
+	}
+	/deep/.uni-steps-items.uni-steps-column .uni-steps-item-desc{
+		margin-left:-150upx;
+		margin-top:-60upx;
+		width:100upx;
+		height:80upx;
+	}
+	/deep/.uni-steps{
+		margin-left:100upx;
+		overflow: visible;
+	}
+	/deep/.uni-steps-item-title-container{
+		margin-bottom:80upx;
 	}
 </style>

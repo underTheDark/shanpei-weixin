@@ -9,10 +9,10 @@
 				<view class='content'>
 					<view>申请获取以下权限</view>
 					<text>
-					 {{getphone==1 ? "获得你的公开信息(昵称，头像、地区,等)" : getphone==2?"获得你的手机号信息":""}}
+					 "获得你的公开信息(昵称，头像、地区,等)" 
 					</text>
 				</view>
-                <button v-show="getphone==2" type='primary' open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">授权确认</button>
+                <!-- <button v-show="getphone==2" type='primary' open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">授权确认</button> -->
                 
 				<button v-show="getphone==1" class='bottom' type='primary' open-type="getUserInfo" withCredentials="true" lang="zh_CN" @getuserinfo="wxGetUserInfo">
 					授权登录
@@ -42,7 +42,8 @@
 		data() {
 			return {
 				SessionKey: '',
-				OpenId: '',
+				OpenId:'',
+				code:"",
 				nickName: null,
 				avatarUrl: null,
 				isCanUse: uni.getStorageSync('info') || true ,//默认为true
@@ -67,7 +68,7 @@
 						try {
 							//uni.setStorageSync('isCanUse', false); //记录是否第一次授权  false:表示不是第一次授权
 							_this.updateUserInfo();
-							_this.getphone=2;
+							
 						} catch (e) {}
 					},
 					fail(res) {}
@@ -75,26 +76,9 @@
 			},
 
    
-             getPhoneNumber (e) {
-            	  var _this=this;
-            	  uni.getStorage({
-            	  	  key:"sessionkey",
-            		  success:function(res){
-            			  
-            		  }
-            	  })
-            		   
-               if (e.detail.errMsg == 'getPhoneNumber:fail user deny') {    
-                  //  console.log('用户拒绝提供手机号');  
-                } else {  
-            		_this.writePhone=true;
-                    
-                }
-               
-            },
-            
-			//登录
-			login() {
+  
+			// //登录
+			 login() {
 				let _this = this;
 				uni.showLoading({
 					title: '登录中...'
@@ -102,11 +86,11 @@
 
 				// 1.wx获取登录用户code
 				uni.login({
-					// provider: 'weixin',
+					 provider: 'weixin',
 					success: function(loginRes) {
 						console.log(loginRes)
-						let code = loginRes.code;
-
+						 _this.code = loginRes.code;
+                          
 						if (!_this.isCanUse) {
 							//非第一次授权获取用户信息
 							uni.getUserInfo({
@@ -121,27 +105,36 @@
 								}
 							});
 						}
-
+                     console.log(111,_this.code)
+					    uni.hideLoading();
 					//	2.将用户登录code传递到后台置换用户SessionKey、OpenId等信息
-						uni.request({
-							url: "http://shanpei.wsstreet.net/getOpenid",
-							data: {
-								code: code,
-							},
-							method: 'POST',
-
-							success: (res) => {
-								console.log("res",res)
-								_this.OpenId=res.data.data.openid;
-								_this.SessionKey=res.data.data.session_key;
-								uni.setStorage({
-									key:"sessionkey",
-									data:_this.SessionKey
-								})
-								//openId、或SessionKdy存储//隐藏loading
-								uni.hideLoading();
-							}
-						});
+						if(_this.code){
+							console.log(33333333333)
+							uni.request({
+								url: _this.config.url+"getOpenid",
+								data: {
+									code: _this.code,
+								},
+								method: 'POST',
+								success: (res) => {
+									console.log("res")
+									console.log(res)
+									// _this.OpenId=res.data.openid;
+									// _this.SessionKey=res.data.session_key;
+									// 
+									// uni.setStorage({
+									// 	key:"sessionkey",
+									// 	data:_this.SessionKey
+									// })
+									//openId、或SessionKdy存储//隐藏loading
+									
+								},
+							    fail:()=>{
+									console.log("shibai")
+								}
+							});
+						}
+					
 					},
 				});
 			},
@@ -149,7 +142,7 @@
 			updateUserInfo() {
 			    let _this = this;
 			    uni.request({
-			        url:"http://shanpei.wsstreet.net/reg" ,//服务器端地址
+			        url:_this.config.url+"reg" ,//服务器端地址
 			        data: {
 			            openid:_this.OpenId,
 						headimg:_this.avatarUrl,
@@ -181,7 +174,7 @@
 			//确认跳转home
 			confirm(){
 				    console.log(1)
-                
+                var _this=this;
 				var result = this.phoneNumber.replace(/(^\s+)|(\s+$)/g,"");
 				if(result.length<1){
 					console.log(2)
@@ -198,7 +191,7 @@
 				}else{
 					console.log(4)
 					uni.request({
-						url:this.config.url+"reg",
+						url:_this.config.url+"reg",
 						method:"POST",
 						data:{
 							openid:this.OpenId,

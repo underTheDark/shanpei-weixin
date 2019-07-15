@@ -36,26 +36,24 @@
 	
 	export default {
 		mounted(){
-			
-				uni.request({
-				url: this.config.url+"goods/lists",
-				data: {
-					"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NjA5MjQ3NjgsImV4cCI6MTU4Njg0NDc2OCwiZGF0YSI6eyJpZCI6Mywib3BlbmlkIjoib0lieWY0cER5Z0ZLcWNRT1h3OGhaclZFbnJTRSIsImhlYWRpbWciOiJodHRwczpcL1wvd3gucWxvZ28uY25cL21tb3BlblwvdmlfMzJcL1EwajRUd0dUZlRMMFpGR3QwNWliMTJVWnJoMkNidm1VOUcwOGJpYW5pYmtiOXViWXVWaWN5WkZFaWNQUE9JQ1dPZ041UEYyVmxPOTRQVkFEUVBCYzZWM3pxZUFcLzEzMiIsIm5pY2tuYW1lIjoiXHU1ZjIwXHU0ZTA5IiwicGhvbmUiOiIiLCJ1c2VybmFtZSI6IiIsInZpcF9sZXZlbCI6MCwidmlwX2RhdGUiOm51bGwsImNyZWF0ZV9hdCI6IjIwMTktMDYtMTkgMTQ6MTE6NTgifX0.B32WfMWQ-0QJ1VtEbhxXgtT-nBqc8GwJb3ANBhy8BxU"
-			        ,cate_id:this.key1,
-					sort:1,
-					asc:1,
-					
-				},
-				method: "post",
-				success: (res) => {
-			        console.log(res);
+			uni.request({
+			url: this.config.url+"goods/lists",
+			data: {
+				token: this.token
+				,cate_id:this.key1,
+				sort:1,
+				asc:1,
+				page:1,
+			},
+			method: "post",
+			success: (res) => {
+				console.log(res);
 					this.goodsList =res.data.data.data;
-					}
+				}
 			})
 		},
 		data() {
 			return {
-				
 				goodsList:[],
 				loadingText:"正在加载...",
 				headerTop:"0px",
@@ -63,24 +61,21 @@
 				orderbyList:[
 					{text:"综合",selected:true,orderbyicon:false,orderby:0},
 					{text:"销量",selected:false,orderbyicon:['sheng','jiang'],orderby:0},
-					{text:"价格",selected:false,orderbyicon:false,orderby:0}
+					{text:"价格",selected:false,orderbyicon:['sheng','jiang'],orderby:0}
 				],
 				orderby:"sheng",
 				id:"",
 				key1:"",
+				cur_page:0,
+				tol_page:1,
 			};
 		},
-		onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
-			// console.log(option)
-			  uni.setNavigationBarTitle({
-             title: option.title
-      });
-			 
-             this.key1=	option.key;		
-			uni.setNavigationBarTitle({
-				title: option.name
+		onLoad: function (option) { 
+			console.log("option",option)
+		    uni.setNavigationBarTitle({
+				title: option.title
 			});
-			
+             this.key1=	option.key;	
 			//兼容H5下排序栏位置
 			// #ifdef H5
 				//定时器方式循环获取高度为止，这么写的原因是onLoad中head未必已经渲染出来。
@@ -110,32 +105,40 @@
 		},
 		//上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
 		onReachBottom(){
+			this.cur_page=this.cur_page+1;
 			uni.showToast({title: '触发上拉加载'});
-			let len = this.goodsList.length;
-			if(len>=40){
+			if(this.cur_page>=this.tol_page){
 				this.loadingText="到底了";
 				return false;
 			}else{
 				this.loadingText="正在加载...";
 			}
-			let end_goods_id = this.goodsList[len-1].goods_id;
-			for(let i=1;i<=10;i++){
-				let goods_id = end_goods_id+i;
-				let p = { goods_id: goods_id, img: '../../static/img/goods/p'+(goods_id%10==0?10:goods_id%10)+'.jpg', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan:'1235人付款' };
-				this.goodsList.push(p);
-			}
 		},
 		methods:{
+			// 排序方式
+			sortType(type,asc=1){
+				uni.request({
+				url: this.config.url+"goods/lists",
+				data: {
+					token: this.token
+					,cate_id:this.key1,
+					sort:type,
+					asc:asc,
+					page:this.cur_page,
+				},
+				method: "post",
+				success: (res) => {
+					console.log(res.data.data);
+						this.goodsList =res.data.data.data;
+						this.cur_page=res.data.data.data.current_page;
+						this.tol_page=res.data.data.data.last_page;
+					}
+				})
+			},
 			reload(){
 				console.log("reload");
-				let tmpArr = []
-				this.goodsList = [];
-				let end_goods_id = 0;
-				for(let i=1;i<=10;i++){
-					let goods_id = end_goods_id+i;
-					let p = { goods_id: goods_id, img: '../../static/img/goods/p'+(goods_id%10==0?10:goods_id%10)+'.jpg', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan:'1235人付款' };
-					this.goodsList.push(p);
-				}
+				this.sortType(1);
+				
 			},
 			//商品跳转
 			toGoods(e){
@@ -147,6 +150,7 @@
 			},
 			//排序类型
 			select(index){
+				
 				let tmpTis = this.orderbyList[index].text+"排序 "
 				if(this.orderbyList[index].orderbyicon){
 					let type = this.orderbyList[index].orderby==0?'升序':'降序';
@@ -164,6 +168,25 @@
 					}
 				}
 				uni.showToast({title:tmpTis,icon:"none"});
+				switch(index){
+					case 0:
+					this.sortType(1);
+					break;
+					case 1:
+					if(this.orderbyList[index].orderby){
+						this.sortType(2,2);
+					}else{
+						this.sortType(2);
+					}
+					break;
+					case 2:
+					if(this.orderbyList[index].orderby){
+						this.sortType(3,2);
+					}else{
+						this.sortType(3);
+					}
+					break;
+				}
 			}
 		}
 		

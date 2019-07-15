@@ -169,7 +169,6 @@ page {
   bottom: 171rpx;
   right: 25rpx;
   background: -webkit-gradient(linear, left bottom, left top, from(rgba(255, 142, 28, 0.99)), to(rgba(255, 179, 73, 0.99)));
-  background: -webkit-linear-gradient(bottom, rgba(255, 142, 28, 0.99), rgba(255, 179, 73, 0.99));
   background: -o-linear-gradient(bottom, rgba(255, 142, 28, 0.99), rgba(255, 179, 73, 0.99));
   background: linear-gradient(0deg, rgba(255, 142, 28, 0.99), rgba(255, 179, 73, 0.99));
   color: white;
@@ -193,8 +192,7 @@ page {
           justify-content: center;
   width: 84rpx;
   height: 84rpx;
-  -webkit-border-radius: 84rpx;
-          border-radius: 84rpx;
+  border-radius: 84rpx;
 }
 .icon {
   font-family: 'HMfont-home' !important;
@@ -343,14 +341,12 @@ page {
 .header .before .back .icon {
     color: #fff;
     background-color: rgba(0, 0, 0, 0.2);
-    -webkit-border-radius: 100%;
-            border-radius: 100%;
+    border-radius: 100%;
 }
 .header .before .icon-btn .icon {
     color: #fff;
     background-color: rgba(0, 0, 0, 0.2);
-    -webkit-border-radius: 100%;
-            border-radius: 100%;
+    border-radius: 100%;
 }
 .header .after {
     background-color: #f1f1f1;
@@ -426,8 +422,7 @@ page {
             align-items: center;
     padding: 0 25rpx;
     height: 40rpx;
-    -webkit-border-radius: 40rpx;
-            border-radius: 40rpx;
+    border-radius: 40rpx;
     font-size: 22rpx;
     position: absolute;
     bottom: 20rpx;
@@ -589,8 +584,7 @@ page {
 .comments .comment .user-info .comment-user-info .people-icon {
         width: 80rpx;
         height: 80rpx;
-        -webkit-border-radius: 80rpx;
-                border-radius: 80rpx;
+        border-radius: 80rpx;
 }
 .comments .comment .user-info .comment-user-info .star {
         diplay: flex;
@@ -677,23 +671,40 @@ page {
               align-items: center;
       width: 100rpx;
       height: 100rpx;
-      -webkit-border-radius: 50%;
-              border-radius: 50%;
+      border-radius: 50%;
       border: 1px dashed #aaa;
       font-size: 24rpx;
 }
 .description .product-detail .product-dec {
       width: 100vw;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+          -ms-flex-direction: column;
+              flex-direction: column;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+          -ms-flex-align: center;
+              align-items: center;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+          -ms-flex-pack: center;
+              justify-content: center;
 }
-.description .product-detail .product-dec ._div {
+.description .product-detail .product-dec ._h2 {
+        font-size: 24rpx;
+        color: #333;
+}
+.description .product-detail .product-dec ._p {
         width: 100vw;
 }
-.description .product-detail .product-dec ._div ._p {
-          width: 100vw;
-}
-.description .product-detail .product-dec ._div ._p ._img {
-            width: 100% !important;
-            height: auto;
+.description .product-detail .product-dec ._p ._img {
+          width: 100% !important;
+          height: 300rpx;
 }
 .recomment {
   margin-top: 20rpx;
@@ -754,8 +765,7 @@ page {
 .recomment .recomment-contain .recomment-list .recomment-list-left image {
           width: 210rpx;
           height: 210rpx;
-          -webkit-border-radius: 210rpx;
-                  border-radius: 210rpx;
+          border-radius: 210rpx;
 }
 .recomment .recomment-contain .recomment-list .recomment-list-right {
         display: -webkit-box;
@@ -821,8 +831,7 @@ page {
             width: 54rpx;
             height: 30rpx;
             border: 1px solid #c71622;
-            -webkit-border-radius: 15px;
-                    border-radius: 15px;
+            border-radius: 15px;
             color: #c71622;
             font-size: 20rpx;
             display: -webkit-box;
@@ -1018,8 +1027,7 @@ page {
     bottom: -70%;
     width: 100%;
     height: 70%;
-    -webkit-border-radius: 20rpx 20rpx 0 0;
-            border-radius: 20rpx 20rpx 0 0;
+    border-radius: 20rpx 20rpx 0 0;
     background-color: #fff;
     display: -webkit-box;
     display: -webkit-flex;
@@ -1232,8 +1240,7 @@ page {
 .popup.spec .sp view {
       font-size: 28rpx;
       padding: 5rpx 20rpx;
-      -webkit-border-radius: 8rpx;
-              border-radius: 8rpx;
+      border-radius: 8rpx;
       margin: 0 30rpx 20rpx 0;
       background-color: #f6f6f6;
 }
@@ -1317,8 +1324,7 @@ page {
         width: 60rpx;
         height: 60rpx;
         background-color: #f3f3f3;
-        -webkit-border-radius: 5rpx;
-                border-radius: 5rpx;
+        border-radius: 5rpx;
 }
 .popup.spec .length .number .sub .icon,
         .popup.spec .length .number .add .icon {

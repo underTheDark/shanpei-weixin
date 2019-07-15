@@ -170,7 +170,7 @@
 			     this.city_tree=[]
 				 this.ciry_four=[]
 				 this.isdisabled = false;
-				 	
+				 this.street=""	
 			},
 			showcitytwo(id,name){
 				//this.pid=id
@@ -319,8 +319,8 @@
 											title:res.data.info,
 											duration:1000,
 										})
-										uni.navigateTo({
-											url:"/pages/user/address/address"
+										uni.navigateBack({
+											
 										})
 									}else if(res.data.code==0){
 										uni.showToast({

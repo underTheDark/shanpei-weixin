@@ -26,8 +26,7 @@
     "pages/serType/serType",
     "pages/applyReturn/applyReturn",
     "pages/applyChange/applyChange",
-    "pages/reSelect/reSelect",
-    "pages/getphone/getphone"
+    "pages/reSelect/reSelect"
   ],
   "subPackages": [],
   "window": {
@@ -43,7 +42,7 @@
   "usingComponents": {},
   "tabBar": {
     "color": "#333333",
-    "selectedColor": "#f06c7a",
+    "selectedColor": "#14CC21",
     "borderStyle": "black",
     "backgroundColor": "#ffffff",
     "list": [

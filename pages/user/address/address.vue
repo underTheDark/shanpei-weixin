@@ -101,12 +101,12 @@
 			</view>
 		</view>
 
-		<!-- <uni-popup :show=true type="middle" mode="fixed" msg="居中弹出popup" @hidePopup="hidePopup"></uni-popup> -->
+		
 
 	</view>
 </template>
 <script>
-	import uniPopup from "../../../components/uni-popup/uni-popup.vue"
+	
 
 	export default {
 		mounted() {
@@ -142,9 +142,7 @@
 				}
 			})
 		},
-		components: {
-			uniPopup
-		},
+		
 		data() {
 			return {
 				src1: '../../../static/img/address/y-duihao.png',

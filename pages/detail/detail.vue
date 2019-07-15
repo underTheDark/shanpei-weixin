@@ -1,8 +1,11 @@
 <template>
 	<view id="detail">
 		<view class="detail-head">
-			<view>付款状态</view>
-			<view>剩余时间</view>
+			<view>{{status[order.status]}}</view>
+			<view v-if="down">{{status2[order.status]}}</view>
+			<view v-if="!down">
+				{{string}}
+			</view>
 		</view>
 		<view class="detail-main">
 			<view class="detail-main-one">
@@ -19,116 +22,144 @@
 			</view>
 			<view class="detail-main-two">
 				<view class="row" v-for="(row,index) in goodsList" :key="index">
-					<image :src="row.img"></image>
+					<image :src="row.goods_logo"></image>
 					<view class="row-right">
-						<view class="product-title">{{row.name}}</view>
+						<view class="product-title">{{row.goods_title}}</view>
 						<view class="product-msg">
-							<text>{{row.price}}</text>
-							<text>{{row.num}}</text>
+							<text>{{row.price_selling}}</text>
+							<text>{{row.number}}</text>
 						</view>
 					</view>
 				</view>
 				<view class="money">
 					<view>
 						<text>商品总额</text>
-						<text>222</text>
+						<text>{{order.price_goods}}</text>
 					</view>
 					<view>
 						<text>运费</text>
-						<text>￥6</text>
+						<text>￥{{order.price_express}}</text>
 					</view>
 				</view>
 				<view class="pay-amount">
 					<text>应付款</text>
-					<text>2222</text>
+					<text>{{order.price_total}}</text>
 				</view>
 			</view>
-			<view class="detail-main-three">
-				<view class="three-title">
-					订单信息
-				</view>
-				<view class="three-main">
-					<view>订单编号：2222222222</view>
-					<view>创建时间：22222222</view>
-				</view>
-			</view>
-			<view class="detail-main-four">
-				<!-- 代付款 -->
-				<view class="order-status">
-					<view class="status-one">
-						取消订单
+			<!-- 代付款 -->
+			<view v-if="order.status == 2">
+				<view class="detail-main-three">
+					<view class="three-title">
+						订单信息
 					</view>
-					<view class="status-two">去付款</view>
+					<view class="three-main">
+						<view>订单编号：{{order.order_no}}</view>
+						<view>创建时间：{{order.create_at}}</view>
+					</view>
+				</view>
+				<view class="detail-main-four">
+					<view class="order-status" >
+						<view class="status-one">
+							取消订单
+						</view>
+						<view class="status-two">去付款</view>
+					</view>
+						
 				</view>
 			</view>
-		</view>
+			
+			
+			<!-- 待发货 -->
+			<view v-if="order.status == 3">
+				<view class="detail-main-three">
+					<view class="three-title">
+						订单信息
+					</view>
+					<view class="three-main">
+						<view>订单编号：{{order.order_no}}</view>
+						<view>创建时间：{{order.create_at}}</view>
+						<view>支付方式：微信支付</view>
+						<view>付款时间：{{order.pay_at}}</view>
+					</view>
+					
+				</view>
+				<view class="detail-main-four">
+					<view class="order-status" >
+				
+					<view class="status-two">取消订单</view>
+					</view>
+				</view>
+			</view>
+			
+			<!-- 待收货 -->
+			<view v-if="order.status == 4">
+				<view class="detail-main-three">
+					<view class="three-title">
+						订单信息
+					</view>
+					<view class="three-main">
+						<view>订单编号：{{order.order_no}}</view>
+						<view>创建时间：{{order.create_at}}</view>
+						<view>支付方式：微信支付</view>
+						<view>付款时间：{{order.pay_at}}</view>
+					</view>
+				</view>
+				<view class="detail-main-four">
+					<view class="order-status" >
+						<view class="status-one" @click="cancelOrder()">
+							取消订单
+						</view>
+						<view class="status-two">确认收货</view>
+					</view>
+					
+						
+				</view>
+			</view>
+			
+			<!-- 已完成 -->
+			<view v-if="order.status == 5">
+				<view class="detail-main-three">
+					<view class="three-title">
+						订单信息
+					</view>
+					<view class="three-main">
+						<view>订单编号：{{order.order_no}}</view>
+						<view>创建时间：{{order.create_at}}</view>
+						<view>支付方式：微信支付</view>
+						<view>付款时间：{{order.pay_at}}</view>
+					</view>
+				</view>
+				<view class="detail-main-four">
+					<view class="order-status" >
+						<view class="status-one">
+							删除订单
+						</view>
+						<view class="status-two">去评价</view>
+					</view>						
+				</view>
+			</view>
+			
+			</view>
+			
 	</view>
 </template>
 
 <script>
+	import uniCountdown from "@/components/uni-countdown/uni-countdown.vue"
+
 	export default {
 		data() {
 			return {
-				goodsList: [{
-						goods_id: 0,
-						img: '../../static/img/goods/p1.jpg',
-						name: '商品名称商品名称商品名称商品名称商品名称',
-						price: '￥168',
-						slogan: '1235人付款',
-						lprice: "$10",
-						num: 100,
-						good: "100%"
-					},
-					{
-						goods_id: 1,
-						img: '../../static/img/goods/p2.jpg',
-						name: '商品名称商品名称商品名称商品名称商品名称',
-						price: '￥168',
-						slogan: '1235人付款',
-						lprice: "$10",
-						num: 100,
-						good: "100%"
-					},
-					{
-						goods_id: 2,
-						img: '../../static/img/goods/p3.jpg',
-						name: '商品名称商品名称商品名称商品名称商品名称',
-						price: '￥168',
-						slogan: '1235人付款',
-						lprice: "$10",
-						num: 100,
-						good: "100%"
-					},
-					{
-						goods_id: 3,
-						img: '../../static/img/goods/p4.jpg',
-						name: '商品名称商品名称商品名称商品名称商品名称',
-						price: '￥168',
-						slogan: '1235人付款',
-						lprice: "$10",
-						num: 100,
-						good: "100%"
-					},
-					{
-						goods_id: 4,
-						img: '../../static/img/goods/p5.jpg',
-						name: '商品名称商品名称商品名称商品名称商品名称',
-						price: '￥168',
-						slogan: '1235人付款',
-						lprice: "$10",
-						num: 100,
-						good: "100%"
-					},
-					{
-						goods_id: 5,
-						img: '../../static/img/goods/p6.jpg',
-						name: '商品名称商品名称商品名称商品名称商品名称',
-						price: '￥168',
-						slogan: '1235人付款',
-						lprice: "$10",
-						num: 100,
-						good: "100%"
-					},
+				order_no:'',
+				down:true,
+				hour:"",
+				minute:"",
+				miao:"",
+				string:"",
+				order:'',
+				status:["已取消","等待买家付款","等待买家付款","订单待发货","订单待收货","订单已完成"],
+				status2:["已取消","剩12小时50分钟自动关闭","剩12小时50分钟自动关闭","请耐心等候哦~","宝贝正在努力的向您奔跑~","欢迎您的再次光临！"],
+				goodsList: [
 					{
 						goods_id: 6,
 						img: '../../static/img/goods/p7.jpg',
@@ -139,42 +170,80 @@
 						num: 100,
 						good: "100%"
 					},
-					{
-						goods_id: 7,
-						img: '../../static/img/goods/p8.jpg',
-						name: '商品名称商品名称商品名称商品名称商品名称',
-						price: '￥168',
-						slogan: '1235人付款',
-						lprice: "$10",
-						num: 100,
-						good: "100%"
-					},
-					{
-						goods_id: 8,
-						img: '../../static/img/goods/p9.jpg',
-						name: '商品名称商品名称商品名称商品名称商品名称',
-						price: '￥168',
-						slogan: '1235人付款',
-						lprice: "$10",
-						num: 100,
-						good: "100%"
-					},
-					{
-						goods_id: 9,
-						img: '../../static/img/goods/p10.jpg',
-						name: '商品名称商品名称商品名称商品名称商品名称',
-						price: '￥168',
-						slogan: '1235人付款',
-						lprice: "$10",
-						num: 100,
-						good: "100%"
-					}
-				]
+				],
+				datatime:"",
 			}
 		},
+		components: {uniCountdown},
+		onLoad(e){
+			console.log("e",e.id);
+			this.order_no = e.id;
+			uni.request({
+				url:this.config.url+'order/detail',
+				method: 'POST',
+				data: {
+					order_no:this.order_no,
+					token:this.token
+				},
+				success: res => {
+					console.log("res",res);
+					if(res.data.code == 1){
+						this.goodsList = res.data.data.order_list;
+						this.order = res.data.data;
+						let datatime=res.data.data.create_at;
+						this.getDistanceTime(datatime);
+						setInterval(()=>this.getDistanceTime(datatime),1000);
+						if(this.order.status == 2){
+							this.down = false;
+						}
+					}
+				},
+			});
+			
+		},
 		methods: {
+			getDistanceTime(time){
+				let _this=this;
+				var endTime= new Date(Date.parse(time.replace(/-/g, "/")));/*replace将时间字符串中所有的'-'替换成'/',parse将时间格式的字符串转换成毫秒*/
+				var nowTime = new Date();
+				let m = 60*1000*60*24;
+				var distance =endTime.getTime()+ m - nowTime.getTime();/*getTime把一个date对象转换成毫秒*/
 
-		}
+				var day = 0;
+				var hour = 0;
+				var minute = 0;
+				var second = 0;
+
+				if(distance >= 0){
+					day = Math.floor(distance/1000/60/60/24);
+					hour = Math.floor(distance/1000/60/60%24);
+					minute = Math.floor(distance/1000/60%60);
+					second = Math.floor(distance/1000%60);
+				}else{
+					_this.string="已取消"
+				}
+
+				_this.string =  hour + "时" + minute + "分" + second + "秒";
+			},
+			
+			//取消订单
+			 cancelOrder(){
+				console.log(order)
+				uni.request({
+					url:this.config.url+"order/cancle",
+					method:"POST",
+					data:{
+						token:this.token,
+						order_no:this.order_no,
+					},
+					success:res =>{
+						//console.log(res)
+					}
+				})
+			},
+		},
+		
+		
 	}
 </script>
 
@@ -269,6 +338,7 @@
 				}
 
 				.row-right {
+					flex: 1;
 					display: flex;
 					flex-direction: column;
 					justify-content: space-between;
@@ -282,6 +352,7 @@
 					}
 
 					.product-msg {
+						width:100%;
 						display: flex;
 						justify-content: space-between;
 						align-items: center;
@@ -361,7 +432,7 @@
 
 		.detail-main-four {
 			height: 127upx;
-
+	
 			.order-status {
 				display: flex;
 				justify-content: flex-end;

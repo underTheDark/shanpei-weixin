@@ -249,6 +249,7 @@
 
 					</view>
 				</view>
+				<uni-load-more :status="status" :showIcon="showIcon"></uni-load-more>
 			</view>
 		</view>
         <!-- 咨询客服 -->
@@ -256,18 +257,20 @@
 			<text>咨询</text>
 			<text>客服</text>
 		</view>
+		
 	</view>
 </template>
 
 <script>
 	import uniNumberBox from "@/components/uni-number-box/uni-number-box.vue"
 	import uniRate from "@/components/uni-rate/uni-rate.vue"  //星星评分
-
+    import uniLoadMore from "@/components/uni-load-more/uni-load-more.vue"
 	export default {
 		
 		components: {
 			uniNumberBox,
-			uniRate
+			uniRate,
+			uniLoadMore
 		},
 		data() {
 			return {
@@ -308,7 +311,13 @@
 			   size_list:[],
 			   // 选中规格
 			   selected_size:'',
-			   
+			   totalList: [],
+			   loadingText: '正在加载...',
+			   	showIcon: false,
+			   	status: "more",
+			   current_page: 0,
+			   total: "",
+			   last_page: "1",
 			};
 		},
 		onLoad(option) {
@@ -338,9 +347,11 @@
 		},
 		//上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
 		onReachBottom() {
-			uni.showToast({
-				title: '触发上拉加载'
-			});
+		  		// 当前页小于最后一页才调用
+		  	if (this.current_page < this.last_page) {
+		  		this.getRecommendList();
+		  	}
+			
 		},
 		mounted() {
             uni.request({
@@ -352,46 +363,58 @@
             	},
             	method: "post",
             	success: (res) => {
-                     console.log("res.data",res.data.data.goods_list);
-            		this.goodsData =res.data.data;
-            		this.comment=this.goodsData.comment;
-					//this.evaImg=this.goodsData.commit[0].comment_covers;
-					this.isKeep=this.goodsData.is_collect;
-					this.guiList=this.goodsData.specs;
-					// 轮播图
-					this.swiperList=res.data.data.image.split("|");
-					console.log(this.swiperList)
-					// 商品详情
-					this.detail=res.data.data.content;
-					console.log(this.detail);
-					// 商品明细
-					this.goods_list=res.data.data.goods_list;
+                     console.log("goods",res,res.data.data.goods_list);
+					 if(res.data.code==1){
+						 this.goodsData =res.data.data;
+						 this.comment=this.goodsData.comment;
+						 //this.evaImg=this.goodsData.commit[0].comment_covers;
+						 this.isKeep=this.goodsData.is_collect;
+						 this.guiList=this.goodsData.specs;
+						 // 轮播图
+						 this.swiperList=res.data.data.image.split("|");
+						 console.log(this.swiperList)
+						 // 商品详情
+						 this.detail=res.data.data.content;
+						 console.log(this.detail);
+						 // 商品明细
+						 this.goods_list=res.data.data.goods_list;
+					 }
+            	
 					
 				
             	}
             
             });
-			  // 推荐商品
-			  uni.request({
-				url: this.config.url+"recommend",
-				data: {
-					"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NjA5MjQ3NjgsImV4cCI6MTU4Njg0NDc2OCwiZGF0YSI6eyJpZCI6Mywib3BlbmlkIjoib0lieWY0cER5Z0ZLcWNRT1h3OGhaclZFbnJTRSIsImhlYWRpbWciOiJodHRwczpcL1wvd3gucWxvZ28uY25cL21tb3BlblwvdmlfMzJcL1EwajRUd0dUZlRMMFpGR3QwNWliMTJVWnJoMkNidm1VOUcwOGJpYW5pYmtiOXViWXVWaWN5WkZFaWNQUE9JQ1dPZ041UEYyVmxPOTRQVkFEUVBCYzZWM3pxZUFcLzEzMiIsIm5pY2tuYW1lIjoiXHU1ZjIwXHU0ZTA5IiwicGhvbmUiOiIiLCJ1c2VybmFtZSI6IiIsInZpcF9sZXZlbCI6MCwidmlwX2RhdGUiOm51bGwsImNyZWF0ZV9hdCI6IjIwMTktMDYtMTkgMTQ6MTE6NTgifX0.B32WfMWQ-0QJ1VtEbhxXgtT-nBqc8GwJb3ANBhy8BxU"
-			        ,
-					
-					
-				},
-				method: "post",
-				success: (res) => {
-			        // console.log('res1',res);
-					 this.tuiList=res.data.data.data
-					// this.goodsData =res.data.data;
-					// this.comment=this.goodsData.comment;
-					// this.evaImg=this.goodsData.commit[0].comment_covers;
-					// this.tuiList=this.goodsData.goods_list;
-					
-				}
-			
-			})
+			//   // 推荐商品
+			//   uni.request({
+			// 	url: this.config.url+"recommend",
+			// 	data: {
+   //              token:this.token
+			// 		
+			// 		
+			// 	},
+			// 	method: "post",
+			// 	success: (res) => {
+			//          console.log('res1',res);
+			// 		var len;
+			// 	     if(res.data.code==1){
+			// 			 this.totalList=res.data.data.data;
+			// 			 this.cur_page=this.data.data.current_page;
+			// 			 this.tol_page=this.data.data.last_page
+			// 			 if (this.totalList.length < 10) {
+			// 			 	len = this.totalList.length;
+			// 			 } else {
+			// 			 	len = 10;
+			// 			 }
+			// 			 for (var i = 0; i < len; i++) {
+			// 			 	this.tuiList.push(this.totalList[i])
+			// 			 	//	console.log(this.productList)
+			// 			 }
+			// 		 }
+			// 		
+			// 	}
+			// 
+			// })
 		},
 		methods: {
 			// 购买数量
@@ -432,6 +455,44 @@
 				
 				
 			},
+			// 获取推荐列表
+			getRecommendList() {
+				this.status = "loading";
+				// 首页为你推荐
+				uni.request({
+					url: this.config.url+'recommend', //仅为示例，并非真实接口地址。
+					data: {
+						token: this.token,
+						page: Number(this.current_page) + 1,
+					},
+					method: "post",
+					success: (res) => {
+						var len;
+						// console.log("res.data", res.data);
+						// 商品列表
+						this.totalList = res.data.data.data;
+						//每页10 
+						if (this.totalList.length < 10) {
+							len = this.totalList.length;
+						} else {
+							len = 10;
+						}
+						for (var i = 0; i < len; i++) {
+							this.tuiList.push(this.totalList[i])
+							//	console.log(this.productList)
+						}
+			
+						this.current_page = res.data.data.current_page;
+						this.last_page = res.data.data.last_page;
+						this.total = res.data.data.data.total;
+						this.status = "more";
+						if (this.current_page >= this.last_page) {
+							this.status = "noMore";
+						}
+					}
+				});
+			
+			},
 			//加入购物车
 			cancel(){
 				// 判断加入购物车
@@ -450,6 +511,11 @@
 							if(data.data.code==1){
 								uni.showToast({
 									title: '加入成功',
+									icon:"none"
+								});
+							}else{
+								uni.showToast({
+									title: data.data.info,
 									icon:"none"
 								});
 							}
@@ -535,19 +601,21 @@
 					//跳转到结算面
 				
 				    goods=this.goodsData;
-					goods.iscart=0;
 					goods.goods_spec=this.selected_size;
 					goods.goods_number=this.proNum;
-						
+					
+					let data={};
+						data.isCart = 0;
+						data.goods = goods
 					uni.setStorage({
-						key:"quick",
-						data:goods,
+						key:"cart",
+						data:data,
 						success: () => {
 							
 						}
 					})
 					uni.navigateTo({
-						url:"/pages/order/confirmation"
+						url:"/pages/order/confirmation?iscart=1"
 					})
 					
 				}else{
@@ -1200,16 +1268,23 @@ color:rgba(102,102,102,1);
 
 			.product-dec {
 				width: 100vw;
-				div{
-					width: 100vw;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+					justify-content: center;
+					h2{
+						font-size: 24upx;
+						color:#333;
+					}
 					p{
 						width: 100vw;
+						
 						img{
 							width: 100% !important;
-							height: auto;
+							height: 300upx;
 						}
 					}
-				}
+				
 				
 			}
 		}
@@ -1561,23 +1636,6 @@ color:rgba(51,51,51,1);
 
 			}
 
-// 			.btn {
-// 				width: 100%;
-// 				height: 100upx;
-// 
-// 				.button {
-// 					width: 100%;
-// 					height: 80upx;
-// 					border-radius: 40upx;
-// 					color: #fff;
-// 					display: flex;
-// 					align-items: center;
-// 					justify-content: center;
-// 					font-size: 28upx;
-// 					background: rgba(20, 204, 33, 1);
-// 
-// 				}
-// 			}
 		}
 
 		&.show {

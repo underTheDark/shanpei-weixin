@@ -43,6 +43,17 @@
       -ms-flex-direction: column;
           flex-direction: column;
 }
+.service-one .list {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+}
 .service-one .order-num {
     padding: 20rpx;
     font-size: 28rpx;
@@ -221,8 +232,7 @@
             align-items: center;
     width: 90%;
     height: 90rpx;
-    -webkit-border-radius: 90rpx;
-            border-radius: 90rpx;
+    border-radius: 90rpx;
     background: #00c65d;
 }
 
