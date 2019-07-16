@@ -172,7 +172,8 @@
 .return .return-left text:nth-child(1) {
       width: 33rpx;
       height: 33rpx;
-      border-radius: 33rpx;
+      -webkit-border-radius: 33rpx;
+              border-radius: 33rpx;
       color: #FF3699FF;
       border: 1px solid #FF3699FF;
       font-size: 16rpx;

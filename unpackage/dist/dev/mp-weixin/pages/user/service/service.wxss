@@ -131,7 +131,8 @@ page {
       width: 31rpx;
       height: 31rpx;
       border: 1px solid red;
-      border-radius: 31rpx;
+      -webkit-border-radius: 31rpx;
+              border-radius: 31rpx;
       display: -webkit-box;
       display: -webkit-flex;
       display: -ms-flexbox;

@@ -53,7 +53,8 @@
   margin-top: 40rpx;
 }
 .bottom {
-  border-radius: 80rpx;
+  -webkit-border-radius: 80rpx;
+          border-radius: 80rpx;
   margin: 70rpx 50rpx;
   font-size: 35rpx;
 }
@@ -126,7 +127,8 @@
         -ms-flex-align: center;
             align-items: center;
 }
-.getphone .btns .confirm, .getphone .btns .cancel {
+.getphone .btns .confirm,
+    .getphone .btns .cancel {
       display: -webkit-box;
       display: -webkit-flex;
       display: -ms-flexbox;
@@ -160,7 +162,8 @@
           justify-content: space-between;
   width: 100%;
 }
-.btns .cancel, .confim {
+.btns .cancel,
+.confim {
   width: 50%;
   height: 40rpx;
   display: -webkit-box;

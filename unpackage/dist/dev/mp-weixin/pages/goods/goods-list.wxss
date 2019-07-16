@@ -124,7 +124,8 @@
 }
 .goods-list .product-list .product {
     width: 48%;
-    border-radius: 20rpx;
+    -webkit-border-radius: 20rpx;
+            border-radius: 20rpx;
     background-color: #fff;
     margin-bottom: 30rpx;
     -webkit-box-shadow: 0rpx 5rpx 25rpx rgba(0, 0, 0, 0.1);
@@ -142,7 +143,8 @@
 .goods-list .product-list .product image {
       width: 100%;
       height: 273rpx;
-      border-radius: 20rpx 20rpx 0 0;
+      -webkit-border-radius: 20rpx 20rpx 0 0;
+              border-radius: 20rpx 20rpx 0 0;
       margin-bottom: 30rpx;
 }
 .goods-list .product-list .product .name {

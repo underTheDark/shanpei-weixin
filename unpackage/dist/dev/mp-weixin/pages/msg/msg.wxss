@@ -64,13 +64,15 @@
       font-weight: 500;
       color: white;
       background: #DEDEDE;
-      border-radius: 20rpx;
+      -webkit-border-radius: 20rpx;
+              border-radius: 20rpx;
 }
 .chat-list .chat .chat-bottom {
       margin-top: 30rpx;
       background: white;
       width: 100%;
-      border-radius: 10rpx;
+      -webkit-border-radius: 10rpx;
+              border-radius: 10rpx;
       padding: 30rpx 20rpx;
 }
 .chat-list .chat .chat-bottom .chat-title {

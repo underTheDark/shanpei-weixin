@@ -47,7 +47,8 @@ page {
     content: "\E6A4";
 }
 checkbox .wx-checkbox-input {
-  border-radius: 50%;
+  -webkit-border-radius: 50%;
+          border-radius: 50%;
 }
 checkbox .wx-checkbox-input.wx-checkbox-input-checked {
   color: #fff !important;
@@ -113,7 +114,9 @@ checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
     font-size: 32rpx;
 }
 .goods-list .row {
+    width: -webkit-calc(96%);
     width: calc(96%);
+    height: -webkit-calc(22vw + 40rpx);
     height: calc(22vw + 40rpx);
     display: -webkit-box;
     display: -webkit-flex;
@@ -237,7 +240,8 @@ checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
 .goods-list .row .carrier .goods-info .img {
           width: 22vw;
           height: 22vw;
-          border-radius: 10rpx;
+          -webkit-border-radius: 10rpx;
+                  border-radius: 10rpx;
           overflow: hidden;
           -webkit-flex-shrink: 0;
               -ms-flex-negative: 0;
@@ -283,7 +287,8 @@ checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
                 -ms-flex-align: center;
                     align-items: center;
             padding: 0 10rpx;
-            border-radius: 15rpx;
+            -webkit-border-radius: 15rpx;
+                    border-radius: 15rpx;
             margin-bottom: 20vw;
 }
 .goods-list .row .carrier .goods-info .info .price-number {
@@ -378,7 +383,8 @@ checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
     color: #14cc21;
     padding: 0 30rpx;
     height: 50rpx;
-    border-radius: 30rpx;
+    -webkit-border-radius: 30rpx;
+            border-radius: 30rpx;
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;

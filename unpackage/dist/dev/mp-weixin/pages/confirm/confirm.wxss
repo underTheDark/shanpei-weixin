@@ -86,7 +86,8 @@
 #confirm .confirm-two view {
       width: 156rpx;
       height: 56rpx;
-      border-radius: 56rpx;
+      -webkit-border-radius: 56rpx;
+              border-radius: 56rpx;
       font-size: 28rpx;
       display: -webkit-box;
       display: -webkit-flex;

@@ -97,7 +97,8 @@
 .send-msg .send-top .people-content .img image {
           width: 82rpx;
           height: 82rpx;
-          border-radius: 82rpx;
+          -webkit-border-radius: 82rpx;
+                  border-radius: 82rpx;
 }
 .send-msg .send-top .people-content view:nth-child(2) {
         display: -webkit-box;
@@ -340,7 +341,8 @@
     width: 80%;
     height: 88rpx;
     background: #14cc21;
-    border-radius: 88rpx;
+    -webkit-border-radius: 88rpx;
+            border-radius: 88rpx;
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;

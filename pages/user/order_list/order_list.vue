@@ -75,12 +75,25 @@
 
 		<!-- 取消订单弹出框 -->
          
-
-	<!-- 	<view class="menu_mask" v-if="false" @tap="hideMenu">
-			<view class="menu_list">
-				<view class="menu_item" v-for="(item,index) in array" :key="index" @tap="selectedAddress(item)">{{item.name}}</view>
+         <view class="picker_li" v-if="ishow">
+			<view class="pickbg"></view>
+			<view class="btn_c">
+				<view class="qx" @tap="cancel">取消</view>
+				<view class="sign" @tap="sure" :disabled="isdisabled">确定</view>
 			</view>
-		</view> -->
+			<view class="picker_w">
+				<view class="li_four" >
+					<view class="li_i" 
+						:class="[style4 == item.id ? 'active' : '' ]"
+						v-for="(item,d) in city_four" 
+						:key="d" 
+						@tap="showcityfour(item.id,item.name)">
+						{{item.name}}
+					</view>
+				</view>
+				
+			</view>
+		</view>
 	</view>
 </template>
 <script>
@@ -89,7 +102,7 @@
 		 
 		data() {
 			return {
-				show_menu: false,
+				ishow: false,
 				selceted: "",
 				headerPosition: "fixed",
 				headerTop: "0px",
@@ -242,7 +255,7 @@
 			//取消订单
 			cancelOrder(order, index) {
 				console.log(order, index)
-				this.show_menu = true;
+				this.ishow = true;
 
 				// uni.request({
 				// 	url:this.config.url+"order/cancle",
@@ -517,40 +530,64 @@
 			}
 		}
 	}
-
-	.menu_mask {
+ .pickbg{
 		position: fixed;
+		bottom: 0;
 		left: 0;
-		top: 0;
-		background-color: rgba(0, 0, 0, .3);
-		z-index: 1000000;
-		width: 100vw;
-		height: 100vh;
-
-		.menu_list {
-			width: 100vw;
-			height: 410upx;
-			overflow: auto;
-			background-color: #fff;
-			position: absolute;
-			bottom: 0;
-			box-sizing: border-box;
-			padding: 0 42upx;
-			display: flex;
-			flex-direction: column;
-
-			.menu_item {
-				display: block;
-				width: 100%;
-				height: 106upx;
-				font-size: 29upx;
-				box-sizing: border-box;
-				border-bottom: 1px solid rgba(216, 216, 216, 1);
-				color: #666;
-				line-height: 106upx;
-
-			}
-
+		width: 100%;
+		height: 100%;
+		background: rgba(0,0,0,0.5);
+		z-index: 98;
+	}
+	.btn_c{
+		position: fixed;
+		bottom:660upx;
+		left: 0;
+		width:90%;
+		height: 40upx;
+		padding:20upx 5%;
+		background: #fff;
+		z-index: 99;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.picker_w{
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height:600upx;
+		background: #fff;
+		z-index: 99;
+		padding:30upx 0;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+	}
+	.li_four{
+		height:600upx;
+		
+		overflow-y: auto;
+		text-align: center;
+		.li_i{
+			width:100%;
 		}
+	}
+	.sign{
+		background: #C49569;
+		font-size: 28upx;
+		color: #fff;
+		padding:8upx 24upx;
+		border-radius: 10upx;
+	}
+	.active{
+		color:#C49569;
+	}
+	.li_i{
+		font-size: 28upx;
+		padding: 20upx;
 	}
 </style>

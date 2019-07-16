@@ -109,8 +109,7 @@
 	
 
 	export default {
-		mounted() {
-
+		onShow() {
 			// 自提点
 			uni.request({
 				
@@ -125,7 +124,7 @@
 					this.selfLen = res.data.data.length;
 						console.log(res, res.data.data.length, "zi")
 				}
-
+			
 			})
 			//我的收货地址
 			uni.request({
@@ -141,6 +140,10 @@
 					this.homeLen = res.data.data.length;
 				}
 			})
+		},
+		mounted() {
+
+			
 		},
 		
 		data() {
@@ -361,6 +364,8 @@
 		display: flex;
 		flex-direction: column;
 			background: white;
+			padding-bottom: 190upx;
+			box-sizing:border-box;
 	}
 
 	.address-title {

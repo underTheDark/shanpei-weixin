@@ -51,7 +51,45 @@
 	//高德SDK
 	import amap from '../../common/SDK/amap-wx.js';
 	export default {
-
+         onShow() {
+         	  // 自提点列表
+         	  uni.request({
+         	  	url: this.config.url + "order/store",
+         	  	method: "post",
+         	  	data: {
+         	  		token: this.token,
+         	  		lat: this.lat,
+         	  		lng: this.lng,
+         	  },
+         	  	success: (res) => {
+         	  		console.log("zi",res.data)
+         	  		if (res.data.code == 1) {
+         	  			this.selfList = res.data.data.data
+         	  		} else {
+         	  
+         	  		}
+         	  	}
+         	  }),
+         	
+         	
+         	//我的收获地址
+         	uni.request({
+         		url: this.config.url + "member/address",
+         		method: "post",
+         		data: {
+         			token: this.token,
+         	
+         		},
+         		success: (res) => {
+         			//console.log("wo",res.data.data, res)
+         			if (res.data.code == 1) {
+         				this.homeList = res.data.data
+         			} else {
+         	
+         			}
+         		}
+         	})
+         },
 		onLoad() {
 			var _this = this;
 			// #ifdef APP-PLUS
@@ -75,43 +113,7 @@
 
 		},
 		mounted() {
-              // 自提点列表
-              uni.request({
-              	url: this.config.url + "order/store",
-              	method: "post",
-              	data: {
-              		token: this.token,
-              		lat: this.lat,
-              		lng: this.lng,
-              },
-              	success: (res) => {
-              		console.log("zi",res.data)
-              		if (res.data.code == 1) {
-              			this.selfList = res.data.data.data
-              		} else {
-              
-              		}
-              	}
-              }),
-
-
-			//我的收获地址
-			uni.request({
-				url: this.config.url + "member/address",
-				method: "post",
-				data: {
-					token: this.token,
-
-				},
-				success: (res) => {
-					//console.log("wo",res.data.data, res)
-					if (res.data.code == 1) {
-						this.homeList = res.data.data
-					} else {
-
-					}
-				}
-			})
+             
 		},
 		data() {
 			return {
@@ -205,7 +207,8 @@
 
 		background: rgba(245, 245, 245, 1);
 		height: 100vh;
-
+        padding-bottom: 190upx;
+		box-sizing:border-box;
 	}
 
 	.send-type {
