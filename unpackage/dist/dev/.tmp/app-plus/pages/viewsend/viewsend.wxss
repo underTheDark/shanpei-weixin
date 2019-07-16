@@ -1,0 +1,199 @@
+@charset "UTF-8";
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+#viewsend {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.product {
+  padding: 0 20rpx;
+  border-bottom: 20rpx solid #f7f7f7;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.product .row {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    padding: 20rpx 0;
+    border-bottom: 1px solid #e6e6e6;
+}
+.product .row .row-left {
+      width: 156rpx;
+      height: 156rpx;
+}
+.product .row .row-left image {
+        width: 156rpx;
+        height: 156rpx;
+}
+.product .row .row-right {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+          -ms-flex-direction: column;
+              flex-direction: column;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+          -ms-flex-pack: justify;
+              justify-content: space-between;
+      margin-left: 30rpx;
+}
+.product .row .row-right .product-title {
+        font-size: 28rpx;
+        font-family: PingFang-SC-Medium;
+        font-weight: 500;
+        color: #101010;
+}
+.product .row .row-right .product-msg {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: justify;
+        -webkit-justify-content: space-between;
+            -ms-flex-pack: justify;
+                justify-content: space-between;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+            -ms-flex-align: center;
+                align-items: center;
+        font-size: 28rpx;
+}
+.product .row .row-right .product-msg text:nth-child(1) {
+          color: #ff541f;
+          font-weight: 800;
+}
+.product .row .row-right .product-msg text:nth-child(2) {
+          color: #101010;
+}
+.people {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 20rpx 4%;
+}
+.people .people-left {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+.people .people-left image {
+      width: 84rpx;
+      height: 84rpx;
+      border-radius: 84rpx;
+      margin-right: 30rpx;
+}
+.people .people-left .people-msg {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+          -ms-flex-direction: column;
+              flex-direction: column;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+          -ms-flex-pack: justify;
+              justify-content: space-between;
+      font-size: 28rpx;
+}
+.people .people-left .people-msg text:nth-child(1) {
+        color: #b2b2b2;
+}
+.people .people-left .people-msg text:nth-child(2) {
+        font-weight: bold;
+        color: #333333;
+}
+.people .people-right {
+    width: 65rpx;
+    height: 65rpx;
+}
+.people .people-right image {
+      width: 65rpx;
+      height: 65rpx;
+}
+.goods-status {
+  margin: 60rpx 0 0 60rpx;
+}
+/deep/.uni-steps-item-circle {
+  width: 20rpx;
+  height: 20rpx;
+}
+/deep/.uni-steps-items.uni-steps-column .uni-steps-item-line {
+  width: 6rpx;
+  left: -26rpx;
+}
+/deep/.uni-icon-checkbox-filled:before {
+  margin-left: 5rpx;
+}
+/deep/.uni-steps-items {
+  overflow: visible;
+}
+/deep/.uni-steps-items.uni-steps-column .uni-steps-item-desc {
+  margin-left: -150rpx;
+  margin-top: -60rpx;
+  width: 100rpx;
+  height: 80rpx;
+}
+/deep/.uni-steps {
+  margin-left: 100rpx;
+  overflow: visible;
+}
+/deep/.uni-steps-item-title-container {
+  margin-bottom: 80rpx;
+}
+

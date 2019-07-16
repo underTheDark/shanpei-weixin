@@ -57,34 +57,9 @@
 
 
 
-
-
 var _amapWx = _interopRequireDefault(__webpack_require__(/*! ../../common/SDK/amap-wx.js */ "C:\\Users\\Administrator\\Desktop\\shanpei-r\\shanpei-weixin-rr\\common\\SDK\\amap-wx.js"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //高德SDK
 var _default = {
-
-  onLoad: function onLoad() {var _this2 = this;
-    var _this = this;
-
-
-
-    var amapPlugin = new _amapWx.default.AMapWX({
-      //高德地图KEY，随时失效，请务必替换为自己的KEY，参考：http://ask.dcloud.net.cn/article/35070
-      key: '5b9b64be2413fc19c26683fcf0de890f' });
-
-    //定位地址
-    amapPlugin.getRegeo({
-      success: function success(data) {
-        //	console.log(data)
-        _this2.city = data[0].regeocodeData.addressComponent.city.replace(/市/g, ''); //把"市"去掉
-
-        _this2.lat = data[0].latitude; //纬度
-        _this2.lng = data[0].longitude; //经度
-      } });
-
-
-
-  },
-  mounted: function mounted() {var _this3 = this;
+  onShow: function onShow() {var _this2 = this;
     // 自提点列表
     uni.request({
       url: this.config.url + "order/store",
@@ -97,11 +72,11 @@ var _default = {
       success: function success(res) {
         console.log("zi", res.data);
         if (res.data.code == 1) {
-          _this3.selfList = res.data.data.data;
+          _this2.selfList = res.data.data.data;
         } else {
 
         }
-      } }),
+      } });
 
 
 
@@ -116,13 +91,55 @@ var _default = {
       success: function success(res) {
         //console.log("wo",res.data.data, res)
         if (res.data.code == 1) {
-          _this3.homeList = res.data.data;
+          _this2.homeList = res.data.data;
         } else {
 
         }
       } });
 
   },
+  onLoad: function onLoad() {var _this3 = this;
+    var _this = this;
+
+
+
+    var amapPlugin = new _amapWx.default.AMapWX({
+      //高德地图KEY，随时失效，请务必替换为自己的KEY，参考：http://ask.dcloud.net.cn/article/35070
+      key: '5b9b64be2413fc19c26683fcf0de890f' });
+
+    //定位地址
+    amapPlugin.getRegeo({
+      success: function success(data) {
+        //	console.log(data)
+        _this3.city = data[0].regeocodeData.addressComponent.city.replace(/市/g, ''); //把"市"去掉
+
+        _this3.lat = data[0].latitude; //纬度
+        _this3.lng = data[0].longitude; //经度
+        console.log(_this3.lat, _this3.lng);
+        // 自提点列表
+        uni.request({
+          url: _this3.config.url + "order/store",
+          method: "post",
+          data: {
+            token: _this3.token,
+            lat: _this3.lat,
+            lng: _this3.lng },
+
+          success: function success(res) {
+            console.log("zi", res.data);
+            if (res.data.code == 1) {
+              _this3.selfList = res.data.data.data;
+            } else {
+
+            }
+          } });
+
+      } });
+
+
+
+  },
+
   data: function data() {
     return {
       homeNum: 0, //选中我的收货地址下标
@@ -289,14 +306,13 @@ var render = function() {
               ),
               _c("view", { staticClass: "add-right" }, [
                 _c("view", { staticClass: "address-user-top" }, [
-                  _c("text", [_vm._v(_vm._s(home.name))]),
+                  _c("text", [_vm._v(_vm._s(home.username))]),
                   _c("text", [_vm._v(_vm._s(home.phone))])
                 ]),
                 _c("view", { staticClass: "address-user-bottom" }, [
                   _vm._v(
                     _vm._s(home.province) +
                       _vm._s(home.city) +
-                      "\n\t\t\t\t\t\t" +
                       _vm._s(home.area) +
                       _vm._s(home.address) +
                       _vm._s(home.street)
@@ -335,7 +351,7 @@ var render = function() {
             },
             [
               _c("view", { staticClass: "addr-far" }, [
-                _c("text", [_vm._v(_vm._s(self.name))]),
+                _c("text", [_vm._v(_vm._s(self.username))]),
                 _c("text", [_vm._v(_vm._s(self.distance) + " km")])
               ]),
               _c("text", { staticClass: "getgoods-msg" }, [
@@ -345,7 +361,6 @@ var render = function() {
                 _vm._v(
                   _vm._s(self.province_name) +
                     _vm._s(self.city_name) +
-                    "\n\t\t\t\t\t" +
                     _vm._s(self.area_name) +
                     _vm._s(self.address_name) +
                     _vm._s(self.street_name)

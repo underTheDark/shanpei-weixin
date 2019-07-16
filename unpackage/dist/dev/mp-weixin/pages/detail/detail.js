@@ -285,11 +285,34 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var _uniCountdown = _interopRequireDefault(__webpack_require__(/*! @/components/uni-countdown/uni-countdown.vue */ "C:\\Users\\Administrator\\Desktop\\shanpei-r\\shanpei-weixin-rr\\components\\uni-countdown\\uni-countdown.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
 
 {
   data: function data() {
     return {
+      style4: "",
+      desc: "", //退货描述
+      array: [{ id: 0, name: "我不想买了" }, { id: 1, name: "信息填写错误" }, { id: 2, name: "重新拍" },
+      { id: 3, name: "卖家缺货" }, { id: 4, name: "其他原因" }],
+
+      show_menu: false,
       order_no: '',
       down: true,
       hour: "",
@@ -342,6 +365,7 @@ var _uniCountdown = _interopRequireDefault(__webpack_require__(/*! @/components/
 
   },
   methods: {
+
     getDistanceTime: function getDistanceTime(time) {
       var _this = this;
       var endTime = new Date(Date.parse(time.replace(/-/g, "/"))); /*replace将时间字符串中所有的'-'替换成'/',parse将时间格式的字符串转换成毫秒*/
@@ -368,19 +392,156 @@ var _uniCountdown = _interopRequireDefault(__webpack_require__(/*! @/components/
 
     //取消订单
     cancelOrder: function cancelOrder() {
-      console.log(order);
+      console.log(12222);
+      this.show_menu = true;
+
+    },
+    // 退货取消
+    cancel: function cancel() {
+      this.show_menu = false;
+    },
+    //确认
+    sure: function sure() {
+      if (this.desc) {
+
+        this.show_menu = false;
+        uni.request({
+          url: this.config.url + "order/cancle",
+          method: "POST",
+          data: {
+            token: this.token,
+            order_no: this.order_no,
+            cancle_desc: this.desc },
+
+          success: function success(res) {
+            console.log(res);
+
+            if (res.data.code == 1) {
+              uni.showToast({
+                title: "取消订单成功" });
+
+              uni.navigateTo({
+                url: "/pages/user/order_list/order_list?tbIndex=" + 1 });
+
+
+            } else {
+              uni.showToast({
+                title: "取消订单失败" });
+
+            }
+          } });
+
+      } else {
+        uni.showToast({
+          title: "请选择退货原因",
+          icon: 'none' });
+
+
+      }
+    },
+    //确认收货
+    confirm: function confirm() {
       uni.request({
-        url: this.config.url + "order/cancle",
+        url: this.config.url + "order/confirm",
+        data: {
+          token: this.token,
+          order_no: this.order_no },
+
+        method: "post",
+        success: function success(res) {
+          console.log(res);
+          uni.navigateTo({
+            url: "pages/confirm/confirm" });
+
+        } });
+
+    },
+    //删除订单
+    deleteOrder: function deleteOrder() {var _this3 = this;
+      uni.request({
+        url: this.config.url + "order/del",
         method: "POST",
         data: {
           token: this.token,
           order_no: this.order_no },
 
         success: function success(res) {
-          //console.log(res)
+          console.log(res);
+          _this3.orderList.splice(index, 1);
+          if (res.data.code == 1) {
+            uni.showToast({
+              title: "删除订单成功" });
+
+          }
         } });
 
-    } } };exports.default = _default;
+    },
+    //跳转订单
+    evalute: function evalute() {
+      uni.navigateTo({
+        url: "/pages/user/keep/sayFeel/sayFeel" });
+
+    },
+    showcityfour: function showcityfour(id, name) {
+      this.style4 = id;
+      this.desc = name;
+    },
+    //去付款
+    toPayment: function toPayment() {
+      //调起支付接口
+      var _this = this;
+      uni.request({
+        url: this.config.url + "order/pay",
+        method: "POST",
+        data: {
+          token: this.token,
+          order_no: this.order_no },
+
+        success: function success(res) {
+          console.log(res);
+          if (res.data.code == 1) {
+            var pay = res.data.data.data;
+            uni.requestPayment({
+              provider: 'wxpay',
+              appid: pay.appId,
+              timeStamp: pay.timeStamp,
+              nonceStr: pay.nonceStr,
+              package: pay.package,
+              signType: pay.signType,
+              paySign: pay.paySign,
+              success: function success(res) {
+                console.log('success:' + JSON.stringify(res));
+
+
+                uni.showToast({
+                  title: "支付成功" });
+
+
+                //跳转我的订单
+                uni.navigateTo({
+                  url: "/pages/user/order_list/order_list?tbIndex=" + 1 });
+
+              },
+              fail: function fail(err) {
+                //console.log('fail:' + JSON.stringify(err));
+                uni.showToast({
+                  title: "支付失败" });
+
+              } });
+
+          } else {
+            uni.showToast({
+              title: res.data.info });
+
+          }
+        } });
+
+
+    } },
+
+  mounted: function mounted() {
+    console.log(this.order_no);
+  } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
 /***/ }),
@@ -542,7 +703,30 @@ var render = function() {
       !_vm.down ? _c("view", [_vm._v(_vm._s(_vm.string))]) : _vm._e()
     ]),
     _c("view", { staticClass: "detail-main" }, [
-      _vm._m(0),
+      _c("view", { staticClass: "detail-main-one" }, [
+        _vm._m(0),
+        _c("view", { staticClass: "one-right" }, [
+          _c("view", [
+            _vm._v(
+              "收货人：" +
+                _vm._s(_vm.order.express_name) +
+                "   " +
+                _vm._s(_vm.order.express_phone)
+            )
+          ]),
+          _c("view", [
+            _vm._v(
+              "收货地址：" +
+                _vm._s(_vm.order.express_province) +
+                _vm._s(_vm.order.express_city) +
+                _vm._s(_vm.order.express_area) +
+                "\n\t\t\t\t" +
+                _vm._s(_vm.order.express_street) +
+                _vm._s(_vm.order.express_address)
+            )
+          ])
+        ])
+      ]),
       _c(
         "view",
         { staticClass: "detail-main-two" },
@@ -555,8 +739,8 @@ var render = function() {
                   _vm._v(_vm._s(row.goods_title))
                 ]),
                 _c("view", { staticClass: "product-msg" }, [
-                  _c("text", [_vm._v(_vm._s(row.price_selling))]),
-                  _c("text", [_vm._v(_vm._s(row.number))])
+                  _c("text", [_vm._v("￥" + _vm._s(row.price_selling))]),
+                  _c("text", [_vm._v("x" + _vm._s(row.number))])
                 ])
               ])
             ])
@@ -564,7 +748,7 @@ var render = function() {
           _c("view", { staticClass: "money" }, [
             _c("view", [
               _c("text", [_vm._v("商品总额")]),
-              _c("text", [_vm._v(_vm._s(_vm.order.price_goods))])
+              _c("text", [_vm._v("￥" + _vm._s(_vm.order.price_goods))])
             ]),
             _c("view", [
               _c("text", [_vm._v("运费")]),
@@ -573,7 +757,7 @@ var render = function() {
           ]),
           _c("view", { staticClass: "pay-amount" }, [
             _c("text", [_vm._v("应付款")]),
-            _c("text", [_vm._v(_vm._s(_vm.order.price_total))])
+            _c("text", [_vm._v("￥" + _vm._s(_vm.order.price_total))])
           ])
         ],
         2
@@ -587,7 +771,33 @@ var render = function() {
                 _c("view", [_vm._v("创建时间：" + _vm._s(_vm.order.create_at))])
               ])
             ]),
-            _vm._m(1)
+            _c("view", { staticClass: "detail-main-four" }, [
+              _c("view", { staticClass: "order-status" }, [
+                _c(
+                  "view",
+                  {
+                    staticClass: "status-one",
+                    attrs: { eventid: "91b664d0-0" },
+                    on: {
+                      click: function($event) {
+                        $event.stopPropagation()
+                        _vm.cancelOrder()
+                      }
+                    }
+                  },
+                  [_vm._v("取消订单")]
+                ),
+                _c(
+                  "view",
+                  {
+                    staticClass: "status-two",
+                    attrs: { eventid: "91b664d0-1" },
+                    on: { click: _vm.toPayment }
+                  },
+                  [_vm._v("去付款")]
+                )
+              ])
+            ])
           ])
         : _vm._e(),
       _vm.order.status == 3
@@ -603,7 +813,7 @@ var render = function() {
                 _c("view", [_vm._v("付款时间：" + _vm._s(_vm.order.pay_at))])
               ])
             ]),
-            _vm._m(2)
+            _vm._m(1)
           ])
         : _vm._e(),
       _vm.order.status == 4
@@ -624,17 +834,17 @@ var render = function() {
                 _c(
                   "view",
                   {
-                    staticClass: "status-one",
-                    attrs: { eventid: "91b664d0-0" },
+                    staticClass: "status-two",
+                    attrs: { eventid: "91b664d0-2" },
                     on: {
                       click: function($event) {
-                        _vm.cancelOrder()
+                        $event.stopPropagation()
+                        _vm.confirm()
                       }
                     }
                   },
-                  [_vm._v("取消订单")]
-                ),
-                _c("view", { staticClass: "status-two" }, [_vm._v("确认收货")])
+                  [_vm._v("确认收货")]
+                )
               ])
             ])
           ])
@@ -652,10 +862,86 @@ var render = function() {
                 _c("view", [_vm._v("付款时间：" + _vm._s(_vm.order.pay_at))])
               ])
             ]),
-            _vm._m(3)
+            _c("view", { staticClass: "detail-main-four" }, [
+              _c("view", { staticClass: "order-status" }, [
+                _c(
+                  "view",
+                  {
+                    staticClass: "status-one",
+                    attrs: { eventid: "91b664d0-3" },
+                    on: {
+                      click: function($event) {
+                        _vm.deleteOrder()
+                      }
+                    }
+                  },
+                  [_vm._v("删除订单")]
+                ),
+                _c(
+                  "view",
+                  {
+                    staticClass: "status-two",
+                    attrs: { eventid: "91b664d0-4" },
+                    on: { click: _vm.evalute }
+                  },
+                  [_vm._v("去评价")]
+                )
+              ])
+            ])
           ])
         : _vm._e()
-    ])
+    ]),
+    _vm.show_menu
+      ? _c("view", { staticClass: "picker_li" }, [
+          _c("view", { staticClass: "pickbg" }),
+          _c("view", { staticClass: "btn_c" }, [
+            _c(
+              "view",
+              {
+                staticClass: "qx",
+                attrs: { eventid: "91b664d0-5" },
+                on: { tap: _vm.cancel }
+              },
+              [_vm._v("取消")]
+            ),
+            _c(
+              "view",
+              {
+                staticClass: "sign",
+                attrs: { disabled: _vm.isdisabled, eventid: "91b664d0-6" },
+                on: { tap: _vm.sure }
+              },
+              [_vm._v("确定")]
+            )
+          ]),
+          _c("view", { staticClass: "picker_w" }, [
+            _c("view", { staticClass: "return-title" }, [
+              _vm._v("请选择退货原因")
+            ]),
+            _c(
+              "view",
+              { staticClass: "li_four" },
+              _vm._l(_vm.array, function(item, d) {
+                return _c(
+                  "view",
+                  {
+                    key: d,
+                    staticClass: "li_i",
+                    class: [_vm.style4 == item.id ? "active" : ""],
+                    attrs: { eventid: "91b664d0-7-" + d },
+                    on: {
+                      tap: function($event) {
+                        _vm.showcityfour(item.id, item.name)
+                      }
+                    }
+                  },
+                  [_vm._v(_vm._s(item.name))]
+                )
+              })
+            )
+          ])
+        ])
+      : _vm._e()
   ])
 }
 var staticRenderFns = [
@@ -663,16 +949,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "detail-main-one" }, [
-      _c("view", { staticClass: "img" }, [_c("image", { attrs: { src: "" } })]),
-      _c("view", { staticClass: "one-right" }, [
-        _c("view", [_vm._v("收货人：张方方   222222222222")]),
-        _c("view", [
-          _vm._v(
-            "收货地址：中国 河南省 郑州市 高新区广告\n\t\t\t\t\t产业园9号楼13楼"
-          )
-        ])
-      ])
+    return _c("view", { staticClass: "img" }, [
+      _c("image", { attrs: { src: "../../static/img/category/dingwei.png" } })
     ])
   },
   function() {
@@ -680,31 +958,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("view", { staticClass: "detail-main-four" }, [
-      _c("view", { staticClass: "order-status" }, [
-        _c("view", { staticClass: "status-one" }, [_vm._v("取消订单")]),
-        _c("view", { staticClass: "status-two" }, [_vm._v("去付款")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "detail-main-four" }, [
-      _c("view", { staticClass: "order-status" }, [
-        _c("view", { staticClass: "status-two" }, [_vm._v("取消订单")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "detail-main-four" }, [
-      _c("view", { staticClass: "order-status" }, [
-        _c("view", { staticClass: "status-one" }, [_vm._v("删除订单")]),
-        _c("view", { staticClass: "status-two" }, [_vm._v("去评价")])
-      ])
+      _c("view", { staticClass: "order-status" })
     ])
   }
 ]

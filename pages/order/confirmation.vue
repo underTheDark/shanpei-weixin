@@ -13,16 +13,18 @@
 		<view class="addr">
 
 			<view class="sendgoods-info">配送信息</view>
-			<view class="sendgoods-addr" v-if="address">
-				<view >
+			<view class="sendgoods-addr" v-if="true">
+				<view>
 					<text class="getgoods-name" v-show="getgoods_name==1">{{addrList.name}}</text>
-					<text class="getgoods-people">{{addrList.username}}{{addrList.name}} &nbsp;&nbsp;&nbsp;{{addrList.phone}}</text>
+					<text class="getgoods-people">{{addrList.username}} &nbsp;&nbsp;&nbsp;{{addrList.phone}}</text>
 					<text class="getgoods-addr">
-						{{addrList.province_name}}{{addrList.city_name}}{{addrList.area_name}} {{addrList.street_name}} {{addrList.address_name}}
-					    {{addrList.province}}{{addrList.city}}{{addrList.area}}{{addrList.street}}{{addrList.address}}
+
+						{{addrList.province}}{{addrList.city}}{{addrList.area}}{{addrList.street}}{{addrList.address}}
+						{{addrList.province_name}}{{addrList.city_name}}{{addrList.area_name}} {{addrList.street_name}}{{addrList.address_name}}
+
 					</text>
 				</view>
-				
+
 			</view>
 		</view>
 		<!-- 购买商品列表 -->
@@ -37,7 +39,7 @@
 						<view class="title">{{buy.goods_title}}</view>
 						<view class="spec">
 							<text>{{buy.goods_spec}} </text>
-							
+
 						</view>
 						<view class="price-number">
 							<view class="price">￥{{buy.price_selling}}</view>
@@ -72,36 +74,15 @@
 				<view class="btn" @tap="toPay">去结算</view>
 			</view>
 		</view>
-	</view> 
+	</view>
 </template>
 
 <script>
 	export default {
 
 		mounted() {
-	         //获取收货地址
-			 
-			 uni.getStorage({
-			 	key:"address",
-				success:(res)=>{
-					
-					var addr=JSON.parse(res.data)
-					console.log("address",res,addr)
-					if(addr.distance){
-						console.log(2)
-						 console.log(addr.distance)
-							this.getgoods_name=1
-					}else{
-						console.log(1)
-					      this.addrList=addr;
-						  this.getgoods_name=2;
-					}
-					
-				}
-			 })
 			
-			
-		},
+			},
 		computed: {
 			totalmoney() {
 				var totalNum = Number(this.total) + Number(this.express)
@@ -116,55 +97,38 @@
 				number: "", //购买商品总数量
 				goodsPrice: 0.0, //商品合计价格
 				sumPrice: 0.0, //用户付款价格
-				address:9,  //地址是否显示
-				addrList:{}, //选中地址信息
+				address: 9, //地址是否显示
+				addrList: {}, //选中地址信息
 				goods: [],
 				express: '',
 				total: "", //商品总价格
-				iscart:"",
+				iscart: "",
 				getgoods_name: false, //送货类型显示
 				order_no: "", //订单编号
-                
+				orderType: "", //地址类型
+				defaultAddr: "", //默认地址
+				addrId: "" //默认地址id
 			}
 		},
 		onLoad(option) {
-			console.log(option);
+
+			console.log("con", option);
+			if (option.iscart) {
 				//立即购买商品缓存
 				uni.getStorage({
-					key:"cart",
-					success:(res)=>{
-						console.log("liji",res)
-						this.iscart=res.data.isCart;
-						if(res.data.isCart == 0){
-						var quick={goods_id:res.data.goods.id,goods_number:res.data.goods.goods_number,goods_spec:res.data.goods.goods_spec}
-					   
-						this.goods.push(quick)
-						
-						//确认订单信息
-						uni.request({
-							url: this.config.url + "order/sure",
-							method: "post",
-							data: {
-								token: this.token,
-								goods: this.goods
-							},
-							success: (res) => {
-							//	 console.log("sure",res)
-								if (res.data.code == 1) {
-									this.buyList = res.data.data.goods;  //商品列表
-									this.express = res.data.data.express;
-									this.total = res.data.data.total;
-									this.number = res.data.data.number;
-									//this.getgoods_name=res.data.data.order_type; //提交记录
-								}
+					key: "cart",
+					success: (res) => {
+						console.log("liji", res)
+						this.iscart = res.data.isCart;
+						if (res.data.isCart == 0) {
+							var quick = {
+								goods_id: res.data.goods.id,
+								goods_number: res.data.goods.goods_number,
+								goods_spec: res.data.goods.goods_spec
 							}
-						})
-						
-						}else{
-							
-							//购物车购买商品缓存
-							// var quick={goods_id:res.data.id,goods_number:res.data.goods_number,goods_spec:res.data.goods_spec}
-							this.goods=res.data.goods;
+
+							this.goods.push(quick)
+
 							//确认订单信息
 							uni.request({
 								url: this.config.url + "order/sure",
@@ -174,29 +138,171 @@
 									goods: this.goods
 								},
 								success: (res) => {
-									console.log("cart",res)
+									console.log("sure", res)
 									if (res.data.code == 1) {
-										this.buyList = res.data.data.goods;  //商品列表
+										this.buyList = res.data.data.goods; //商品列表
 										this.express = res.data.data.express;
 										this.total = res.data.data.total;
 										this.number = res.data.data.number;
-										//this.getgoods_name=res.data.data.order_type; //提交记录
+										this.orderType = res.data.data.order_type; //提交记录
+
+										//判断是否有默认地址
+										if (this.orderType == 0) {
+											this.address = false;
+										} else if (this.orderType == 1) {
+											this.getgoods_name == 1;
+											this.address = true;
+											this.addrList = res.data.data.address //默认地址
+											this.addrId = res.data.data.address.id; //默认地址id
+
+										} else if (this.orderType == 2) {
+											this.getgoods_name = 2;
+											this.address = true;
+											this.addrList = res.data.data.address //默认地址
+
+											this.addrId = res.data.data.address.id; //默认地址id
+										}
 									}
 								}
 							})
-							
+
+						} else {
+
+							//购物车购买商品缓存
+							// var quick={goods_id:res.data.id,goods_number:res.data.goods_number,goods_spec:res.data.goods_spec}
+							this.goods = res.data.goods;
+							//确认订单信息
+							uni.request({
+								url: this.config.url + "order/sure",
+								method: "post",
+								data: {
+									token: this.token,
+									goods: this.goods
+								},
+								success: (res) => {
+									console.log("cart", res)
+									if (res.data.code == 1) {
+										this.buyList = res.data.data.goods; //商品列表
+										this.express = res.data.data.express;
+										this.total = res.data.data.total;
+										this.number = res.data.data.number;
+										this.orderType = res.data.data.order_type; //提交记录
+
+										//判断是否有默认地址
+										if (this.orderType == 0) {
+											this.address = false;
+										} else if (this.orderType == 1) {
+											this.getgoods_name = 1;
+											this.address = true;
+											this.addrList = res.data.data.address //默认地址
+											this.addrId = res.data.data.address.id; //默认地址id
+										} else if (this.orderType == 2) {
+											this.getgoods_name = 2;
+											this.address = true;
+											this.addrList = res.data.data.address //默认地址
+											this.addrId = res.data.data.address.id; //默认地址id
+										}
+									}
+								}
+							})
+
 						}
-					
-					
-					
+
+
+
 					},
 				})
-		
+
+			}else{
+				//获取收货地址缓存
+				
+				uni.getStorage({
+					key: "address",
+					success: (res) => {
+				
+						var addr = JSON.parse(res.data)
+						console.log("address", res, addr)
+						if (addr.distance) {
+							this.addrId = addr.id;
+							this.getgoods_name = 1
+							this.addrList = addr;
+						} else {
+							this.addrId = addr.id;
+							this.addrList = addr;
+							this.getgoods_name = 2;
+						}
+				
+					}
+				});
+				//获取商品缓存
+				//立即购买商品缓存
+				uni.getStorage({
+					key: "cart",
+					success: (res) => {
+						console.log("liji", res)
+						this.iscart = res.data.isCart;
+						if (res.data.isCart == 0) {
+							var quick = {
+								goods_id: res.data.goods.id,
+								goods_number: res.data.goods.goods_number,
+								goods_spec: res.data.goods.goods_spec
+							}
+				
+							this.goods.push(quick)
+				
+							//确认订单信息
+							uni.request({
+								url: this.config.url + "order/sure",
+								method: "post",
+								data: {
+									token: this.token,
+									goods: this.goods
+								},
+								success: (res) => {
+									console.log("sure", res)
+									if (res.data.code == 1) {
+										this.buyList = res.data.data.goods; //商品列表
+										this.express = res.data.data.express;
+										this.total = res.data.data.total;
+										this.number = res.data.data.number;
+										
+									}
+								}
+							})
+				
+						} else {
+				
+							//购物车购买商品缓存
+							// var quick={goods_id:res.data.id,goods_number:res.data.goods_number,goods_spec:res.data.goods_spec}
+							this.goods = res.data.goods;
+							//确认订单信息
+							uni.request({
+								url: this.config.url + "order/sure",
+								method: "post",
+								data: {
+									token: this.token,
+									goods: this.goods
+								},
+								success: (res) => {
+									console.log("cart", res)
+									if (res.data.code == 1) {
+										this.buyList = res.data.data.goods; //商品列表
+										this.express = res.data.data.express;
+										this.total = res.data.data.total;
+										this.number = res.data.data.number;
+									
+				
+									}
+								}
+							})
+				
+						}
+				    },
+				})
+			}
+
 		},
-		onBackPress() {
-			//页面后退时候，清除订单信息
-			this.clearOrder();
-		},
+
 		filters: {
 			toFixed: function(x) {
 				return parseFloat(x).toFixed(2);
@@ -209,7 +315,7 @@
 					url: "/pages/sendType/sendType"
 				})
 			},
-			
+
 
 			clearOrder() {
 				uni.removeStorage({
@@ -229,7 +335,7 @@
 						token: this.token,
 						goods: this.goods,
 						order_type: this.getgoods_name,
-						address_id: this.addrList.id,
+						address_id: this.addrId,
 						from_car: this.iscart
 					},
 					success: (res) => {
@@ -251,7 +357,7 @@
 										var pay = res.data.data.data
 										uni.requestPayment({
 											provider: 'wxpay',
-											appid:pay.appId,
+											appid: pay.appId,
 											timeStamp: pay.timeStamp,
 											nonceStr: pay.nonceStr,
 											package: pay.package,
@@ -260,19 +366,19 @@
 											success: function(res) {
 												console.log('success:' + JSON.stringify(res));
 												uni.navigateTo({
-													url:"/pages/user/order_list/order_list?tbIndex=2"
+													url: "/pages/user/order_list/order_list?tbIndex=" + 1
 												})
-												
+
 											},
 											fail: function(err) {
 												console.log('fail:' + JSON.stringify(err));
 												uni.switchTab({
-													
-							
-													url:"/pages/tabBar/home"
+
+
+													url: "/pages/tabBar/home"
 												})
 												uni.showToast({
-													title:"支付失败"
+													title: "支付失败"
 												})
 											}
 										});
@@ -287,7 +393,7 @@
 						}
 					}
 				})
-		
+
 
 			}
 
@@ -303,7 +409,8 @@
 
 	// 配送方式
 	.confirm {
-
+		width: 100%;
+		box-sizing: border-box;
 		background: rgba(245, 245, 245, 1);
 
 	}
@@ -374,15 +481,16 @@
 		.sendgoods-addr {
 			display: flex;
 			justify-content: space-between;
-			width: 100%;
+			width: 96%;
+			padding: 0 2%;
 
 			view {
-				width:100%;
+				width: 100%;
 				display: flex;
 				flex-direction: column;
 
 				.getgoods-name {
-					font-size: 28upx;
+					font-size: 30upx;
 					font-family: PingFang-SC-Regular;
 					font-weight: 400;
 					color: rgba(51, 51, 51, 1);
@@ -395,15 +503,16 @@
 					color: rgba(102, 102, 102, 1);
 					margin: 10upx 0;
 					display: flex;
-					
+
 				}
 
 				.getgoods-addr {
-					font-size: 28upx;
+					font-size: 32upx;
 					font-family: PingFang-SC-Regular;
 					font-weight: 400;
 					color: rgba(153, 153, 153, 1);
-					display: block
+					display: block;
+
 				}
 
 			}
@@ -466,13 +575,13 @@
 					}
 
 					.spec {
-						font-size: 22upx;
+						font-size: 26upx;
 
 						color: #a7a7a7;
 						height: 40upx;
 						display: flex;
 						align-items: center;
-						padding: 0 10upx;
+						
 
 						margin-bottom: 20vw;
 

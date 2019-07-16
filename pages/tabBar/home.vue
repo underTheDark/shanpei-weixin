@@ -1,5 +1,5 @@
 <template>
-	<view class="home" v-if="true">
+	<view class="home" v-if="home">
 		<!-- 状态栏 -->
 		<view class="status" :style="{ position: headerPosition,top:statusTop,opacity: afterHeaderOpacity}"></view>
 		<!-- 顶部导航栏 -->
@@ -144,7 +144,8 @@
 			uniLoadMore
 		},
 		mounted() {
-			this.init();		
+				 this.init();	
+				
 		},
 
 		data() {
@@ -172,7 +173,7 @@
 				productList: [],
 				totalList: [],
 				loadingText: '正在加载...',
-	
+	            token1:"",
 				
 				current_page: 0,
 				total: "",
@@ -204,10 +205,24 @@
 
 		},
 		onReady(){
-			 
+			 //  uni.showLoading({
+			 // 	title: '加载中'
+			 // });
 		},
 		onLoad() {
-			this.first_load();
+			uni.getStorage({
+					key:"info",
+					success: (res) => {
+						
+						var result=JSON.parse(res.data)
+						
+						this.token1=result.token;
+						console.log(res,result.token,this.token1)
+						this.first_load();
+						
+					}
+				})
+		
 		},
 		methods: {
 			//加载更多热销产品
@@ -220,9 +235,7 @@
 					
 			},
 			first_load(){
-				 uni.showLoading({
-					title: '加载中'
-				});
+				
 				
 				var amapPlugin = new amap.AMapWX({
 					//高德地图KEY，随时失效，请务必替换为自己的KEY，参考：http://ask.dcloud.net.cn/article/35070
@@ -233,6 +246,7 @@
 					success: data => {
 						//console.log(data)
 						this.city = data[0].regeocodeData.addressComponent.city.replace(/市/g, ''); //把"市"去掉
+					    this.init()
 					}
 				});
 				
@@ -241,7 +255,7 @@
 					url: this.config.url + "member/message",
 					method: "POST",
 					data: {
-						token: this.token
+						token: this.token1
 					},
 					success: (res) => {
 						//console.log("mesg",res)
@@ -254,36 +268,42 @@
 						}
 					}
 				})
-				uni.request({
-					url: this.config.url+'index', //仅为示例，并非真实接口地址。
-					data: {
-						token: this.token
-					},
-					method: "post",
-					success: (res) => {
-				        console.log("hoem", res);
-						var num;
-						if(res.data.code==1){
-							this.swiperList = res.data.data.banner;
-							this.categoryList = res.data.data.cate;
-							
-							this.limitList = res.data.data.limit_buy;
-							this.hot = res.data.data.hot;
-							
-							if (this.hotList.length < 10) {
-								num = this.totalList.length;
-							} else {
-								num = 10;
+				
+					uni.request({
+						url: this.config.url+'home', //仅为示例，并非真实接口地址。
+						data: {
+							token: this.token1
+						},
+						method: "post",
+						success: (res) => {
+					     //   console.log("hoem", res);
+							var num;
+							if(res.data.code==1){
+							//	console.log(res)
+								this.swiperList = res.data.data.banner;
+								this.categoryList = res.data.data.cate;
+								
+								this.limitList = res.data.data.limit_buy;
+								this.hot = res.data.data.hot;
+								 this.home=true;
+								 
+								
+								if (this.hotList.length < 10) {
+									num = this.totalList.length;
+								} else {
+									num = 10;
+								}
+								for (var i = 0; i < num; i++) {
+									this.hotList.push(this.hot[i])
+									//	console.log(this.productList)
+								}
+							  
 							}
-							for (var i = 0; i < num; i++) {
-								this.hotList.push(this.hot[i])
-								//	console.log(this.productList)
-							}
-						    this.home=true;
+							
 						}
-						
-					}
-				})
+					})
+				
+				
 			},
 			
 			
@@ -294,7 +314,7 @@
 				uni.request({
 					url: this.config.url+'recommend', //仅为示例，并非真实接口地址。
 					data: {
-						token: this.token,
+						token: this.token1,
 						page: Number(this.current_page) + 1,
 					},
 					method: "post",
@@ -339,7 +359,7 @@
 				uni.request({
 					url: this.config.url+'keyword', //仅为示例，并非真实接口地址。
 					data: {
-						token: this.token
+						token: this.token1
 
 					},
 					method: "post",

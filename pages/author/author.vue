@@ -26,10 +26,9 @@
 		    <view class="mask"></view>
 			<view class="getphone">
 				<text class="title">请输入绑定手机号</text>
-				<input type="text" v-model="phoneNumber"  class="pnone-number" placeholder="请输入手机号"/>
+				<input type="text" v-model="phoneNumber"  class="phone-number" placeholder="请输入手机号"/>
 				<view class="btns">
-					<text class="cancel" @click="cancel">取消</text>
-					<text class="confirm" @tap="confirm">确认</text>
+					确定
 				</view>
 			</view>
 		</view>
@@ -46,7 +45,7 @@
 				code:"",
 				nickName: null,
 				avatarUrl: null,
-				isCanUse: uni.getStorageSync('info') || true ,//默认为true
+				isCanUse:  false ,//默认为true
 			    getphone:"1",
 				writePhone:false,
 				phoneNumber:"",  //手机号
@@ -64,12 +63,8 @@
 					  // console.log("phon",infoRes)
 						_this.nickName = infoRes.userInfo.nickName; //昵称
 						_this.avatarUrl = infoRes.userInfo.avatarUrl; //头像
-							
-						try {
-							//uni.setStorageSync('isCanUse', false); //记录是否第一次授权  false:表示不是第一次授权
-							_this.updateUserInfo();
-							
-						} catch (e) {}
+						_this.writePhone=true;	
+                       
 					},
 					fail(res) {}
 				});
@@ -79,7 +74,7 @@
   
 			// //登录
 			 login() {
-				let _this = this;
+				var _this = this;
 				uni.showLoading({
 					title: '登录中...'
 				});
@@ -90,90 +85,53 @@
 					success: function(loginRes) {
 						console.log(loginRes)
 						 _this.code = loginRes.code;
-                          
-						if (!_this.isCanUse) {
-							//非第一次授权获取用户信息
-							uni.getUserInfo({
-								provider: 'weixin',
-								success: function(infoRes) {
-									// console.log("1",infoRes)
-									//获取用户信息后向调用信息更新方法
-									let nickName = infoRes.userInfo.nickName; //昵称
-									let avatarUrl = infoRes.userInfo.avatarUrl; //头像
-									
-									//_this.updateUserInfo(); //调用更新信息方法
-								}
-							});
-						}
-                     console.log(111,_this.code)
+                         _this.getOpenid()
+
 					    uni.hideLoading();
-					//	2.将用户登录code传递到后台置换用户SessionKey、OpenId等信息
-						if(_this.code){
-							console.log(33333333333)
-							uni.request({
-								url: _this.config.url+"getOpenid",
-								data: {
-									code: _this.code,
-								},
-								method: 'POST',
-								success: (res) => {
-									console.log("res")
-									console.log(res)
-									// _this.OpenId=res.data.openid;
-									// _this.SessionKey=res.data.session_key;
-									// 
-									// uni.setStorage({
-									// 	key:"sessionkey",
-									// 	data:_this.SessionKey
-									// })
-									//openId、或SessionKdy存储//隐藏loading
-									
-								},
-							    fail:()=>{
-									console.log("shibai")
-								}
-							});
-						}
+					
 					
 					},
 				});
 			},
-			//向后台更新信息
-			updateUserInfo() {
-			    let _this = this;
-			    uni.request({
-			        url:_this.config.url+"reg" ,//服务器端地址
-			        data: {
-			            openid:_this.OpenId,
-						headimg:_this.avatarUrl,
-						nickname:_this.nickName
-			        },
-			        method: 'POST',
-			       
-			        success: (res) => {
-						//console.log( "22",res)
-			            if (res.data.code==1) {
-							var info=JSON.stringify(res.data.data)
+			//	2.将用户登录code传递到后台置换用户SessionKey、OpenId等信息
+				getOpenid(){
+					
+					uni.request({
+						url: this.config.url+"getOpenid",
+						data: {
+							code: this.code,
+						},
+						method: 'POST',
+						success: (res) => {
+							
+							console.log(res)
+							if(res.data.code==1){
+								 this.OpenId=res.data.data.openid;
+								 this.isCanUse=true;
+							}else if(res.data.code==2){
+							var userinfo=JSON.stringify(res.data.data)	
 							uni.setStorage({
-								key:"info",
-								data:info,
-								success:(res)=>{
-									console.log("用户信息保存成功")
-								}
-							})
+									key:"info",
+									data:userinfo,
+									success:()=>{
+										uni.reLaunch({
+											url:"/pages/tabBar/home"
+										})
+									}
+								})
+					    }
+						}
+					});
+				},
+			//向后台更新信息
 
-			            }
-			        }
-			       
-			    });
-			},
 			cancel(){
 				this.writePhone=false;
 				
 			},
 			//确认跳转home
 			confirm(){
-				    console.log(1)
+				    
                 var _this=this;
 				var result = this.phoneNumber.replace(/(^\s+)|(\s+$)/g,"");
 				if(result.length<1){
@@ -189,7 +147,7 @@
 						duration:1000
 					})
 				}else{
-					console.log(4)
+					
 					uni.request({
 						url:_this.config.url+"reg",
 						method:"POST",
@@ -299,52 +257,37 @@
 			 box-shadow: 0 5upx 10upx #ccc;
 			 position:fixed;
 			 top:50%;
-			 margin-top:-150upx;
+			 margin-top:-200upx;
 			 z-index:100;
-			 width:60%;
-			 padding:0 10%;
-			 height:340upx;
+			 border-radius:20upx;
+			 width:70%;
+			 height:300upx;
 			 background:white;
+			 padding-top:40upx;
 			 .title{
-				 margin-bottom:30upx;
+				 
 			 }
 			 .btns{
 				 display: flex;
 				 justify-content: center;
 				 align-items: center;
-				 .confirm,.cancel{
-					 display: flex;
-					 align-items: center;
-					 justify-content: center;
-					 width:50%;
-					
-				 }
-				 
+				 height:100upx;
+				 width:100%;
+				 border-top:1px solid #E6E6E6;
+				 color:#14CC21;
+				 font-size: 34upx;
 			 }
 			 .phone-number{
-				 border:1px solid #ccc;
-				 height:60upx;
-				 outline: none;
-				 padding:20upx;
-				 margin-top:30upx;
+				 border:1px solid #E6E6E6;
+				 height:88upx;
+				 margin:40upx 0;
+				 display: flex;
+				 justify-content: center;
+				 align-items: center;
+				 line-height:90upx;
+				 text-align: center;
+				 border-radius:88upx;
 			 }
 	}
-	// .mask{
-	// 	width:100%;
-	// 	height:100%;
-	// 	
-	// }
-	.btns{
-		margin-top:40upx;
-		display: flex;
-		justify-content: space-between;
-		width:100%;
-	}
-	.btns .cancel,.confim{
-		width:50%;
-		height:40upx;
-		display: flex;
-		align-items: center;
-		justify-content: cneter;
-	}
+
 </style>

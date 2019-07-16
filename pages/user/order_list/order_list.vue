@@ -1,6 +1,11 @@
 <template>
 	<view>
-
+        <!-- 顶部导航 -->
+		<view class="topTabBar" :style="{position:headerPosition,top:headerTop}">
+			<view class="grid" v-for="(grid,tbIndex) in orderType" :key="tbIndex" @tap="showType(tbIndex)">
+				<view class="text" :class="[tbIndex==tabbarIndex?'on':'']">{{grid}}</view>
+			</view>
+		</view>
 		<!-- 考虑非APP端长列表和复杂的DOM使用scroll-view会卡顿，所以漂浮顶部选项卡使用page本身的滑动 -->
 		<view class="order-list">
 			<view class="list">
@@ -45,7 +50,7 @@
 					</view>
 					<view class="btns">
 						<block v-if="row.status==2 ">
-							<view class="default" @click="openPopup">取消订单</view>
+							<view class="default" @click.stop="cancelOrder(row.order_no,index)">取消订单</view>
 							<view class="pay" @tap.stop="toPayment(row.order_no,index)">去付款</view>
 						</block>
 
@@ -74,21 +79,37 @@
 		</view>
 
 		<!-- 取消订单弹出框 -->
-         
 
-	<!-- 	<view class="menu_mask" v-if="false" @tap="hideMenu">
-			<view class="menu_list">
-				<view class="menu_item" v-for="(item,index) in array" :key="index" @tap="selectedAddress(item)">{{item.name}}</view>
+
+		
+		<view class="picker_li" v-if="show_menu">
+			<view class="pickbg"></view>
+			<view class="btn_c">
+				<view class="qx" @tap="cancel">取消</view>
+				<view class="sign" @tap="sure" :disabled="isdisabled">确定</view>
 			</view>
-		</view> -->
+			<view class="picker_w">
+				<view class="return-title">请选择退货原因</view>
+				<view class="li_four">
+					
+					<view class="li_i" :class="[style4 == item.id ? 'active' : '' ]" v-for="(item,d) in array" :key="d" @tap="showcityfour(item.id,item.name)">
+						{{item.name}}
+					</view>
+				</view>
+
+			</view>
+		</view>
 	</view>
 </template>
 <script>
-	
 	export default {
-		 
+
 		data() {
 			return {
+				style4:"",
+				desc:"",   //退货描述
+				num:"", //取消订单下标
+				order:"",  //取消订订单编号
 				show_menu: false,
 				selceted: "",
 				headerPosition: "fixed",
@@ -107,10 +128,13 @@
 				orderList: [],
 				list: [],
 				tabbarIndex: 0,
-				array: ["我不想买了", "信息填写错误，重新拍", "卖家缺货", "其他原因"]
+				array: [{id:0,name:"我不想买了"},{id:1,name:"信息填写错误"},{id:2,name:"重新拍"},
+				{id:3,name:"卖家缺货"},{id:4,name:"其他原因"}]
+					
 			};
 		},
 		onLoad(option) {
+			
 			//option为object类型，会序列化上个页面传递的参数
 			console.log("option: " + JSON.stringify(option));
 			let tbIndex = parseInt(option.tbIndex) + 1;
@@ -127,7 +151,7 @@
 			}, 1);
 			// #endif
 		},
-		mounted() {
+		onShow() {
 			uni.request({
 				url: this.config.url + "member/order",
 				method: "post",
@@ -138,7 +162,7 @@
 				success: (res) => {
 					//console.log("moun",res)
 					if (res.data.code == 1) {
-
+			
 						this.orderList = res.data.data.data;
 						this.orderList.forEach((item, index) => {
 							let num = 0;
@@ -146,7 +170,32 @@
 								num += e.number
 							})
 							item.sum = num;
-
+			
+						})
+					}
+				}
+			})
+		},
+		mounted() {
+			uni.request({
+				url: this.config.url + "member/order",
+				method: "post",
+				data: {
+					token: this.token,
+					type: this.tabbarIndex
+				},
+				success: (res) => {
+					console.log("moun",res)
+					if (res.data.code == 1) {
+			
+						this.orderList = res.data.data.data;
+						this.orderList.forEach((item, index) => {
+							let num = 0;
+							item.order_list.forEach(e => {
+								num += e.number
+							})
+							item.sum = num;
+			
 						})
 					}
 				}
@@ -158,40 +207,50 @@
 			this.headerPosition = e.scrollTop >= 0 ? "fixed" : "absolute";
 		},
 		methods: {
-          
+			//顶部栏切换
+			showType(tbIndex){
+				this.tabbarIndex = tbIndex;
+				this.list = this.orderList[tbIndex];
+			},
+			//选中退货原因
+            showcityfour(id,name){
+				this.style4=id;
+				this.desc=name;
+			},
 			ToDetail(id) {
 				uni.navigateTo({
 					url: "../../detail/detail?id=" + id
 				})
 			},
-			// showType(tbIndex){
-			// 	console.log(tbIndex)
-			// 	uni.request({
-			// 	    url:this.config.url+"member/order",
-			// 		method:"post",
-			// 		data:{
-			// 			token:this.token,
-			// 			type:tbIndex
-			// 		},
-			// 		success:(res) => {
-			// 			console.log("moun",res)
-			// 			if(res.data.code==1){
-			// 				
-			// 				this.orderList=res.data.data.data;
-			// 				this.orderList.forEach((item,index)=>{
-			// 						let num=0;
-			// 						item.order_list.forEach(e=>{
-			// 							num += e.number
-			// 						})
-			// 						item.sum = num;
-			// 					
-			// 				})
-			// 			}
-			// 		}
-			// 	})
-			// 	this.tabbarIndex = tbIndex;
-			// 	this.list = this.orderList[tbIndex];
-			// },
+			//切换导航栏
+			showType(tbIndex){
+				console.log(tbIndex)
+				uni.request({
+				    url:this.config.url+"member/order",
+					method:"post",
+					data:{
+						token:this.token,
+						type:tbIndex
+					},
+					success:(res) => {
+						console.log("moun",res)
+						if(res.data.code==1){
+							
+							this.orderList=res.data.data.data;
+							this.orderList.forEach((item,index)=>{
+									let num=0;
+									item.order_list.forEach(e=>{
+										num += e.number
+									})
+									item.sum = num;
+								
+							})
+						}
+					}
+				})
+				this.tabbarIndex = tbIndex;
+				this.list = this.orderList[tbIndex];
+			},
 			//去付款
 			toPayment(order, index) {
 				//调起支付接口
@@ -229,7 +288,7 @@
 										title: "支付失败"
 									})
 								}
-							});
+							})
 						} else {
 							uni.showToast({
 								title: res.data.info
@@ -241,30 +300,49 @@
 			},
 			//取消订单
 			cancelOrder(order, index) {
-				console.log(order, index)
+				
 				this.show_menu = true;
-
-				// uni.request({
-				// 	url:this.config.url+"order/cancle",
-				// 	method:"POST",
-				// 	data:{
-				// 		token:this.token,
-				// 		order_no:order,
-				// 	},
-				// 	success:res =>{
-				// 		console.log(res)
-				// 		this.orderList.splice(index,1)
-				// 		if(res.data.code==1){
-				// 			uni.showToast({
-				// 				title:"取消订单成功"
-				// 			})
-				// 		}else{
-				// 			uni.showToast({
-				// 				title:"取消订单失败"
-				// 			})
-				// 		}
-				// 	}
-				// })
+              this.num=index;
+			  this.order=order;
+			},
+			// 取消
+			cancel(){
+				this.show_menu=false
+			},
+			//确认
+			sure(){
+				if(this.desc){
+					
+					this.show_menu=false
+					uni.request({
+						url:this.config.url+"order/cancle",
+						method:"POST",
+						data:{
+							token:this.token,
+							order_no:this.order,
+							cancle_desc:this.desc
+						},
+						success:res =>{
+							console.log(res)
+							this.orderList.splice(this.index,1)
+							if(res.data.code==1){
+								uni.showToast({
+									title:"取消订单成功"
+								})
+							}else{
+								uni.showToast({
+									title:"取消订单失败"
+								})
+							}
+						}
+					})
+				}else{
+					uni.showToast({
+						title:"请选择退货原因",
+						icon:'none'
+					})
+					
+				}
 			},
 			//确认收货
 			confirm(order) {
@@ -276,7 +354,10 @@
 						order_no: order,
 					},
 					success: res => {
-						console.log(res)
+						console.log( "确认收货",res)
+						uni.navigateTo({
+							url:"pages/confirm/confirm"
+						})
 					}
 				})
 			},
@@ -326,6 +407,12 @@
 						}
 					}
 				})
+			},
+			//跳转订单
+			evalute(){
+				uni.navigateTo({
+					url:"/pages/user/keep/sayFeel/sayFeel"
+				})
 			}
 		}
 	}
@@ -337,7 +424,35 @@
 	page {
 		background-color: #f3f3f3;
 	}
-
+    .topTabBar{
+	width: 100%;
+	position: fixed;
+	top: 0;
+	z-index: 10;
+	background-color: #f8f8f8;
+	height: 80upx;
+	display: flex;
+	justify-content: space-around;
+	.grid{
+		width: 20%;
+		height: 80upx;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		color: #444;
+		font-size: 28upx;
+		.text{
+			height: 76upx;
+			display: flex;
+			align-items: center;
+			&.on{
+				color: #f06c7a;
+				border-bottom: solid 4upx #f06c7a;
+			}
+		}
+		
+	}
+}
 	.order-list {
 
 		width: 100%;
@@ -552,5 +667,79 @@
 			}
 
 		}
+	}
+	 //地址选出框
+	 .pickbg{
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0,0,0,0.5);
+		z-index: 98;
+	}
+	.btn_c{
+		position: fixed;
+		bottom:660upx;
+		left: 0;
+		width:90%;
+		height: 40upx;
+		padding:20upx 5%;
+		background: #fff;
+		z-index: 99;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.picker_w{
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height:600upx;
+		background: #fff;
+		z-index: 99;
+		padding:30upx 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
+     .return-title{
+		 width:90vw;
+		 
+		 box-sizing: border-box;
+     	color:#ccc;
+     	font-size: 28upx;
+     	display: flex;
+     	margin-bottom: 40upx;
+     	justify-content: flex-start;
+     }
+	.li_four{
+		
+		height:600upx;
+		width:100%;
+		overflow-y: auto;
+		text-align: center;
+		.li_i{
+			font-size: 34upx;
+			width:100%;
+		}
+		
+	}
+	.sign{
+		background: #C49569;
+		font-size: 28upx;
+		color: #fff;
+		padding:8upx 24upx;
+		border-radius: 10upx;
+	}
+	.active{
+		color:#C49569;
+	}
+	.li_i{
+		font-size: 28upx;
+		padding: 20upx;
 	}
 </style>

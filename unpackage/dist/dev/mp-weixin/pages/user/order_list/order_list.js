@@ -8,7 +8,24 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default =
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _methods;function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -99,6 +116,10 @@
 
   data: function data() {
     return {
+      style4: "",
+      desc: "", //退货描述
+      num: "", //取消订单下标
+      order: "", //取消订订单编号
       show_menu: false,
       selceted: "",
       headerPosition: "fixed",
@@ -117,10 +138,13 @@
       orderList: [],
       list: [],
       tabbarIndex: 0,
-      array: ["我不想买了", "信息填写错误，重新拍", "卖家缺货", "其他原因"] };
+      array: [{ id: 0, name: "我不想买了" }, { id: 1, name: "信息填写错误" }, { id: 2, name: "重新拍" },
+      { id: 3, name: "卖家缺货" }, { id: 4, name: "其他原因" }] };
+
 
   },
   onLoad: function onLoad(option) {
+
     //option为object类型，会序列化上个页面传递的参数
     console.log("option: " + JSON.stringify(option));
     var tbIndex = parseInt(option.tbIndex) + 1;
@@ -137,7 +161,7 @@
 
 
   },
-  mounted: function mounted() {var _this2 = this;
+  onShow: function onShow() {var _this2 = this;
     uni.request({
       url: this.config.url + "member/order",
       method: "post",
@@ -162,181 +186,244 @@
       } });
 
   },
+  mounted: function mounted() {var _this3 = this;
+    uni.request({
+      url: this.config.url + "member/order",
+      method: "post",
+      data: {
+        token: this.token,
+        type: this.tabbarIndex },
+
+      success: function success(res) {
+        console.log("moun", res);
+        if (res.data.code == 1) {
+
+          _this3.orderList = res.data.data.data;
+          _this3.orderList.forEach(function (item, index) {
+            var num = 0;
+            item.order_list.forEach(function (e) {
+              num += e.number;
+            });
+            item.sum = num;
+
+          });
+        }
+      } });
+
+  },
   onPageScroll: function onPageScroll(e) {
     return;
     //兼容iOS端下拉时顶部漂移
     this.headerPosition = e.scrollTop >= 0 ? "fixed" : "absolute";
   },
-  methods: {
-
+  methods: (_methods = {
+    //顶部栏切换
+    showType: function showType(tbIndex) {
+      this.tabbarIndex = tbIndex;
+      this.list = this.orderList[tbIndex];
+    },
+    //选中退货原因
+    showcityfour: function showcityfour(id, name) {
+      this.style4 = id;
+      this.desc = name;
+    },
     ToDetail: function ToDetail(id) {
       uni.navigateTo({
         url: "../../detail/detail?id=" + id });
 
-    },
-    // showType(tbIndex){
-    // 	console.log(tbIndex)
-    // 	uni.request({
-    // 	    url:this.config.url+"member/order",
-    // 		method:"post",
-    // 		data:{
-    // 			token:this.token,
-    // 			type:tbIndex
-    // 		},
-    // 		success:(res) => {
-    // 			console.log("moun",res)
-    // 			if(res.data.code==1){
-    // 				
-    // 				this.orderList=res.data.data.data;
-    // 				this.orderList.forEach((item,index)=>{
-    // 						let num=0;
-    // 						item.order_list.forEach(e=>{
-    // 							num += e.number
-    // 						})
-    // 						item.sum = num;
-    // 					
-    // 				})
-    // 			}
-    // 		}
-    // 	})
-    // 	this.tabbarIndex = tbIndex;
-    // 	this.list = this.orderList[tbIndex];
-    // },
-    //去付款
-    toPayment: function toPayment(order, index) {
-      //调起支付接口
-      var _this = this;
+    } }, _defineProperty(_methods, "showType", function showType(
+
+  tbIndex) {var _this4 = this;
+    console.log(tbIndex);
+    uni.request({
+      url: this.config.url + "member/order",
+      method: "post",
+      data: {
+        token: this.token,
+        type: tbIndex },
+
+      success: function success(res) {
+        console.log("moun", res);
+        if (res.data.code == 1) {
+
+          _this4.orderList = res.data.data.data;
+          _this4.orderList.forEach(function (item, index) {
+            var num = 0;
+            item.order_list.forEach(function (e) {
+              num += e.number;
+            });
+            item.sum = num;
+
+          });
+        }
+      } });
+
+    this.tabbarIndex = tbIndex;
+    this.list = this.orderList[tbIndex];
+  }), _defineProperty(_methods, "toPayment", function toPayment(
+
+  order, index) {
+    //调起支付接口
+    var _this = this;
+    uni.request({
+      url: this.config.url + "order/pay",
+      method: "POST",
+      data: {
+        token: this.token,
+        order_no: order },
+
+      success: function success(res) {
+        console.log(res);
+        if (res.data.code == 1) {
+          var pay = res.data.data.data;
+          uni.requestPayment({
+            provider: 'wxpay',
+            appid: pay.appId,
+            timeStamp: pay.timeStamp,
+            nonceStr: pay.nonceStr,
+            package: pay.package,
+            signType: pay.signType,
+            paySign: pay.paySign,
+            success: function success(res) {
+              console.log('success:' + JSON.stringify(res));
+              _this.orderList.splice(index, 1);
+              uni.showToast({
+                title: "支付成功" });
+
+
+            },
+            fail: function fail(err) {
+              console.log('fail:' + JSON.stringify(err));
+              uni.showToast({
+                title: "支付失败" });
+
+            } });
+
+        } else {
+          uni.showToast({
+            title: res.data.info });
+
+        }
+      } });
+
+
+  }), _defineProperty(_methods, "cancelOrder", function cancelOrder(
+
+  order, index) {
+
+    this.show_menu = true;
+    this.num = index;
+    this.order = order;
+  }), _defineProperty(_methods, "cancel", function cancel()
+
+  {
+    this.show_menu = false;
+  }), _defineProperty(_methods, "sure", function sure()
+
+  {var _this5 = this;
+    if (this.desc) {
+
+      this.show_menu = false;
       uni.request({
-        url: this.config.url + "order/pay",
+        url: this.config.url + "order/cancle",
         method: "POST",
         data: {
           token: this.token,
-          order_no: order },
+          order_no: this.order,
+          cancle_desc: this.desc },
 
         success: function success(res) {
           console.log(res);
+          _this5.orderList.splice(_this5.index, 1);
           if (res.data.code == 1) {
-            var pay = res.data.data.data;
-            uni.requestPayment({
-              provider: 'wxpay',
-              appid: pay.appId,
-              timeStamp: pay.timeStamp,
-              nonceStr: pay.nonceStr,
-              package: pay.package,
-              signType: pay.signType,
-              paySign: pay.paySign,
-              success: function success(res) {
-                console.log('success:' + JSON.stringify(res));
-                _this.orderList.splice(index, 1);
-                uni.showToast({
-                  title: "支付成功" });
-
-
-              },
-              fail: function fail(err) {
-                console.log('fail:' + JSON.stringify(err));
-                uni.showToast({
-                  title: "支付失败" });
-
-              } });
+            uni.showToast({
+              title: "取消订单成功" });
 
           } else {
             uni.showToast({
-              title: res.data.info });
+              title: "取消订单失败" });
 
           }
         } });
 
+    } else {
+      uni.showToast({
+        title: "请选择退货原因",
+        icon: 'none' });
 
-    },
-    //取消订单
-    cancelOrder: function cancelOrder(order, index) {
-      console.log(order, index);
-      this.show_menu = true;
 
-      // uni.request({
-      // 	url:this.config.url+"order/cancle",
-      // 	method:"POST",
-      // 	data:{
-      // 		token:this.token,
-      // 		order_no:order,
-      // 	},
-      // 	success:res =>{
-      // 		console.log(res)
-      // 		this.orderList.splice(index,1)
-      // 		if(res.data.code==1){
-      // 			uni.showToast({
-      // 				title:"取消订单成功"
-      // 			})
-      // 		}else{
-      // 			uni.showToast({
-      // 				title:"取消订单失败"
-      // 			})
-      // 		}
-      // 	}
-      // })
-    },
-    //确认收货
-    confirm: function confirm(order) {
-      uni.request({
-        url: this.config.url + "order/confirm",
-        method: "POST",
-        data: {
-          token: this.token,
-          order_no: order },
+    }
+  }), _defineProperty(_methods, "confirm", function confirm(
 
-        success: function success(res) {
-          console.log(res);
-        } });
+  order) {
+    uni.request({
+      url: this.config.url + "order/confirm",
+      method: "POST",
+      data: {
+        token: this.token,
+        order_no: order },
 
-    },
-    //查看物流
-    viewSend: function viewSend() {
-      uni.request({
-        url: this.config.url + "order/express",
-        method: "POST",
-        data: {
-          token: this.token,
-          order_no: order },
+      success: function success(res) {
+        console.log("确认收货", res);
+        uni.navigateTo({
+          url: "pages/confirm/confirm" });
 
-        success: function success(res) {
-          console.log(res);
-        } });
+      } });
 
-    },
-    //申请售后
-    service: function service(row) {
-      uni.navigateTo({
-        url: "pages/serType/serType" });
+  }), _defineProperty(_methods, "viewSend", function viewSend()
 
-      uni.setStorage({
-        key: "regoods",
-        data: row,
-        success: function success() {
-          console.log('保存换货数据成功');
-        } });
+  {
+    uni.request({
+      url: this.config.url + "order/express",
+      method: "POST",
+      data: {
+        token: this.token,
+        order_no: order },
 
-    },
-    //删除订单
-    deleteOrder: function deleteOrder(order, index) {var _this3 = this;
-      uni.request({
-        url: this.config.url + "order/del",
-        method: "POST",
-        data: {
-          token: this.token,
-          order_no: order },
+      success: function success(res) {
+        console.log(res);
+      } });
 
-        success: function success(res) {
-          console.log(res);
-          _this3.orderList.splice(index, 1);
-          if (res.data.code == 1) {
-            uni.showToast({
-              title: "删除订单成功" });
+  }), _defineProperty(_methods, "service", function service(
 
-          }
-        } });
+  row) {
+    uni.navigateTo({
+      url: "pages/serType/serType" });
 
-    } } };exports.default = _default;
+    uni.setStorage({
+      key: "regoods",
+      data: row,
+      success: function success() {
+        console.log('保存换货数据成功');
+      } });
+
+  }), _defineProperty(_methods, "deleteOrder", function deleteOrder(
+
+  order, index) {var _this6 = this;
+    uni.request({
+      url: this.config.url + "order/del",
+      method: "POST",
+      data: {
+        token: this.token,
+        order_no: order },
+
+      success: function success(res) {
+        console.log(res);
+        _this6.orderList.splice(index, 1);
+        if (res.data.code == 1) {
+          uni.showToast({
+            title: "删除订单成功" });
+
+        }
+      } });
+
+  }), _defineProperty(_methods, "evalute", function evalute()
+
+  {
+    uni.navigateTo({
+      url: "/pages/user/keep/sayFeel/sayFeel" });
+
+  }), _methods) };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
 /***/ }),
@@ -368,6 +455,38 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("view", [
+    _c(
+      "view",
+      {
+        staticClass: "topTabBar",
+        style: { position: _vm.headerPosition, top: _vm.headerTop }
+      },
+      _vm._l(_vm.orderType, function(grid, tbIndex) {
+        return _c(
+          "view",
+          {
+            key: tbIndex,
+            staticClass: "grid",
+            attrs: { eventid: "a0e8c0bc-0-" + tbIndex },
+            on: {
+              tap: function($event) {
+                _vm.showType(tbIndex)
+              }
+            }
+          },
+          [
+            _c(
+              "view",
+              {
+                staticClass: "text",
+                class: [tbIndex == _vm.tabbarIndex ? "on" : ""]
+              },
+              [_vm._v(_vm._s(grid))]
+            )
+          ]
+        )
+      })
+    ),
     _c("view", { staticClass: "order-list" }, [
       _c(
         "view",
@@ -387,7 +506,7 @@ var render = function() {
               {
                 key: index,
                 staticClass: "row",
-                attrs: { eventid: "a0e8c0bc-7-" + index },
+                attrs: { eventid: "a0e8c0bc-8-" + index },
                 on: {
                   click: function($event) {
                     _vm.ToDetail(row.order_no)
@@ -466,8 +585,13 @@ var render = function() {
                             "view",
                             {
                               staticClass: "default",
-                              attrs: { eventid: "a0e8c0bc-0-" + index },
-                              on: { click: _vm.openPopup }
+                              attrs: { eventid: "a0e8c0bc-1-" + index },
+                              on: {
+                                click: function($event) {
+                                  $event.stopPropagation()
+                                  _vm.cancelOrder(row.order_no, index)
+                                }
+                              }
                             },
                             [_vm._v("取消订单")]
                           ),
@@ -475,7 +599,7 @@ var render = function() {
                             "view",
                             {
                               staticClass: "pay",
-                              attrs: { eventid: "a0e8c0bc-1-" + index },
+                              attrs: { eventid: "a0e8c0bc-2-" + index },
                               on: {
                                 tap: function($event) {
                                   $event.stopPropagation()
@@ -493,7 +617,7 @@ var render = function() {
                             "view",
                             {
                               staticClass: "default",
-                              attrs: { eventid: "a0e8c0bc-2-" + index },
+                              attrs: { eventid: "a0e8c0bc-3-" + index },
                               on: {
                                 click: function($event) {
                                   $event.stopPropagation()
@@ -507,7 +631,7 @@ var render = function() {
                             "view",
                             {
                               staticClass: "default",
-                              attrs: { eventid: "a0e8c0bc-3-" + index },
+                              attrs: { eventid: "a0e8c0bc-4-" + index },
                               on: {
                                 click: function($event) {
                                   $event.stopPropagation()
@@ -521,7 +645,7 @@ var render = function() {
                             "view",
                             {
                               staticClass: "pay",
-                              attrs: { eventid: "a0e8c0bc-4-" + index },
+                              attrs: { eventid: "a0e8c0bc-5-" + index },
                               on: {
                                 click: function($event) {
                                   $event.stopPropagation()
@@ -540,7 +664,7 @@ var render = function() {
                             "view",
                             {
                               staticClass: "pay",
-                              attrs: { eventid: "a0e8c0bc-5-" + index },
+                              attrs: { eventid: "a0e8c0bc-6-" + index },
                               on: {
                                 click: function($event) {
                                   $event.stopPropagation()
@@ -558,7 +682,7 @@ var render = function() {
                             "view",
                             {
                               staticClass: "default",
-                              attrs: { eventid: "a0e8c0bc-6-" + index },
+                              attrs: { eventid: "a0e8c0bc-7-" + index },
                               on: {
                                 click: function($event) {
                                   $event.stopPropagation()
@@ -579,7 +703,58 @@ var render = function() {
         ],
         2
       )
-    ])
+    ]),
+    _vm.show_menu
+      ? _c("view", { staticClass: "picker_li" }, [
+          _c("view", { staticClass: "pickbg" }),
+          _c("view", { staticClass: "btn_c" }, [
+            _c(
+              "view",
+              {
+                staticClass: "qx",
+                attrs: { eventid: "a0e8c0bc-9" },
+                on: { tap: _vm.cancel }
+              },
+              [_vm._v("取消")]
+            ),
+            _c(
+              "view",
+              {
+                staticClass: "sign",
+                attrs: { disabled: _vm.isdisabled, eventid: "a0e8c0bc-10" },
+                on: { tap: _vm.sure }
+              },
+              [_vm._v("确定")]
+            )
+          ]),
+          _c("view", { staticClass: "picker_w" }, [
+            _c("view", { staticClass: "return-title" }, [
+              _vm._v("请选择退货原因")
+            ]),
+            _c(
+              "view",
+              { staticClass: "li_four" },
+              _vm._l(_vm.array, function(item, d) {
+                return _c(
+                  "view",
+                  {
+                    key: d,
+                    staticClass: "li_i",
+                    class: [_vm.style4 == item.id ? "active" : ""],
+                    attrs: { eventid: "a0e8c0bc-11-" + d },
+                    on: {
+                      tap: function($event) {
+                        _vm.showcityfour(item.id, item.name)
+                      }
+                    }
+                  },
+                  [_vm._v(_vm._s(item.name))]
+                )
+              })
+            )
+          ])
+        ])
+      : _vm._e()
   ])
 }
 var staticRenderFns = []

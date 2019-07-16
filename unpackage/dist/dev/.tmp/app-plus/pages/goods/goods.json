@@ -1,0 +1,12 @@
+{
+  "navigationBarTitleText": "",
+  "navigationBarBackgroundColor": "white",
+  "onReachBottomDistance": 50,
+  "titleNView": false,
+  "bounce": "none",
+  "usingComponents": {
+    "uni-number-box": "/components/uni-number-box/uni-number-box",
+    "uni-rate": "/components/uni-rate/uni-rate",
+    "uni-load-more": "/components/uni-load-more/uni-load-more"
+  }
+}

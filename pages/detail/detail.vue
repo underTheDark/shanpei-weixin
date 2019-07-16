@@ -10,13 +10,13 @@
 		<view class="detail-main">
 			<view class="detail-main-one">
 				<view class="img">
-					<image src=""></image>
+					<image src="../../static/img/category/dingwei.png"></image>
 				</view>
 				<view class="one-right">
-					<view>收货人：张方方 &nbsp;&nbsp;222222222222</view>
+					<view>收货人：{{order.express_name}} &nbsp;&nbsp;{{order.express_phone}}</view>
 					<view>
-						收货地址：中国 河南省 郑州市 高新区广告
-						产业园9号楼13楼
+						收货地址：{{order.express_province}}{{order.express_city}}{{order.express_area}}
+					{{order.express_street}}{{order.express_address}}
 					</view>
 				</view>
 			</view>
@@ -26,15 +26,15 @@
 					<view class="row-right">
 						<view class="product-title">{{row.goods_title}}</view>
 						<view class="product-msg">
-							<text>{{row.price_selling}}</text>
-							<text>{{row.number}}</text>
+							<text>￥{{row.price_selling}}</text>
+							<text>x{{row.number}}</text>
 						</view>
 					</view>
 				</view>
 				<view class="money">
 					<view>
 						<text>商品总额</text>
-						<text>{{order.price_goods}}</text>
+						<text>￥{{order.price_goods}}</text>
 					</view>
 					<view>
 						<text>运费</text>
@@ -43,7 +43,7 @@
 				</view>
 				<view class="pay-amount">
 					<text>应付款</text>
-					<text>{{order.price_total}}</text>
+					<text>￥{{order.price_total}}</text>
 				</view>
 			</view>
 			<!-- 代付款 -->
@@ -59,10 +59,10 @@
 				</view>
 				<view class="detail-main-four">
 					<view class="order-status" >
-						<view class="status-one">
+						<view class="status-one"  @click.stop="cancelOrder()">
 							取消订单
 						</view>
-						<view class="status-two">去付款</view>
+						<view class="status-two" @click="toPayment">去付款</view>
 					</view>
 						
 				</view>
@@ -86,7 +86,7 @@
 				<view class="detail-main-four">
 					<view class="order-status" >
 				
-					<view class="status-two">取消订单</view>
+					<!-- <view class="status-two"  @click.stop="cancelOrder()">取消订单</view> -->
 					</view>
 				</view>
 			</view>
@@ -106,10 +106,10 @@
 				</view>
 				<view class="detail-main-four">
 					<view class="order-status" >
-						<view class="status-one" @click="cancelOrder()">
+						<!-- <view class="status-one" @click.stop="cancelOrder()">
 							取消订单
-						</view>
-						<view class="status-two">确认收货</view>
+						</view> -->
+						<view class="status-two" @click.stop="confirm()">确认收货</view>
 					</view>
 					
 						
@@ -131,16 +131,33 @@
 				</view>
 				<view class="detail-main-four">
 					<view class="order-status" >
-						<view class="status-one">
+						<view class="status-one" @click="deleteOrder()">
 							删除订单
 						</view>
-						<view class="status-two">去评价</view>
+						<view class="status-two" @click="evalute">去评价</view>
 					</view>						
 				</view>
 			</view>
 			
 			</view>
+			<!-- 取消订单弹出框 -->
+			<view class="picker_li" v-if="show_menu">
+				<view class="pickbg"></view>
+				<view class="btn_c">
+					<view class="qx" @tap="cancel">取消</view>
+					<view class="sign" @tap="sure" :disabled="isdisabled">确定</view>
+				</view>
+				<view class="picker_w">
+					<view class="return-title">请选择退货原因</view>
+					<view class="li_four">
+						
+						<view class="li_i" :class="[style4 == item.id ? 'active' : '' ]" v-for="(item,d) in array" :key="d" @tap="showcityfour(item.id,item.name)">
+							{{item.name}}
+						</view>
+					</view>
 			
+				</view>
+			</view>
 	</view>
 </template>
 
@@ -150,6 +167,12 @@
 	export default {
 		data() {
 			return {
+				style4:"",
+				desc:"",   //退货描述
+				array: [{id:0,name:"我不想买了"},{id:1,name:"信息填写错误"},{id:2,name:"重新拍"},
+				{id:3,name:"卖家缺货"},{id:4,name:"其他原因"}],  
+				
+				show_menu: false,
 				order_no:'',
 				down:true,
 				hour:"",
@@ -202,6 +225,7 @@
 			
 		},
 		methods: {
+			
 			getDistanceTime(time){
 				let _this=this;
 				var endTime= new Date(Date.parse(time.replace(/-/g, "/")));/*replace将时间字符串中所有的'-'替换成'/',parse将时间格式的字符串转换成毫秒*/
@@ -227,22 +251,157 @@
 			},
 			
 			//取消订单
-			 cancelOrder(){
-				console.log(order)
+			cancelOrder(){
+				console.log(12222)
+				 this.show_menu = true;
+				 
+			},
+			// 退货取消
+			cancel(){
+				this.show_menu=false
+			},
+			//确认
+			sure(){
+				if(this.desc){
+					
+					this.show_menu=false
+					uni.request({
+						url:this.config.url+"order/cancle",
+						method:"POST",
+						data:{
+							token:this.token,
+							order_no:this.order_no,
+							cancle_desc:this.desc
+						},
+						success:res =>{
+							console.log(res)
+							
+							if(res.data.code==1){
+								uni.showToast({
+									title:"取消订单成功"
+								})
+								uni.navigateTo({
+									url:"/pages/user/order_list/order_list?tbIndex="+1
+								})
+								
+							}else{
+								uni.showToast({
+									title:"取消订单失败"
+								})
+							}
+						}
+					})
+				}else{
+					uni.showToast({
+						title:"请选择退货原因",
+						icon:'none'
+					})
+					
+				}
+			},
+			//确认收货
+			confirm(){
 				uni.request({
-					url:this.config.url+"order/cancle",
-					method:"POST",
+					url:this.config.url+"order/confirm",
 					data:{
 						token:this.token,
-						order_no:this.order_no,
+						order_no:this.order_no
 					},
-					success:res =>{
-						//console.log(res)
+					method:"post",
+					success(res) {
+						console.log(res)
+						uni.navigateTo({
+							url:"pages/confirm/confirm"
+						})
 					}
 				})
 			},
+				//删除订单
+			deleteOrder() {
+				uni.request({
+					url: this.config.url + "order/del",
+					method: "POST",
+					data: {
+						token: this.token,
+						order_no: this.order_no,
+					},
+					success: res => {
+						console.log(res)
+						this.orderList.splice(index, 1)
+						if (res.data.code == 1) {
+							uni.showToast({
+								title: "删除订单成功"
+							})
+						}
+					}
+				})
+			},
+			//跳转订单
+			evalute(){
+				uni.navigateTo({
+					url:"/pages/user/keep/sayFeel/sayFeel"
+				})
+			},
+            showcityfour(id,name){
+           	this.style4=id;
+           	this.desc=name;
+           },
+		   //去付款
+		   toPayment() {
+		   	//调起支付接口
+		   	var _this = this;
+		   	uni.request({
+		   		url: this.config.url + "order/pay",
+		   		method: "POST",
+		   		data: {
+		   			token: this.token,
+		   			order_no: this.order_no
+		   		},
+		   		success: (res) => {
+		   			console.log(res)
+		   			if (res.data.code == 1) {
+		   				var pay = res.data.data.data
+		   				uni.requestPayment({
+		   					provider: 'wxpay',
+		   					appid: pay.appId,
+		   					timeStamp: pay.timeStamp,
+		   					nonceStr: pay.nonceStr,
+		   					package: pay.package,
+		   					signType: pay.signType,
+		   					paySign: pay.paySign,
+		   					success: function(res) {
+		   						console.log('success:' + JSON.stringify(res));
+							
+		   						
+		   						uni.showToast({
+		   							title: "支付成功",
+		   
+		   						})
+									//跳转我的订单
+								uni.navigateTo({
+									url:"/pages/user/order_list/order_list?tbIndex="+1
+								})
+		   					},
+		   					fail: function(err) {
+		   						//console.log('fail:' + JSON.stringify(err));
+		   						uni.showToast({
+		   							title: "支付失败"
+		   						})
+		   					}
+		   				})
+		   			} else {
+		   				uni.showToast({
+		   					title: res.data.info
+		   				})
+		   			}
+		   		}
+		   	})
+		   
+		   },
 		},
-		
+		mounted(){
+			console.log(this.order_no)
+		}
 		
 	}
 </script>
@@ -289,14 +448,15 @@
 			box-shadow: 0upx 5upx 20upx 0 rgba(230,230,230,1);
 			background: white;
 			img {
-				width: 20upx;
-				height: 20upx;
+				width: 29upx;
+				height: 36upx;
+				
 			}
 
 			image {
-				width: 20upx;
-				height: 20upx;
-				background: blue;
+				width: 29upx;
+				height: 36upx;
+				
 			}
 
 			.one-right {
@@ -463,5 +623,79 @@
 				}
 			}
 		}
+	}
+		 //地址选出框
+	 .pickbg{
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0,0,0,0.5);
+		z-index: 98;
+	}
+	.btn_c{
+		position: fixed;
+		bottom:660upx;
+		left: 0;
+		width:90%;
+		height: 40upx;
+		padding:20upx 5%;
+		background: #fff;
+		z-index: 99;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.picker_w{
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height:600upx;
+		background: #fff;
+		z-index: 99;
+		padding:30upx 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
+	 .return-title{
+		 width:90vw;
+		 
+		 box-sizing: border-box;
+	 	color:#ccc;
+	 	font-size: 28upx;
+	 	display: flex;
+	 	margin-bottom: 40upx;
+	 	justify-content: flex-start;
+	 }
+	.li_four{
+		
+		height:600upx;
+		width:100%;
+		overflow-y: auto;
+		text-align: center;
+		.li_i{
+			font-size: 34upx;
+			width:100%;
+		}
+		
+	}
+	.sign{
+		background: #C49569;
+		font-size: 28upx;
+		color: #fff;
+		padding:8upx 24upx;
+		border-radius: 10upx;
+	}
+	.active{
+		color:#C49569;
+	}
+	.li_i{
+		font-size: 28upx;
+		padding: 20upx;
 	}
 </style>

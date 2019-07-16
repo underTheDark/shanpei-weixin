@@ -23,7 +23,7 @@
 				<view class="row" v-for="(row,index) in homeList" :key="index">
 					<view class="row-top">
 						<view class="top-one">
-							<text>{{row.name}}</text>
+							<text>{{row.username}}</text>
 							<text>{{row.phone}}</text>
 						</view>
 						<view class="top-two">
@@ -109,9 +109,8 @@
 	
 
 	export default {
-		mounted() {
-
-			// 自提点
+		onShow(){
+				// 自提点
 			uni.request({
 				
 				url: this.config.url + "member/station",
@@ -125,7 +124,7 @@
 					this.selfLen = res.data.data.length;
 						console.log(res, res.data.data.length, "zi")
 				}
-
+			
 			})
 			//我的收货地址
 			uni.request({
@@ -141,6 +140,10 @@
 					this.homeLen = res.data.data.length;
 				}
 			})
+		},
+		mounted() {
+
+		
 		},
 		
 		data() {

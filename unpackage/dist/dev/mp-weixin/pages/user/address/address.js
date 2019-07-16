@@ -119,8 +119,7 @@
 
 
 {
-  mounted: function mounted() {var _this2 = this;
-
+  onShow: function onShow() {var _this2 = this;
     // 自提点
     uni.request({
 
@@ -150,6 +149,10 @@
         _this2.homeList = res.data.data;
         _this2.homeLen = res.data.data.length;
       } });
+
+  },
+  mounted: function mounted() {
+
 
   },
 
@@ -357,7 +360,7 @@ var render = function() {
                 return _c("view", { key: index, staticClass: "row" }, [
                   _c("view", { staticClass: "row-top" }, [
                     _c("view", { staticClass: "top-one" }, [
-                      _c("text", [_vm._v(_vm._s(row.name))]),
+                      _c("text", [_vm._v(_vm._s(row.username))]),
                       _c("text", [_vm._v(_vm._s(row.phone))])
                     ]),
                     _c("view", { staticClass: "top-two" }, [

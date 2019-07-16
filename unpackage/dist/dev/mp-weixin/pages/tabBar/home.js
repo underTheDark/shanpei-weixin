@@ -155,6 +155,7 @@ var _default = {
 
   mounted: function mounted() {
     this.init();
+
   },
 
   data: function data() {
@@ -182,7 +183,7 @@ var _default = {
       productList: [],
       totalList: [],
       loadingText: '正在加载...',
-
+      token1: "",
 
       current_page: 0,
       total: "",
@@ -214,10 +215,24 @@ var _default = {
 
   },
   onReady: function onReady() {
-
+    //  uni.showLoading({
+    // 	title: '加载中'
+    // });
   },
-  onLoad: function onLoad() {
-    this.first_load();
+  onLoad: function onLoad() {var _this = this;
+    uni.getStorage({
+      key: "info",
+      success: function success(res) {
+
+        var result = JSON.parse(res.data);
+
+        _this.token1 = result.token;
+        console.log(res, result.token, _this.token1);
+        _this.first_load();
+
+      } });
+
+
   },
   methods: {
     //加载更多热销产品
@@ -229,9 +244,7 @@ var _default = {
 
 
     },
-    first_load: function first_load() {var _this = this;
-      uni.showLoading({
-        title: '加载中' });
+    first_load: function first_load() {var _this2 = this;
 
 
       var amapPlugin = new _amapWx.default.AMapWX({
@@ -242,7 +255,8 @@ var _default = {
       amapPlugin.getRegeo({
         success: function success(data) {
           //console.log(data)
-          _this.city = data[0].regeocodeData.addressComponent.city.replace(/市/g, ''); //把"市"去掉
+          _this2.city = data[0].regeocodeData.addressComponent.city.replace(/市/g, ''); //把"市"去掉
+          _this2.init();
         } });
 
 
@@ -251,60 +265,66 @@ var _default = {
         url: this.config.url + "member/message",
         method: "POST",
         data: {
-          token: this.token },
+          token: this.token1 },
 
         success: function success(res) {
           //console.log("mesg",res)
 
           if (res.data.code == 1) {
-            _this.msgList = res.data.data.data;
+            _this2.msgList = res.data.data.data;
             if (res.data.data.data.length > 0) {
-              _this.msg = true;
+              _this2.msg = true;
             }
           }
         } });
 
+
       uni.request({
-        url: this.config.url + 'index', //仅为示例，并非真实接口地址。
+        url: this.config.url + 'home', //仅为示例，并非真实接口地址。
         data: {
-          token: this.token },
+          token: this.token1 },
 
         method: "post",
         success: function success(res) {
-          console.log("hoem", res);
+          //   console.log("hoem", res);
           var num;
           if (res.data.code == 1) {
-            _this.swiperList = res.data.data.banner;
-            _this.categoryList = res.data.data.cate;
+            //	console.log(res)
+            _this2.swiperList = res.data.data.banner;
+            _this2.categoryList = res.data.data.cate;
 
-            _this.limitList = res.data.data.limit_buy;
-            _this.hot = res.data.data.hot;
+            _this2.limitList = res.data.data.limit_buy;
+            _this2.hot = res.data.data.hot;
+            _this2.home = true;
 
-            if (_this.hotList.length < 10) {
-              num = _this.totalList.length;
+
+            if (_this2.hotList.length < 10) {
+              num = _this2.totalList.length;
             } else {
               num = 10;
             }
             for (var i = 0; i < num; i++) {
-              _this.hotList.push(_this.hot[i]);
+              _this2.hotList.push(_this2.hot[i]);
               //	console.log(this.productList)
             }
-            _this.home = true;
+
           }
 
         } });
+
+
 
     },
 
 
     // 获取推荐列表
-    getRecommendList: function getRecommendList() {var _this2 = this;
+    getRecommendList: function getRecommendList() {var _this3 = this;
       this.status = "loading";
       // 首页为你推荐
       uni.request({
         url: this.config.url + 'recommend', //仅为示例，并非真实接口地址。
         data: {
-          token: this.token,
+          token: this.token1,
           page: Number(this.current_page) + 1 },
 
         method: "post",
@@ -312,24 +332,24 @@ var _default = {
           var len;
           // console.log("res.data", res.data);
           // 商品列表
-          _this2.totalList = res.data.data.data;
+          _this3.totalList = res.data.data.data;
           //每页10 
-          if (_this2.totalList.length < 10) {
-            len = _this2.totalList.length;
+          if (_this3.totalList.length < 10) {
+            len = _this3.totalList.length;
           } else {
             len = 10;
           }
           for (var i = 0; i < len; i++) {
-            _this2.productList.push(_this2.totalList[i]);
+            _this3.productList.push(_this3.totalList[i]);
             //	console.log(this.productList)
           }
 
-          _this2.current_page = res.data.data.current_page;
-          _this2.last_page = res.data.data.last_page;
-          _this2.total = res.data.data.data.total;
-          _this2.status = "more";
-          if (_this2.current_page >= _this2.last_page) {
-            _this2.status = "noMore";
+          _this3.current_page = res.data.data.current_page;
+          _this3.last_page = res.data.data.last_page;
+          _this3.total = res.data.data.data.total;
+          _this3.status = "more";
+          if (_this3.current_page >= _this3.last_page) {
+            _this3.status = "noMore";
           }
         } });
 
@@ -344,19 +364,19 @@ var _default = {
 
     },
     //搜索跳转
-    toSearch: function toSearch() {var _this3 = this;
+    toSearch: function toSearch() {var _this4 = this;
       // 搜索推荐
       uni.request({
         url: this.config.url + 'keyword', //仅为示例，并非真实接口地址。
         data: {
-          token: this.token },
+          token: this.token1 },
 
 
         method: "post",
         success: function success(res) {
 
           console.log(res);
-          _this3.searchList = res.data.data;
+          _this4.searchList = res.data.data;
         } });
 
 
@@ -413,7 +433,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return true
+  return _vm.home
     ? _c(
         "view",
         { staticClass: "home" },
@@ -701,7 +721,7 @@ var render = function() {
         ],
         1
       )
-    : undefined
+    : _vm._e()
 }
 var staticRenderFns = [
   function() {

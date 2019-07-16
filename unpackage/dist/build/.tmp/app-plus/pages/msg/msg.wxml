@@ -1,0 +1,1 @@
+<view class="msg"><view class="chat-list"><block wx:for="{{msgList}}" wx:for-item="chat" wx:for-index="index" wx:key="index"><view class="chat"><view class="chat-top">{{''+chat.create_at+''}}</view><view class="chat-bottom"><view class="chat-title">{{chat.title}}</view><view class="chat-content">{{chat.content}}</view></view></view></block></view></view>

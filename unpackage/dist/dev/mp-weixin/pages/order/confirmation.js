@@ -86,30 +86,11 @@
 
 
 
+
+
 {
 
-  mounted: function mounted() {var _this = this;
-    //获取收货地址
-
-    uni.getStorage({
-      key: "address",
-      success: function success(res) {
-
-        var addr = JSON.parse(res.data);
-        console.log("address", res, addr);
-        if (addr.distance) {
-          console.log(2);
-          console.log(addr.distance);
-          _this.getgoods_name = 1;
-        } else {
-          console.log(1);
-          _this.addrList = addr;
-          _this.getgoods_name = 2;
-        }
-
-      } });
-
-
+  mounted: function mounted() {
 
   },
   computed: {
@@ -133,80 +114,205 @@
       total: "", //商品总价格
       iscart: "",
       getgoods_name: false, //送货类型显示
-      order_no: "" //订单编号
+      order_no: "", //订单编号
+      orderType: "", //地址类型
+      defaultAddr: "", //默认地址
+      addrId: "" //默认地址id
     };
+  },
+  onLoad: function onLoad(option) {var _this = this;
+
+    console.log("con", option);
+    if (option.iscart) {
+      //立即购买商品缓存
+      uni.getStorage({
+        key: "cart",
+        success: function success(res) {
+          console.log("liji", res);
+          _this.iscart = res.data.isCart;
+          if (res.data.isCart == 0) {
+            var quick = {
+              goods_id: res.data.goods.id,
+              goods_number: res.data.goods.goods_number,
+              goods_spec: res.data.goods.goods_spec };
+
+
+            _this.goods.push(quick);
+
+            //确认订单信息
+            uni.request({
+              url: _this.config.url + "order/sure",
+              method: "post",
+              data: {
+                token: _this.token,
+                goods: _this.goods },
+
+              success: function success(res) {
+                console.log("sure", res);
+                if (res.data.code == 1) {
+                  _this.buyList = res.data.data.goods; //商品列表
+                  _this.express = res.data.data.express;
+                  _this.total = res.data.data.total;
+                  _this.number = res.data.data.number;
+                  _this.orderType = res.data.data.order_type; //提交记录
+
+                  //判断是否有默认地址
+                  if (_this.orderType == 0) {
+                    _this.address = false;
+                  } else if (_this.orderType == 1) {
+                    _this.getgoods_name == 1;
+                    _this.address = true;
+                    _this.addrList = res.data.data.address; //默认地址
+                    _this.addrId = res.data.data.address.id; //默认地址id
+
+                  } else if (_this.orderType == 2) {
+                    _this.getgoods_name = 2;
+                    _this.address = true;
+                    _this.addrList = res.data.data.address; //默认地址
+
+                    _this.addrId = res.data.data.address.id; //默认地址id
+                  }
+                }
+              } });
+
+
+          } else {
+
+            //购物车购买商品缓存
+            // var quick={goods_id:res.data.id,goods_number:res.data.goods_number,goods_spec:res.data.goods_spec}
+            _this.goods = res.data.goods;
+            //确认订单信息
+            uni.request({
+              url: _this.config.url + "order/sure",
+              method: "post",
+              data: {
+                token: _this.token,
+                goods: _this.goods },
+
+              success: function success(res) {
+                console.log("cart", res);
+                if (res.data.code == 1) {
+                  _this.buyList = res.data.data.goods; //商品列表
+                  _this.express = res.data.data.express;
+                  _this.total = res.data.data.total;
+                  _this.number = res.data.data.number;
+                  _this.orderType = res.data.data.order_type; //提交记录
+
+                  //判断是否有默认地址
+                  if (_this.orderType == 0) {
+                    _this.address = false;
+                  } else if (_this.orderType == 1) {
+                    _this.getgoods_name = 1;
+                    _this.address = true;
+                    _this.addrList = res.data.data.address; //默认地址
+                    _this.addrId = res.data.data.address.id; //默认地址id
+                  } else if (_this.orderType == 2) {
+                    _this.getgoods_name = 2;
+                    _this.address = true;
+                    _this.addrList = res.data.data.address; //默认地址
+                    _this.addrId = res.data.data.address.id; //默认地址id
+                  }
+                }
+              } });
+
+
+          }
+
+
+
+        } });
+
+
+    } else {
+      //获取收货地址缓存
+
+      uni.getStorage({
+        key: "address",
+        success: function success(res) {
+
+          var addr = JSON.parse(res.data);
+          console.log("address", res, addr);
+          if (addr.distance) {
+            _this.addrId = addr.id;
+            _this.getgoods_name = 1;
+            _this.addrList = addr;
+          } else {
+            _this.addrId = addr.id;
+            _this.addrList = addr;
+            _this.getgoods_name = 2;
+          }
+
+        } });
+
+      //获取商品缓存
+      //立即购买商品缓存
+      uni.getStorage({
+        key: "cart",
+        success: function success(res) {
+          console.log("liji", res);
+          _this.iscart = res.data.isCart;
+          if (res.data.isCart == 0) {
+            var quick = {
+              goods_id: res.data.goods.id,
+              goods_number: res.data.goods.goods_number,
+              goods_spec: res.data.goods.goods_spec };
+
+
+            _this.goods.push(quick);
+
+            //确认订单信息
+            uni.request({
+              url: _this.config.url + "order/sure",
+              method: "post",
+              data: {
+                token: _this.token,
+                goods: _this.goods },
+
+              success: function success(res) {
+                console.log("sure", res);
+                if (res.data.code == 1) {
+                  _this.buyList = res.data.data.goods; //商品列表
+                  _this.express = res.data.data.express;
+                  _this.total = res.data.data.total;
+                  _this.number = res.data.data.number;
+
+                }
+              } });
+
+
+          } else {
+
+            //购物车购买商品缓存
+            // var quick={goods_id:res.data.id,goods_number:res.data.goods_number,goods_spec:res.data.goods_spec}
+            _this.goods = res.data.goods;
+            //确认订单信息
+            uni.request({
+              url: _this.config.url + "order/sure",
+              method: "post",
+              data: {
+                token: _this.token,
+                goods: _this.goods },
+
+              success: function success(res) {
+                console.log("cart", res);
+                if (res.data.code == 1) {
+                  _this.buyList = res.data.data.goods; //商品列表
+                  _this.express = res.data.data.express;
+                  _this.total = res.data.data.total;
+                  _this.number = res.data.data.number;
+
+
+                }
+              } });
+
+
+          }
+        } });
+
+    }
 
   },
-  onLoad: function onLoad(option) {var _this2 = this;
-    console.log(option);
-    //立即购买商品缓存
-    uni.getStorage({
-      key: "cart",
-      success: function success(res) {
-        console.log("liji", res);
-        _this2.iscart = res.data.isCart;
-        if (res.data.isCart == 0) {
-          var quick = { goods_id: res.data.goods.id, goods_number: res.data.goods.goods_number, goods_spec: res.data.goods.goods_spec };
 
-          _this2.goods.push(quick);
-
-          //确认订单信息
-          uni.request({
-            url: _this2.config.url + "order/sure",
-            method: "post",
-            data: {
-              token: _this2.token,
-              goods: _this2.goods },
-
-            success: function success(res) {
-              //	 console.log("sure",res)
-              if (res.data.code == 1) {
-                _this2.buyList = res.data.data.goods; //商品列表
-                _this2.express = res.data.data.express;
-                _this2.total = res.data.data.total;
-                _this2.number = res.data.data.number;
-                //this.getgoods_name=res.data.data.order_type; //提交记录
-              }
-            } });
-
-
-        } else {
-
-          //购物车购买商品缓存
-          // var quick={goods_id:res.data.id,goods_number:res.data.goods_number,goods_spec:res.data.goods_spec}
-          _this2.goods = res.data.goods;
-          //确认订单信息
-          uni.request({
-            url: _this2.config.url + "order/sure",
-            method: "post",
-            data: {
-              token: _this2.token,
-              goods: _this2.goods },
-
-            success: function success(res) {
-              console.log("cart", res);
-              if (res.data.code == 1) {
-                _this2.buyList = res.data.data.goods; //商品列表
-                _this2.express = res.data.data.express;
-                _this2.total = res.data.data.total;
-                _this2.number = res.data.data.number;
-                //this.getgoods_name=res.data.data.order_type; //提交记录
-              }
-            } });
-
-
-        }
-
-
-
-      } });
-
-
-  },
-  onBackPress: function onBackPress() {
-    //页面后退时候，清除订单信息
-    this.clearOrder();
-  },
   filters: {
     toFixed: function toFixed(x) {
       return parseFloat(x).toFixed(2);
@@ -221,16 +327,16 @@
     },
 
 
-    clearOrder: function clearOrder() {var _this3 = this;
+    clearOrder: function clearOrder() {var _this2 = this;
       uni.removeStorage({
         key: 'buylist',
         success: function success(res) {
-          _this3.buylist = [];
+          _this2.buylist = [];
           //console.log('remove buylist success');
         } });
 
     },
-    toPay: function toPay() {var _this4 = this;
+    toPay: function toPay() {var _this3 = this;
       //商品列表
       uni.request({
         url: this.config.url + "order/order",
@@ -239,21 +345,21 @@
           token: this.token,
           goods: this.goods,
           order_type: this.getgoods_name,
-          address_id: this.addrList.id,
+          address_id: this.addrId,
           from_car: this.iscart },
 
         success: function success(res) {
           console.log(res);
           if (res.data.code == 1) {
-            _this4.order_no = res.data.data.order_no; //获取订单编号
+            _this3.order_no = res.data.data.order_no; //获取订单编号
 
             //调起支付接口
             uni.request({
-              url: _this4.config.url + "order/pay",
+              url: _this3.config.url + "order/pay",
               method: "POST",
               data: {
-                token: _this4.token,
-                order_no: _this4.order_no },
+                token: _this3.token,
+                order_no: _this3.order_no },
 
               success: function success(res) {
                 console.log(res);
@@ -270,7 +376,7 @@
                     success: function success(res) {
                       console.log('success:' + JSON.stringify(res));
                       uni.navigateTo({
-                        url: "/pages/user/order_list/order_list?tbIndex=2" });
+                        url: "/pages/user/order_list/order_list?tbIndex=" + 1 });
 
 
                     },
@@ -358,7 +464,7 @@ var render = function() {
     ]),
     _c("view", { staticClass: "addr" }, [
       _c("view", { staticClass: "sendgoods-info" }, [_vm._v("配送信息")]),
-      _vm.address
+      true
         ? _c("view", { staticClass: "sendgoods-addr" }, [
             _c("view", [
               _c(
@@ -379,31 +485,29 @@ var render = function() {
               _c("text", { staticClass: "getgoods-people" }, [
                 _vm._v(
                   _vm._s(_vm.addrList.username) +
-                    _vm._s(_vm.addrList.name) +
                     "    " +
                     _vm._s(_vm.addrList.phone)
                 )
               ]),
               _c("text", { staticClass: "getgoods-addr" }, [
                 _vm._v(
-                  _vm._s(_vm.addrList.province_name) +
+                  _vm._s(_vm.addrList.province) +
+                    _vm._s(_vm.addrList.city) +
+                    _vm._s(_vm.addrList.area) +
+                    _vm._s(_vm.addrList.street) +
+                    _vm._s(_vm.addrList.address) +
+                    "\n\t\t\t\t\t" +
+                    _vm._s(_vm.addrList.province_name) +
                     _vm._s(_vm.addrList.city_name) +
                     _vm._s(_vm.addrList.area_name) +
                     " " +
                     _vm._s(_vm.addrList.street_name) +
-                    " " +
-                    _vm._s(_vm.addrList.address_name) +
-                    "\n\t\t\t\t    " +
-                    _vm._s(_vm.addrList.province) +
-                    _vm._s(_vm.addrList.city) +
-                    _vm._s(_vm.addrList.area) +
-                    _vm._s(_vm.addrList.street) +
-                    _vm._s(_vm.addrList.address)
+                    _vm._s(_vm.addrList.address_name)
                 )
               ])
             ])
           ])
-        : _vm._e()
+        : undefined
     ]),
     _c(
       "view",

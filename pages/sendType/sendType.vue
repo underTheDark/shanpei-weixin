@@ -15,12 +15,11 @@
 					</view>
 					<view class="add-right">
 						<view class="address-user-top">
-							<text>{{home.name}}</text>
+							<text>{{home.username}}</text>
 							<text>{{home.phone}}</text>
 						</view>
 						<view class="address-user-bottom">
-							{{home.province}}{{home.city}}
-							{{home.area}}{{home.address}}{{home.street}}
+							{{home.province}}{{home.city}}{{home.area}}{{home.address}}{{home.street}}
 						</view>
 					</view>
 				</view>
@@ -29,12 +28,11 @@
 			<view class="addr-home" v-show="subState==1">
 				<view class="addr-info" @tap="selectSelf(self.id,self)" v-for="(self,selfIndex) in selfList" :key="selfIndex">
 					<view class="addr-far">
-						<text>{{self.name}}</text>
+						<text>{{self.username}}</text>
 						<text>{{self.distance}} km</text>
 					</view>
 					<text class="getgoods-msg">{{self.username}}&nbsp;&nbsp;&nbsp;{{self.phone}}</text>
-					<text class="getgoods-addr">{{self.province_name}}{{self.city_name}}
-						{{self.area_name}}{{self.address_name}}{{self.street_name}}
+					<text class="getgoods-addr">{{self.province_name}}{{self.city_name}}{{self.area_name}}{{self.address_name}}{{self.street_name}}
 					</text>
 				</view>
 			</view>
@@ -51,7 +49,45 @@
 	//高德SDK
 	import amap from '../../common/SDK/amap-wx.js';
 	export default {
-
+        onShow(){
+			   // 自提点列表
+			  uni.request({
+			  	url: this.config.url + "order/store",
+			  	method: "post",
+			  	data: {
+			  		token: this.token,
+			  		lat: this.lat,
+			  		lng: this.lng,
+			  },
+			  	success: (res) => {
+			  		console.log("zi",res.data)
+			  		if (res.data.code == 1) {
+			  			this.selfList = res.data.data.data
+			  		} else {
+			  
+			  		}
+			  	}
+			  })
+			
+			
+			//我的收获地址
+			uni.request({
+				url: this.config.url + "member/address",
+				method: "post",
+				data: {
+					token: this.token,
+			
+				},
+				success: (res) => {
+					//console.log("wo",res.data.data, res)
+					if (res.data.code == 1) {
+						this.homeList = res.data.data
+					} else {
+			
+					}
+				}
+			})
+		},
 		onLoad() {
 			var _this = this;
 			// #ifdef APP-PLUS
@@ -69,50 +105,31 @@
 
 					this.lat = data[0].latitude; //纬度
 					this.lng = data[0].longitude; //经度
+					console.log(this.lat,this.lng)
+					  // 自提点列表
+					uni.request({
+						url: this.config.url + "order/store",
+						method: "post",
+						data: {
+							token: this.token,
+							lat: this.lat,
+							lng: this.lng
+					    },
+						success: (res) => {
+							console.log("zi",res.data)
+							if (res.data.code == 1) {
+								this.selfList = res.data.data.data
+							} else {
+					
+							}
+						}
+					})
                 }
-			});
-
-
-		},
-		mounted() {
-              // 自提点列表
-              uni.request({
-              	url: this.config.url + "order/store",
-              	method: "post",
-              	data: {
-              		token: this.token,
-              		lat: this.lat,
-              		lng: this.lng,
-              },
-              	success: (res) => {
-              		console.log("zi",res.data)
-              		if (res.data.code == 1) {
-              			this.selfList = res.data.data.data
-              		} else {
-              
-              		}
-              	}
-              }),
-
-
-			//我的收获地址
-			uni.request({
-				url: this.config.url + "member/address",
-				method: "post",
-				data: {
-					token: this.token,
-
-				},
-				success: (res) => {
-					//console.log("wo",res.data.data, res)
-					if (res.data.code == 1) {
-						this.homeList = res.data.data
-					} else {
-
-					}
-				}
 			})
+
+          
 		},
+
 		data() {
 			return {
                 homeNum:0,  //选中我的收货地址下标

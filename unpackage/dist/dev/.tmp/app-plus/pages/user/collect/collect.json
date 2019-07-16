@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "收藏",
+  "navigationBarBackgroundColor": "#f06c7a",
+  "navigationBarTextStyle": "white",
+  "bounce": "none",
+  "usingComponents": {
+    "uni-swipe-action": "/components/uni-swipe-action/uni-swipe-action"
+  }
+}
