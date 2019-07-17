@@ -18,9 +18,8 @@
 					<text class="getgoods-name" v-show="getgoods_name==1">{{addrList.name}}</text>
 					<text class="getgoods-people">{{addrList.username}} &nbsp;&nbsp;&nbsp;{{addrList.phone}}</text>
 					<text class="getgoods-addr">
-
+                        {{addrList.province_name}}{{addrList.city_name}}{{addrList.area_name}} {{addrList.street_name}}
 						{{addrList.province}}{{addrList.city}}{{addrList.area}}{{addrList.street}}{{addrList.address}}
-						{{addrList.province_name}}{{addrList.city_name}}{{addrList.area_name}} {{addrList.street_name}}{{addrList.address_name}}
 
 					</text>
 				</view>

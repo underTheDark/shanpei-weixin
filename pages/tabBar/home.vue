@@ -1,7 +1,7 @@
 <template>
 	<view class="home" v-if="home">
 		<!-- 状态栏 -->
-		<view class="status" :style="{ position: headerPosition,top:statusTop,opacity: afterHeaderOpacity}"></view>
+		<!-- <view class="status" :style="{ position: headerPosition,top:statusTop,opacity: afterHeaderOpacity}"></view> -->
 		<!-- 顶部导航栏 -->
 		<view class="header" :style="{ position: headerPosition,top:headerTop,opacity: afterHeaderOpacity }">
 			<!-- 定位城市 -->
@@ -217,7 +217,7 @@
 						var result=JSON.parse(res.data)
 						
 						this.token1=result.token;
-						console.log(res,result.token,this.token1)
+						
 						this.first_load();
 						
 					}
@@ -268,7 +268,7 @@
 						}
 					}
 				})
-				
+				//主页数据
 					uni.request({
 						url: this.config.url+'home', //仅为示例，并非真实接口地址。
 						data: {
@@ -288,8 +288,8 @@
 								 this.home=true;
 								 
 								
-								if (this.hotList.length < 10) {
-									num = this.totalList.length;
+								if (this.hot.length < 10) {
+									num = this.hot.length;
 								} else {
 									num = 10;
 								}
@@ -649,7 +649,7 @@
 		padding: 0 0 30upx 0;
 		border-bottom: solid 2upx #f6f6f6;
 		display: flex;
-		justify-content: space-between;
+		justify-content: flex-start;
 		flex-wrap: wrap;
 
 		.category {

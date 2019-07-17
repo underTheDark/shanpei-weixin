@@ -538,7 +538,7 @@ var render = function() {
                 ]),
                 _c(
                   "view",
-                  { staticClass: "order-list" },
+                  { staticClass: "order-list-item" },
                   _vm._l(row.order_list, function(item, itemNum) {
                     return _c(
                       "view",
@@ -550,6 +550,9 @@ var render = function() {
                         _c("view", { staticClass: "right" }, [
                           _c("view", { staticClass: "name" }, [
                             _vm._v(_vm._s(item.goods_title))
+                          ]),
+                          _c("view", { staticClass: "spec" }, [
+                            _vm._v(_vm._s(item.goods_spec))
                           ]),
                           _c("view", { staticClass: "price-number" }, [
                             _c("view", { staticClass: "price" }, [
@@ -657,7 +660,6 @@ var render = function() {
                           )
                         ])
                       : _vm._e(),
-                    row.status == 3 ? _c("block") : _vm._e(),
                     row.status == 5
                       ? _c("block", [
                           _c(

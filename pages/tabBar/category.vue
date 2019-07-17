@@ -33,7 +33,7 @@
 						{{mingcheng}}
 					</view>
 					<view class="list" >
-						<view class="box" v-for="(child,num) in categoryChild" :key="num" @click="goodsList(num)">
+						<view class="box" v-for="(child,num) in categoryChild" :key="num" @click="goodsList(num,child)">
 							<image :src="child.logo"></image>
 							<view class="text">{{child.title}}</view>
 						</view>
@@ -101,12 +101,13 @@
 		},
 		methods: {
 			// 物品列表跳转
-			goodsList(index){
-			  var title=this.mingcheng
-			   var index1=JSON.stringify(index)
-		       var key1=JSON.stringify(this.first)
+			goodsList(index,child){
+				console.log(index,child)
+			  // var title=this.mingcheng
+			  //  var index1=JSON.stringify(index)
+		   //     var key1=JSON.stringify(this.first)
 				uni.navigateTo({
-					url:"/pages/goods/goods-list?id="+index1+"&key="+key1+"&title="+title
+					url:"/pages/goods/goods-list?id="+child.id+"&title="+this.mingcheng
 				})
 			},
 			//消息列表

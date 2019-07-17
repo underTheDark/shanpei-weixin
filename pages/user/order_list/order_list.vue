@@ -23,7 +23,7 @@
 							 row.status==4?'代签收':row.status==5?'已完成':""}}
 						</text>
 					</view>
-					<view class="order-list">
+					<view class="order-list-item">
 						<view class="order-info" v-for="(item,itemNum) in row.order_list" :key="itemNum">
 							<view class="left">
 								<image :src="item.goods_logo"></image>
@@ -32,7 +32,7 @@
 								<view class="name">
 									{{item.goods_title}}
 								</view>
-
+                                 <view class="spec">{{item.goods_spec}}</view>
 								<view class="price-number">
 									<view class="price">￥{{item.price_selling}}</view>
 									<view class="number">x{{item.number}}</view>
@@ -60,11 +60,11 @@
 							<view class="pay" @click.stop="confirm(row.order_no)">确认收货</view>
 
 						</block>
-						<block v-if="row.status==3">
-							<!-- <view class="default" @click.stop="cancelOrder(row.order_no)">取消订单</view> -->
+					<!-- 	<block v-if="row.status==3">
+							<view class="default" @click.stop="cancelOrder(row.order_no)">取消订单</view>
 
 
-						</block>
+						</block> -->
 						<block v-if="row.status==5">
 							<view class="pay" @click.stop="evalute()">去评价</view>
 						</block>
@@ -454,7 +454,7 @@
 	}
 }
 	.order-list {
-
+        padding-top:80upx;
 		width: 100%;
 
 		.list {
@@ -514,7 +514,7 @@
 					}
 				}
 
-				.order-list {
+				.order-list-item {
 					display: flex;
 					flex-direction: column;
 					width: 100%;
@@ -523,6 +523,7 @@
 				.order-info {
 					width: 100%;
 					display: flex;
+					
 					padding: 20upx 0;
 					border-bottom: 1px solid #F5F5F5;
 
@@ -541,8 +542,10 @@
 					.right {
 						width: 100%;
 						margin-left: 10upx;
-						position: relative;
-
+						
+                        display: flex;
+						flex-direction: column;
+						justify-content: space-around;
 						.name {
 							width: 100%;
 							font-size: 28upx;
@@ -554,13 +557,12 @@
 
 						.spec {
 							color: #a7a7a7;
-							font-size: 22upx;
-
+							font-size: 28upx;
+                             
 						}
 
 						.price-number {
-							position: absolute;
-							bottom: 0;
+						
 							width: 100%;
 							display: flex;
 							justify-content: space-between;
@@ -602,7 +604,7 @@
 				}
 
 				.btns {
-					height: 80upx;
+					
 					display: flex;
 					align-items: center;
 					justify-content: flex-end;

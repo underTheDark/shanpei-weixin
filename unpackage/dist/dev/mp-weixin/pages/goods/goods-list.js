@@ -57,7 +57,7 @@
 
       method: "post",
       success: function success(res) {
-        console.log(res);
+
         _this.goodsList = res.data.data.data;
       } });
 
@@ -77,15 +77,16 @@
       id: "",
       key1: "",
       cur_page: 0,
-      tol_page: 1 };
-
+      tol_page: 1,
+      tip: false //提示默认消失
+    };
   },
   onLoad: function onLoad(option) {
     console.log("option", option);
     uni.setNavigationBarTitle({
       title: option.title });
 
-    this.key1 = option.key;
+    this.key1 = option.id;
     //兼容H5下排序栏位置
 
 
@@ -98,27 +99,29 @@
 
 
   },
-  onPageScroll: function onPageScroll(e) {
-    //兼容iOS端下拉时顶部漂移
-    if (e.scrollTop >= 0) {
-      this.headerPosition = "fixed";
-    } else {
-      this.headerPosition = "absolute";
-    }
-  },
+  // onPageScroll(e){
+  // 	//兼容iOS端下拉时顶部漂移
+  // 	if(e.scrollTop>=0){
+  // 		this.headerPosition = "fixed";
+  // 	}else{
+  // 		this.headerPosition = "absolute";
+  // 	}
+  // },
   //下拉刷新，需要自己在page.json文件中配置开启页面下拉刷新 "enablePullDownRefresh": true
-  onPullDownRefresh: function onPullDownRefresh() {var _this2 = this;
-    setTimeout(function () {
-      _this2.reload();
-      uni.stopPullDownRefresh();
-    }, 1000);
-  },
+  // onPullDownRefresh() {
+  //     setTimeout(()=>{
+  // 		this.reload();
+  //         uni.stopPullDownRefresh();
+  //     }, 1000);
+  // },
   //上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
   onReachBottom: function onReachBottom() {
     this.cur_page = this.cur_page + 1;
-    uni.showToast({ title: '触发上拉加载' });
+
+    this.tip = true;
+    console.log(this.cur_page, this.tol_page);
     if (this.cur_page >= this.tol_page) {
-      this.loadingText = "到底了";
+      this.loadingText = "没有商品了";
       return false;
     } else {
       this.loadingText = "正在加载...";
@@ -126,7 +129,8 @@
   },
   methods: {
     // 排序方式
-    sortType: function sortType(type) {var _this3 = this;var asc = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+    sortType: function sortType(type) {var _this2 = this;var asc = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+      this.tip = false;
       uni.request({
         url: this.config.url + "goods/lists",
         data: {
@@ -139,14 +143,14 @@
         method: "post",
         success: function success(res) {
           console.log(res.data.data);
-          _this3.goodsList = res.data.data.data;
-          _this3.cur_page = res.data.data.data.current_page;
-          _this3.tol_page = res.data.data.data.last_page;
+          _this2.goodsList = res.data.data.data;
+          _this2.cur_page = res.data.data.current_page;
+          _this2.tol_page = res.data.data.last_page;
         } });
 
     },
     reload: function reload() {
-      console.log("reload");
+
       this.sortType(1);
 
     },
@@ -177,7 +181,7 @@
           this.orderbyList[i].selected = false;
         }
       }
-      uni.showToast({ title: tmpTis, icon: "none" });
+
       switch (index) {
         case 0:
           this.sortType(1);
@@ -304,9 +308,11 @@ var render = function() {
           )
         })
       ),
-      _c("view", { staticClass: "loading-text" }, [
-        _vm._v(_vm._s(_vm.loadingText))
-      ])
+      _vm.tip
+        ? _c("view", { staticClass: "loading-text" }, [
+            _vm._v(_vm._s(_vm.loadingText))
+          ])
+        : _vm._e()
     ])
   ])
 }

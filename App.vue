@@ -18,4 +18,7 @@
 		/* background:rgba(247,247,247,1); */
 
 	}
+	.product-dec,.product-dec image,image,img{
+		width: 100% ;
+	}
 </style>

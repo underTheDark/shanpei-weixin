@@ -17,4 +17,7 @@
 page{
 	/* background:rgba(247,247,247,1); */
 }
+.product-dec,.product-dec image,image,._img{
+	width: 100% ;
+}
 

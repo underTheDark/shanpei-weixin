@@ -227,7 +227,7 @@ var _default = {
         var result = JSON.parse(res.data);
 
         _this.token1 = result.token;
-        console.log(res, result.token, _this.token1);
+
         _this.first_load();
 
       } });
@@ -278,7 +278,7 @@ var _default = {
           }
         } });
 
-
+      //主页数据
       uni.request({
         url: this.config.url + 'home', //仅为示例，并非真实接口地址。
         data: {
@@ -298,8 +298,8 @@ var _default = {
             _this2.home = true;
 
 
-            if (_this2.hotList.length < 10) {
-              num = _this2.totalList.length;
+            if (_this2.hot.length < 10) {
+              num = _this2.hot.length;
             } else {
               num = 10;
             }
@@ -438,14 +438,6 @@ var render = function() {
         "view",
         { staticClass: "home" },
         [
-          _c("view", {
-            staticClass: "status",
-            style: {
-              position: _vm.headerPosition,
-              top: _vm.statusTop,
-              opacity: _vm.afterHeaderOpacity
-            }
-          }),
           _c(
             "view",
             {

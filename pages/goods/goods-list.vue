@@ -27,7 +27,7 @@
 					</view>
 				</view>
 			</view>
-			<view class="loading-text">{{loadingText}}</view>
+			<view class="loading-text" v-if="tip">{{loadingText}}</view>
 		</view>
 	</view>
 </template>
@@ -47,7 +47,7 @@
 			},
 			method: "post",
 			success: (res) => {
-				console.log(res);
+				
 					this.goodsList =res.data.data.data;
 				}
 			})
@@ -68,6 +68,7 @@
 				key1:"",
 				cur_page:0,
 				tol_page:1,
+				tip:false    //提示默认消失
 			};
 		},
 		onLoad: function (option) { 
@@ -75,7 +76,7 @@
 		    uni.setNavigationBarTitle({
 				title: option.title
 			});
-             this.key1=	option.key;	
+             this.key1=	option.id;	
 			//兼容H5下排序栏位置
 			// #ifdef H5
 				//定时器方式循环获取高度为止，这么写的原因是onLoad中head未必已经渲染出来。
@@ -88,27 +89,29 @@
 				},1);
 			// #endif
 		},
-		onPageScroll(e){
-			//兼容iOS端下拉时顶部漂移
-			if(e.scrollTop>=0){
-				this.headerPosition = "fixed";
-			}else{
-				this.headerPosition = "absolute";
-			}
-		},
+		// onPageScroll(e){
+		// 	//兼容iOS端下拉时顶部漂移
+		// 	if(e.scrollTop>=0){
+		// 		this.headerPosition = "fixed";
+		// 	}else{
+		// 		this.headerPosition = "absolute";
+		// 	}
+		// },
 		//下拉刷新，需要自己在page.json文件中配置开启页面下拉刷新 "enablePullDownRefresh": true
-		onPullDownRefresh() {
-		    setTimeout(()=>{
-				this.reload();
-		        uni.stopPullDownRefresh();
-		    }, 1000);
-		},
+		// onPullDownRefresh() {
+		//     setTimeout(()=>{
+		// 		this.reload();
+		//         uni.stopPullDownRefresh();
+		//     }, 1000);
+		// },
 		//上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
 		onReachBottom(){
 			this.cur_page=this.cur_page+1;
-			uni.showToast({title: '触发上拉加载'});
+			
+			this.tip=true;
+			console.log(this.cur_page,this.tol_page)
 			if(this.cur_page>=this.tol_page){
-				this.loadingText="到底了";
+				this.loadingText="没有商品了";
 				return false;
 			}else{
 				this.loadingText="正在加载...";
@@ -117,6 +120,7 @@
 		methods:{
 			// 排序方式
 			sortType(type,asc=1){
+				this.tip=false;
 				uni.request({
 				url: this.config.url+"goods/lists",
 				data: {
@@ -130,13 +134,13 @@
 				success: (res) => {
 					console.log(res.data.data);
 						this.goodsList =res.data.data.data;
-						this.cur_page=res.data.data.data.current_page;
-						this.tol_page=res.data.data.data.last_page;
+						this.cur_page=res.data.data.current_page;
+						this.tol_page=res.data.data.last_page;
 					}
 				})
 			},
 			reload(){
-				console.log("reload");
+		
 				this.sortType(1);
 				
 			},
@@ -167,7 +171,7 @@
 						this.orderbyList[i].selected = false;
 					}
 				}
-				uni.showToast({title:tmpTis,icon:"none"});
+				
 				switch(index){
 					case 0:
 					this.sortType(1);

@@ -73,7 +73,7 @@
       headerPosition: "fixed",
       headerTop: null,
       statusTop: null,
-
+      dataImg: "",
       //个人信息,
       user: {
         username: '游客1002',
@@ -182,6 +182,10 @@
       } });
 
   },
+  mounted: function mounted() {
+
+    this.dataImg = this.config.url + "static/upload/bg.png";
+  },
   methods: {
     //消息列表
     toMsg: function toMsg() {
@@ -264,23 +268,30 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("view", [
-    _c("view", { staticClass: "user" }, [
-      _c("view", { staticClass: "left" }, [
-        _c("image", {
-          attrs: { src: _vm.user.face, eventid: "0c0ea9f6-0" },
-          on: { tap: _vm.toSetting }
-        }),
-        _c(
-          "view",
-          {
-            staticClass: "username",
-            attrs: { eventid: "0c0ea9f6-1" },
-            on: { tap: _vm.toLogin }
-          },
-          [_vm._v(_vm._s(_vm.user.username))]
-        )
-      ])
-    ]),
+    _c(
+      "view",
+      {
+        staticClass: "user",
+        style: { backgroundImage: "url(" + _vm.dataImg + ")" }
+      },
+      [
+        _c("view", { staticClass: "left" }, [
+          _c("image", {
+            attrs: { src: _vm.dataImg, eventid: "0c0ea9f6-0" },
+            on: { tap: _vm.toSetting }
+          }),
+          _c(
+            "view",
+            {
+              staticClass: "username",
+              attrs: { eventid: "0c0ea9f6-1" },
+              on: { tap: _vm.toLogin }
+            },
+            [_vm._v(_vm._s(_vm.user.username))]
+          )
+        ])
+      ]
+    ),
     _c("view", { staticClass: "order" }, [
       _c("view", { staticClass: "list" }, [
         _c("view", { staticClass: "list-top" }, [

@@ -92,8 +92,8 @@
 					<view class="product-title">
 						<image :src="goodsData.logo" />
 						<view class="product-mes">
-							<text>{{goodsData.price}}</text>
-							<text>{{goodsData.number_stock}}</text>
+							<text> ￥{{goodsData.price}}</text>
+							<text>库存:&nbsp; {{goodsData.number_stock}}</text>
 						</view>
 						<view class="hidden"  @tap="hideSpec">x</view>
 					</view>
@@ -116,8 +116,9 @@
 				</view>
 
 				<view class="spec-btn">
-					<view class="cancelB" @click="cancel()">加入购物车</view>
-					<view class="confirmB" @tap="buy()">立即购买</view>
+					
+					<view class="cancelB" @click="cancel()" >加入购物车</view>
+					<view class="confirmB" @tap="buy()">{{limitgoods==0 ?"预热中":"立即购买"}}</view>
 				</view>
 			</view>
 		</view>
@@ -318,6 +319,7 @@
 			   current_page: 0,
 			   total: "",
 			   last_page: "1",
+			   limitgoods:""
 			};
 		},
 		onLoad(option) {
@@ -326,25 +328,25 @@
 			this.showBack = false;
 			// #endif
 			//option为object类型，会序列化上个页面传递的参数
-			//console.log(option); //打印出上个页面传递的参数。
+			//console.log("goods",option); //打印出上个页面传递的参数。
 			this.id=option.id;
 			this.goodsDetail=option;
 		},
 		onReady() {
 			this.calcAnchor(); //计算锚点高度，页面数据是ajax加载时，请把此行放在数据渲染完成事件中执行以保证高度计算正确
 		},
-		onPageScroll(e) {
-			//锚点切换
-			this.selectAnchor = e.scrollTop >= this.anchorlist[2].top ? 2 : e.scrollTop >= this.anchorlist[1].top ? 1 : 0;
-			//导航栏渐变
-			let tmpY = 375;
-			e.scrollTop = e.scrollTop > tmpY ? 375 : e.scrollTop;
-			this.afterHeaderOpacity = e.scrollTop * (1 / tmpY);
-			this.beforeHeaderOpacity = 1 - this.afterHeaderOpacity;
-			//切换层级
-			this.beforeHeaderzIndex = e.scrollTop > 0 ? 10 : 11;
-			this.afterHeaderzIndex = e.scrollTop > 0 ? 11 : 10;
-		},
+		// onPageScroll(e) {
+		// 	//锚点切换
+		// 	this.selectAnchor = e.scrollTop >= this.anchorlist[2].top ? 2 : e.scrollTop >= this.anchorlist[1].top ? 1 : 0;
+		// 	//导航栏渐变
+		// 	let tmpY = 375;
+		// 	e.scrollTop = e.scrollTop > tmpY ? 375 : e.scrollTop;
+		// 	this.afterHeaderOpacity = e.scrollTop * (1 / tmpY);
+		// 	this.beforeHeaderOpacity = 1 - this.afterHeaderOpacity;
+		// 	//切换层级
+		// 	this.beforeHeaderzIndex = e.scrollTop > 0 ? 10 : 11;
+		// 	this.afterHeaderzIndex = e.scrollTop > 0 ? 11 : 10;
+		// },
 		//上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
 		onReachBottom() {
 		  		// 当前页小于最后一页才调用
@@ -365,7 +367,9 @@
             	success: (res) => {
                      console.log("goods",res,res.data.data.goods_list);
 					 if(res.data.code==1){
+						 
 						 this.goodsData =res.data.data;
+						 this.limitgoods=res.data.data.coud_buy;
 						 this.comment=this.goodsData.comment;
 						 //this.evaImg=this.goodsData.commit[0].comment_covers;
 						 this.isKeep=this.goodsData.is_collect;
@@ -375,6 +379,7 @@
 						 console.log(this.swiperList)
 						 // 商品详情
 						 this.detail=res.data.data.content;
+						 console.log("de",this.detail)
 						 console.log(this.detail);
 						 // 商品明细
 						 this.goods_list=res.data.data.goods_list;
@@ -1268,6 +1273,7 @@ color:rgba(102,102,102,1);
 
 			.product-dec {
 				width: 100vw;
+				
 				display: flex;
 				flex-direction: column;
 				align-items: center;

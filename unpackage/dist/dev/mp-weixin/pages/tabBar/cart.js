@@ -367,7 +367,7 @@ var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/
     } },
 
 
-  mounted: function mounted() {
+  onShow: function onShow() {
     // 获取购物车信息
 
     var that = this;
@@ -396,6 +396,9 @@ var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/
         }
 
       } });
+
+  },
+  mounted: function mounted() {
 
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))

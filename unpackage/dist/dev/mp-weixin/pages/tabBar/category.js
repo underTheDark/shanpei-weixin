@@ -111,12 +111,13 @@ var _default = {
   },
   methods: {
     // 物品列表跳转
-    goodsList: function goodsList(index) {
-      var title = this.mingcheng;
-      var index1 = JSON.stringify(index);
-      var key1 = JSON.stringify(this.first);
+    goodsList: function goodsList(index, child) {
+      console.log(index, child);
+      // var title=this.mingcheng
+      //  var index1=JSON.stringify(index)
+      //     var key1=JSON.stringify(this.first)
       uni.navigateTo({
-        url: "/pages/goods/goods-list?id=" + index1 + "&key=" + key1 + "&title=" + title });
+        url: "/pages/goods/goods-list?id=" + child.id + "&title=" + this.mingcheng });
 
     },
     //消息列表
@@ -250,7 +251,7 @@ var render = function() {
                       attrs: { eventid: "8a036190-2-" + num },
                       on: {
                         click: function($event) {
-                          _vm.goodsList(num)
+                          _vm.goodsList(num, child)
                         }
                       }
                     },

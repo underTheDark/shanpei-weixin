@@ -87,7 +87,6 @@
 
 
 
-
 {
 
   mounted: function mounted() {
@@ -491,18 +490,17 @@ var render = function() {
               ]),
               _c("text", { staticClass: "getgoods-addr" }, [
                 _vm._v(
-                  _vm._s(_vm.addrList.province) +
-                    _vm._s(_vm.addrList.city) +
-                    _vm._s(_vm.addrList.area) +
-                    _vm._s(_vm.addrList.street) +
-                    _vm._s(_vm.addrList.address) +
-                    "\n\t\t\t\t\t" +
-                    _vm._s(_vm.addrList.province_name) +
+                  _vm._s(_vm.addrList.province_name) +
                     _vm._s(_vm.addrList.city_name) +
                     _vm._s(_vm.addrList.area_name) +
                     " " +
                     _vm._s(_vm.addrList.street_name) +
-                    _vm._s(_vm.addrList.address_name)
+                    "\n\t\t\t\t\t\t" +
+                    _vm._s(_vm.addrList.province) +
+                    _vm._s(_vm.addrList.city) +
+                    _vm._s(_vm.addrList.area) +
+                    _vm._s(_vm.addrList.street) +
+                    _vm._s(_vm.addrList.address)
                 )
               ])
             ])

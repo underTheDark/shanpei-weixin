@@ -357,7 +357,7 @@
 			}
 			
         },
-		mounted() {
+		onShow(){
 			// 获取购物车信息
 			
 			let that=this;
@@ -387,6 +387,9 @@
 					
 				}
 			})
+		},
+		mounted() {
+			
 		}
 	}
 </script>

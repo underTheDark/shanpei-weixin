@@ -2,10 +2,10 @@
 	<view>
 	
 		<!-- 用户信息 -->
-		<view class="user" >
+		<view class="user"  :style="{backgroundImage:'url('+dataImg+')'}">
 			<!-- 头像 -->
 			<view class="left">
-				<image :src="user.face" @tap="toSetting"></image>
+				<image :src="dataImg" @tap="toSetting"></image>
 				<view class="username" @tap="toLogin">{{user.username}}</view>
 			</view>
 			
@@ -63,7 +63,7 @@
 				headerPosition: "fixed",
 				headerTop: null,
 				statusTop: null,
-				
+				dataImg:"",
 				//个人信息,
 				user: {
 					username: '游客1002',
@@ -171,6 +171,10 @@
 					//this.toLogin(); 
 				}
 			});
+		},
+		mounted(){
+			
+			this.dataImg=this.config.url+"static/upload/bg.png"
 		},
 		methods: {
 			//消息列表
@@ -361,7 +365,8 @@
 		padding: 0 4%;
 		display: flex;
 		align-items: center;
-		
+		// background-image: url("https://shanpei.wsstreet.net/static/upload/bg.png") no-repeat;
+		background-size:100% 100%;
 		padding-bottom: 120upx;
         
 		.left {

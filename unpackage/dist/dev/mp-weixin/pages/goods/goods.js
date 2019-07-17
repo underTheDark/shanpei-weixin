@@ -377,6 +377,7 @@ var _uniIcon = _interopRequireDefault(__webpack_require__(/*! ../uni-icon/uni-ic
 
 
 
+
 var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/uni-number-box/uni-number-box.vue */ "C:\\Users\\Administrator\\Desktop\\shanpei-r\\shanpei-weixin-rr\\components\\uni-number-box\\uni-number-box.vue"));
 var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-rate/uni-rate.vue */ "C:\\Users\\Administrator\\Desktop\\shanpei-r\\shanpei-weixin-rr\\components\\uni-rate\\uni-rate.vue"));
 var _uniLoadMore = _interopRequireDefault(__webpack_require__(/*! @/components/uni-load-more/uni-load-more.vue */ "C:\\Users\\Administrator\\Desktop\\shanpei-r\\shanpei-weixin-rr\\components\\uni-load-more\\uni-load-more.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //星星评分
@@ -432,7 +433,8 @@ var _default = {
       status: "more",
       current_page: 0,
       total: "",
-      last_page: "1" };
+      last_page: "1",
+      limitgoods: "" };
 
   },
   onLoad: function onLoad(option) {
@@ -441,25 +443,25 @@ var _default = {
     this.showBack = false;
 
     //option为object类型，会序列化上个页面传递的参数
-    //console.log(option); //打印出上个页面传递的参数。
+    //console.log("goods",option); //打印出上个页面传递的参数。
     this.id = option.id;
     this.goodsDetail = option;
   },
   onReady: function onReady() {
     this.calcAnchor(); //计算锚点高度，页面数据是ajax加载时，请把此行放在数据渲染完成事件中执行以保证高度计算正确
   },
-  onPageScroll: function onPageScroll(e) {
-    //锚点切换
-    this.selectAnchor = e.scrollTop >= this.anchorlist[2].top ? 2 : e.scrollTop >= this.anchorlist[1].top ? 1 : 0;
-    //导航栏渐变
-    var tmpY = 375;
-    e.scrollTop = e.scrollTop > tmpY ? 375 : e.scrollTop;
-    this.afterHeaderOpacity = e.scrollTop * (1 / tmpY);
-    this.beforeHeaderOpacity = 1 - this.afterHeaderOpacity;
-    //切换层级
-    this.beforeHeaderzIndex = e.scrollTop > 0 ? 10 : 11;
-    this.afterHeaderzIndex = e.scrollTop > 0 ? 11 : 10;
-  },
+  // onPageScroll(e) {
+  // 	//锚点切换
+  // 	this.selectAnchor = e.scrollTop >= this.anchorlist[2].top ? 2 : e.scrollTop >= this.anchorlist[1].top ? 1 : 0;
+  // 	//导航栏渐变
+  // 	let tmpY = 375;
+  // 	e.scrollTop = e.scrollTop > tmpY ? 375 : e.scrollTop;
+  // 	this.afterHeaderOpacity = e.scrollTop * (1 / tmpY);
+  // 	this.beforeHeaderOpacity = 1 - this.afterHeaderOpacity;
+  // 	//切换层级
+  // 	this.beforeHeaderzIndex = e.scrollTop > 0 ? 10 : 11;
+  // 	this.afterHeaderzIndex = e.scrollTop > 0 ? 11 : 10;
+  // },
   //上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
   onReachBottom: function onReachBottom() {
     // 当前页小于最后一页才调用
@@ -480,7 +482,9 @@ var _default = {
       success: function success(res) {
         console.log("goods", res, res.data.data.goods_list);
         if (res.data.code == 1) {
+
           _this.goodsData = res.data.data;
+          _this.limitgoods = res.data.data.coud_buy;
           _this.comment = _this.goodsData.comment;
           //this.evaImg=this.goodsData.commit[0].comment_covers;
           _this.isKeep = _this.goodsData.is_collect;
@@ -490,6 +494,7 @@ var _default = {
           console.log(_this.swiperList);
           // 商品详情
           _this.detail = res.data.data.content;
+          console.log("de", _this.detail);
           console.log(_this.detail);
           // 商品明细
           _this.goods_list = res.data.data.goods_list;
@@ -1167,8 +1172,10 @@ var render = function() {
                 _c("view", { staticClass: "product-title" }, [
                   _c("image", { attrs: { src: _vm.goodsData.logo } }),
                   _c("view", { staticClass: "product-mes" }, [
-                    _c("text", [_vm._v(_vm._s(_vm.goodsData.price))]),
-                    _c("text", [_vm._v(_vm._s(_vm.goodsData.number_stock))])
+                    _c("text", [_vm._v("￥" + _vm._s(_vm.goodsData.price))]),
+                    _c("text", [
+                      _vm._v("库存:  " + _vm._s(_vm.goodsData.number_stock))
+                    ])
                   ]),
                   _c(
                     "view",
@@ -1270,7 +1277,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("立即购买")]
+                [_vm._v(_vm._s(_vm.limitgoods == 0 ? "预热中" : "立即购买"))]
               )
             ])
           ]
