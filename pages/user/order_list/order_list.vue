@@ -79,14 +79,20 @@
 		</view>
 
 		<!-- 取消订单弹出框 -->
+<<<<<<< HEAD
 
 
 		
 		<view class="picker_li" v-if="show_menu">
+=======
+         
+         <view class="picker_li" v-if="ishow">
+>>>>>>> 13e556c53e8074841c5a932647a9015b82b2f822
 			<view class="pickbg"></view>
 			<view class="btn_c">
 				<view class="qx" @tap="cancel">取消</view>
 				<view class="sign" @tap="sure" :disabled="isdisabled">确定</view>
+<<<<<<< HEAD
 			</view>
 			<view class="picker_w">
 				<view class="return-title">请选择退货原因</view>
@@ -98,6 +104,21 @@
 				</view>
 
 			</view>
+=======
+			</view>
+			<view class="picker_w">
+				<view class="li_four" >
+					<view class="li_i" 
+						:class="[style4 == item.id ? 'active' : '' ]"
+						v-for="(item,d) in city_four" 
+						:key="d" 
+						@tap="showcityfour(item.id,item.name)">
+						{{item.name}}
+					</view>
+				</view>
+				
+			</view>
+>>>>>>> 13e556c53e8074841c5a932647a9015b82b2f822
 		</view>
 	</view>
 </template>
@@ -106,11 +127,15 @@
 
 		data() {
 			return {
+<<<<<<< HEAD
 				style4:"",
 				desc:"",   //退货描述
 				num:"", //取消订单下标
 				order:"",  //取消订订单编号
 				show_menu: false,
+=======
+				ishow: false,
+>>>>>>> 13e556c53e8074841c5a932647a9015b82b2f822
 				selceted: "",
 				headerPosition: "fixed",
 				headerTop: "0px",
@@ -300,6 +325,7 @@
 			},
 			//取消订单
 			cancelOrder(order, index) {
+<<<<<<< HEAD
 				
 				this.show_menu = true;
               this.num=index;
@@ -343,6 +369,32 @@
 					})
 					
 				}
+=======
+				console.log(order, index)
+				this.ishow = true;
+
+				// uni.request({
+				// 	url:this.config.url+"order/cancle",
+				// 	method:"POST",
+				// 	data:{
+				// 		token:this.token,
+				// 		order_no:order,
+				// 	},
+				// 	success:res =>{
+				// 		console.log(res)
+				// 		this.orderList.splice(index,1)
+				// 		if(res.data.code==1){
+				// 			uni.showToast({
+				// 				title:"取消订单成功"
+				// 			})
+				// 		}else{
+				// 			uni.showToast({
+				// 				title:"取消订单失败"
+				// 			})
+				// 		}
+				// 	}
+				// })
+>>>>>>> 13e556c53e8074841c5a932647a9015b82b2f822
 			},
 			//确认收货
 			confirm(order) {
@@ -634,42 +686,53 @@
 			}
 		}
 	}
-
-	.menu_mask {
+ .pickbg{
 		position: fixed;
+		bottom: 0;
 		left: 0;
-		top: 0;
-		background-color: rgba(0, 0, 0, .3);
-		z-index: 1000000;
-		width: 100vw;
-		height: 100vh;
-
-		.menu_list {
-			width: 100vw;
-			height: 410upx;
-			overflow: auto;
-			background-color: #fff;
-			position: absolute;
-			bottom: 0;
-			box-sizing: border-box;
-			padding: 0 42upx;
-			display: flex;
-			flex-direction: column;
-
-			.menu_item {
-				display: block;
-				width: 100%;
-				height: 106upx;
-				font-size: 29upx;
-				box-sizing: border-box;
-				border-bottom: 1px solid rgba(216, 216, 216, 1);
-				color: #666;
-				line-height: 106upx;
-
-			}
-
+		width: 100%;
+		height: 100%;
+		background: rgba(0,0,0,0.5);
+		z-index: 98;
+	}
+	.btn_c{
+		position: fixed;
+		bottom:660upx;
+		left: 0;
+		width:90%;
+		height: 40upx;
+		padding:20upx 5%;
+		background: #fff;
+		z-index: 99;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.picker_w{
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height:600upx;
+		background: #fff;
+		z-index: 99;
+		padding:30upx 0;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+	}
+	.li_four{
+		height:600upx;
+		
+		overflow-y: auto;
+		text-align: center;
+		.li_i{
+			width:100%;
 		}
 	}
+<<<<<<< HEAD
 	 //地址选出框
 	 .pickbg{
 		position: fixed;
@@ -730,6 +793,8 @@
 		}
 		
 	}
+=======
+>>>>>>> 13e556c53e8074841c5a932647a9015b82b2f822
 	.sign{
 		background: #C49569;
 		font-size: 28upx;

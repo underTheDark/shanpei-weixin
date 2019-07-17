@@ -54,7 +54,8 @@
         -ms-flex-pack: center;
             justify-content: center;
     height: 44rpx;
-    border-radius: 6rpx;
+    -webkit-border-radius: 6rpx;
+            border-radius: 6rpx;
     margin: 0 5rpx;
     font-size: 28rpx;
     border: 1px solid #000000;
@@ -102,6 +103,7 @@
 .detail-head {
   height: 234rpx;
   background: -webkit-gradient(linear, right top, left top, from(#37e488), color-stop(51%, #00d162), to(#37e488));
+  background: -webkit-linear-gradient(right, #37e488 0%, #00d162 51%, #37e488 100%);
   background: -o-linear-gradient(right, #37e488 0%, #00d162 51%, #37e488 100%);
   background: linear-gradient(-90deg, #37e488 0%, #00d162 51%, #37e488 100%);
   display: -webkit-box;
@@ -157,7 +159,8 @@
     padding: 30rpx 2%;
     margin: -60rpx 2% 80rpx;
     width: 92%;
-    border-radius: 10rpx;
+    -webkit-border-radius: 10rpx;
+            border-radius: 10rpx;
     -webkit-box-shadow: 0rpx 5rpx 20rpx 0 #e6e6e6;
             box-shadow: 0rpx 5rpx 20rpx 0 #e6e6e6;
     background: white;
@@ -377,7 +380,8 @@
 .detail-main .detail-main-four .order-status view {
         width: 156rpx;
         height: 56rpx;
-        border-radius: 56rpx;
+        -webkit-border-radius: 56rpx;
+                border-radius: 56rpx;
         display: -webkit-box;
         display: -webkit-flex;
         display: -ms-flexbox;

@@ -269,7 +269,8 @@
             align-items: center;
     width: 90%;
     height: 90rpx;
-    border-radius: 90rpx;
+    -webkit-border-radius: 90rpx;
+            border-radius: 90rpx;
     background: #00c65d;
 }
 

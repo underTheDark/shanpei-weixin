@@ -62,7 +62,7 @@
 	  flex-direction: column;
 	  justify-content: center;
 	  align-items: center;
-	  background: green;
+	  
 	  height:235upx;
 	  text:nth-child(1){
 		  font-size: 30upx;

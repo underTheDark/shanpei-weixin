@@ -45,7 +45,6 @@ page {
   -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
-  background: green;
   height: 235rpx;
 }
 .total-credit text:nth-child(1) {

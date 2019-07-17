@@ -183,7 +183,8 @@
       width: 5px;
       height: 5px;
       background-color: #969799;
-      border-radius: 50%;
+      -webkit-border-radius: 50%;
+              border-radius: 50%;
 }
 .uni-steps-item-line {
       background-color: #ebedf0;
@@ -338,7 +339,8 @@
 .people .people-left image {
       width: 84rpx;
       height: 84rpx;
-      border-radius: 84rpx;
+      -webkit-border-radius: 84rpx;
+              border-radius: 84rpx;
       margin-right: 30rpx;
 }
 .people .people-left .people-msg {

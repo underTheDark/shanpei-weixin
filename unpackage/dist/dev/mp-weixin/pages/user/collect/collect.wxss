@@ -143,7 +143,9 @@ page {
     font-size: 32rpx;
 }
 .goods-list .row {
+    width: -webkit-calc(96%);
     width: calc(96%);
+    height: -webkit-calc(22vw + 40rpx);
     height: calc(22vw + 40rpx);
     display: -webkit-box;
     display: -webkit-flex;
@@ -267,7 +269,8 @@ page {
 .goods-list .row .carrier .goods-info .img {
           width: 22vw;
           height: 22vw;
-          border-radius: 10rpx;
+          -webkit-border-radius: 10rpx;
+                  border-radius: 10rpx;
           overflow: hidden;
           -webkit-flex-shrink: 0;
               -ms-flex-negative: 0;
@@ -313,7 +316,8 @@ page {
                 -ms-flex-align: center;
                     align-items: center;
             padding: 0 10rpx;
-            border-radius: 15rpx;
+            -webkit-border-radius: 15rpx;
+                    border-radius: 15rpx;
             margin-bottom: 20vw;
 }
 .goods-list .row .carrier .goods-info .info .price-number {

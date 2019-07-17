@@ -25,7 +25,8 @@
 /* 透明度 */
 /* 文章场景相关 */
 checkbox .wx-checkbox-input {
-  border-radius: 50%;
+  -webkit-border-radius: 50%;
+          border-radius: 50%;
 }
 checkbox .wx-checkbox-input.wx-checkbox-input-checked {
   color: #fff !important;
@@ -37,6 +38,9 @@ checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
 .sendType {
   background: whitesmoke;
   height: 100vh;
+  padding-bottom: 190rpx;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 .send-type {
   display: -webkit-box;

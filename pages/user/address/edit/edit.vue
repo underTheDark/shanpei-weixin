@@ -37,9 +37,9 @@
 					详细地址
 				</view>
 				<view class="input add-content">
-					<textarea v-model="detailed" auto-height="true" placeholder="输入详细地址">
+					<input v-model="detailed"  placeholder="输入详细地址">
 
-					</textarea>
+					
 				</view>
 			</view>
 			<view class="add-border"></view>
@@ -445,10 +445,9 @@
 					justify-content: flex-end;
 				}
 
-				.textarea {
-
-					min-height: 120upx;
-					height: 360upx;
+				input {
+                      height:60upx;
+					  line-height:60upx;
 				}
 			}
 

@@ -109,8 +109,13 @@
 	
 
 	export default {
+<<<<<<< HEAD
 		onShow(){
 				// 自提点
+=======
+		onShow() {
+			// 自提点
+>>>>>>> 13e556c53e8074841c5a932647a9015b82b2f822
 			uni.request({
 				
 				url: this.config.url + "member/station",
@@ -143,7 +148,11 @@
 		},
 		mounted() {
 
+<<<<<<< HEAD
 		
+=======
+			
+>>>>>>> 13e556c53e8074841c5a932647a9015b82b2f822
 		},
 		
 		data() {
@@ -364,6 +373,8 @@
 		display: flex;
 		flex-direction: column;
 			background: white;
+			padding-bottom: 190upx;
+			box-sizing:border-box;
 	}
 
 	.address-title {
