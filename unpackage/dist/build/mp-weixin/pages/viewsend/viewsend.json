@@ -1,7 +1,8 @@
 {
   "usingComponents": {},
   "navigationBarTitleText": "查看物流",
-  "navigationBarBackgroundColor": "#f8f8f8",
+  "navigationBarBackgroundColor": "#fff",
+  "navigationBarTextStyle": "black",
   "backgroundColorTop": "#f3f3f3",
   "backgroundColorBottom": "#ffffff"
 }

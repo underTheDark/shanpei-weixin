@@ -1,7 +1,9 @@
 {
   "navigationBarTitleText": "积分",
-  "navigationBarBackgroundColor": "#f06c7a",
-  "navigationBarTextStyle": "white",
+  "navigationBarBackgroundColor": "#fff",
+  "navigationBarTextStyle": "black",
   "bounce": "none",
-  "usingComponents": {}
+  "usingComponents": {
+    "uni-load-more": "/components/uni-load-more/uni-load-more"
+  }
 }

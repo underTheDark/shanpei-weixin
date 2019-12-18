@@ -8,9 +8,9 @@
 		"es6": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.7.0",
-	"appid": "wxaa42e31b87197e9e",
-	"projectname": "闪配",
+	"libVersion": "2.9.2",
+	"appid": "wx3cc72b4883616798",
+	"projectname": "优递鲜",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
 	"condition": {

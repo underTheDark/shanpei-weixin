@@ -1,2 +1,1 @@
-<import src="./confirm.vue.wxml" />
-    <template is="45bd4549" data="{{ ...$root['0'], $root }}"/>
+<view id="confirm"><view class="confirm-one"><image src="../../static/img/querenshouhuo.png"></image><text>订单交易成功！</text></view><view class="confirm-two"><view data-event-opts="{{[['tap',[['goIndex',['$event']]]]]}}" class="status-one" bindtap="__e">返回首页</view><view data-event-opts="{{[['tap',[['evaluate',['$event']]]]]}}" class="status-two" bindtap="__e">去评价</view></view></view>

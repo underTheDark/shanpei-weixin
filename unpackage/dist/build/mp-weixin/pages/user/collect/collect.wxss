@@ -143,8 +143,11 @@ page {
     font-size: 32rpx;
 }
 .goods-list .row {
-    width: calc(96%);
+    width: calc(100%);
     height: calc(22vw + 40rpx);
+    border-botom: 20rpx solid #F7F7F7;
+    -webkit-box-shadow: 0 5rpx 10rpx #F7F7F7;
+            box-shadow: 0 5rpx 10rpx #F7F7F7;
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -156,7 +159,6 @@ page {
     position: relative;
     overflow: hidden;
     z-index: 4;
-    border: 0;
 }
 .goods-list .row .menu {
       position: absolute;
@@ -261,7 +263,7 @@ page {
         display: -ms-flexbox;
         display: flex;
         padding-right: 20rpx;
-        border-bottom: 1px solid #cecece;
+        border-bottom: 20rpx solid #cecece;
         padding: 60rpx 0;
 }
 .goods-list .row .carrier .goods-info .img {
@@ -350,7 +352,8 @@ page {
 .goods-list .row .carrier .goods-info .info .price-number .uni-numbox--disabled {
               line-height: 100%;
 }
-.goods-list .row .carrier .goods-info .info .price-number .uni-numbox__minus, .goods-list .row .carrier .goods-info .info .price-number .uni-numbox__plus {
+.goods-list .row .carrier .goods-info .info .price-number .uni-numbox__minus,
+            .goods-list .row .carrier .goods-info .info .price-number .uni-numbox__plus {
               line-height: 100%;
 }
 .goods-list .row .carrier .goods-info .info .price-number .uni-numbox__value[data-v-5fc0e502] {
@@ -366,6 +369,17 @@ page {
               -webkit-align-items: center;
                   -ms-flex-align: center;
                       align-items: center;
+}
+.goods-list .row .carrier .goods-info .info .price-number .price {
+              font-size: 28rpx;
+}
+.goods-list .row .carrier .goods-info .info .price-number .price text:nth-child(1) {
+                color: #FF541F;
+                margin-right: 30rpx;
+}
+.goods-list .row .carrier .goods-info .info .price-number .price text:nth-child(2) {
+                color: #999999;
+                text-decoration: line-through;
 }
 .goods-list .row .carrier .goods-info .info .price-number .number {
               display: -webkit-box;

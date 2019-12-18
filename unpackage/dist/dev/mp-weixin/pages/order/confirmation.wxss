@@ -196,8 +196,7 @@
 .buy-list .row .goods-info .img {
         width: 22vw;
         height: 22vw;
-        -webkit-border-radius: 10rpx;
-                border-radius: 10rpx;
+        border-radius: 10rpx;
         overflow: hidden;
         -webkit-flex-shrink: 0;
             -ms-flex-negative: 0;
@@ -366,8 +365,7 @@
   margin: 30rpx auto 20rpx auto;
   -webkit-box-shadow: 0rpx 5rpx 20rpx rgba(0, 0, 0, 0.1);
           box-shadow: 0rpx 5rpx 20rpx rgba(0, 0, 0, 0.1);
-  -webkit-border-radius: 20rpx;
-          border-radius: 20rpx;
+  border-radius: 20rpx;
 }
 .order .row {
     margin: 20rpx 0;
@@ -467,8 +465,7 @@
   margin: 30rpx auto 20rpx auto;
   -webkit-box-shadow: 0rpx 5rpx 20rpx rgba(0, 0, 0, 0.1);
           box-shadow: 0rpx 5rpx 20rpx rgba(0, 0, 0, 0.1);
-  -webkit-border-radius: 20rpx;
-          border-radius: 20rpx;
+  border-radius: 20rpx;
 }
 .detail .row {
     height: 60rpx;

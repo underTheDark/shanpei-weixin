@@ -107,6 +107,14 @@
 			this.statusHeight = plus.navigator.getStatusbarHeight();
 			// #endif
 		},
+			//分享页面 
+		onShareAppMessage: function() {
+			var that = this;
+			return {
+				title: '快来看一看啊！',
+				path: '/pages/tabBar/cart',
+			}
+		},
 		methods: {
 			
 		
@@ -135,6 +143,7 @@
 			},
 			//控制左滑删除效果-begin
 			touchStart(index, event) {
+				console.log(index,event,"start")
 				//多点触控不触发
 				if (event.touches.length > 1) {
 					this.isStop = true;
@@ -146,6 +155,7 @@
 				this.initXY = [event.touches[0].pageX, event.touches[0].pageY];
 			},
 			touchMove(index, event) {
+				console.log(index,event,"move")
 				//多点触控不触发
 				if (event.touches.length > 1) {
 					this.isStop = true;
@@ -153,7 +163,7 @@
 				}
 				let moveX = event.touches[0].pageX - this.initXY[0];
 				let moveY = event.touches[0].pageY - this.initXY[1];
-
+                console.log(moveX,moveY)
 				if (this.isStop || Math.abs(moveX) < 5) {
 					return;
 				}
@@ -164,9 +174,11 @@
 				}
 
 				if (moveX < 0) {
+					console.log("movex<0")
 					this.theIndex = index;
 					this.isStop = true;
 				} else if (moveX > 0) {
+					console.log("movex>0")
 					if (this.theIndex != null && this.oldIndex == this.theIndex) {
 						this.oldIndex = index;
 						this.theIndex = null;
@@ -177,7 +189,8 @@
 					}
 				}
 			},
-			touchEnd(index, $event) {
+			touchEnd(index, event) {
+				console.log(index,event,"end")
 				//结束禁止触发效果
 				this.isStop = false;
 			},
@@ -196,32 +209,39 @@
 			},
 			//跳转确认订单页面
 			toConfirmation() {
-			     console.log(this.goodsList)
-				 let data={};
-				 let arr=[]
-				 this.goodsList.forEach(item=>{
-					 if(item.selected){
-						 let obj={
-							 goods_id:item.goods_id,
-							 goods_number:item.number,
-							 goods_spec:item.goods_spec,
-						 }
-						 arr.push(obj);
-					 }
-				 })
-				 console.log("data",data);
-				 data.isCart = 1;
-				 data.goods = arr;
-				 uni.setStorage({
-				 	key:"cart",
-				 	data:data,
-				 	success: () => {
-				 		console.log("success");
-				 	}
-				 })
-				 uni.navigateTo({
-				 	url:"/pages/order/confirmation?iscart=2"
-				 })
+			   //  console.log(this.goodsList)
+				 if(this.goodsList.length>0){
+					  let data={};
+					 let arr=[]
+					 this.goodsList.forEach(item=>{
+					 					 if(item.selected){
+					 						 let obj={
+					 							 goods_id:item.goods_id,
+					 							 goods_number:item.number,
+					 							 goods_spec:item.goods_spec,
+					 						 }
+					 						 arr.push(obj);
+					 					 }
+					 })
+					// console.log("data",data);
+					 data.isCart = 1;
+					 data.goods = arr;
+					 uni.setStorage({
+					 	key:"cart",
+					 	data:data,
+					 	success: () => {
+					 		
+					 	}
+					 })
+					 uni.navigateTo({
+					 	url:"/pages/order/confirmation?iscart=2"
+					 })
+				 }else{
+					 uni.showToast({
+					 	title:"还没有商品哟"
+					 })
+				 }
+				
 			},
 			//删除商品
 			deleteGoods(id) {
@@ -241,7 +261,7 @@
 			},
 			// 删除购物车
 			delCart(id){
-					uni.request({
+					this.request({
 						method:"post",
 						data:{
 							token:this.token,
@@ -306,7 +326,7 @@
 			},
 			// 改变数量后台
 			changeNum(id,type){
-				uni.request({
+				this.request({
 					method:"post",
 					data:{
 						token:this.token,
@@ -315,7 +335,7 @@
 					},
 					url:this.config.url+"member/resume_car",
 					success:function(res){
-						console.log("res",res);
+						//console.log("res",res);
 					},
 				})
 			},
@@ -359,16 +379,16 @@
         },
 		onShow(){
 			// 获取购物车信息
-			
+			this.isAllselected=false;
 			let that=this;
-			uni.request({
+			this.request({
 				method:"post",
 				data:{
 					token:this.token
 				},
 				url:this.config.url+"member/car",
 				success:function(res){
-					 console.log("data",res.data);
+					// console.log("data",res.data);
 					if(res.data.code==1){
 						that.goodsList=res.data.data;
 						that.goodsList.forEach(item=>{
@@ -463,17 +483,13 @@
 		diplay: flex;
 		align-items: center;
 	}
-
 	.checkbox-box {
 		display: flex;
 		align-items: center;
-
-
 		.checkbox {
 			display: flex;
 			justify-content: center;
 			align-items: center;
-
 		}
 
 		.text {
@@ -481,9 +497,6 @@
 			margin-left: 10upx;
 		}
 	}
-
-
-
 
 	.goods-list {
 		width: 100%;
@@ -501,9 +514,6 @@
 		.row {
 			width: calc(96%);
 			height: calc(22vw + 40upx);
-			
-
-			
 			display: flex;
 			align-items: center;
 			position: relative;

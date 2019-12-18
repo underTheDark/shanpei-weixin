@@ -26,7 +26,10 @@
     "pages/serType/serType",
     "pages/applyReturn/applyReturn",
     "pages/applyChange/applyChange",
-    "pages/reSelect/reSelect"
+    "pages/reSelect/reSelect",
+    "pages/getgoods/getgoods",
+    "pages/search/search",
+    "pages/webview/webview"
   ],
   "subPackages": [],
   "window": {
@@ -77,6 +80,6 @@
     "autoclose": false
   },
   "appname": "闪配",
-  "compilerVersion": "2.1.0",
+  "compilerVersion": "2.1.1",
   "usingComponents": {}
 }

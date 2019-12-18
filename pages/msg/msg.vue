@@ -39,7 +39,7 @@
 				},
 				mounted() {
 					//系统消息
-					uni.request({
+					this.request({
 						url: this.config.url + "member/message",
 						method: "POST",
 						data: {

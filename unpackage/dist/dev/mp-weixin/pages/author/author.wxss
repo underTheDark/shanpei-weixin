@@ -53,8 +53,7 @@
   margin-top: 40rpx;
 }
 .bottom {
-  -webkit-border-radius: 80rpx;
-          border-radius: 80rpx;
+  border-radius: 80rpx;
   margin: 70rpx 50rpx;
   font-size: 35rpx;
 }
@@ -107,9 +106,32 @@
   z-index: 100;
   border-radius: 20rpx;
   width: 70%;
-  height: 300rpx;
   background: white;
   padding-top: 40rpx;
+}
+.getphone .phone {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
+    position: relative;
+}
+.getphone .phone .title {
+      font-size: 30rpx;
+}
+.getphone .phone .del {
+      position: absolute;
+      right: -100rpx;
+      color: #E6E6E6;
+      font-size: 50rpx;
 }
 .getphone .btns {
     display: -webkit-box;
@@ -124,12 +146,12 @@
     -webkit-align-items: center;
         -ms-flex-align: center;
             align-items: center;
-<<<<<<< HEAD
     height: 100rpx;
     width: 100%;
-    border-top: 1px solid #E6E6E6;
-    color: #14CC21;
+    background: #00C70C;
+    color: white;
     font-size: 34rpx;
+    border-radius: 0 0 15rpx 15rpx;
 }
 .getphone .phone-number {
     border: 1px solid #E6E6E6;
@@ -147,36 +169,16 @@
     -webkit-align-items: center;
         -ms-flex-align: center;
             align-items: center;
-    line-height: 90rpx;
+    line-height: 88rpx;
     text-align: center;
     border-radius: 88rpx;
-=======
 }
-.getphone .btns .confirm,
-    .getphone .btns .cancel {
-      display: -webkit-box;
-      display: -webkit-flex;
-      display: -ms-flexbox;
-      display: flex;
-      -webkit-box-align: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
-      -webkit-box-pack: center;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      width: 50%;
-}
-.getphone .phone-number {
-    border: 1px solid #ccc;
-    height: 60rpx;
-    outline: none;
-    padding: 20rpx;
-    margin-top: 30rpx;
+.getphone .phone-number1 {
+    line-height: 88rpx;
+    text-align: center;
+    border-radius: 88rpx;
 }
 .btns {
-  margin-top: 40rpx;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -203,6 +205,5 @@
   -webkit-justify-content: cneter;
       -ms-flex-pack: cneter;
           justify-content: cneter;
->>>>>>> 13e556c53e8074841c5a932647a9015b82b2f822
 }
 

@@ -88,6 +88,10 @@
           -ms-flex-direction: column;
               flex-direction: column;
       margin-left: 20rpx;
+      -webkit-box-flex: 1;
+      -webkit-flex: 1;
+          -ms-flex: 1;
+              flex: 1;
 }
 .service-one .product .product-right .product-title {
         font-size: 28rpx;
@@ -169,6 +173,19 @@
     padding: 20rpx 0;
     font-size: 28rpx;
 }
+.upload-photo .imgs-box {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+}
+.upload-photo .imgs-box .imgs {
+      width: 160rpx;
+      height: 160rpx;
+}
 .upload-photo .photo {
     display: -webkit-box;
     display: -webkit-flex;
@@ -187,8 +204,8 @@
     -webkit-align-items: center;
         -ms-flex-align: center;
             align-items: center;
-    width: 120rpx;
-    height: 120rpx;
+    width: 160rpx;
+    height: 160rpx;
     border: 1px dashed #cecece;
 }
 .upload-photo .photo image {
@@ -232,8 +249,7 @@
             align-items: center;
     width: 90%;
     height: 90rpx;
-    -webkit-border-radius: 90rpx;
-            border-radius: 90rpx;
+    border-radius: 90rpx;
     background: #00c65d;
 }
 

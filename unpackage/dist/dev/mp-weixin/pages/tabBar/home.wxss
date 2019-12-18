@@ -128,8 +128,7 @@ page {
     width: 100%;
     height: 60rpx;
     background-color: #f5f5f5;
-    -webkit-border-radius: 30rpx;
-            border-radius: 30rpx;
+    border-radius: 30rpx;
     position: relative;
     display: -webkit-box;
     display: -webkit-flex;
@@ -181,8 +180,7 @@ page {
 .header .icon-btn .hongdian {
       width: 10rpx;
       height: 10rpx;
-      -webkit-border-radius: 50%;
-              border-radius: 50%;
+      border-radius: 50%;
       background: red;
       position: absolute;
       top: 7rpx;
@@ -243,8 +241,7 @@ page {
       width: 102rpx;
       height: 46rpx;
       background: rgba(0, 0, 0, 0.5);
-      -webkit-border-radius: 46rpx;
-              border-radius: 46rpx;
+      border-radius: 46rpx;
       overflow: hidden;
       display: -webkit-box;
       display: -webkit-flex;
@@ -412,6 +409,10 @@ page {
           font-weight: 500;
           color: #555555;
 }
+.promotion .promotion-head .promotion-head-right {
+      color: #999999;
+      font-size: 24rpx;
+}
 .promotion .list {
     width: 100%;
     display: -webkit-box;
@@ -427,8 +428,7 @@ page {
       width: 43%;
       padding: 15rpx 3%;
       background-color: #ebf9f9;
-      -webkit-border-radius: 10rpx;
-              border-radius: 10rpx;
+      border-radius: 10rpx;
       overflow: hidden;
       display: -webkit-box;
       display: -webkit-flex;
@@ -488,8 +488,7 @@ page {
                 -ms-flex-align: center;
                     align-items: center;
             color: #fff;
-            -webkit-border-radius: 4rpx;
-                    border-radius: 4rpx;
+            border-radius: 4rpx;
             margin: 0 4rpx;
             padding: 0 2rpx;
 }
@@ -533,12 +532,17 @@ page {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  -webkit-justify-content: space-around;
+      -ms-flex-pack: distribute;
+          justify-content: space-around;
   -webkit-flex-wrap: wrap;
       -ms-flex-wrap: wrap;
           flex-wrap: wrap;
 }
 .hot-list .hot-list-item {
-    width: 33.3%;
+    width: 32%;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -551,7 +555,7 @@ page {
     -webkit-flex-wrap: wrap;
         -ms-flex-wrap: wrap;
             flex-wrap: wrap;
-    padding-bottom: 20rpx;
+    padding: 0 10rpx 20rpx 0;
 }
 .hot-list .hot-list-item .item-img {
       width: 224rpx;
@@ -593,15 +597,96 @@ page {
               align-items: center;
 }
 .hot-list .hot-list-item .item-price text:nth-child(1) {
-        font-size: 34rpx;
+        font-size: 26rpx;
         color: #ff541f;
-        margin-right: 20rpx;
+        margin-right: 10rpx;
         font-weight: 800;
 }
 .hot-list .hot-list-item .item-price text:nth-child(2) {
         font-size: 24rpx;
         color: #999;
         text-decoration: line-through;
+}
+.limit-list {
+  width: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+}
+.limit-list .limit-list-item:nth-child(2n-1) {
+    margin-right: 9rpx;
+}
+.limit-list .limit-list-item {
+    width: 49%;
+    height: 182rpx;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    padding-top: 28rpx;
+    border-radius: 20rpx;
+    -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+    padding-bottom: 9rpx;
+}
+.limit-list .limit-list-item .item-img {
+      width: 100%;
+      height: 100%;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+          -ms-flex-pack: center;
+              justify-content: center;
+      -webkit-box-align: end;
+      -webkit-align-items: flex-end;
+          -ms-flex-align: end;
+              align-items: flex-end;
+}
+.limit-list .limit-list-item .item-img image {
+        width: 100%;
+        height: 100%;
+}
+.limit-list .limit-list-item .item-price {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+          -ms-flex-direction: column;
+              flex-direction: column;
+      margin: 0 28rpx 0 21rpx;
+}
+.limit-list .limit-list-item .item-price .title {
+        font-size: 26rpx;
+        color: #B49966;
+        width: 150rpx;
+        white-space: nowrap;
+        overflow: hidden;
+        -o-text-overflow: ellipsis;
+           text-overflow: ellipsis;
+}
+.limit-list .limit-list-item .item-price .price {
+        color: #101010;
+        font-size: 30rpx;
+        margin: 20rpx 0;
+}
+.limit-list .limit-list-item .item-price image {
+        width: 34rpx;
+        height: 34rpx;
 }
 .goods-list {
   padding-top: 20rpx;
@@ -668,8 +753,7 @@ page {
 }
 .goods-list .product-list .product {
       width: 48%;
-      -webkit-border-radius: 20rpx;
-              border-radius: 20rpx;
+      border-radius: 20rpx;
       background-color: #fff;
       margin: 0 0 15rpx 0;
       -webkit-box-shadow: 0rpx 5rpx 25rpx rgba(0, 0, 0, 0.1);
@@ -677,8 +761,7 @@ page {
 }
 .goods-list .product-list .product image {
         width: 100%;
-        -webkit-border-radius: 20rpx 20rpx 0 0;
-                border-radius: 20rpx 20rpx 0 0;
+        border-radius: 20rpx 20rpx 0 0;
 }
 .goods-list .product-list .product .name {
         width: 92%;
@@ -715,5 +798,6 @@ page {
           color: #807c87;
           font-size: 24rpx;
           margin-left: 30rpx;
+          text-decoration: line-through;
 }
 

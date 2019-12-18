@@ -1,8 +1,8 @@
 {
-  "usingComponents": {},
   "navigationBarTitleText": "申请换货",
   "enablePullDownRefresh": true,
   "onReachBottomDistance": 50,
   "backgroundColorTop": "#ffffff",
-  "backgroundColorBottom": "#ffffff"
+  "backgroundColorBottom": "#ffffff",
+  "usingComponents": {}
 }

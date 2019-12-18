@@ -49,50 +49,11 @@
 	//高德SDK
 	import amap from '../../common/SDK/amap-wx.js';
 	export default {
-<<<<<<< HEAD
-        onShow(){
-			   // 自提点列表
-			  uni.request({
-			  	url: this.config.url + "order/store",
-			  	method: "post",
-			  	data: {
-			  		token: this.token,
-			  		lat: this.lat,
-			  		lng: this.lng,
-			  },
-			  	success: (res) => {
-			  		console.log("zi",res.data)
-			  		if (res.data.code == 1) {
-			  			this.selfList = res.data.data.data
-			  		} else {
-			  
-			  		}
-			  	}
-			  })
-			
-			
-			//我的收获地址
-			uni.request({
-				url: this.config.url + "member/address",
-				method: "post",
-				data: {
-					token: this.token,
-			
-				},
-				success: (res) => {
-					//console.log("wo",res.data.data, res)
-					if (res.data.code == 1) {
-						this.homeList = res.data.data
-					} else {
-			
-					}
-				}
-			})
-		},
-=======
+
+        
          onShow() {
          	  // 自提点列表
-         	  uni.request({
+         	  this.request({
          	  	url: this.config.url + "order/store",
          	  	method: "post",
          	  	data: {
@@ -112,7 +73,7 @@
          	
          	
          	//我的收获地址
-         	uni.request({
+         	this.request({
          		url: this.config.url + "member/address",
          		method: "post",
          		data: {
@@ -129,7 +90,7 @@
          		}
          	})
          },
->>>>>>> 13e556c53e8074841c5a932647a9015b82b2f822
+
 		onLoad() {
 			var _this = this;
 			// #ifdef APP-PLUS
@@ -149,7 +110,7 @@
 					this.lng = data[0].longitude; //经度
 					console.log(this.lat,this.lng)
 					  // 自提点列表
-					uni.request({
+					this.request({
 						url: this.config.url + "order/store",
 						method: "post",
 						data: {
@@ -171,13 +132,7 @@
 
           
 		},
-<<<<<<< HEAD
 
-=======
-		mounted() {
-             
-		},
->>>>>>> 13e556c53e8074841c5a932647a9015b82b2f822
 		data() {
 			return {
                 homeNum:0,  //选中我的收货地址下标
@@ -205,6 +160,7 @@
 			},
 			//跳转新增地址页面
 			add() {
+				
 				uni.navigateTo({
 					url: "/pages/user/address/edit/edit"
 				})
@@ -303,7 +259,7 @@
 
 	.send-add {
 
-
+         padding-bottom:140upx;
 
 		.add-list {
 			display: flex;

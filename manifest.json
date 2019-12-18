@@ -1,5 +1,5 @@
 {
-    "name" : "闪配",
+    "name" : "优递鲜",
     "appid" : "__UNI__F6C6B92",
     "description" : "",
     "versionName" : "1.1.1",
@@ -15,14 +15,18 @@
                 "permissions" : []
             }
         },
-        "modules" : {}
+        "modules" : {
+            "Maps" : {},
+            "Share" : {}
+        },
+        "value" : "cangshutuan haopinzhe uni-app"
     },
     /* SDK配置 */
     "quickapp" : {},
     /* 快应用特有相关 */
     "mp-weixin" : {
         /* 小程序特有相关 */
-        "appid" : "wxaa42e31b87197e9e",
+        "appid" : "wx3cc72b4883616798",
         "setting" : {
             "urlCheck" : true,
             "es6" : true
@@ -31,9 +35,11 @@
             "scope.userLocation" : {
                 "desc" : "你的位置信息将用于小程序位置接口的效果展示"
             }
-        }
+        },
+        "navigateToMiniProgramAppIdList" : [ "wx6885acbedba59c14" ]
     },
     "h5" : {
         "template" : ""
-    }
+    },
+    "navigateToMiniProgramAppIdList" : [ "wx6885acbedba59c14" ]
 }

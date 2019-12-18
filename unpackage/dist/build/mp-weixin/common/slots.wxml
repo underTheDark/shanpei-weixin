@@ -1,7 +1,9 @@
+<import src="/components/uni-steps/uni-steps.vue.wxml" />
 <import src="/components/uni-load-more/uni-load-more.vue.wxml" />
 <import src="/components/uni-number-box/uni-number-box.vue.wxml" />
 <import src="/components/uni-rate/uni-rate.vue.wxml" />
-<import src="/components/uni-steps/uni-steps.vue.wxml" />
+<import src="/components/uni-nav-bar/uni-nav-bar.vue.wxml" />
 <import src="/components/uni-icon/uni-icon.vue.wxml" />
+<import src="/components/uni-status-bar/uni-status-bar.vue.wxml" />
 <import src="/common/slots.wxml" />
 

@@ -92,6 +92,7 @@
       display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
+      width: 100%;
       -webkit-box-orient: vertical;
       -webkit-box-direction: normal;
       -webkit-flex-direction: column;
@@ -172,13 +173,24 @@
 .return .return-left text:nth-child(1) {
       width: 33rpx;
       height: 33rpx;
-      -webkit-border-radius: 33rpx;
-              border-radius: 33rpx;
+      border-radius: 33rpx;
       color: #FF3699FF;
       border: 1px solid #FF3699FF;
       font-size: 16rpx;
       text-align: center;
       margin-right: 20rpx;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+          -ms-flex-pack: center;
+              justify-content: center;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+          -ms-flex-align: center;
+              align-items: center;
 }
 .return .return-left text:nth-child(2) {
       font-size: 28rpx;

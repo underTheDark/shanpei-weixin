@@ -27,6 +27,9 @@
 page {
   background: whitesmoke;
 }
+.place {
+  border-top: 1px solid #F5F5F5;
+}
 .service-list {
   display: -webkit-box;
   display: -webkit-flex;
@@ -61,20 +64,35 @@ page {
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-pack: justify;
-    -webkit-justify-content: space-between;
-        -ms-flex-pack: justify;
-            justify-content: space-between;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
-    padding: 10rpx 4%;
-    background: whitesmoke;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    width: 100%;
+}
+.service-list .service-two .list {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+          -ms-flex-pack: justify;
+              justify-content: space-between;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+          -ms-flex-align: center;
+              align-items: center;
+      padding: 10rpx 4%;
+      background: whitesmoke;
+}
+.service-list .service-two .service-two-left {
+      margin-right: 20rpx;
 }
 .service-list .service-two .service-two-left image {
-      width: 180rpx;
-      height: 180rpx;
+        width: 180rpx;
+        height: 180rpx;
 }
 .service-list .service-two .service-two-right {
       display: -webkit-box;
@@ -86,6 +104,7 @@ page {
       -webkit-flex-direction: column;
           -ms-flex-direction: column;
               flex-direction: column;
+      width: 100%;
 }
 .service-list .service-two .service-two-right text {
         font-size: 28rpx;

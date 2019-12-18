@@ -1,130 +1,127 @@
 <template>
 	<view>
-		<video id="myVideo" class="myVideo" :src="videoSrc" v-show="isPlayVideo" :show-fullscreen-btn="showFullscreenBtn" :direction="videoDirection" :show-play-btn="showPlayBtn" @pause="videoPause" @fullscreenchange="viderFullscreen">
-			<cover-image class="stopPlayVideoBtn" @click="stopPlayVideo" src="/static/img/close.png"></cover-image>
-		</video>
-		<view class="content">
-			
-			<view class="label">
-				<view v-for="(label,index) in labelList" :class="{'on':index==labelIndex}" @tap="loadRatings(index)" :key="label.type">
-					{{label.name}}({{label.number}})
-				</view>
-			</view>
-			<view class="list">
-				<view class="row" v-for="(row,Rindex) in ratingsList" :key="Rindex">
-					<view class="left">
-						<view class="face">
-							<image :src="row.face"></image>
-						</view>
-					</view>
-					<view class="right">
-						<view class="name-date">
-							<view class="username">
-								{{row.username}}
-							</view>
-							<view class="date">
-								{{row.date}}
-							</view>
-						</view>
-						<view class="spec">
-							{{row.spec}}
-						</view>
-						<view class="first">
-							<view class="rat">
-								{{row.first.content}}
-							</view>
-							<view class="img-video">
-								<view class="box" v-for="item in row.first.video" @tap="playVideo(item.path)" :key="item.path">
-									<image mode="aspectFill" :src="item.img"></image>
-									<view class="playbtn">
-										<view class="icon bofang"></view>
-									</view>
-								</view>
-								<view class="box" v-for="item in row.first.img" @tap="showBigImg(item,row.first.img)" :key="item">
-									<image mode="aspectFill" :src="item"></image>
-								</view>
-							</view>
-						</view>
-						<view class="append" v-if="row.append">
-							<view class="date">
-								{{row.append.date}}天后追加
-							</view>
-							<view class="rat">
-								{{row.append.content}}
-							</view>
-							<view class="img-video">
-								<view class="box" v-for="item in row.append.video" @tap="playVideo(item.path)" :key="item.path">
-									<image mode="aspectFill" :src="item.img"></image>
-									<view class="playbtn">
-										<view class="icon bofang"></view>
-									</view>
-								</view>
-								<view class="box" v-for="item in row.append.img" @tap="showBigImg(item,row.append.img)" :key="item">
-									<image mode="aspectFill" :src="item"></image>
-								</view>
+		<!-- <view class="tabr" :style="{top:headerTop}">
+			<view :class="{on:typeClass=='goods'}" @tap="switchType('goods')">已评价</view>
+			<view :class="{on:typeClass=='shop'}" @tap="switchType('shop')">待评价</view>
+			<view class="border" :class="typeClass"></view>
+		</view>-->
+		<view class="place"></view>
+ 
+		<view class="keep-main">
+			<!-- 已评价 -->
+			<view class="list"  v-for="(eva,evaNum) in goodsList" :key="evaNum">
+				<view class="list-one">
+					<view class="one-left">
+						<image :src="info.headimg"></image>
+						<view class="evaluate">
+							<text>{{info.nickname}}</text>
+							<view class="star">
+							   <uni-rate max="5" size="18" :value="eva.comment_star" ></uni-rate>
 							</view>
 						</view>
 					</view>
+					<view class="one-right">
+						{{eva.create_at}}
+					</view>
 				</view>
+				<view class="list-two">
+					{{eva.comment_content}}
+				</view>
+				<view v-if="eva.comment_covers.length>0" class="list-three" >
+					
+					<view class="imgs" v-for="(src,index) in eva.comment_covers" :key="index">
+						<image :src="src"></image>
+					</view>
+				</view>
+				
 			</view>
+			<!-- <view class="do-evaluate" v-show="subState==2" v-for="(eva,index) in goodsList" :key="index">
+				<view class="do-evaluate-one">
+					<view class="evaluate-left">
+						{{eva.order_no}}
+					</view>
+					<view class="evaluate-right">已完成</view>
+				</view>
+				<view class="do-evaluate-two">
+					<image src="eva.goods_logo"></image>
+					<view class="goods-dec">
+						<text class="goods-title">
+							{{eva.goods_title}}
+						</text>
+						<view class="goods-price">
+							<text>共{{eva.number}}件产品 &nbsp合计：</text>
+							<view class="total-price">
+								<text>￥</text>
+								<text>{{eva.price_real}}</text>
+							</view>
+						</view>
+
+					</view>
+				</view>
+				<view class="do-evaluate-three" @click="sayFeel()">
+					<text>去评价</text>
+				</view>
+			</view> -->
 		</view>
 	</view>
 </template>
 
 <script>
+	import uniRate from "@/components/uni-rate/uni-rate.vue" //星星评分
 	export default {
+		components:{
+			uniRate
+		},
+		onLoad(e) {
+		     this.id=e.id
+		
+		},
+		mounted(){
+			var _this=this
+			uni.getStorage({
+				key:"info",
+				success: (res) => {
+				
+					this.info=JSON.parse(res.data)
+						
+				}
+			})
+			
+			//ping lun
+			this.request({
+				url:this.config.url+"goods/comments",
+				method:"post",
+				data:{
+					token:this.token,
+					id:this.id
+				},
+				success:(res)=> {
+					console.log(res)
+					if(res.data.code==1){
+						this.goodsList=res.data.data.data;
+						
+					}
+					
+				}
+			})
+			
+		},
 		data() {
 			return {
-				labelList:[
-					{name:'全部',number:25,type:'all'},
-					{name:'好评',number:23,type:'good'},
-					{name:'中评',number:1,type:'secondary'},
-					{name:'差评',number:1,type:'poor'},
-					{name:'有图',number:12,type:'img'},
-					{name:'视频',number:2,type:'video'},
-					{name:'追加',number:2,type:'append'}
-				],
-				labelIndex:0,
-				ratingsList:[
-					{id:1,username:"大黑哥",face:"/static/img/face.jpg",date:'2019-04-21',spec:"规格: XL",grade:"good",
-						first:{content:"好看，可以，不愧是专业的，才拿到手上就研究了半天才装上",
-						img:["https://ae01.alicdn.com/kf/HTB1wREwTXzqK1RjSZFvq6AB7VXaT.jpg","https://ae01.alicdn.com/kf/HTB1sL7hTjDpK1RjSZFrq6y78VXaw.jpg","https://ae01.alicdn.com/kf/HTB111soTbvpK1RjSZPiq6zmwXXaB.jpg","https://ae01.alicdn.com/kf/HTB1O2TRTmzqK1RjSZPcq6zTepXa4.jpg"],
-						video:[{img:"https://ae01.alicdn.com/kf/HTB1AMEBTcfpK1RjSZFOq6y6nFXaK.jpg",path:"https://mp4.vjshi.com/2018-12-28/1083f3db90334f86e3fc3586b4472914.mp4"}]
-						},
-						append:{date:65,content:"用了一段时间，质量很好，体验很流畅，推荐购买",
-						img:["https://ae01.alicdn.com/kf/HTB1dKZtTgHqK1RjSZFEq6AGMXXaS.jpg","https://ae01.alicdn.com/kf/HTB18h3oTmzqK1RjSZFjq6zlCFXap.jpg"],
-						video:[{img:"https://ae01.alicdn.com/kf/HTB1AMEBTcfpK1RjSZFOq6y6nFXaK.jpg",path:"https://mp4.vjshi.com/2017-06-17/ed1d63669bea39f5ef078c4e194291d6.mp4"}]
-						}
-					},
-					{id:2,username:"小黑狗",face:"/static/img/face.jpg",date:'2019-04-21',spec:"规格: XL",grade:"secondary",
-						first:{content:"好评，看图",
-						img:["https://ae01.alicdn.com/kf/HTB111soTbvpK1RjSZPiq6zmwXXaB.jpg","https://ae01.alicdn.com/kf/HTB1O2TRTmzqK1RjSZPcq6zTepXa4.jpg"],
-						video:[]
-						}
-					},
-					{id:3,username:"小黑狗",face:"/static/img/face.jpg",date:'2019-04-21',spec:"规格: XL",grade:"poor",
-						first:{content:"好评，看图",
-						img:["https://ae01.alicdn.com/kf/HTB111soTbvpK1RjSZPiq6zmwXXaB.jpg","https://ae01.alicdn.com/kf/HTB1O2TRTmzqK1RjSZPcq6zTepXa4.jpg"],
-						video:[]
-						}
-					},
-					{id:3,username:"小黑狗",face:"/static/img/face.jpg",date:'2019-04-21',spec:"规格: XL",grade:"secondary",
-						first:{content:"系统默认好评",
-						img:[],
-						video:[]
-						}
-					}
-				],
-				videoDirection:0,
-				showFullscreenBtn:true,
-				showPlayBtn:true,
-				isPlayVideo:true,
-				videoSrc:''
-
-			};
+				id:"",
+				goodsList: [],
+				headerTop: 0,
+				//控制滑动效果
+				typeClass: 'goods',
+				
+				theIndex: null,
+				oldIndex: null,
+				isStop: false,
+				info:{}
+			}
 		},
-		onReady: function (res) {
-			this.videoContext = uni.createVideoContext('myVideo')
+		onPageScroll(e) {
+
 		},
 		//下拉刷新，需要自己在page.json文件中配置开启页面下拉刷新 "enablePullDownRefresh": true
 		onPullDownRefresh() {
@@ -132,277 +129,368 @@
 				uni.stopPullDownRefresh();
 			}, 1000);
 		},
-		//上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
-		onReachBottom() {
-			uni.showToast({ title: '触发上拉加载' });
-		},
+		
 		methods: {
-			loadRatings(index){
-				this.labelIndex = index;
-				uni.showToast({
-					title:"切换评论列表"
+			sayFeel() {
+				uni.navigateTo({
+					url: "/pages/user/keep/sayFeel/sayFeel"
 				})
-				//实际应用中，请求对应类型的评论列表，覆盖this.ratingsList
-				/*
-				let type = this.labelList[index].type; // 评论类型
-				......
-				*/
 			},
-			playVideo(path) {
-				this.videoSrc = path;
-				// this.isPlayVideo = true;
-				this.$nextTick(function() {
-					this.videoContext.requestFullScreen({direction:0});
-				});
-				
-			},
-			stopPlayVideo(){
-				this.videoContext.pause();
-			},
-			videoPause(){
-				// this.isPlayVideo = false;
-				this.videoSrc = '';
-			}, 
-			viderFullscreen(e){
-				if(e.detail.fullScreen){
-					this.videoContext.play();
-				}else{
-					this.stopPlayVideo();
+			switchType(type) {
+				// if(this.typeClass==type){
+				// 	return ;
+				// }
+				// uni.pageScrollTo({
+				// 	scrollTop:0,
+				// 	duration:0
+				// })
+				// this.typeClass = type;
+				// this.subState = this.typeClass==''?'':'show'+type;
+				// setTimeout(()=>{
+				// 	this.oldIndex = null;
+				// 	this.theIndex = null;
+				// 	this.subState = this.typeClass=='goods'?'':this.subState;
+				// },200)
+				this.typeClass = type;
+				if (type == "goods") {
+					this.subState = 1;
+
+				} else if (type == "shop") {
+					this.subState = 2;
 				}
 			},
-			showBigImg(src,srclist){
-				uni.previewImage({
-					current:src,
-					urls: srclist
-				});
+
+
+			discard() {
+				//丢弃
 			}
-		},
+
+
+		}
 	}
 </script>
-
 <style lang="scss">
-	page{
-		background-color: #fff;
+	view {
+		display: flex;
+		flex-wrap: wrap;
+
 	}
+
+	html {
+		background: white;
+	}
+
+	page {
+		position: relative;
+		background-color: #f5f5f5;
+	}
+
 	@font-face {
-		font-family: 'HMfont-home';
-		src: url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAANUAAsAAAAAB3QAAAMFAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCDBgqCWII/ATYCJAMMCwgABCAFhG0HORuIBsgekiRnhujwFwBXCiIAxcPz9/tv7XP2vT/DsvBb5Fg1ZYC1RgEPyACODfAANQ+//V/TFNCoPF+WVYQK7WH+Aedybff8hCMj5yv87Nwm3H7YXx7MinQJatc8OpHvH9gGsC8x2XUObekfXI5/ZAnMsyyXOaYtDDDeGtDe2CYrkIC8YeyClnieQK9pHaUTq8MZmpI5LRBPPceAZsYjJYt3C23F2hSfMUTd5Q3uAvgUfD/+GQWFoqnMi87dX9ow+Sn7GsMDCoorYGA6E9gmKjaBJK5XWq6pRJFNFb2qpNqc3kqhTOVHUQKOJms3+scrRMvM7QerMFr4KXPoBD/HNiigghZ03wK+TFBMVYeHlQy897Ofp+zDpYdo+PEx93z1OVb88JB9uvIUi/s+5x4vP0Zrx7KCUMR9wAYIw6E32MyJ88LvuW1EFMn7RHofPkKPn+Hn77ynry5bFAlZaWbJXqWR58UsbvF0O+8AsS79nfQ9fUeY6RvfZydgRSb5sNd5sOzdgUxsjGfrYQVOFmtpaRcCVkpawpWkIVKlpIRXIEpTfTBY4aXRzBJfsGpW4wqSIubw9XcCpTuh8IiyoAD3W57Yato9TEzz9T3ctOjHTAA6kNj6+sf8xuMPQ8Yytu1/Nz3Bj/9nRcDrZsPoPm1r8BtKEkMHzeBySJoKx+EYtmr3lkwFyOJ2HYzpGPU3XDbROZfQbSKBossUVN0WkSRsQqPPFrS67UOvDevNfcawisgerHsFEIZ9QTHoG1TDvpEk/EJj0j+0hgMPva4Ef88+y9HQ9jIZQjaa3ehVJbGy9dIO84/kFKHBaX5AuhLnnh+HJks+vqaYeIoFeYczkjaFqiWJcAUuozBMMG1JfLKk57ZJOu6ba6ve1LMaI2g7xohBEBsyvUAeSyKmvPqiXfj8EXEUQgZuqKoyXhGW83pHQz2DDshaEnequpVrcjeOESEUpLBEBK2AiYRWJIHS6lE+YhE97oBQaqyPaqmukt7ysuj9NkAv8+gaJWqk9kFhxKZXr0yUETsAAAAA')
-			format('woff2');
+		font-family: "HMfont-home";
+		src: url('data:application/x-font-woff2;charset=utf-8;base64,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') format('woff2');
 	}
+
 	.icon {
-		font-family: 'HMfont-home' !important;
-		font-size: 26upx;
+		font-family: "HMfont-home" !important;
+		font-size: 60upx;
 		font-style: normal;
-		&.bofang {
+		color: #000000;
+
+		&.jia {
 			&:before {
-				content: '\e696';
+				content: "\e641";
 			}
 		}
-		&.guanbi {
+
+		&.jian {
 			&:before {
-				content: '\e61a';
+				content: "\e643";
 			}
 		}
+
+		&.shanchu {
+			&:before {
+				content: "\e6a4";
+			}
+		}
+
+		&.shixiao {
+			&:before {
+				content: "\e669";
+			}
+		}
+
+	}
+
+	.hidden {
+		display: none !important;
+	}
+
+	.place {
+		border-top:1px solid #F5F5F5;
+	}
+
+	.tabr {
+		background-color: #fff;
+		width: 94%;
+		height: 95upx;
+		padding: 0 3%;
+		border-bottom: solid 1upx #dedede;
+		position: fixed;
+		top: 0;
+		z-index: 10;
+
+		view {
+			width: 50%;
+			height: 90upx;
+			justify-content: center;
+			align-items: center;
+			font-size: 32upx;
+			color: #999;
+		}
+
+		.on {
+			color: rgba(20, 204, 33, 1);
+
+		}
+
+		.border {
+			height: 4upx;
+			background-color: rgba(20, 204, 33, 1);
+			transition: all .3s ease-out;
+
+			&.shop {
+				transform: translate3d(100%, 0, 0);
+			}
+		}
+
+	}
+
+	.keep-main {
+		display: flex;
+		flex-direction: column;
+		background: white;
+		margin-top: 1upx;
+	
+		width: 100%;
 		
 	}
-.myVideo{
-	position: fixed;
-	top: 50%;
-	right: 100%;
-}
-.content{
-	view{
-		display: flex;
-	}
-	width: 94%;
-	padding: 0 3%;
-	
-	.label{
-		width: 100%;
-		flex-wrap:wrap;
-		view{
-			padding: 0 20upx;
-			height: 50upx;
-			border-radius: 40upx;
-			border:solid 1upx #ddd;
-			align-items: center;
-			color: #555;
-			font-size: 26upx;
-			background-color: #f9f9f9;
-			margin: 10upx 20upx 10upx 0;
-			&.on{
-				border:solid 1upx #f06c7a;
-				color: #f06c7a;
-			}
-		}
-	}
-	.list{
-		width: 100%;
-		flex-wrap: wrap;
-		padding: 20upx 0;
-		.row{
-			width: 100%;
-			margin-top: 30upx;
-			.left{
-				width: 10vw;
-				flex-shrink: 0;
-				margin-right: 10upx;
-				.face{
-					width: 100%;
-					image{
-						width: 10vw;
-						height: 10vw;
-						border-radius: 100%;
-					}
-					
-				}
-			}
-			.right{
-				width: 100%;
-				flex-wrap: wrap;
-				.name-date{
-					width: 100%;
-					justify-content: space-between;
-					align-items: baseline;
-					.username{
-						font-size: 32upx;
-						color: #555;
-					}
-					.date{
-						font-size:28upx;
-						color: #aaa;
-					}
-				}
-				.spec{
-					width: 100%;
-					color: #aaa;
-					font-size: 26upx;
-				}
-				.first{
-					width: 100%;
-					flex-wrap: wrap;
-					.rat{
-						font-size: 30upx;
-					}
-					.img-video{
-						width: 100%;
-						flex-wrap: wrap;
-						.box{
-							width: calc((84.6vw - 50upx)/4);
-							height: calc((84.6vw - 50upx)/4);
-							margin: 5upx 5upx;
-							position: relative;
-							justify-content: center;
-							align-items: center;
-							image{
-								position: absolute;
-								width: 100%;
-								height: 100%;
-								border-radius: 10upx;
-							}
-							.playbtn{
-								position: absolute;
-								.icon{
-									font-size: 80upx;
-									color: rgba(255,255,255,.9)
-								}
-							}
-						}
-					}
-				}
-				
-				.append{
-					width: 100%;
-					flex-wrap: wrap;
-					.date{
-						width: 100%;
-						height: 40upx;
-						border-left: 10upx solid #f06c7a;
-						padding-left: 10upx;
-						align-items: center;
-						font-size: 32upx;
-						margin: 20upx 0;
-					}
-					.rat{
-						font-size: 30upx;
-					}
-					.img-video{
-						width: 100%;
-						flex-wrap: wrap;
-						.box{
-							width: calc((84.6vw - 10upx - (10upx * 4))/4);
-							height: calc((84.6vw - 10upx - (10upx * 4))/4);
-							margin: 5upx 5upx;
-							position: relative;
-							justify-content: center;
-							align-items: center;
-							image{
-								position: absolute;
-								width: 100%;
-								height: 100%;
-								border-radius: 10upx;
-							}
-							.playbtn{
-								position: absolute;
-								.icon{
-									font-size: 80upx;
-									color: rgba(255,255,255,.9);
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-}
-/*
-* <view class="list">
-				<view class="row">
 
-					<view class="right">
+	.list {
+        width:96%;
+		padding: 30upx 2% ;
+		border-bottom: 20upx solid #F5F5F5;
+		
+		background: white;
+        display: flex;
+        flex-direction: column;
+		
+		.list-one {
+			width: 100%;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+
+			.one-left {
+				display: flex;
+				align-items: center;
+                justify-content: center;
+				image {
+					width: 86upx;
+					height: 86upx;
+					border-radius: 86upx;
+					border: 1px solid rgba(54, 153, 255, 1);
+				}
+
+				.evaluate {
+					margin-left: 30upx;
+					display: flex;
+					flex-direction: column;
+					justify-content: space-around;
+					
+					font-size: 28upx;
+					font-family: PingFang-SC-Regular;
+					font-weight: 400;
+					color: rgba(102, 102, 102, 1);
+					.star{
 						
-						<view class="spec">
-							规格：XL
-						</view>
-						<view class="first">
-							<view class="rat">
-								好看，可以，不愧是专业的，才拿到手上就研究了半天才装上
-							</view>
-							<view class="img-video">
-								<view class="box">
-									<image src="https://ae01.alicdn.com/kf/HTB1wREwTXzqK1RjSZFvq6AB7VXaT.jpg"></image>
-									<view class="playbtn">
-										<view class="icon bofang"></view>
-									</view>
-								</view>
-								<view class="box">
-									<image src="https://ae01.alicdn.com/kf/HTB1wREwTXzqK1RjSZFvq6AB7VXaT.jpg"></image>
-								</view>
-								<view class="box">
-									<image src="https://ae01.alicdn.com/kf/HTB1wREwTXzqK1RjSZFvq6AB7VXaT.jpg"></image>
-								</view>
-							</view>
-						</view>
-						<view class="append">
-							<view class="date">
-								65天后追加
-							</view>
-							<view class="rat">
-								好看，可以，不愧是专业的，才拿到手上就研究了半天才装上
-							</view>
-							<view class="img-video">
-								<view class="box">
-									<image src="https://ae01.alicdn.com/kf/HTB1wREwTXzqK1RjSZFvq6AB7VXaT.jpg"></image>
-								</view>
-								<view class="box">
-									<image src="https://ae01.alicdn.com/kf/HTB1wREwTXzqK1RjSZFvq6AB7VXaT.jpg"></image>
-								</view>
-							</view>
-						</view>
-					</view>
-				</view>
-			</view>
-			* 
-			* */
+					}
+				}
+
+			}
+
+			.one-right {
+				font-size: 24upx;
+				font-family: DINPro-Light;
+				font-weight: 300;
+				color: rgba(153, 153, 153, 1);
+				display: flex;
+				justify-content: space-between;
+				align-items: flex-start;
+			}
+		}
+
+		.list-two {
+			font-size: 28upx;
+			font-family: PingFang-SC-Regular;
+			font-weight: 400;
+			color: rgba(51, 51, 51, 1);
+			margin: 20upx 0;
+		}
+
+		.list-three {
+			display: flex;
+			align-items: center;
+			width:100%;
+			margin: 10upx 0 ;
+            .imgs{
+				width:33%;
+				height:220upx;
+			}
+			image {
+				width: 100%;
+				height: 100%;
+				margin-right: 10upx;
+			}
+		}
+
+		.list-four {
+			display: flex;
+			padding: 20upx;
+			justify-content: space-between;
+			align-items: center;
+            box-sizing: border-box;
+			background: rgba(245, 245, 245, 1);
+
+			.four-left {
+				width: 140upx;
+				height: 140upx;
+                margin-right:30upx;
+				image {
+					width: 140upx;
+					height: 140upx;
+				}
+			}
+
+			.four-right {
+                height:100%;
+				margin-left: 10upx;
+				display: flex;
+				flex:1;
+				flex-direction: column;
+				justify-content: space-around;
+				
+
+				text:nth-child(1) {
+					font-size: 28upx;
+					color: rgba(51, 51, 51, 1);
+					display: -webkit-box;
+					-webkit-line-clamp: 2;
+					-webkit-box-orient: vertical;
+					text-overflow: ellipsis;
+					overflow: hidden;
+
+				}
+
+				text:nth-child(2) {
+					color: rgba(255, 32, 27, 1);
+					font-size: 24upx;
+				}
+			}
+		}
+	}
+
+	// 待评价
+	.do-evaluate {
+		display: flex;
+		flex-direction: column;
+
+		.do-evaluate-one {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 20upx 4%;
+			border-bottom: 1px solid #cecece;
+
+			.evaluate-left {
+				font-size: 28upx;
+				font-family: PingFang-SC-Regular;
+				font-weight: 400;
+				color: rgba(16, 16, 16, 1);
+			}
+
+			.evaluate-right {
+				font-size: 28upx;
+				font-family: PingFang-SC-Regular;
+				font-weight: 400;
+				color: rgba(20, 204, 33, 1);
+			}
+		}
+
+		.do-evaluate-two {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin: 0 4%;
+			padding: 20upx 0;
+			border-bottom: 1px solid #cecece;
+
+			image {
+				width: 157upx;
+				height: 157upx;
+			}
+
+			.goods-dec {
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+				align-content: flex-end;
+
+				.goods-title {
+					font-size: 28upx;
+					font-family: PingFang-SC-Medium;
+					font-weight: 500;
+					color: rgba(16, 16, 16, 1);
+				}
+
+				.goods-price {
+					display: flex;
+					font-size: 24upx;
+					color: rgba(102, 102, 102, 1);
+
+					.total-price {
+						text:nth-child(2) {
+							font-size: 22upx;
+							font-family: PingFang-SC-Bold;
+							font-weight: bold;
+							color: rgba(51, 51, 51, 1);
+						}
+
+						text:nth-child(1) {
+							font-size: 16upx;
+							font-family: PingFang-SC-Bold;
+							font-weight: bold;
+							color: rgba(51, 51, 51, 1);
+						}
+					}
+				}
+			}
+		}
+
+		.do-evaluate-three {
+
+			width: 156upx;
+			height: 56upx;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin: 20upx 0 20upx 75%;
+			font-size: 28upx;
+			font-family: PingFang-SC-Regular;
+			font-weight: 400;
+			color: rgba(20, 204, 33, 1);
+			border: 1px solid rgba(20, 204, 33, 1);
+			border-radius: 56upx;
+		}
+	}
 </style>

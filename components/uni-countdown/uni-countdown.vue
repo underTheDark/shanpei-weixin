@@ -24,19 +24,19 @@
 			},
 			backgroundColor: {
 				type: String,
-				default: "#FFFFFF"
+				default: "#35374D"
 			},
 			borderColor: {
 				type: String,
-				default: "#000000"
+				default: "#35374D"
 			},
 			color: {
 				type: String,
-				value: "#000000"
+				value: "#fff"
 			},
 			splitorColor: {
 				type: String,
-				default: "#000000"
+				default: "black"
 			},
 			day: {
 				type: Number,
@@ -66,17 +66,15 @@
 				seconds: 0
 			}
 		},
-		created: function(e) {
-			this.seconds = this.toSeconds(this.day, this.hour, this.minute, this.second)
-			this.countDown()
-			this.timer = setInterval(() => {
-				this.seconds--
-				if (this.seconds < 0) {
-					this.timeUp()
-					return
-				}
-				this.countDown()
-			}, 1000)
+		watch: {
+			second (val) {
+				this.seconds = this.toSeconds(this.day, this.hour, this.minute, this.second)
+				// this.timeUp()
+				this.startData();
+			}
+		},
+		created: function(e) {	
+			this.startData();
 		},
 		beforeDestroy() {
 			clearInterval(this.timer)
@@ -89,20 +87,36 @@
 				clearInterval(this.timer)
 				this.$emit('timeup')
 			},
+			startData(){
+				this.seconds = this.toSeconds(this.day, this.hour, this.minute, this.second)
+				if(this.seconds<=0){
+					return
+				}
+				//this.countDown()
+				this.timer = setInterval(() => {
+					this.seconds--
+					if (this.seconds < 0) {
+						this.timeUp()
+						return
+					}
+					this.countDown()
+				}, 1000)
+			},
 			countDown() {
 				let seconds = this.seconds
-                let [day, hour, minute, second] = [0, 0, 0, 0]
+				let [day, hour, minute, second] = [0, 0, 0, 0]
 				if (seconds > 0) {
 					day = Math.floor(seconds / (60 * 60 * 24))
 					hour = Math.floor(seconds / (60 * 60)) - (day * 24)
 					minute = Math.floor(seconds / 60) - (day * 24 * 60) - (hour * 60)
 					second = Math.floor(seconds) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60)
+					
 				} else {
 					this.timeUp()
 				}
-                if (day < 10) {
-                	day = '0' + day
-                }
+				if (day < 10) {
+					day = '0' + day
+				}
 				if (hour < 10) {
 					hour = '0' + hour
 				}
@@ -112,7 +126,7 @@
 				if (second < 10) {
 					second = '0' + second
 				}
-                this.d = day
+				this.d = day
 				this.h = hour
 				this.i = minute
 				this.s = second
@@ -120,32 +134,31 @@
 		}
 	}
 </script>
-<style lang="scss">
-	$countdown-height:44upx;
+<style>
+	@charset "UTF-8";
 
 	.uni-countdown {
 		padding: 2upx 0;
 		display: inline-flex;
 		flex-wrap: nowrap;
+		justify-content: center
+	}
+
+	.uni-countdown__splitor {
 		justify-content: center;
+		line-height: 44upx;
+		padding: 0 5upx;
+		font-size: 140%;
+		color:black;
+	}
 
-		&__splitor {
-			justify-content: center;
-			line-height: $countdown-height;
-			padding: 0 5upx;
-            font-size: $uni-font-size-base;
-		}
-
-		&__number {
-			line-height: $countdown-height;
-			justify-content: center;
-			height: $countdown-height;
-			border-radius: $uni-border-radius-base;
-			margin: 0 5upx;
-			font-size: $uni-font-size-base;
-			border: 1px solid #000000;
-			font-size: $uni-font-size-sm;
-			padding: 0 10upx;
-		}
+	.uni-countdown__number {
+		line-height: 44upx;
+		justify-content: center;
+		height: 44upx;
+		margin: 0 5upx;
+		border: 0;
+		font-size: 30upx;
+		padding: 0 10upx;
 	}
 </style>

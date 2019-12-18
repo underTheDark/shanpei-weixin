@@ -1,2 +1,1 @@
-<import src="./reSelect.vue.wxml" />
-    <template is="35c37232" data="{{ ...$root['0'], $root }}"/>
+<view id="reselect"><view class="content"><view class="product-title"><image src="../../static/img/1.jpg"></image><view class="product-mes"><text>库存</text><text>价格</text></view></view><view class="product-color"><text>颜色</text><view>毛衣 （加厚班）</view></view><view class="product-size product-color"><text>颜色</text><view>毛衣 （加厚班）</view></view><view class="product-num"><text>数量</text><view><uni-number-box vue-id="1" min="{{1}}" bind:__l="__l"></uni-number-box></view></view></view><view class="button">确定</view></view>

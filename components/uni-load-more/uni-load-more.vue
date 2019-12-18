@@ -20,7 +20,7 @@
 				<view :style="{background:color}"></view>
 			</view>
 		</view>
-		<text class="uni-load-more__text" :style="{color:color}">{{status === 'more' ? contentText.contentdown : (status === 'loading' ? contentText.contentrefresh : contentText.contentnomore)}}</text>
+		<text v-if="status=='loading' || 'noMore'" class="uni-load-more__text" :style="{color:color}">{{status === 'more' ? contentText.contentdown : (status === 'loading' ? contentText.contentrefresh : contentText.contentnomore)}}</text>
 	</view>
 </template>
 
@@ -65,10 +65,15 @@
 		height: 80upx;
 		align-items: center;
 		justify-content: center;
+		
 
 		&__text {
 			font-size: 28upx;
 			color: $uni-text-color-grey;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width:100vw;
 		}
 
 		&__img {

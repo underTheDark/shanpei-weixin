@@ -29,6 +29,9 @@
   height: 24rpx;
 }
 .confirm {
+  width: 100%;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   background: whitesmoke;
 }
 .send,
@@ -113,7 +116,8 @@
     -webkit-justify-content: space-between;
         -ms-flex-pack: justify;
             justify-content: space-between;
-    width: 100%;
+    width: 96%;
+    padding: 0 2%;
 }
 .addr .sendgoods-addr view {
       width: 100%;
@@ -128,7 +132,7 @@
               flex-direction: column;
 }
 .addr .sendgoods-addr view .getgoods-name {
-        font-size: 28rpx;
+        font-size: 30rpx;
         font-family: PingFang-SC-Regular;
         font-weight: 400;
         color: #333333;
@@ -145,7 +149,7 @@
         display: flex;
 }
 .addr .sendgoods-addr view .getgoods-addr {
-        font-size: 28rpx;
+        font-size: 32rpx;
         font-family: PingFang-SC-Regular;
         font-weight: 400;
         color: #999999;
@@ -225,7 +229,7 @@
           overflow: hidden;
 }
 .buy-list .row .goods-info .info .spec {
-          font-size: 22rpx;
+          font-size: 26rpx;
           color: #a7a7a7;
           height: 40rpx;
           display: -webkit-box;
@@ -236,7 +240,6 @@
           -webkit-align-items: center;
               -ms-flex-align: center;
                   align-items: center;
-          padding: 0 10rpx;
           margin-bottom: 20vw;
 }
 .buy-list .row .goods-info .info .spec text {

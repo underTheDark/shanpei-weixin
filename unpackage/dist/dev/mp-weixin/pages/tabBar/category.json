@@ -1,5 +1,5 @@
 {
-  "usingComponents": {},
   "navigationBarTextStyle": "black",
-  "navigationBarTitleText": ""
+  "navigationBarTitleText": "分类",
+  "usingComponents": {}
 }

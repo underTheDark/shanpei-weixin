@@ -1,7 +1,9 @@
 {
-  "navigationBarTitleText": "我的收藏",
-  "navigationBarBackgroundColor": "#f06c7a",
-  "navigationBarTextStyle": "white",
+  "navigationBarTitleText": "我的评价",
+  "navigationBarBackgroundColor": "#fff",
+  "navigationBarTextStyle": "black",
   "bounce": "none",
-  "usingComponents": {}
+  "usingComponents": {
+    "uni-rate": "/components/uni-rate/uni-rate"
+  }
 }

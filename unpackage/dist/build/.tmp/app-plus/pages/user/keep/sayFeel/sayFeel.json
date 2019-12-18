@@ -1,7 +1,10 @@
 {
   "navigationBarTitleText": "评价",
-  "navigationBarBackgroundColor": "#f06c7a",
-  "navigationBarTextStyle": "white",
+  "navigationBarBackgroundColor": "#fff",
+  "navigationBarTextStyle": "black",
   "bounce": "none",
-  "usingComponents": {}
+  "usingComponents": {
+    "uni-rate": "/components/uni-rate/uni-rate",
+    "robby-image-upload": "/components/robby-image-upload/robby-image-upload"
+  }
 }

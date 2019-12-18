@@ -1,80 +1,3 @@
-
-@charset "UTF-8";
-.uni-swipe-action {
-	width: 100%;
-	overflow: hidden
-}
-.uni-swipe-action__container {
-	position: relative;
-	background-color: #fff;
-	width: 200%;
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-box-orient: horizontal;
-	-webkit-box-direction: normal;
-	-webkit-flex-direction: row;
-	    -ms-flex-direction: row;
-	        flex-direction: row;
-	-webkit-flex-wrap: wrap;
-	    -ms-flex-wrap: wrap;
-	        flex-wrap: wrap;
-	-webkit-transition: -webkit-transform 350ms cubic-bezier(.165, .84, .44, 1);
-	transition: -webkit-transform 350ms cubic-bezier(.165, .84, .44, 1);
-	-o-transition: transform 350ms cubic-bezier(.165, .84, .44, 1);
-	transition: transform 350ms cubic-bezier(.165, .84, .44, 1);
-	transition: transform 350ms cubic-bezier(.165, .84, .44, 1), -webkit-transform 350ms cubic-bezier(.165, .84, .44, 1)
-}
-.uni-swipe-action__content {
-	width: 50%
-}
-.uni-swipe-action__btn-group {
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-box-orient: horizontal;
-	-webkit-box-direction: normal;
-	-webkit-flex-direction: row;
-	    -ms-flex-direction: row;
-	        flex-direction: row
-}
-.uni-swipe-action--show {
-	position: relative;
-	z-index: 1000
-}
-.uni-swipe-action--btn {
-	padding: 0 32rpx;
-	color: #fff;
-	background-color: #c7c6cd;
-	font-size: 28rpx;
-	display: -webkit-inline-box;
-	display: -webkit-inline-flex;
-	display: -ms-inline-flexbox;
-	display: inline-flex;
-	text-align: center;
-	-webkit-box-orient: horizontal;
-	-webkit-box-direction: normal;
-	-webkit-flex-direction: row;
-	    -ms-flex-direction: row;
-	        flex-direction: row;
-	-webkit-box-align: center;
-	-webkit-align-items: center;
-	    -ms-flex-align: center;
-	        align-items: center
-}
-.uni-swipe-action__mask {
-	display: block;
-	opacity: 0;
-	position: fixed;
-	z-index: 999;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%
-}
-
 @charset "UTF-8";
 /**
  * 这里是uni-app内置的常用样式变量
@@ -143,10 +66,11 @@ page {
     font-size: 32rpx;
 }
 .goods-list .row {
-    width: -webkit-calc(96%);
-    width: calc(96%);
-    height: -webkit-calc(22vw + 40rpx);
+    width: calc(100%);
     height: calc(22vw + 40rpx);
+    border-botom: 20rpx solid #F7F7F7;
+    -webkit-box-shadow: 0 5rpx 10rpx #F7F7F7;
+            box-shadow: 0 5rpx 10rpx #F7F7F7;
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -158,7 +82,6 @@ page {
     position: relative;
     overflow: hidden;
     z-index: 4;
-    border: 0;
 }
 .goods-list .row .menu {
       position: absolute;
@@ -263,14 +186,13 @@ page {
         display: -ms-flexbox;
         display: flex;
         padding-right: 20rpx;
-        border-bottom: 1px solid #cecece;
+        border-bottom: 20rpx solid #cecece;
         padding: 60rpx 0;
 }
 .goods-list .row .carrier .goods-info .img {
           width: 22vw;
           height: 22vw;
-          -webkit-border-radius: 10rpx;
-                  border-radius: 10rpx;
+          border-radius: 10rpx;
           overflow: hidden;
           -webkit-flex-shrink: 0;
               -ms-flex-negative: 0;
@@ -316,8 +238,7 @@ page {
                 -ms-flex-align: center;
                     align-items: center;
             padding: 0 10rpx;
-            -webkit-border-radius: 15rpx;
-                    border-radius: 15rpx;
+            border-radius: 15rpx;
             margin-bottom: 20vw;
 }
 .goods-list .row .carrier .goods-info .info .price-number {
@@ -354,7 +275,8 @@ page {
 .goods-list .row .carrier .goods-info .info .price-number .uni-numbox--disabled {
               line-height: 100%;
 }
-.goods-list .row .carrier .goods-info .info .price-number .uni-numbox__minus, .goods-list .row .carrier .goods-info .info .price-number .uni-numbox__plus {
+.goods-list .row .carrier .goods-info .info .price-number .uni-numbox__minus,
+            .goods-list .row .carrier .goods-info .info .price-number .uni-numbox__plus {
               line-height: 100%;
 }
 .goods-list .row .carrier .goods-info .info .price-number .uni-numbox__value[data-v-5fc0e502] {
@@ -370,6 +292,17 @@ page {
               -webkit-align-items: center;
                   -ms-flex-align: center;
                       align-items: center;
+}
+.goods-list .row .carrier .goods-info .info .price-number .price {
+              font-size: 28rpx;
+}
+.goods-list .row .carrier .goods-info .info .price-number .price text:nth-child(1) {
+                color: #FF541F;
+                margin-right: 30rpx;
+}
+.goods-list .row .carrier .goods-info .info .price-number .price text:nth-child(2) {
+                color: #999999;
+                text-decoration: line-through;
 }
 .goods-list .row .carrier .goods-info .info .price-number .number {
               display: -webkit-box;

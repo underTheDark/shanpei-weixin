@@ -6,7 +6,7 @@
 					收货人
 				</view>
 				<view class="input">
-					<input placeholder="请输入收件人" type="text" v-model="name" />
+					<input placeholder="请输入收件人" type="text" v-model="username" />
 				</view>
 			</view>
 			<view class="row">
@@ -136,14 +136,14 @@
 				city_tree:[],  //区地址
 				city_four:[],  //街道地址
 				id: '',
-				name: '',          //用户名
+				username: '',          //用户名
 				tel: '',         //手机号
 				detailed: '',   //详细地址
 				address:"",
-				province: "河南省",
-				city: "郑州市",
-				area: "高新区",
-				street: "枫杨街",
+				province: "请选择",
+				city: "",
+				area: "",
+				street: "请选择",
 				isDefault: 0,  //设置为默认地址 1
 				strId:"",
 				themeColor: '#007AFF',
@@ -158,7 +158,7 @@
 				this.ishow=1;
 				this.citynum=0;
 				this.init(0,1)
-				console.log(222)
+				
 			},
 			showcity(id,name){
 				// this.pid=id
@@ -170,7 +170,7 @@
 			     this.city_tree=[]
 				 this.ciry_four=[]
 				 this.isdisabled = false;
-				 this.street=""	
+				 this.street="请选择"	
 			},
 			showcitytwo(id,name){
 				//this.pid=id
@@ -193,9 +193,7 @@
 				this.citynum=4
 			},
 			showcityfour(id,name){
-				//this.pid=id
-				 //this.init(id)
-				 console.log(id)
+				
 				this.street=name;
 				//this.id3=id
 				this.style4=id
@@ -231,7 +229,7 @@
 			
 			init(pid,level){
 				// 获取
-				uni.request({
+				this.request({
 					url: this.config.url+'area',
 					data: {
 						pid:pid,
@@ -270,7 +268,7 @@
 						save() {
 							console.log(this.tel, this.detailed)
 							let data = {
-								"name": this.name,
+								"username": this.username,
 								"phone": this.tel,
 								id: this.id,
 								token: this.token,
@@ -282,7 +280,7 @@
 								address: this.detailed
 							}
 			
-							if (!this.name) {
+							if (!this.username) {
 								uni.showToast({
 									title: '请输入收件人姓名',
 									icon: 'none'
@@ -308,7 +306,7 @@
 							// 	title:'正在提交'
 							// })
 							//实际应用中请提交ajax,模板定时器模拟提交效果
-							uni.request({
+							this.request({
 								url: this.config.url + "address/edit",
 								method: "post",
 								data: data,
@@ -359,7 +357,8 @@
 		},
 		mounted(){
 			//加载默认地址
-			this.address=this.province+"-"+this.city+"-"+this.area;
+			// this.address=this.province+"-"+this.city+"-"+this.area;
+			this.address="请选择"
 			this.street=this.street;
 		}
 

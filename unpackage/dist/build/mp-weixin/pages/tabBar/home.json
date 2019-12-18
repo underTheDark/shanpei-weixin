@@ -3,5 +3,5 @@
   "navigationBarTextStyle": "black",
   "enablePullDownRefresh": true,
   "onReachBottomDistance": 50,
-  "navigationBarTitleText": "闪配"
+  "navigationBarTitleText": "主页"
 }

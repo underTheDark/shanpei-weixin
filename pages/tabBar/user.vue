@@ -1,12 +1,12 @@
 <template>
-	<view>
+	<view id="user">
 	
 		<!-- 用户信息 -->
-		<view class="user"  :style="{backgroundImage:'url('+dataImg+')'}">
+		<view class="user">
 			<!-- 头像 -->
-			<view class="left">
-				<image :src="dataImg" @tap="toSetting"></image>
-				<view class="username" @tap="toLogin">{{user.username}}</view>
+			<view class="left" >
+				<image :src="info.headimg" ></image>
+				<view class="username" >{{info.nickname}}</view>
 			</view>
 			
 		    
@@ -64,6 +64,7 @@
 				headerTop: null,
 				statusTop: null,
 				dataImg:"",
+				info:{},
 				//个人信息,
 				user: {
 					username: '游客1002',
@@ -174,7 +175,15 @@
 		},
 		mounted(){
 			
-			this.dataImg=this.config.url+"static/upload/bg.png"
+			
+			uni.getStorage({
+				key:"info",
+				success: (res) => {
+				
+					this.info=JSON.parse(res.data)
+						console.log(res.data,this.info)
+				}
+			})
 		},
 		methods: {
 			//消息列表
@@ -359,28 +368,36 @@
 	.place-bottom {
 		height: 300upx;
 	}
-
-	.user {
-		width: 92%;
-		padding: 0 4%;
+  #user{
+	  width:100vw;
+  }
+#user .user {
+		
+		width: 100%;
+		height:300upx;
 		display: flex;
 		align-items: center;
-		// background-image: url("https://shanpei.wsstreet.net/static/upload/bg.png") no-repeat;
+		background: url('../../static/img/bg.jpg') no-repeat center;
 		background-size:100% 100%;
-		padding-bottom: 120upx;
+		position:relative;
+		
         
 		.left {
-			
-			
-			
-			
-            display: flex;
+		
+		    position: absolute;
+			left:40upx;
+			top:80upx;
+		    display: flex;
 			align-items: center;
+			z-index: 10000;
 			image {
 				width: 80upx;
 				height: 80upx;
 				border-radius: 100%;
-				margin-right:20upx;
+				margin-right:40upx;
+				
+				
+			
 			}
 			.username {
 				font-size: 36upx;
@@ -411,13 +428,15 @@
 	}
 
 	.order {
+		position: relative;
+		z-index:1000;
 		width: 84%;
 		margin: 30upx 4% 30upx 4%;
 		padding: 30upx 4% 20upx 4%;
 		background-color: #fff;
 		box-shadow: 0upx 0upx 25upx rgba(0, 0, 0, 0.1);
 		border-radius: 15upx;
-
+        margin-top:-40upx;
 		.list {
 			display: flex;
 			

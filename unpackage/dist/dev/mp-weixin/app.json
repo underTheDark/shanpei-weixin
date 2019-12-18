@@ -26,12 +26,15 @@
     "pages/serType/serType",
     "pages/applyReturn/applyReturn",
     "pages/applyChange/applyChange",
-    "pages/reSelect/reSelect"
+    "pages/reSelect/reSelect",
+    "pages/getgoods/getgoods",
+    "pages/search/search",
+    "pages/webview/webview"
   ],
   "subPackages": [],
   "window": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "",
+    "navigationBarTitleText": "优递鲜",
     "navigationBarBackgroundColor": "#ffffff",
     "backgroundColor": "#ffffff",
     "backgroundColorTop": "#ffffff",
@@ -39,7 +42,6 @@
     "onReachBottomDistance": 50,
     "enablePullDownRefresh": true
   },
-  "usingComponents": {},
   "tabBar": {
     "color": "#333333",
     "selectedColor": "#14CC21",
@@ -77,5 +79,9 @@
       "desc": "你的位置信息将用于小程序位置接口的效果展示"
     }
   },
-  "sitemapLocation": "sitemap.json"
+  "navigateToMiniProgramAppIdList": [
+    "wx6885acbedba59c14"
+  ],
+  "usingComponents": {},
+  "sitemapLocation": "sitemap4.json"
 }

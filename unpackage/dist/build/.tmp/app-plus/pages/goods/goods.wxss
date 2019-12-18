@@ -138,9 +138,13 @@ page {
   -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
-  width: 84rpx;
-  height: 84rpx;
-  border-radius: 84rpx;
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 100rpx;
+}
+.people-service text {
+    font-size: 24rpx;
+    line-height: 30rpx;
 }
 .icon {
   font-family: 'HMfont-home' !important;

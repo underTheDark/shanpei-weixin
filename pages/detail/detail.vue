@@ -25,6 +25,7 @@
 					<image :src="row.goods_logo"></image>
 					<view class="row-right">
 						<view class="product-title">{{row.goods_title}}</view>
+						<view class="product-title">{{row.goods_spec}}</view>
 						<view class="product-msg">
 							<text>￥{{row.price_selling}}</text>
 							<text>x{{row.number}}</text>
@@ -109,14 +110,15 @@
 						<!-- <view class="status-one" @click.stop="cancelOrder()">
 							取消订单
 						</view> -->
-						<view class="status-two" @click.stop="confirm()">确认收货</view>
+					
+					<view class="status-one"  @click.stop="viewSend()">查看物流</view>
 					</view>
 					
 						
 				</view>
 			</view>
 			
-			<!-- 已完成 -->
+				<!-- 已签收 -->
 			<view v-if="order.status == 5">
 				<view class="detail-main-three">
 					<view class="three-title">
@@ -131,9 +133,35 @@
 				</view>
 				<view class="detail-main-four">
 					<view class="order-status" >
-						<view class="status-one" @click="deleteOrder()">
+						<!-- <view class="status-one" @click.stop="cancelOrder()">
+							取消订单
+						</view> -->
+						<view class="status-one"  @click.stop="viewSend()">查看物流</view>
+						<view class="status-one" @click.stop="service()">申请售后</view>
+						<view class="status-two" @click.stop="confirm()">确认收货</view>
+					</view>
+					
+						
+				</view>
+			</view>
+			<!-- 已完成 -->
+			<view v-if="order.status == 6&&order.is_coment==0">
+				<view class="detail-main-three">
+					<view class="three-title">
+						订单信息
+					</view>
+					<view class="three-main">
+						<view>订单编号：{{order.order_no}}</view>
+						<view>创建时间：{{order.create_at}}</view>
+						<view>支付方式：微信支付</view>
+						<view>付款时间：{{order.pay_at}}</view>
+					</view>
+				</view>
+				<view class="detail-main-four">
+					<view class="order-status" >
+						<!-- <view class="status-one" @click="deleteOrder()">
 							删除订单
-						</view>
+						</view> -->
 						<view class="status-two" @click="evalute">去评价</view>
 					</view>						
 				</view>
@@ -179,29 +207,21 @@
 				minute:"",
 				miao:"",
 				string:"",
-				order:'',
+				order:{},
 				status:["已取消","等待买家付款","等待买家付款","订单待发货","订单待收货","订单已完成"],
 				status2:["已取消","剩12小时50分钟自动关闭","剩12小时50分钟自动关闭","请耐心等候哦~","宝贝正在努力的向您奔跑~","欢迎您的再次光临！"],
 				goodsList: [
-					{
-						goods_id: 6,
-						img: '../../static/img/goods/p7.jpg',
-						name: '商品名称商品名称商品名称商品名称商品名称',
-						price: '￥168',
-						slogan: '1235人付款',
-						lprice: "$10",
-						num: 100,
-						good: "100%"
-					},
+					
 				],
 				datatime:"",
 			}
 		},
 		components: {uniCountdown},
 		onLoad(e){
-			console.log("e",e.id);
+			
 			this.order_no = e.id;
-			uni.request({
+			console.log(this.order_no)
+			this.request({
 				url:this.config.url+'order/detail',
 				method: 'POST',
 				data: {
@@ -213,6 +233,7 @@
 					if(res.data.code == 1){
 						this.goodsList = res.data.data.order_list;
 						this.order = res.data.data;
+						console.log("order",this.order)
 						let datatime=res.data.data.create_at;
 						this.getDistanceTime(datatime);
 						setInterval(()=>this.getDistanceTime(datatime),1000);
@@ -249,12 +270,52 @@
 
 				_this.string =  hour + "时" + minute + "分" + second + "秒";
 			},
-			
+			//查看物流
+			viewSend() {
+				console.log(this.order_no)
+				var _this=this;
+				this.request({
+					url: this.config.url + "order/express",
+					method: "POST",
+					data: {
+						
+					order_no: this.order_no,
+					},
+					success: res => {
+						console.log(res)
+						if(res.data.code==1){
+							var goods=JSON.stringify(this.order)
+							var info=JSON.stringify(res.data.data)
+							uni.navigateTo({
+								url:"/pages/viewsend/viewsend?info="+info+"&goods="+goods
+							})
+						}else{
+							uni.showToast({
+								title:res.data.info
+							})
+						}
+					}
+				})
+			},
+			//申请售后
+			service() {
+				uni.navigateTo({
+					url: "/pages/serType/serType"
+				})
+				uni.setStorage({
+					key: "regoods",
+					data: this.order,
+					success: () => {
+						console.log('保存换货数据成功')
+					}
+				})
+			},
 			//取消订单
 			cancelOrder(){
-				console.log(12222)
+				
 				 this.show_menu = true;
-				 
+				 this.num=index;
+				 this.order=order;
 			},
 			// 退货取消
 			cancel(){
@@ -265,7 +326,7 @@
 				if(this.desc){
 					
 					this.show_menu=false
-					uni.request({
+					this.request({
 						url:this.config.url+"order/cancle",
 						method:"POST",
 						data:{
@@ -301,24 +362,29 @@
 			},
 			//确认收货
 			confirm(){
-				uni.request({
+				
+				this.request({
 					url:this.config.url+"order/confirm",
 					data:{
-						token:this.token,
-						order_no:this.order_no
+						order_no:this.order.order_no
 					},
 					method:"post",
-					success(res) {
-						console.log(res)
-						uni.navigateTo({
-							url:"pages/confirm/confirm"
-						})
+					success:(res)=> {
+					
+						if(res.data.code==1){
+							var con=JSON.stringify(this.order)
+							console.log( "确认收货",res)
+							uni.navigateTo({
+								url:"/pages/confirm/confirm?con="+con
+							})
+						}
 					}
 				})
 			},
 				//删除订单
 			deleteOrder() {
-				uni.request({
+				console.log(this.order_no)
+				this.request({
 					url: this.config.url + "order/del",
 					method: "POST",
 					data: {
@@ -327,10 +393,12 @@
 					},
 					success: res => {
 						console.log(res)
-						this.orderList.splice(index, 1)
 						if (res.data.code == 1) {
 							uni.showToast({
 								title: "删除订单成功"
+							})
+							uni.navigateBack({
+								
 							})
 						}
 					}
@@ -338,9 +406,11 @@
 			},
 			//跳转订单
 			evalute(){
+				var goods=JSON.stringify(this.order)
 				uni.navigateTo({
-					url:"/pages/user/keep/sayFeel/sayFeel"
+					url:"/pages/user/keep/sayFeel/sayFeel?eval="+goods
 				})
+				
 			},
             showcityfour(id,name){
            	this.style4=id;
@@ -350,7 +420,7 @@
 		   toPayment() {
 		   	//调起支付接口
 		   	var _this = this;
-		   	uni.request({
+		   	this.request({
 		   		url: this.config.url + "order/pay",
 		   		method: "POST",
 		   		data: {
@@ -361,7 +431,7 @@
 		   			console.log(res)
 		   			if (res.data.code == 1) {
 		   				var pay = res.data.data.data
-		   				uni.requestPayment({
+		   				this.requestPayment({
 		   					provider: 'wxpay',
 		   					appid: pay.appId,
 		   					timeStamp: pay.timeStamp,
@@ -398,9 +468,6 @@
 		   	})
 		   
 		   },
-		},
-		mounted(){
-			console.log(this.order_no)
 		}
 		
 	}
@@ -436,7 +503,7 @@
 	.detail-main {
 		display: flex;
 		flex-direction: column;
-     
+       width:100%;
 		.detail-main-one {
 			display: flex;
 			align-items: center;
@@ -447,17 +514,20 @@
 			border-radius:10upx;
 			box-shadow: 0upx 5upx 20upx 0 rgba(230,230,230,1);
 			background: white;
-			img {
+			.img {
 				width: 29upx;
 				height: 36upx;
-				
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				image {
+					width: 29upx;
+					height: 36upx;
+					
+				}
 			}
 
-			image {
-				width: 29upx;
-				height: 36upx;
-				
-			}
+			
 
 			.one-right {
 				display: flex;
@@ -611,7 +681,7 @@
 				}
 
 				.status-one {
-
+                     margin-right:30upx;
 					border: 1px solid rgba(217, 217, 217, 1);
 					color: rgba(217, 217, 217, 1);
 				}
@@ -619,7 +689,7 @@
 				.status-two {
 					border: 1px solid rgba(0, 198, 93, 1);
 					color: rgba(0, 198, 93, 1);
-					margin:0 30upx;
+					margin-right:30upx;
 				}
 			}
 		}

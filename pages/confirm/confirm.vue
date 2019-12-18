@@ -15,7 +15,7 @@
 	export default {
 		data() {
 			return {
-				
+				con:[]
 			}
 		},
 		methods: {
@@ -26,9 +26,12 @@
 			},
 			evaluate(){
 				uni.navigateTo({
-					url:"/pages/user/keep/sayFeel/sayFeel"
+					url:"/pages/user/keep/sayFeel/sayFeel?eval="+this.con
 				})
 			}
+		},
+		onLoad(e) {
+			this.con=e.con
 		}
 	}
 </script>

@@ -79,6 +79,10 @@
           -ms-flex-pack: justify;
               justify-content: space-between;
       margin-left: 30rpx;
+      -webkit-box-flex: 1;
+      -webkit-flex: 1;
+          -ms-flex: 1;
+              flex: 1;
 }
 .product .row .row-right .product-title {
         font-size: 28rpx;

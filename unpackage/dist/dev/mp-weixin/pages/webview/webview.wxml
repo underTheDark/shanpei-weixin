@@ -1,0 +1,1 @@
+<view id="webview"><rich-text nodes="{{detail}}"></rich-text></view>

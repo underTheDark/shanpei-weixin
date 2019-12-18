@@ -2,7 +2,7 @@
 
 <script>
 	const config={
-		url:'https://shanpei.wsstreet.net/',
+		url:'https://app.hnfxwl.net/',
 		
 	}
 	export default config

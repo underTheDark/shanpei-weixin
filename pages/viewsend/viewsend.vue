@@ -3,35 +3,31 @@
 		<view class="product">
 			<view class="row" v-for="(row,index) in goodsList" :key="index">
 				<view class="row-left">
-					<image :src="row.img"></image>
+					<image :src="row.goods_logo"></image>
 				</view>
 				<view class="row-right">
-					<view class="product-title">{{row.name}}</view>
+					<view class="product-title">{{row.goods_title}}</view>
 					<view class="product-msg">
-						<text>{{row.price}}</text>
-						<text>{{row.num}}</text>
+						<text>￥{{row.price_selling}}</text>
+						<text>x{{row.number}}</text>
 					</view>
 				</view>
 			</view>
 		</view>
 		<view class="people">
 			<view class="people-left">
-				<image src="../../static/img/call.png"></image>
+				<image :src="info.fromuser.headimg"></image>
 				<view class="people-msg">
-					<text>快递员</text>
-					<text>dddddddd</text>
+					<text>{{info.fromuser.name}}</text>
+					<text>{{info.fromuser.phone}}</text>
 				</view>
 			</view>
-			<view class="people-right">
-				<image src="../../static/img/call.png"></image>
+			<view class="people-right" @click="callPhone">
+				<image src="../../static/img/phone.png"></image>
 			</view>
 		</view>
 		<view class="goods-status">
-			<uni-steps :data="[
-    {title:'买家下单',desc:'2018-11-11'},
-    {title:'卖家发货',desc:'2018-11-12'},
-    {title:'买家签收',desc:'2018-11-13'},
-    {title:'交易完成',desc:'2018-11-14'}]"
+			<uni-steps :data="status"
 			 direction="column" :active="0"
 			 active-color="#14CC21"
 			 >
@@ -49,23 +45,38 @@
 		},
 		data() {
 			return {
-				goodsList: [
-					{
-						goods_id: 9,
-						img: '../../static/img/goods/p10.jpg',
-						name: '商品名称商品名称商品名称商品名称商品名称',
-						price: '￥168',
-						slogan: '1235人付款',
-						lprice: "$10",
-						num: 100,
-						good: "100%"
-					}
-				]
+				goodsList: [],
+				info:{},
+				goods:{},
+				status:[],
+				phoneNumber:"" ,// 电话号码
 			}
 
 		},
 		methods: {
-
+            callPhone(){
+				uni.makePhoneCall({
+                   phoneNumber: this.phoneNumber
+})
+			}
+		},
+		onLoad(e) {
+			
+			this.goods=JSON.parse(e.goods)
+			
+			this.info=JSON.parse(e.info)
+			console.log(this.goods,this.info)
+			this.goodsList=this.goods.order_list;
+			this.phoneNumber=this.info.fromuser.phone;
+			this.express=this.info.express;
+			console.log(this.express)
+			this.express.forEach((item)=>{
+				var  obj={}
+				obj.desc=item.create_at
+				obj.title=item.content
+				this.status.push(obj)
+			})
+			
 		}
 	}
 </script>
@@ -102,7 +113,7 @@
 				flex-direction: column;
 				justify-content: space-between;
 				margin-left: 30upx;
-
+                 flex: 1;
 				.product-title {
 					font-size: 28upx;
 					font-family: PingFang-SC-Medium;
@@ -204,4 +215,11 @@
 	/deep/.uni-steps-item-title-container{
 		margin-bottom:80upx;
 	}
+   .goods-status .uni-steps-items.uni-steps-column .uni-steps-item-title {
+		white-space: wrap;
+		width:80%;
+		
+		overflow: visible;
+		
+	 }
 </style>

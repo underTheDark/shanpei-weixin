@@ -27,7 +27,56 @@
 page {
   background-color: #f3f3f3;
 }
+.topTabBar {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 10;
+  background-color: #f8f8f8;
+  height: 80rpx;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: space-around;
+      -ms-flex-pack: distribute;
+          justify-content: space-around;
+}
+.topTabBar .grid {
+    width: 20%;
+    height: 80rpx;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
+    color: #444;
+    font-size: 28rpx;
+}
+.topTabBar .grid .text {
+      height: 76rpx;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+          -ms-flex-align: center;
+              align-items: center;
+}
+.topTabBar .grid .text.on {
+        color: #f06c7a;
+        border-bottom: solid 4rpx #f06c7a;
+}
 .order-list {
+  padding-top: 80rpx;
   width: 100%;
 }
 .order-list .list {
@@ -107,7 +156,7 @@ page {
 .order-list .list .row .type .order-status {
           color: #14CC21;
 }
-.order-list .list .row .order-list {
+.order-list .list .row .order-list-item {
         display: -webkit-box;
         display: -webkit-flex;
         display: -ms-flexbox;
@@ -143,7 +192,18 @@ page {
 .order-list .list .row .order-info .right {
           width: 100%;
           margin-left: 10rpx;
-          position: relative;
+          display: -webkit-box;
+          display: -webkit-flex;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-orient: vertical;
+          -webkit-box-direction: normal;
+          -webkit-flex-direction: column;
+              -ms-flex-direction: column;
+                  flex-direction: column;
+          -webkit-justify-content: space-around;
+              -ms-flex-pack: distribute;
+                  justify-content: space-around;
 }
 .order-list .list .row .order-info .right .name {
             width: 100%;
@@ -155,11 +215,9 @@ page {
 }
 .order-list .list .row .order-info .right .spec {
             color: #a7a7a7;
-            font-size: 22rpx;
+            font-size: 28rpx;
 }
 .order-list .list .row .order-info .right .price-number {
-            position: absolute;
-            bottom: 0;
             width: 100%;
             display: -webkit-box;
             display: -webkit-flex;
@@ -212,7 +270,6 @@ page {
             color: #333;
 }
 .order-list .list .row .btns {
-        height: 80rpx;
         display: -webkit-box;
         display: -webkit-flex;
         display: -ms-flexbox;
@@ -254,44 +311,107 @@ page {
           border: solid 1rpx #14CC21;
           color: #14CC21;
 }
-.menu_mask {
+.pickbg {
   position: fixed;
+  bottom: 0;
   left: 0;
-  top: 0;
-  background-color: rgba(0, 0, 0, 0.3);
-  z-index: 1000000;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 98;
 }
-.menu_mask .menu_list {
-    width: 100vw;
-    height: 410rpx;
-    overflow: auto;
-    background-color: #fff;
-    position: absolute;
-    bottom: 0;
-    -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-    padding: 0 42rpx;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: column;
-        -ms-flex-direction: column;
-            flex-direction: column;
+.btn_c {
+  position: fixed;
+  bottom: 660rpx;
+  left: 0;
+  width: 90%;
+  height: 40rpx;
+  padding: 20rpx 5%;
+  background: #fff;
+  z-index: 99;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
-.menu_mask .menu_list .menu_item {
-      display: block;
-      width: 100%;
-      height: 106rpx;
-      font-size: 29rpx;
-      -webkit-box-sizing: border-box;
-              box-sizing: border-box;
-      border-bottom: 1px solid #d8d8d8;
-      color: #666;
-      line-height: 106rpx;
+.picker_w {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 600rpx;
+  background: #fff;
+  z-index: 99;
+  padding: 30rpx 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.return-title {
+  width: 90vw;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  color: #ccc;
+  font-size: 28rpx;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 40rpx;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+.li_four {
+  height: 600rpx;
+  width: 100%;
+  overflow-y: auto;
+  text-align: center;
+}
+.li_four .li_i {
+    font-size: 34rpx;
+    width: 100%;
+}
+.sign {
+  background: #C49569;
+  font-size: 28rpx;
+  color: #fff;
+  padding: 8rpx 24rpx;
+  border-radius: 10rpx;
+}
+.active {
+  color: #C49569;
+}
+.li_i {
+  font-size: 28rpx;
+  padding: 20rpx;
 }
 

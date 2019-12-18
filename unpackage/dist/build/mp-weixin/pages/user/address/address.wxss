@@ -121,6 +121,9 @@ view {
       -ms-flex-direction: column;
           flex-direction: column;
   background: white;
+  padding-bottom: 190rpx;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 .address-title {
   display: -webkit-box;

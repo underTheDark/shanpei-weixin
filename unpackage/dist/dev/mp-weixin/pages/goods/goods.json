@@ -1,6 +1,11 @@
 {
-  "usingComponents": {},
-  "navigationBarTitleText": "",
-  "navigationBarBackgroundColor": "white",
-  "onReachBottomDistance": 50
+  "navigationBarTitleText": "详情",
+  "navigationBarBackgroundColor": "#fff",
+  "onReachBottomDistance": 50,
+  "usingComponents": {
+    "uni-number-box": "/components/uni-number-box/uni-number-box",
+    "uni-rate": "/components/uni-rate/uni-rate",
+    "uni-load-more": "/components/uni-load-more/uni-load-more",
+    "uni-countdown": "/components/uni-countdown/uni-countdown"
+  }
 }

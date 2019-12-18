@@ -1,6 +1,10 @@
 {
-  "usingComponents": {},
   "navigationBarTitleText": "收藏",
   "navigationBarBackgroundColor": "#fff",
-  "navigationBarTextStyle": "white"
+  "onReachBottomDistance": 50,
+  "navigationBarTextStyle": "black",
+  "usingComponents": {
+    "uni-swipe-action": "/components/uni-swipe-action/uni-swipe-action",
+    "uni-load-more": "/components/uni-load-more/uni-load-more"
+  }
 }

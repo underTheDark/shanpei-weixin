@@ -47,10 +47,19 @@
 	//高德SDK
 	import amap from '@/common/SDK/amap-wx.js';
 	export default {
-		mounted() {
-			
+		onLoad() {
+			this.amapPlugin = new amap.AMapWX({
+				//高德地图KEY，随时失效，请务必替换为自己的KEY，参考：http://ask.dcloud.net.cn/article/35070
+				key: '5b9b64be2413fc19c26683fcf0de890f'
+			});
+			//定位地址
+			this.amapPlugin.getRegeo({
+				success: (data) => {
+					this.city = data[0].regeocodeData.addressComponent.city.replace(/市/g, ''); //把"市"去掉
+				}
+			});
 			this.showCategoryIndex = 0;
-			uni.request({
+			this.request({
 				url:this.config.url+'category',
 				data: {
                  token:this.token
@@ -87,18 +96,7 @@
 				this.headerPosition = "absolute";
 			}
 		},
-		onLoad() {
-			this.amapPlugin = new amap.AMapWX({
-				//高德地图KEY，随时失效，请务必替换为自己的KEY，参考：http://ask.dcloud.net.cn/article/35070
-				key: '5b9b64be2413fc19c26683fcf0de890f'
-			});
-			//定位地址
-			this.amapPlugin.getRegeo({
-				success: (data) => {
-					this.city = data[0].regeocodeData.addressComponent.city.replace(/市/g, ''); //把"市"去掉
-				}
-			});
-		},
+
 		methods: {
 			// 物品列表跳转
 			goodsList(index,child){
@@ -127,12 +125,20 @@
 		
 			//搜索跳转
 			toSearch() {
-				uni.showToast({
-					title: "建议跳转到新页面做搜索功能"
-				});
-			}
+				uni.navigateTo({
+					url:"/pages/search/search"
+				})
+			
+			},
 		},
-
+        	//分享页面 
+        onShareAppMessage: function() {
+        	var that = this;
+        	return {
+        		title: '快来看一看啊！',
+        		path: '/pages/tabBar/category',
+        	}
+        },
 	}
 </script>
 <style lang="scss">

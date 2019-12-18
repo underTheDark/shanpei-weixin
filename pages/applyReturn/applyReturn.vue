@@ -9,7 +9,7 @@
 					<image :src="item.goods_logo"></image>
 					<view class="product-right">
 						<view class="product-title">
-				               {{item.goods_item}}
+				               {{item.goods_title}}
 						</view>
 						<view class="product-size">
 							<text>{{item.goods_spec}}</text>
@@ -17,7 +17,7 @@
 						</view>
 						<view class="product-price">
 							<text>{{item.price_selling}}</text>
-							<text>{{item.number}}</text>
+							<text>x{{item.number}}</text>
 						</view>
 					</view>
 				</view>
@@ -26,13 +26,16 @@
 		</view>
 		<view class="return-reason">
 			<view class="reason-title">退款原因</view>
-			<textarea placeholder="请输入换货原因" v-model="reason"></textarea>
+			<textarea placeholder-class="font-size:28upx;" placeholder-style="color:#999999" placeholder="请输入换货原因" v-model="reason"></textarea>
 		</view>
 		<view class="upload-photo">
 			<view class="upload-title">上传凭证</view>
-			<view class="photo">
-				<image src="../../static/img/sayfeel/photo.png"></image>
-				<text>添加图片</text>
+			<view class="imgs-box">
+				<image class="imgs" :src="item" v-for="(item,num) in tempFilePaths" :key="num"></image>
+				<view class="photo" @click="addPhoto()">
+					<image src="../../static/img/sayfeel/photo.png"></image>
+					<text>添加图片</text>
+				</view>
 			</view>
 		</view>
 		<view class="submit" @click="applyReturn(goods.order_no)">
@@ -45,13 +48,50 @@
 	export default {
 		data() {
 			return {
-                  goods:{},
-				  reason:""   //退货原因
+                   goods:{},
+                  reason:""   ,//退货原因
+                  imgData:[],
+                  arr:[],
+                  tempFilePaths:[]
 			}
 		},
 		methods: {
+			addPhoto(index) {
+				
+				var _this=this;
+				uni.chooseImage({
+			
+					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+					sourceType: ['album'], //从相册选择
+					success: function(res) {
+						_this.tempFilePaths = res.tempFilePaths.concat(_this.tempFilePaths);
+						
+						const uploadTask = uni.uploadFile({
+							url: this.config.url+"/Upload",
+							filePath: _this.tempFilePaths[0],
+							name: 'file',
+							formData: {
+								'user': 'test'
+							},
+							success: function(uploadFileRes) {
+							var a=JSON.parse(uploadFileRes.data)
+							var b=a.data.url;
+							   
+								_this.arr.push(b)
+								
+								
+							}
+						});
+			
+			
+					},
+					error: function(e) {
+						console.log(e);
+					}
+				});
+			},
             applyReturn(order){
-				uni.request({
+				this.request({
 					url:this.config.url+"order/refund",
 					method:"POST",
 					data:{
@@ -59,11 +99,25 @@
 						order_no:order,
 						refund_type:1,
 						refund_desc:this.reason,
-						refund_covers:""
+						refund_covers:this.arr
 						
 					},
 					success: (res) => {
 						console.log("return",res)
+						if(res.data.code==1){
+							uni.showToast({
+								title:res.data.info
+							})
+							uni.navigateTo({
+								
+						
+							     url:"/pages/user/order_list/order_list"
+							})
+						}else{
+							uni.showToast({
+								title:res.data.info
+							})
+						}
 					}
 				})
 			}
@@ -73,9 +127,12 @@
 				key:"regoods",
 				success:(res)=>{
 					console.log("regoods",res)
-					this.goods=res.regoods;
+					this.goods=res.data;
 				}
 			})
+		},
+		onLoad(e) {
+			this.goods=JSON.parse(e.info)
 		}
 	}
 </script>
@@ -118,7 +175,7 @@
 				display: flex;
 				flex-direction: column;
 				margin-left: 20upx;
-
+                flex: 1;
 				.product-title {
 					font-size: 28upx;
 					font-family: PingFang-SC-Medium;
@@ -181,14 +238,22 @@
 			padding: 20upx 0;
 			font-size: 28upx;
 		}
+		 .imgs-box{
+			display: flex;
+			flex-wrap: wrap;
+			.imgs{
+				width: 160upx;
+				height: 160upx;
+			}
+		}
 
 		.photo {
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
 			align-items: center;
-			width: 120upx;
-			height: 120upx;
+			width: 160upx;
+			height: 160upx;
 			border: 1px dashed #cecece;
 
 			image {

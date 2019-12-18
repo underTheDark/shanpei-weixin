@@ -13,8 +13,27 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
 /*每个页面公共css */
-page{
+page {
 	/* background:rgba(247,247,247,1); */
+}
+.product-dec,
+.product-dec image,
+image,
+._img {
+	width: 100%;
+}
+.place {
+	border-top: 1px solid #F7F7F7;
 }
 

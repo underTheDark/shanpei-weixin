@@ -4,7 +4,7 @@
 		<view v-if="isCanUse">
 			<view>
 				<view class='header'>
-					
+					<image src="../../static/img/logo.jpg"></image>
 				</view>
 				<view class='content'>
 					<view>申请获取以下权限</view>
@@ -26,13 +26,15 @@
 		<view class="writePhone" v-if="writePhone">
 			<view class="mask"></view>
 			<view class="getphone">
-				<text class="title">请输入绑定手机号</text>
-<<<<<<< HEAD
-				<input type="text" v-model="phoneNumber"  class="phone-number" placeholder="请输入手机号"/>
-=======
-				<input type="text" v-model="phoneNumber" class="pnone-number" placeholder="请输入手机号" />
->>>>>>> 13e556c53e8074841c5a932647a9015b82b2f822
-				<view class="btns">
+				<view class="phone">
+					 <text class="title">请输入绑定手机号</text>
+					 <view class="del" @click="hidePhone">x</view>
+				</view>
+			
+
+				<input type="text" v-model="phoneNumber" placeholder-class="phone-number1"  class="phone-number" placeholder="请输入手机号"/>
+
+				<view class="btns" @click="confirm">
 					确定
 				</view>
 			</view>
@@ -50,17 +52,12 @@
 				code: "",
 				nickName: null,
 				avatarUrl: null,
-<<<<<<< HEAD
+
 				isCanUse:  false ,//默认为true
 			    getphone:"1",
 				writePhone:false,
 				phoneNumber:"",  //手机号
-=======
-				isCanUse: uni.getStorageSync('info') || true, //默认为true
-				getphone: "1",
-				writePhone: false,
-				phoneNumber: "", //手机号
->>>>>>> 13e556c53e8074841c5a932647a9015b82b2f822
+
 			};
 		},
 		methods: {
@@ -69,39 +66,31 @@
 
                 
 				let _this = this;
-				 _this.setOpenid()
+				 // _this.setOpenid()
 				uni.getUserInfo({
 					provider: 'weixin',
 					success: function(infoRes) {
 						 console.log("phon",infoRes)
 						_this.nickName = infoRes.userInfo.nickName; //昵称
 						_this.avatarUrl = infoRes.userInfo.avatarUrl; //头像
-<<<<<<< HEAD
+                 
 						_this.writePhone=true;	
                        
-=======
 
-						try {
-							//uni.setStorageSync('isCanUse', false); //记录是否第一次授权  false:表示不是第一次授权
-							// _this.updateUserInfo();
-
-						} catch (e) {}
->>>>>>> 13e556c53e8074841c5a932647a9015b82b2f822
 					},
 					fail(res) {}
 				});
 			},
 
-
+            hidePhone(){
+				this.writePhone=false;
+			},
 
 			// //登录
-<<<<<<< HEAD
+
 			 login() {
 				var _this = this;
-=======
-			login() {
-				let _this = this;
->>>>>>> 13e556c53e8074841c5a932647a9015b82b2f822
+
 				uni.showLoading({
 					title: '登录中...'
 				});
@@ -110,61 +99,50 @@
 				uni.login({
 					provider: 'weixin',
 					success: function(loginRes) {
-<<<<<<< HEAD
-						console.log(loginRes)
+
+						
 						 _this.code = loginRes.code;
                          _this.getOpenid()
 
 					    uni.hideLoading();
-					
-=======
-						console.log("loginRes",loginRes)
-						_this.code = loginRes.code;
-						
-						//	2.将用户登录code传递到后台置换用户SessionKey、OpenId等信息 
->>>>>>> 13e556c53e8074841c5a932647a9015b82b2f822
-					
-
-						uni.hideLoading()
-						
 
                     },
 				});
 			},
-			setOpenid(){
-				var _this=this;
+// 			setOpenid(){
+// 				var _this=this;
+// 
+// 					this.request({
+// 					url: this.config.url+"getOpenid",
+// 					data: {
+// 						code: _this.code,
+// 					},
+// 					method: 'POST',
+// 					success: (res) => {
+// 					  console.log("getopenid",res)
+// 				            if(res.data.code==2){
+// 								_this.OpenId = res.data.data.openid;
+// 							//	console.log("_this.Openid",_this.Openid);
+// 								//_this.getinfo();
+// 								_this.SessionKey = res.data.data.session_key;
+// 							}
+// 						
+// 				
+// 						uni.setStorage({
+// 							key: "sessionkey",
+// 							data: _this.SessionKey
+// 						})
+// 						//openId、或SessionKdy存储//隐藏loading
+// 				
+// 					}
+// 				});
+// 				
+// 			},
 
-					uni.request({
-					url: this.config.url+"getOpenid",
-					data: {
-						code: _this.code,
-					},
-					method: 'POST',
-					success: (res) => {
-					  console.log("getopenid",res)
-				            if(res.data.code==2){
-								_this.OpenId = res.data.data.openid;
-								console.log("_this.Openid",_this.Openid);
-								//_this.getinfo();
-								_this.SessionKey = res.data.data.session_key;
-							}
-						
-				
-						uni.setStorage({
-							key: "sessionkey",
-							data: _this.SessionKey
-						})
-						//openId、或SessionKdy存储//隐藏loading
-				
-					}
-				});
-				
-			},
-<<<<<<< HEAD
 			//	2.将用户登录code传递到后台置换用户SessionKey、OpenId等信息
 				getOpenid(){
 					
-					uni.request({
+					this.request({
 						url: this.config.url+"getOpenid",
 						data: {
 							code: this.code,
@@ -182,6 +160,7 @@
 									key:"info",
 									data:userinfo,
 									success:()=>{
+										
 										uni.reLaunch({
 											url:"/pages/tabBar/home"
 										})
@@ -193,80 +172,34 @@
 				},
 			//向后台更新信息
 
-			cancel(){
-				this.writePhone=false;
-=======
-			//向后台更新信息
-			updateUserInfo() {
-				this.setOpenid();
-			},
-			getinfo(){
-				let _this = this;
-					uni.request({
-						url: _this.config.url + "reg", //服务器端地址
-						data: {
-							openid: _this.OpenId,
-							headimg: _this.avatarUrl,
-							nickname: _this.nickName
-						},
-						method: 'POST',
-				
-						success: (res) => {
-							console.log( "22",res)
-							if (res.data.code == 1) {
-								var info = JSON.stringify(res.data.data)
-								uni.setStorage({
-									key: "info",
-									data: info,
-									success: (res) => {
-										console.log("用户信息保存成功")
-									}
-								})
-				
-							}
-						}
-				
-					});
->>>>>>> 13e556c53e8074841c5a932647a9015b82b2f822
-				
-			},
+	
 			cancel() {
 				this.writePhone = false;
 
 			},
 			//确认跳转home
-<<<<<<< HEAD
+
 			confirm(){
 				    
                 var _this=this;
 				var result = this.phoneNumber.replace(/(^\s+)|(\s+$)/g,"");
 				if(result.length<1){
-=======
-			confirm() {
-				console.log(1)
-				var _this = this;
-				var result = this.phoneNumber.replace(/(^\s+)|(\s+$)/g, "");
-				if (result.length < 1) {
->>>>>>> 13e556c53e8074841c5a932647a9015b82b2f822
-					console.log(2)
+
+					//console.log(2)
 					uni.showToast({
 						title: "请输入手机号",
 						duration: 1000
 					})
 				} else if (!(/^1[3456789]\d{9}$/.test(this.phoneNumber))) {
-					console.log(3)
+					//console.log(3)
 					uni.showToast({
 						title: "请输入正确的手机号",
 						duration: 1000
 					})
-<<<<<<< HEAD
+
 				}else{
-					
-=======
-				} else {
-					console.log(4)
->>>>>>> 13e556c53e8074841c5a932647a9015b82b2f822
-					uni.request({
+
+					this.request({
 						url: _this.config.url + "reg",
 						method: "POST",
 						data: {
@@ -276,13 +209,14 @@
 							phone: this.phoneNumber
 						},
 						success: (res) => {
-							console.log("reg", res)
+						//	console.log("reg", res)	;
 							if (res.data.code == 1) {
 								var userinfo = JSON.stringify(res.data.data)
 								uni.setStorage({
 									key: "info",
 									data: userinfo,
 									success: () => {
+									
 										uni.reLaunch({
 											url: "/pages/tabBar/home"
 										})
@@ -368,7 +302,7 @@
 		background: rgba(0, 0, 0, 0.5);
 		z-index: 98;
 	}
-<<<<<<< HEAD
+
 	.getphone{
 		 
 			 display: flex;
@@ -382,89 +316,106 @@
 			 z-index:100;
 			 border-radius:20upx;
 			 width:70%;
-			 height:300upx;
+			 
 			 background:white;
 			 padding-top:40upx;
-			 .title{
-				 
+			 .phone{
+				 display: flex;
+				 justify-content: center;
+				 align-items: center;
+				 position: relative;
+				 .title{
+					 font-size: 30upx;
+				 }
+				 .del{
+					 position: absolute;
+					 right:-100upx;
+					 color: #E6E6E6;
+					 font-size: 50upx;
+				 }
 			 }
+			
 			 .btns{
 				 display: flex;
 				 justify-content: center;
 				 align-items: center;
 				 height:100upx;
 				 width:100%;
-				 border-top:1px solid #E6E6E6;
-				 color:#14CC21;
+				 background: #00C70C;
+				 color:white;
 				 font-size: 34upx;
+				 border-radius: 0 0 15upx 15upx;
 			 }
 			 .phone-number{
 				 border:1px solid #E6E6E6;
 				 height:88upx;
+				 // min-height:88upx;
 				 margin:40upx 0;
 				 display: flex;
 				 justify-content: center;
 				 align-items: center;
-				 line-height:90upx;
+				 line-height:88upx;
 				 text-align: center;
 				 border-radius:88upx;
 			 }
+			 .phone-number1{
+			 			
+			 				 line-height:88upx;
+			 				 text-align: center;
+			 				 border-radius:88upx;
+			 }
 	}
 
-=======
 
-	.getphone {
 
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		box-shadow: 0 5upx 10upx #ccc;
-		position: fixed;
-		top: 50%;
-		margin-top: -150upx;
-		z-index: 100;
-		width: 60%;
-		padding: 0 10%;
-		height: 340upx;
-		background: white;
+// 	.getphone {
+// 
+// 		display: flex;
+// 		flex-direction: column;
+// 		justify-content: center;
+// 		align-items: center;
+// 		box-shadow: 0 5upx 10upx #ccc;
+// 		position: fixed;
+// 		top: 50%;
+// 		margin-top: -150upx;
+// 		z-index: 100;
+// 		width: 60%;
+// 		padding: 0 10%;
+// 		height: 340upx;
+// 		background: white;
+// 
+// 		.title {
+// 			margin-bottom: 30upx;
+// 		}
+// 
+// 		.btns {
+// 			display: flex;
+// 			justify-content: center;
+// 			align-items: center;
+// 
+// 			.confirm,
+// 			.cancel {
+// 				display: flex;
+// 				align-items: center;
+// 				justify-content: center;
+// 				width: 50%;
+// 
+// 			}
+// 
+// 		}
+// 
+// 		.phone-number {
+// 			border: 1px solid #ccc;
+// 			height: 60upx;
+// 			outline: none;
+// 			padding: 20upx;
+// 			margin-top: 30upx;
+// 		}
+// 	}
+// 
 
-		.title {
-			margin-bottom: 30upx;
-		}
-
-		.btns {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-
-			.confirm,
-			.cancel {
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				width: 50%;
-
-			}
-
-		}
-
-		.phone-number {
-			border: 1px solid #ccc;
-			height: 60upx;
-			outline: none;
-			padding: 20upx;
-			margin-top: 30upx;
-		}
-	}
-
-	// .mask{
-	// 	width:100%;
-	// 	height:100%;
-	// 	
-	// }
 	.btns {
-		margin-top: 40upx;
+		
 		display: flex;
 		justify-content: space-between;
 		width: 100%;
@@ -478,5 +429,5 @@
 		align-items: center;
 		justify-content: cneter;
 	}
->>>>>>> 13e556c53e8074841c5a932647a9015b82b2f822
+
 </style>

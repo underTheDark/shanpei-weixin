@@ -1,7 +1,8 @@
 {
-  "usingComponents": {},
-  "navigationBarTitleText": "我的订单",
-  "navigationBarBackgroundColor": "#f8f8f8",
-  "backgroundColorTop": "#f3f3f3",
-  "backgroundColorBottom": "#ffffff"
+  "navigationStyle": "custom",
+  "onReachBottomDistance": 50,
+  "usingComponents": {
+    "uni-nav-bar": "/components/uni-nav-bar/uni-nav-bar",
+    "uni-load-more": "/components/uni-load-more/uni-load-more"
+  }
 }

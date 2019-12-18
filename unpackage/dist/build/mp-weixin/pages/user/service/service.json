@@ -1,6 +1,6 @@
 {
   "usingComponents": {},
   "navigationBarTitleText": "我的售后",
-  "navigationBarBackgroundColor": "#f06c7a",
-  "navigationBarTextStyle": "white"
+  "navigationBarBackgroundColor": "#fff",
+  "navigationBarTextStyle": "black"
 }

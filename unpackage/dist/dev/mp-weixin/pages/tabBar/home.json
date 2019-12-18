@@ -1,7 +1,9 @@
 {
-  "usingComponents": {},
   "navigationBarTextStyle": "black",
   "enablePullDownRefresh": true,
   "onReachBottomDistance": 50,
-  "navigationBarTitleText": "闪配"
+  "navigationBarTitleText": "主页",
+  "usingComponents": {
+    "uni-load-more": "/components/uni-load-more/uni-load-more"
+  }
 }

@@ -129,7 +129,7 @@
 							this.goods.push(quick)
 
 							//确认订单信息
-							uni.request({
+							this.request({
 								url: this.config.url + "order/sure",
 								method: "post",
 								data: {
@@ -149,7 +149,7 @@
 										if (this.orderType == 0) {
 											this.address = false;
 										} else if (this.orderType == 1) {
-											this.getgoods_name == 1;
+											this.getgoods_name =1;
 											this.address = true;
 											this.addrList = res.data.data.address //默认地址
 											this.addrId = res.data.data.address.id; //默认地址id
@@ -171,7 +171,7 @@
 							// var quick={goods_id:res.data.id,goods_number:res.data.goods_number,goods_spec:res.data.goods_spec}
 							this.goods = res.data.goods;
 							//确认订单信息
-							uni.request({
+							this.request({
 								url: this.config.url + "order/sure",
 								method: "post",
 								data: {
@@ -250,7 +250,7 @@
 							this.goods.push(quick)
 				
 							//确认订单信息
-							uni.request({
+							this.request({
 								url: this.config.url + "order/sure",
 								method: "post",
 								data: {
@@ -275,7 +275,7 @@
 							// var quick={goods_id:res.data.id,goods_number:res.data.goods_number,goods_spec:res.data.goods_spec}
 							this.goods = res.data.goods;
 							//确认订单信息
-							uni.request({
+							this.request({
 								url: this.config.url + "order/sure",
 								method: "post",
 								data: {
@@ -327,7 +327,7 @@
 			},
 			toPay() {
 				//商品列表
-				uni.request({
+				this.request({
 					url: this.config.url + "order/order",
 					method: "post",
 					data: {
@@ -343,7 +343,7 @@
 							this.order_no = res.data.data.order_no; //获取订单编号
 
 							//调起支付接口
-							uni.request({
+							this.request({
 								url: this.config.url + "order/pay",
 								method: "POST",
 								data: {
@@ -381,12 +381,17 @@
 												})
 											}
 										});
+									}else{
+										uni.showToast({
+											title: res.data.info,
+											duration: 1000
+										})
 									}
 								}
 							})
 						} else if (res.data.code == 0) {
 							uni.showToast({
-								title: "提交订单失败",
+								title: res.data.info,
 								duration: 1000
 							})
 						}

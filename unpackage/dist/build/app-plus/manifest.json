@@ -56,6 +56,7 @@
         }
       }
     },
+    "value": "cangshutuan haopinzhe uni-app",
     "allowsInlineMediaPlayback": true,
     "safearea": {
       "background": "#ffffff",
@@ -64,7 +65,7 @@
       }
     },
     "uni-app": {
-      "compilerVersion": "2.1.0",
+      "compilerVersion": "2.1.1",
       "control": "v8",
       "nvueCompiler": "weex"
     },

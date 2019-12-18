@@ -109,14 +109,11 @@
 	
 
 	export default {
-<<<<<<< HEAD
+
 		onShow(){
 				// 自提点
-=======
-		onShow() {
-			// 自提点
->>>>>>> 13e556c53e8074841c5a932647a9015b82b2f822
-			uni.request({
+
+			this.request({
 				
 				url: this.config.url + "member/station",
 				method: "post",
@@ -124,23 +121,23 @@
 					token: this.token
 				},
 				success: (res) => {
-				console.log(111111111)
+				
 					this.selfList = res.data.data;
 					this.selfLen = res.data.data.length;
-						console.log(res, res.data.data.length, "zi")
+						//console.log(res, res.data.data.length, "zi")
 				}
 			
 			})
 			//我的收货地址
-			uni.request({
+			this.request({
 				url: this.config.url + "member/address",
 				method: "POST",
 				data: {
 					token: this.token
 				},
 				success: (res) => {
-					console.log(11111111221)
-					console.log(res, res.data.data.length, "wo")
+					
+					//console.log(res, res.data.data.length, "wo")
 					this.homeList = res.data.data;
 					this.homeLen = res.data.data.length;
 				}
@@ -148,11 +145,7 @@
 		},
 		mounted() {
 
-<<<<<<< HEAD
-		
-=======
-			
->>>>>>> 13e556c53e8074841c5a932647a9015b82b2f822
+
 		},
 		
 		data() {
@@ -171,7 +164,7 @@
 		onLoad(e) {
 			if (e.type == 'select') {
 				this.isSelect = true;
-				console.log(11111)
+				
 			}
 		},
 		onReady() {
@@ -193,7 +186,7 @@
 						var home = _this.homeList;
 						console.log("hoem", home)
 						this.homeList.splice(row, 1)
-						uni.request({
+						this.request({
 							url: this.config.url + "address/del",
 							data: {
 								token: this.token,
@@ -223,7 +216,7 @@
 					confirmColor: "#14CC21",
 					success: res => {
 
-						uni.request({
+						this.request({
 							url: this.config.url + "station/del",
 							data: {
 								token: this.token,

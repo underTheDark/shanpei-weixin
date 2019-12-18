@@ -27,7 +27,7 @@
 				"navigationBarTextStyle": "black",
 				"enablePullDownRefresh": true,
 				"onReachBottomDistance": 50,
-				"navigationBarTitleText": "闪配",
+				"navigationBarTitleText": "主页",
 				"app-plus": {
 					"titleNView": false, //禁用原生导航栏
 					"softinputNavBar": "none"
@@ -42,7 +42,7 @@
 			"path": "pages/tabBar/category",
 			"style": {
 				"navigationBarTextStyle": "black",
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "分类",
 				"app-plus": {
 					"titleNView": false, //禁用原生导航栏
 					"bounce": "none"
@@ -54,7 +54,7 @@
 		{
 			"path": "pages/tabBar/user",
 			"style": {
-				"enablePullDownRefresh": true,
+				
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTitleText": "个人中心",
 				
@@ -67,15 +67,17 @@
 		{
 			"path": "pages/goods/goods-list",
 			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": true
+				"navigationBarTitleText": "商品列表",
+				"navigationBarBackgroundColor": "#fff",
+				
+				"onReachBottomDistance": 50
 			}
 		},
 		{
 			"path": "pages/goods/goods",
 			"style": {
-				"navigationBarTitleText": "",
-				"navigationBarBackgroundColor": "white",
+				"navigationBarTitleText": "详情",
+				"navigationBarBackgroundColor": "#fff",
 				"onReachBottomDistance": 50,
 				"h5": {
 					"titleNView": false
@@ -97,17 +99,20 @@
 		}, {
 			"path": "pages/user/order_list/order_list",
 			"style": {
-				"navigationBarTitleText": "我的订单",
-				"navigationBarBackgroundColor": "#f8f8f8",
-				"backgroundColorTop": "#f3f3f3",
-				"backgroundColorBottom": "#ffffff"
+				// "navigationBarTitleText": "我的订单",
+				// "navigationBarBackgroundColor": "#f8f8f8",
+				// "backgroundColorTop": "#f3f3f3",
+				// "backgroundColorBottom": "#ffffff",
+				"navigationStyle":"custom",
+				"onReachBottomDistance":50
 			}
 		},
 		{
 			"path": "pages/detail/detail",
 			"style": {
 				"navigationBarTitleText": "订单详情",
-				"navigationBarBackgroundColor": "#f8f8f8",
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTextStyle": "black",
 				"backgroundColorTop": "#f3f3f3",
 				"backgroundColorBottom": "#ffffff"
 			}
@@ -116,6 +121,7 @@
 			"path": "pages/tabBar/cart",
 			"style": {
 				"enablePullDownRefresh": true,
+				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "购物车",
 				"app-plus": {
@@ -128,7 +134,8 @@
 			"path": "pages/viewsend/viewsend",
 			"style": {
 				"navigationBarTitleText": "查看物流",
-				"navigationBarBackgroundColor": "#f8f8f8",
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTextStyle": "black",
 				"backgroundColorTop": "#f3f3f3",
 				"backgroundColorBottom": "#ffffff"
 			}
@@ -139,12 +146,14 @@
 			"style": {
 				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "消息列表",
-				"navigationBarBackgroundColor": "#fff"
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTextStyle": "black"
 			}
 		}, {
 			"path": "pages/msg/chat/chat",
 			"style": {
-				"navigationBarBackgroundColor": "#f2f2f2",
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTextStyle": "black",
 				"backgroundColorTop": "#e5e5e5",
 				"backgroundColorBottom": "#e5e5e5",
 				"app-plus": {
@@ -157,9 +166,10 @@
 		, {
 			"path": "pages/user/keep/keep",
 			"style": {
-				"navigationBarTitleText": "我的收藏",
-				"navigationBarBackgroundColor": "#f06c7a",
-				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "我的评价",
+				"navigationBarBackgroundColor": "#fff",
+				"onReachBottomDistance":50,
+				"navigationBarTextStyle": "black",
 				"app-plus": {
 					"bounce": "none"
 				}
@@ -170,8 +180,8 @@
 			"path": "pages/user/keep/sayFeel/sayFeel",
 			"style": {
 				"navigationBarTitleText": "评价",
-				"navigationBarBackgroundColor": "#f06c7a",
-				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTextStyle": "black",
 				"app-plus": {
 					"bounce": "none"
 				}
@@ -180,8 +190,8 @@
 			"path": "pages/user/credit/credit",
 			"style": {
 				"navigationBarTitleText": "积分",
-				"navigationBarBackgroundColor": "#f06c7a",
-				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTextStyle": "black",
 				"app-plus": {
 					"bounce": "none"
 				}
@@ -192,7 +202,8 @@
 			"style": {
 				"navigationBarTitleText": "收藏",
 				"navigationBarBackgroundColor": "#fff",
-				"navigationBarTextStyle": "white",
+				"onReachBottomDistance": 50,
+				"navigationBarTextStyle": "black",
 				"app-plus": {
 					"bounce": "none"
 				}
@@ -202,8 +213,8 @@
 			"path": "pages/user/service/service",
 			"style": {
 				"navigationBarTitleText": "我的售后",
-				"navigationBarBackgroundColor": "#f06c7a",
-				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTextStyle": "black",
 				"app-plus": {
 					"bounce": "none"
 				}
@@ -215,7 +226,8 @@
 				"navigationBarBackgroundColor": "#ffffff",
 				"navigationBarTitleText": "地址管理",
 				"backgroundColorTop": "#ffffff",
-				"backgroundColorBottom": "#ffffff"
+				"backgroundColorBottom": "#ffffff",
+				"onReachBottomDistance":50
 			}
 		},
 
@@ -281,10 +293,28 @@
 		}
 
 	   
+        ,{
+            "path" : "pages/getgoods/getgoods",
+            "style" : {
+				"navigationBarTitleText": "收货",
+				"navigationBarBackgroundColor": "#fff"
+			}
+        }
+        ,{
+            "path" : "pages/search/search",
+            "style" : {
+				"navigationBarTitleText": "搜索",
+				"navigationBarBackgroundColor": "#fff"
+			}
+        }
+        ,{
+            "path" : "pages/webview/webview",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "",
+		"navigationBarTitleText": "优递鲜",
 		"navigationBarBackgroundColor": "#ffffff",
 		"backgroundColor": "#ffffff",
 		"backgroundColorTop": "#ffffff",
@@ -327,6 +357,9 @@
 		"scope.userLocation": {
 			"desc": "你的位置信息将用于小程序位置接口的效果展示"
 		}
-	}
+	},
+	"navigateToMiniProgramAppIdList": [
+        "wx6885acbedba59c14"
+    ]
 
 }

@@ -1,18 +1,11 @@
 <template>
 	<view classs='container'>
-		<view class="status" :style="{ opacity: afterHeaderOpacity }"></view>
-		
+		<!-- <view class="status" :style="{ opacity: afterHeaderOpacity }"></view> -->
+
 		<!-- 底部菜单 -->
 		<view class="footer">
 			<view class="icons">
-				<!-- <view class="box" @tap="share">
-					<view class="icon fenxiang"></view>
-					<view class="text">分享</view>
-				</view>
-				<view class="box" @tap="toChat">
-					<view class="icon kefu"></view>
-					<view class="text">客服</view>
-				</view> -->
+			
 				<view class="box" @tap="keep">
 					<view class="icon" :class="[isKeep?'shoucangsel':'shoucang']"></view>
 					<view class="text">{{isKeep?'已':''}}收藏</view>
@@ -26,46 +19,10 @@
 			</view>
 			<view class="btn">
 				<view class="joinCart" @tap="joinCart">选择规格</view>
-				<!-- <view class="buy" @tap="buy()">立即购买</view> -->
+				
 			</view>
 		</view>
-		<!-- share弹窗 -->
-		<view class="share" :class="shareClass" @touchmove.stop.prevent="discard" @tap="hideShare">
-			<view class="mask"></view>
-			<view class="layer" @tap.stop="discard">
-				<view class="h1">分享</view>
-				<view class="list">
-					<view class="box">
-						<image src="../../static/img/share/wx.png"></image>
-						<view class="title">
-							微信好友
-						</view>
-					</view>
-					<view class="box">
-						<image src="../../static/img/share/pyq.png"></image>
-						<view class="title">
-							朋友圈
-						</view>
-					</view>
-					<view class="box">
-						<image src="../../static/img/share/wb.png"></image>
-						<view class="title">
-							新浪微博
-						</view>
-					</view>
-					<view class="box">
-						<image src="../../static/img/share/qq.png"></image>
-						<view class="title">
-							QQ
-						</view>
-					</view>
-				</view>
-				<view class="btn" @tap="hideShare">
-					取消
-				</view>
-			</view>
-
-		</view>
+		
 		<!-- 服务-模态层弹窗 -->
 		<view class="popup service" :class="serviceClass" @touchmove.stop.prevent="discard" @tap="hideService">
 			<!-- 遮罩层 -->
@@ -95,17 +52,18 @@
 							<text> ￥{{goodsData.price}}</text>
 							<text>库存:&nbsp; {{goodsData.number_stock}}</text>
 						</view>
-						<view class="hidden"  @tap="hideSpec">x</view>
+						<view class="hidden" @tap="hideSpec">x</view>
 					</view>
-				
+
 					<view class="pro-content" v-for="(gui,index) in guiList" :key="index">
-						    <h2 @click="addTitle(index)">{{gui.name}}</h2>
-					        <view  class="product-color">
-								<text @click="addColor(gui,gui.list,color,colorIndex)" v-for="(color,colorIndex) in gui.list" :key="colorIndex" :class="{checked:color.checked}">
-									 {{color.name}}
-								</text>
-							</view>
-						
+						<h2 @click="addTitle(index)">{{gui.name}}</h2>
+						<view class="product-color">
+							<text @click="addColor(gui,gui.list,color,colorIndex)" v-for="(color,colorIndex) in gui.list" :key="colorIndex"
+							 :class="{checked:color.checked}">
+								{{color.name}}
+							</text>
+						</view>
+
 					</view>
 					<view class="product-num">
 						<text>数量</text>
@@ -116,8 +74,8 @@
 				</view>
 
 				<view class="spec-btn">
-					
-					<view class="cancelB" @click="cancel()" >加入购物车</view>
+
+					<view class="cancelB" @click="cancel()">加入购物车</view>
 					<view class="confirmB" @tap="buy()">{{limitgoods==0 ?"预热中":"立即购买"}}</view>
 				</view>
 			</view>
@@ -147,13 +105,30 @@
 					<view class="evaluate-good">好评{{goodsData.good_percent}}%</view>
 				</view>
 			</view>
+			<view class="loseTime" v-if="limit==1">
+				<view class="loseTime_one">
+					{{limitStatus==0?"距开始":limitStatus==1 ? "距结束":limitStatus==2?"已结束":""}}
+				</view>
+				<view class="loseTime_two">
+					<uni-countdown color="#FFFFFF" 
+					background-color="#00B26A" 
+					border-color="#00B26A" 
+					:show-day="false"
+					 :show-colon="true"
+					:hour="hourTime" 
+					:minute="minuteTime"
+					 :second="secondTime"
+					 @timeup="timeup">
+					</uni-countdown>
+				</view>
+			</view>
 
 		</view>
 		<!-- 服务-规则选择 -->
 		<view class="info-box spec">
 			<view class="row">
 				<view class="add-color">库存</view>
-				
+
 				<view class="resdius-num">{{goodsData.number_stock}}</view>
 			</view>
 			<view class="row" @tap="showSpec(false)">
@@ -172,7 +147,7 @@
 		<!-- 评价 -->
 		<view class="info-box comments" id="comments">
 			<view class="row">
-				<view class="text">评价 ({{goodsData.comment_num}})</view>
+				<view class="text">评价 ({{goodsData.total_comment}})</view>
 				<view class="arrow" @tap="toRatings">
 					<view class="show" @tap="showComments(goodsData.id)">
 						更多
@@ -180,22 +155,22 @@
 					</view>
 				</view>
 			</view>
-			<view class="comment" @tap="toRatings" v-for="(commentList,index) in comment" :key=index>
+			<view class="comment" v-for="(commentList,index) in comment" :key=index>
 				<view class="user-info">
 					<view class="comment-user-info">
 
 						<view class="people-icon">
-							<image :src="goodsData.comment[0].member.heading" class="people-icon" />
+							<image :src="info.headimg" class="people-icon" />
 						</view>
 						<view class="star">
 							<view class="star-name">{{goodsData.comment[0].member.nickname}}</view>
 							<view>
-							     <uni-rate size="20" disabled="true" :value="goodsData.comment[0].comment_star"></uni-rate>
+								<uni-rate size="20" disabled="true" :value="goodsData.comment[0].comment_star"></uni-rate>
 							</view>
 						</view>
 					</view>
 					<view class="comment-time">
-						{{goodsData.comment.create_at}}
+						{{goodsData.comment_time}}
 					</view>
 				</view>
 				<view class="content">
@@ -212,17 +187,14 @@
 		<view class="description">
 			<view class="title"> 商品详情 </view>
 			<view class="product-detail">
-				<view >
-					<text>产品</text>
-					<text>特点</text>
-				</view>
+
 				<view class="product-dec" v-html="detail">
 					<!-- <rich-text :nodes="detail"></rich-text> -->
 				</view>
 			</view>
 		</view>
 		<!-- 推荐 -->
-		<view class="recomment" >
+		<view class="recomment">
 			<view class="recomment-title ">推荐商品</view>
 			<view class="recomment-contain">
 				<view class="recomment-list" @click="gotui(tui.id)" v-for="(tui,tuiIndex) in tuiList" :key="tuiIndex">
@@ -236,15 +208,15 @@
 							{{tui.title}}
 						</view>
 						<view class="product-eval">
-							<view class="hot-product" v-show="tui.is_hot==1">热销</view>
+							<view class="hot-product" v-if="tui.is_hot==1">热销</view>
 							<view class="evaluate-num">{{tui.number_sales}}人已购买</view>
 
 							<view class="evaluate-good">{{tui.good_percent}}%好评</view>
 						</view>
 						<view class="product-info">
-							<view class="price">{{tui.price}}</view>
+							<view class="price">￥{{tui.price}}</view>
 
-							<view class="slogan">{{tui.market_price}}</view>
+							<view class="slogan">￥{{tui.market_price}}</view>
 
 						</view>
 
@@ -253,25 +225,32 @@
 				<uni-load-more :status="status" :showIcon="showIcon"></uni-load-more>
 			</view>
 		</view>
-        <!-- 咨询客服 -->
-		<view class="people-service" @tap="toChat">
-			<text>咨询</text>
-			<text>客服</text>
-		</view>
-		
+		<!-- 咨询客服 -->
+		<button open-type="contact" bindcontact="handleContact">
+			<view class="people-service">
+				<text>咨询</text>
+				<text>客服</text>
+			</view>
+		</button>
+
+
 	</view>
 </template>
 
 <script>
 	import uniNumberBox from "@/components/uni-number-box/uni-number-box.vue"
-	import uniRate from "@/components/uni-rate/uni-rate.vue"  //星星评分
-    import uniLoadMore from "@/components/uni-load-more/uni-load-more.vue"
+	import uniRate from "@/components/uni-rate/uni-rate.vue" //星星评分
+	import uniLoadMore from "@/components/uni-load-more/uni-load-more.vue";
+	import uniCountdown from "@/components/uni-countdown/uni-countdown.vue" //倒计时
+
+
 	export default {
-		
+
 		components: {
 			uniNumberBox,
 			uniRate,
-			uniLoadMore
+			uniLoadMore,
+			uniCountdown
 		},
 		data() {
 			return {
@@ -280,15 +259,15 @@
 				afterHeaderzIndex: 10, //层级
 				beforeHeaderOpacity: 1, //不透明度
 				afterHeaderOpacity: 0, //不透明度
-				id:"",  //商品id,
-				proNum:1, //加入购物车数量
+				id: "", //商品id,
+				proNum: 1, //加入购物车数量
 				//是否显示返回按钮
 				// #ifndef MP
 				showBack: true,
 				// #endif
-                evaImg:[], //评价上传图片
-                tuiList:[], //推荐商品
-                guiList:[], //规格
+				evaImg: [], //评价上传图片
+				tuiList: [], //推荐商品
+				guiList: [], //规格
 				//轮播主图数据
 				swiperList: [],
 				//轮播图下标
@@ -299,27 +278,33 @@
 				specClass: '', //规格弹窗css类，控制开关动画
 				shareClass: '', //分享弹窗css类，控制开关动画
 				// 商品信息
-			    goodsData:{},
+				goodsData: {},
 				selectSpec: null, //选中规格
 				isKeep: false, //收藏
 				// 商品详情信息
-				detail:'',
-				goodsDetail:{}, //商品详情
-			   comment:[], //评论信息
-			   // 商品明细
-			   goods_list:[],
-			   // 规格合集
-			   size_list:[],
-			   // 选中规格
-			   selected_size:'',
-			   totalList: [],
-			   loadingText: '正在加载...',
-			   	showIcon: false,
-			   	status: "more",
-			   current_page: 0,
-			   total: "",
-			   last_page: "1",
-			   limitgoods:""
+				detail: '',
+				goodsDetail: {}, //商品详情
+				comment: [], //评论信息
+				// 商品明细
+				goods_list: [],
+				// 规格合集
+				size_list: [],
+				// 选中规格
+				selected_size: '',
+				totalList: [],
+				loadingText: '正在加载...',
+				showIcon: false,
+				status: "more",
+				current_page: 0,
+				total: "",
+				last_page: "1",
+				limitgoods: "",
+				info: {}, //用户信息
+				limit: "", //限时商品
+				limitStatus: 0, //限购状态
+				minuteTime: 0, //分钟
+				hourTime: 0, //小时
+				secondTime: 0, //秒
 			};
 		},
 		onLoad(option) {
@@ -328,9 +313,15 @@
 			this.showBack = false;
 			// #endif
 			//option为object类型，会序列化上个页面传递的参数
-			//console.log("goods",option); //打印出上个页面传递的参数。
-			this.id=option.id;
-			this.goodsDetail=option;
+			//console.log("goods", option); //打印出上个页面传递的参数。
+			if (option.limit == 1) {
+				this.limit = "1";
+
+			} else {
+				this.limit = "0"
+			}
+			this.id = option.id;
+			this.goodsDetail = option;
 		},
 		onReady() {
 			this.calcAnchor(); //计算锚点高度，页面数据是ajax加载时，请把此行放在数据渲染完成事件中执行以保证高度计算正确
@@ -349,123 +340,175 @@
 		// },
 		//上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
 		onReachBottom() {
-		  		// 当前页小于最后一页才调用
-		  	if (this.current_page < this.last_page) {
-		  		this.getRecommendList();
-		  	}
-			
+			// 当前页小于最后一页才调用
+			if (this.current_page < this.last_page) {
+				this.getRecommendList();
+			}
+
 		},
 		mounted() {
-            uni.request({
-            	url: this.config.url+"goods/detail",
-            	data: {
-                       token:this.token,
-					   id:this.id
-            		
-            	},
-            	method: "post",
-            	success: (res) => {
-                     console.log("goods",res,res.data.data.goods_list);
-					 if(res.data.code==1){
-						 
-						 this.goodsData =res.data.data;
-						 this.limitgoods=res.data.data.coud_buy;
-						 this.comment=this.goodsData.comment;
-						 //this.evaImg=this.goodsData.commit[0].comment_covers;
-						 this.isKeep=this.goodsData.is_collect;
-						 this.guiList=this.goodsData.specs;
-						 // 轮播图
-						 this.swiperList=res.data.data.image.split("|");
-						 console.log(this.swiperList)
-						 // 商品详情
-						 this.detail=res.data.data.content;
-						 console.log("de",this.detail)
-						 console.log(this.detail);
-						 // 商品明细
-						 this.goods_list=res.data.data.goods_list;
-					 }
-            	
-					
-				
-            	}
+			this.limitStatus=0;
+			this.request({
+				url: this.config.url + "goods/detail",
+				data: {
+					token: this.token,
+					id: this.id
+
+				},
+				method: "post",
+				success: (res) => {
+					console.log("goods", res, res.data.data.goods_list);
+					if (res.data.code == 1) {
+
+						this.goodsData = res.data.data;
+						if (this.limit) {
+							this.limitTime() //倒计时
+						}
+
+						this.limitgoods = res.data.data.coud_buy;
+						var arr2 = this.goodsData.comment;
+						if (arr2.length > 0) {
+							this.comment.push(arr2[0])
+						}
+
+						//this.evaImg=this.goodsData.commit[0].comment_covers;
+						this.isKeep = this.goodsData.is_collect;
+						this.guiList = this.goodsData.specs;
+						// 轮播图
+						this.swiperList = res.data.data.image.split("|");
+
+						// 商品详情
+						var imgContent = res.data.data.content;
+
+						// this.detail=imgContent.replace(/\<h2/gi, '<h2 style="font-size:18px;text-indent:2px;" ');
+
+						this.detail = imgContent.replace(/\<img/gi, '<img class="img_teshu"');
+
+						// 商品明细
+						this.goods_list = res.data.data.goods_list;
+					}
+
+
+
+				}
+
+			});
+			//用户头像
+			uni.getStorage({
+				key: "info",
+				success: res => {
+
+					this.info = JSON.parse(res.data)
+				}
+			})
             
-            });
-			//   // 推荐商品
-			//   uni.request({
-			// 	url: this.config.url+"recommend",
-			// 	data: {
-   //              token:this.token
-			// 		
-			// 		
-			// 	},
-			// 	method: "post",
-			// 	success: (res) => {
-			//          console.log('res1',res);
-			// 		var len;
-			// 	     if(res.data.code==1){
-			// 			 this.totalList=res.data.data.data;
-			// 			 this.cur_page=this.data.data.current_page;
-			// 			 this.tol_page=this.data.data.last_page
-			// 			 if (this.totalList.length < 10) {
-			// 			 	len = this.totalList.length;
-			// 			 } else {
-			// 			 	len = 10;
-			// 			 }
-			// 			 for (var i = 0; i < len; i++) {
-			// 			 	this.tuiList.push(this.totalList[i])
-			// 			 	//	console.log(this.productList)
-			// 			 }
-			// 		 }
-			// 		
-			// 	}
-			// 
-			// })
+			
 		},
 		methods: {
-			// 购买数量
-			bindChange(val){
-				this.proNum=val;
-			},
-			addTitle(index){
-				console.log(index)
-			},
-			addColor(size,arr,color,index){
-				if(arr.length>0){
-					arr.forEach(item=>{
-						item.checked=false;
-					})
-					color.checked=true;
-					this.$forceUpdate();
-					let check=size.name+":"+color.name;
-					// 单个规格项的规格值
-					size.checked=check;
-					// 所有规格项的规格值
-					let all_check='';
-					this.guiList.forEach(item=>{
-						all_check+=";"+item.checked;
-					})
-					all_check=all_check.substr(1);
+			timeup(e){
+				if(this.limitStatus==0){
+					this.limitStatus=1
+				}else if(this.limitStatus==1){
 					
-					console.log('all_check',all_check);
+					this.limitStatus=2
+				}
+			},
+			// 倒计时
+			limitTime() {
+				var date = new Date()
+				var startTime = (new Date(this.goodsData.start_time)).getTime(); //得到毫秒数  
+				var endTime =  (new Date(this.goodsData.end_time)).getTime(); //得到毫秒数  
+				var currentTime = date.getTime()
+				
+				if (currentTime - startTime < 0) {
+					
+					this.limitStatus = 0;
+					this.secondTime = parseInt((startTime - currentTime) / 1000);
+					this.getTime() //获取时分秒
+
+
+				} else if (currentTime - startTime >= 0 && currentTime - endTime <= 0) {
+					
+					this.limitStatus = 1;
+					this.secondTime = parseInt((endTime - currentTime) / 1000);
+					
+					this.getTime() //获取时分秒
+				} else if (currentTime - endTime > 0) {
+					
+					this.limitStatus = 2;
+					this.hourTime = 0;
+					this.minuteTime = 0;
+					this.secondTime = 0;
+				}
+
+			},
+			// 获取时分秒
+			getTime() {
+				if (this.secondTime > 60) { //如果秒数大于60，将秒数转换成整数
+					//获取分钟，除以60取整数，得到整数分钟
+					this.minuteTime = parseInt(this.secondTime / 60);
+					
+					//获取秒数，秒数取佘，得到整数秒数
+					this.secondTime = parseInt(this.secondTime % 60);
+					//如果分钟大于60，将分钟转换成小时
+					if (this.minuteTime > 60) {
+						//获取小时，获取分钟除以60，得到整数小时
+						this.hourTime = parseInt(this.minuteTime / 60);
+						//获取小时后取佘的分，获取分钟除以60取佘的分
+						this.minuteTime = parseInt(this.minuteTime % 60);
+						
+					}
+				}
+				
+			},
+			//客服
+			handleContact(e) {
+
+			},
+			// 购买数量
+			bindChange(val) {
+				this.proNum = val;
+			},
+			addTitle(index) {
+
+			},
+			addColor(size, arr, color, index) {
+				if (arr.length > 0) {
+					arr.forEach(item => {
+						item.checked = false;
+					})
+					color.checked = true;
+					this.$forceUpdate();
+					let check = size.name + ":" + color.name;
+					// 单个规格项的规格值
+					size.checked = check;
+					// 所有规格项的规格值
+					let all_check = '';
+					this.guiList.forEach(item => {
+						all_check += ";" + item.checked;
+					})
+					all_check = all_check.substr(1);
+
+					console.log('all_check', all_check);
 					// 规格项跟商品对比goos_list显示选中
-					this.goods_list.forEach(item=>{
-						if(item.goods_spec==all_check){
-							this.goodsData.price=item.price_selling;
-							this.goodsData.number_stock=item.number_stock;
+					this.goods_list.forEach(item => {
+						if (item.goods_spec == all_check) {
+							this.goodsData.price = item.price_selling;
+							this.goodsData.number_stock = item.number_stock;
 							// 选中规格项
-							this.selected_size=item.goods_spec;
+							this.selected_size = item.goods_spec;
 						}
 					})
 				}
-				
-				
+
+
 			},
 			// 获取推荐列表
 			getRecommendList() {
 				this.status = "loading";
 				// 首页为你推荐
-				uni.request({
-					url: this.config.url+'recommend', //仅为示例，并非真实接口地址。
+				this.request({
+					url: this.config.url + 'recommend', //仅为示例，并非真实接口地址。
 					data: {
 						token: this.token,
 						page: Number(this.current_page) + 1,
@@ -473,7 +516,7 @@
 					method: "post",
 					success: (res) => {
 						var len;
-						// console.log("res.data", res.data);
+
 						// 商品列表
 						this.totalList = res.data.data.data;
 						//每页10 
@@ -486,7 +529,7 @@
 							this.tuiList.push(this.totalList[i])
 							//	console.log(this.productList)
 						}
-			
+
 						this.current_page = res.data.data.current_page;
 						this.last_page = res.data.data.last_page;
 						this.total = res.data.data.data.total;
@@ -496,53 +539,53 @@
 						}
 					}
 				});
-			
+
 			},
 			//加入购物车
-			cancel(){
+			cancel() {
 				// 判断加入购物车
-				if(this.selected_size && this.selected_size.indexOf('undefined')==-1){
-					uni.request({
-						url:this.config.url+"goods/car",
-						method:"post",
-						data:{
-							token:this.token,
-							goods_id:this.id,
-							goods_spec:this.selected_size,
-							number:this.proNum
+				if (this.selected_size && this.selected_size.indexOf('undefined') == -1) {
+					this.request({
+						url: this.config.url + "goods/car",
+						method: "post",
+						data: {
+							token: this.token,
+							goods_id: this.id,
+							goods_spec: this.selected_size,
+							number: this.proNum
 						},
-						success:function(data){
-							console.log("data",data);
-							if(data.data.code==1){
+						success: function(data) {
+							console.log("data", data);
+							if (data.data.code == 1) {
 								uni.showToast({
 									title: '加入成功',
-									icon:"none"
+									icon: "none"
 								});
-							}else{
+							} else {
 								uni.showToast({
 									title: data.data.info,
-									icon:"none"
+									icon: "none"
 								});
 							}
 						}
 					})
-				}else{
+				} else {
 					uni.showToast({
 						title: '请选中完整规格',
-						icon:"none"
+						icon: "none"
 					});
 				}
 			},
-		 //	跳转推荐详情
-		  gotui(index){
-			 uni.navigateTo({
-			 	url:"/pages/goods/goods?id="+index
-			 })
-		 },
+			//	跳转推荐详情
+			gotui(index) {
+				uni.navigateTo({
+					url: "/pages/goods/goods?id=" + index
+				})
+			},
 			//跳转购物车
-			skipCart(){
+			skipCart() {
 				uni.switchTab({
-					url:"/pages/tabBar/cart"
+					url: "/pages/tabBar/cart"
 				})
 			},
 			//轮播图指示器
@@ -574,61 +617,75 @@
 			//收藏
 			keep() {
 				this.isKeep = this.isKeep ? false : true;
-				uni.request({
-					url:this.config.url+"goods/collect",
-					data:{
-						token:this.token,
-						goods_id:this.id,
+				this.request({
+					url: this.config.url + "goods/collect",
+					data: {
+						token: this.token,
+						goods_id: this.id,
 					},
-					method:"post",
-					success:function(res){
+					method: "post",
+					success: function(res) {
 						console.log(res)
 					}
 				})
 			},
 			// 加入购物车
 			joinCart() {
-				if (this.selectSpec == null) {
-					return this.showSpec(() => {
-						uni.showToast({
-							title: "已加入购物车"
+				if(this.limitStatus==1 ||this.limit==0){
+					if (this.selectSpec == null) {
+						return this.showSpec(() => {
+							uni.showToast({
+								title: "已加入购物车"
+							});
 						});
+					}
+					uni.showToast({
+						title: "已加入购物车"
 					});
+				}else{
+					uni.showToast({
+						title:"请查看限购时间"
+					})
 				}
-				uni.showToast({
-					title: "已加入购物车"
-				});
 			},
 			//立即购买
 			buy() {
-				if(this.selected_size && this.selected_size.indexOf('undefined')==-1){
-				var goods=JSON.stringify(this.goodsDetail)
-					//跳转到结算面
-				
-				    goods=this.goodsData;
-					goods.goods_spec=this.selected_size;
-					goods.goods_number=this.proNum;
-					
-					let data={};
+
+				if (this.goodsData.coud_buy == 1 && this.goodsData.number_stock > 0) {
+					if (this.selected_size && this.selected_size.indexOf('undefined') == -1) {
+						var goods = JSON.stringify(this.goodsDetail)
+						//跳转到结算面
+
+						goods = this.goodsData;
+						goods.goods_spec = this.selected_size;
+						goods.goods_number = this.proNum;
+						console.log("goodsdat", this.goodsData)
+						let data = {};
 						data.isCart = 0;
 						data.goods = goods
-					uni.setStorage({
-						key:"cart",
-						data:data,
-						success: () => {
-							
-						}
-					})
-					uni.navigateTo({
-						url:"/pages/order/confirmation?iscart=1"
-					})
-					
-				}else{
+						uni.setStorage({
+							key: "cart",
+							data: data,
+							success: () => {
+
+							}
+						})
+						uni.navigateTo({
+							url: "/pages/order/confirmation?iscart=1"
+						})
+
+					} else {
+						uni.showToast({
+							title: "请选择完整规格",
+							icon: 'none',
+						})
+					}
+				} else {
 					uni.showToast({
-						title:"请选择完整规格",
-						icon:'none',
+						title: "此商品尚不能购买"
 					})
 				}
+
 
 			},
 			//跳转确认订单页面（模板）
@@ -661,8 +718,10 @@
 				})
 			},
 			//跳转评论列表
-			showComments(goodsid) {
-			
+			showComments() {
+				uni.navigateTo({
+					url: 'ratings/ratings?id=' + this.id
+				})
 			},
 			//选择规格
 			setSelectSpec(index) {
@@ -733,7 +792,7 @@
 			},
 			//规格弹窗
 			showSpec(fun) {
-				console.log('show');
+				
 				this.specClass = 'show';
 				this.specCallback = fun;
 			},
@@ -759,15 +818,23 @@
 </script>
 
 <style lang="scss">
-	.container{
-		width:100vw;
-		height:100vh;
+	.img_teshu {
+		width: 100% !important;
+
+	}
+
+
+	.container {
+		width: 100vw;
+		height: 100vh;
 		overflow: auto;
 	}
-	img{
-		width:100%;
-		height:100%;
+
+	img {
+		width: 100%;
+		height: 100%;
 	}
+
 	page {
 		background-color: #f8f8f8;
 	}
@@ -816,24 +883,30 @@
 		font-family: 'HMfont-home';
 		src: url('data:application/x-font-woff2;charset=utf-8;base64,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') format('woff2');
 	}
-   // 人工服务
-	.people-service{
+
+	// 人工服务
+	.people-service {
 		position: fixed;
-		bottom:171upx;
-		right:25upx;
-		background:linear-gradient(0deg,rgba(255,142,28,0.99),rgba(255,179,73,0.99));
-		color:white;
+		bottom: 171upx;
+		right: 25upx;
+		background: linear-gradient(0deg, rgba(255, 142, 28, 0.99), rgba(255, 179, 73, 0.99));
+		color: white;
 		font-size: 24upx;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		
-		width:84upx;
-		height:84upx;
-		border-radius: 84upx;
-		
+
+		width: 100upx;
+		height: 100upx;
+		border-radius: 100upx;
+
+		text {
+			font-size: 24upx;
+			line-height: 30upx;
+		}
 	}
+
 	.icon {
 		font-family: 'HMfont-home' !important;
 		font-size: 26upx;
@@ -899,7 +972,7 @@
 			}
 		}
 	}
-    
+
 	.status {
 		width: 100%;
 		height: 0;
@@ -1121,10 +1194,21 @@
 		.title {
 			font-size: 28upx;
 		}
+		.loseTime{
+			display: flex;
+			justify-content: flex-end;
+			align-items: center;
+			padding:10upx;
+			.loseTime_one{
+				font-size: 28upx;
+				color:#00C70C;
+				margin-right: 20upx;
+			}
+		}
 	}
 
 	.spec {
-		
+
 		.row {
 			display: flex;
 			justify-content: space-between;
@@ -1132,13 +1216,15 @@
 			font-size: 29upx;
 			color: #cecece;
 			height: 100upx;
-			.resdius-num,.add-color{
-				font-size:28upx;
-font-family:PingFang-SC-Regular;
-font-weight:400;
-color:rgba(102,102,102,1);
+
+			.resdius-num,
+			.add-color {
+				font-size: 28upx;
+				font-family: PingFang-SC-Regular;
+				font-weight: 400;
+				color: rgba(102, 102, 102, 1);
 			}
-			
+
 		}
 	}
 
@@ -1199,12 +1285,13 @@ color:rgba(102,102,102,1);
 						font-size: 25upx;
 						color: #cecece;
 						margin-left: 20upx;
-                        .star-name{
-							padding-left:10upx;
-							font-size:28upx;
-font-family:PingFang-SC-Regular;
-font-weight:400;
-color:rgba(102,102,102,1);
+
+						.star-name {
+							padding-left: 10upx;
+							font-size: 28upx;
+							font-family: PingFang-SC-Regular;
+							font-weight: 400;
+							color: rgba(102, 102, 102, 1);
 						}
 					}
 				}
@@ -1229,14 +1316,16 @@ color:rgba(102,102,102,1);
 			}
 		}
 	}
-  // 商品详情
+
+	// 商品详情
 	.description {
-		
-		
-      background:white;
+
+
+		background: white;
+
 		.title {
-			padding-left:4%;
-			
+			padding-left: 4%;
+
 			height: 80upx;
 			display: flex;
 			font-weight: 800;
@@ -1245,23 +1334,25 @@ color:rgba(102,102,102,1);
 			font-size: 32upx;
 			color: #999;
 			background: white;
-			border-bottom:1px solid #E6E6E6;
+			border-bottom: 1px solid #E6E6E6;
 		}
 
 		.product-detail {
 			width: 100vw;
-            view:nth-child(1){
+
+			view:nth-child(1) {
 				margin: 30upx auto;
-				display:flex;
+				display: flex;
 				flex-direction: column;
 				justify-content: center;
 				align-items: center;
-				width:100upx;
-				height:100upx;
+				width: 100upx;
+				height: 100upx;
 				border-radius: 50%;
 				border: 1px dashed #aaa;
 				font-size: 24upx;
 			}
+
 			// text {
 			// 	
 			// 	disply: flex;
@@ -1273,25 +1364,27 @@ color:rgba(102,102,102,1);
 
 			.product-dec {
 				width: 100vw;
-				
+
 				display: flex;
 				flex-direction: column;
 				align-items: center;
-					justify-content: center;
-					h2{
-						font-size: 24upx;
-						color:#333;
+				justify-content: center;
+
+				h2 {
+					font-size: 24upx;
+					color: #333;
+				}
+
+				p {
+					width: 100vw;
+
+					img {
+						width: 100% !important;
+						height: 300upx;
 					}
-					p{
-						width: 100vw;
-						
-						img{
-							width: 100% !important;
-							height: 300upx;
-						}
-					}
-				
-				
+				}
+
+
 			}
 		}
 	}
@@ -1300,13 +1393,14 @@ color:rgba(102,102,102,1);
 	.recomment {
 		margin-top: 20upx;
 		padding-bottom: 200upx;
-        background:white;
+		background: white;
+
 		.recomment-title {
 			height: 100upx;
 			border-bottom: 1px solid #cecece;
 			font-size: 32upx;
 			display: flex;
-			padding-left:4%;
+			padding-left: 4%;
 			align-items: center;
 			font-weight: 900;
 			color: #999;
@@ -1335,72 +1429,75 @@ color:rgba(102,102,102,1);
 					}
 				}
 
-                 .recomment-list-right {
-                 	display: flex;
-                 	flex-direction: column;
-                    border-bottom:1px solid rgba(230,230,230,1);
-                   width:100%;
-                 	.product-name {
-                 
-                 		display: -webkit-box;
-                 		-webkit-box-orient: vertical;
-                 		-webkit-line-clamp: 2;
-                 		text-align: justify;
-                 		overflow: hidden;
-                 		text-overflow: ellipsis;
-                 		font-size: 30upx;
-                 	}
-                 
-                 	.product-info {
-                 		display: flex;
-                 		align-items: center;
-                        margin:10upx 0;
-                 
-                 		.price {
-                 			color: #e65339;
-                 			font-size: 30upx;
-                 			font-weight: 600;
-                 		}
-                 
-                 		.slogan {
-                 			font-size: 24upx;
-                 			font-family: PingFang-SC-Regular;
-                 			font-weight: 400;
-                 			text-decoration: line-through;
-                 			color: rgba(153, 153, 153, 1);
-                 			margin-left: 20upx;
-                 		}
-                 	}
-                 
-                 	.product-eval {
-                 
-                 		display: flex;
-                 		margin-top:40upx;
-                 		align-items: center;
-                 		color: rgba(102, 102, 102, 1);
-                 		font-size: 22upx;
-                        .hot-product{
-							width:54upx;
-height:30upx;
-border:1px solid rgba(199,22,34,1);
-border-radius:15px;
-color:rgba(199,22,34,1);
-font-size: 20upx;
-display: flex;
-justify-content: center;
-align-items: center;
-margin-right:20upx;
+				.recomment-list-right {
+					display: flex;
+					flex-direction: column;
+					border-bottom: 1px solid rgba(230, 230, 230, 1);
+					width: 100%;
+
+					.product-name {
+
+						display: -webkit-box;
+						-webkit-box-orient: vertical;
+						-webkit-line-clamp: 2;
+						text-align: justify;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						font-size: 30upx;
+					}
+
+					.product-info {
+						display: flex;
+						align-items: center;
+						margin: 10upx 0;
+
+						.price {
+							color: #e65339;
+							font-size: 30upx;
+							font-weight: 600;
 						}
-                 		.evaluate-good {
-                 			margin-left: 20upx;
-                 		}
-                 	}
-                 }
+
+						.slogan {
+							font-size: 24upx;
+							font-family: PingFang-SC-Regular;
+							font-weight: 400;
+							text-decoration: line-through;
+							color: rgba(153, 153, 153, 1);
+							margin-left: 20upx;
+						}
+					}
+
+					.product-eval {
+
+						display: flex;
+						margin-top: 40upx;
+						align-items: center;
+						color: rgba(102, 102, 102, 1);
+						font-size: 22upx;
+
+						.hot-product {
+							width: 54upx;
+							height: 30upx;
+							border: 1px solid rgba(199, 22, 34, 1);
+							border-radius: 15px;
+							color: rgba(199, 22, 34, 1);
+							font-size: 20upx;
+							display: flex;
+							justify-content: center;
+							align-items: center;
+							margin-right: 20upx;
+						}
+
+						.evaluate-good {
+							margin-left: 20upx;
+						}
+					}
+				}
 			}
 		}
 	}
 
-	
+
 
 	.footer {
 		position: fixed;
@@ -1492,24 +1589,29 @@ margin-right:20upx;
 		height: 100%;
 		z-index: 20;
 		display: none;
-    .spec-btn{
-		width:100%;
-		height:100upx;
-		display:flex;
-		align-items: center;
-		.confirmB,.cancelB{
-			width:50%;
-			height:100%;
+
+		.spec-btn {
+			width: 100%;
+			height: 100upx;
 			display: flex;
-			justify-content: center;
 			align-items: center;
-			font-size: 28upx;
+
+			.confirmB,
+			.cancelB {
+				width: 50%;
+				height: 100%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				font-size: 28upx;
+			}
+
+			.confirmB {
+				color: #fff;
+				background: rgba(20, 204, 33, 1);
+			}
 		}
-		.confirmB{
-			color: #fff;
-			background: rgba(20, 204, 33, 1);
-		}
-	}
+
 		.mask {
 			position: fixed;
 			top: 0;
@@ -1524,7 +1626,7 @@ margin-right:20upx;
 			z-index: 22;
 			bottom: -70%;
 			width: 100%;
-			
+
 			height: 70%;
 			border-radius: 20upx 20upx 0 0;
 			background-color: #fff;
@@ -1544,12 +1646,12 @@ margin-right:20upx;
 					.hidden {
 						width: 24px;
 						height: 24px;
-						color:#CECECE;
+						color: #CECECE;
 						font-size: 50upx;
 						position: absolute;
 						right: 0;
 						top: 0upx;
-                        display: flex;
+						display: flex;
 						justify-content: center;
 						align-items: center;
 					}
@@ -1581,40 +1683,44 @@ margin-right:20upx;
 						}
 					}
 				}
-            // 规格
-			  .pro-content{
-				  display: flex;
-				  flex-direction: column;
-				  h2{
-					  margin-top:20upx;
-					  margin-bottom:20upx;
-					  font-size:30upx;
-color:rgba(51,51,51,1);
-				  }
-				  .product-color {
-				  	display: flex;
-				  	font-size: 26upx;
-				  	.checked{
-						color:rgba(20, 204, 33, 1);
-						background:rgba(20,204,33,.3);
-						border:1px solid #FF14CC21;
-					}
-				   
-				  	text {
-				  	    display: flex;
-						align-items: center;
-						justify-content: center;
-						background: rgba(245, 245, 245, 1);
-						width: 234upx;
-						height: 56upx;
+
+				// 规格
+				.pro-content {
+					display: flex;
+					flex-direction: column;
+
+					h2 {
+						margin-top: 20upx;
+						margin-bottom: 20upx;
+						font-size: 30upx;
 						color: rgba(51, 51, 51, 1);
-						margin-right:20upx;
-						border:1px solid rgba(245, 245, 245, 1);
-				  	}
-			
-				  }
-			  }
-				
+					}
+
+					.product-color {
+						display: flex;
+						font-size: 26upx;
+
+						.checked {
+							color: rgba(20, 204, 33, 1);
+							background: rgba(20, 204, 33, .3);
+							border: 1px solid #FF14CC21;
+						}
+
+						text {
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							background: rgba(245, 245, 245, 1);
+							width: 234upx;
+							height: 56upx;
+							color: rgba(51, 51, 51, 1);
+							margin-right: 20upx;
+							border: 1px solid rgba(245, 245, 245, 1);
+						}
+
+					}
+				}
+
 
 				.product-num {
 					display: flex;

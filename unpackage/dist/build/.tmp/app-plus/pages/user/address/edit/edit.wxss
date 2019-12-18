@@ -139,9 +139,9 @@
             -ms-flex-pack: end;
                 justify-content: flex-end;
 }
-.content .row .input .textarea {
-        min-height: 120rpx;
-        height: 360rpx;
+.content .row .input input {
+        height: 60rpx;
+        line-height: 60rpx;
 }
 .content .last-row {
     display: -webkit-box;

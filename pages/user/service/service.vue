@@ -1,27 +1,30 @@
 <template>
 	<view>
-		<view class="service-list">
-			<view class="service-one">订单编号：2222222</view>
+		<view class="place"></view>
+		<view class="service-list" v-for="(item,index) in goodsList" :key="index">
+			<view class="service-one">订单编号：{{item.order_no}}</view>
 			<view class="service-two">
-				<view class="service-two-left">
-					<image src="../../../static/img/category/banner.jpg"></image>
-
-				</view>
-				<view class="service-two-right">
-					<text>
-						kai/贝印 日本进口面粉筛 手持糖粉筛 筛
-						网滤网 筛粉杯子 ...
-					</text>
-					<view class="price-num">
-						<text class="price">11 &nbsp;&nbsp;M</text>
-						<text>x1</text>
+				<view class="list" v-for="(row,num) in item.order_list" :key="num">
+					<view class="service-two-left">
+						<image :src="row.goods_logo"></image>
+					
+					</view>
+					<view class="service-two-right">
+						<text>
+							{{row.goods_title}}
+						</text>
+						<view class="price-num">
+							<text class="price">{{row.goods_spec}}</text>
+							<text>x{{row.number}}</text>
+						</view>
 					</view>
 				</view>
+				
 			</view>
 			<view class="service-three">
 				<text>退</text>
-				<text>仅退款</text>
-				<text>退款成功</text>
+				<text>{{item.refund_type==1?"退货退款":item.refund_type==2?"换货":""}}</text>
+				<text>{{item.refund_state==0?"未退款":item.refund_state==1?"待退款":item.refund_state==2?"已退款":""}}</text>
 			</view>
 		</view>
 	</view>
@@ -31,21 +34,27 @@
 	export default {
 		data() {
 			return {
-
+                  goodsList:[]
 			}
 		},
 		methods: {
 
 		},
 		mounted(){
-			// uni.request({
-			// 	url:this.config.url+"order/service",
-			// 	method:"POST",
-			// 	data:{
-			// 		token:this.token,
-			// 		order_no:
-			// 	}
-			// })
+			this.request({
+				url:this.config.url+"order/service",
+				method:"POST",
+				data:{
+					token:this.token,
+					
+				},
+				success:res=>{
+					console.log(res)
+					if(res.data.code==1){
+						this.goodsList=res.data.data.data;
+					}
+				}
+			})
 		}
 	}
 </script>
@@ -55,7 +64,9 @@
 		background: rgba(245, 245, 245, 1);
 
 	}
-
+    .place {
+    	border-top:1px solid #F5F5F5;
+    }
 	.service-list {
 		display: flex;
 		flex-direction: column;
@@ -78,12 +89,17 @@
 
 		.service-two {
 			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			padding: 10upx 4%;
-			background: rgba(245, 245, 245, 1);
-
+			flex-direction: column;
+			width:100%;
+            .list{
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 10upx 4%;
+				background: rgba(245, 245, 245, 1);
+			}
 			.service-two-left {
+				margin-right:20upx;
 				image {
 					width: 180upx;
 					height: 180upx;
@@ -94,7 +110,7 @@
 			.service-two-right {
 				display: flex;
 				flex-direction: column;
-
+                width:100%;
 				text {
 
 					font-size: 28upx;

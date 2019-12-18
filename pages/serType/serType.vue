@@ -10,7 +10,7 @@
 					<image :src="item.goods_logo"></image>
 					<view class="product-right">
 						<view class="product-title">
-				               {{item.goods_item}}
+				               {{item.goods_title}}
 						</view>
 						<view class="product-size">
 							<text>{{item.goods_spec}}</text>
@@ -18,21 +18,21 @@
 						</view>
 						<view class="product-price">
 							<text>{{item.price_selling}}</text>
-							<text>{{item.number}}</text>
+							<text>x{{item.number}}</text>
 						</view>
 					</view>
 				</view>
 			</view>
 			
 		</view>
-		<view class="return" @click="returnGoods">
+		<view class="return" @click="returnGoods(this.goods)">
 			<view class="return-left">
 				<text>退</text>
 				<text>退款退货</text>
 			</view>
 			<image src="../../static/img/youce-jiantou.png"></image>
 		</view>
-		<view class="return exchange" @click="exchange">
+		<view class="return exchange" @click="exchange(this.goods)">
 			<view class="return-left">
 				<text>换</text>
 				<text>申请换货</text>
@@ -52,13 +52,15 @@
 		},
 		methods: {
 			returnGoods(){
+				var info=JSON.stringify(this.goods)
 				uni.navigateTo({
-					url:"/pages/applyReturn/applyReturn"
+					url:"/pages/applyReturn/applyReturn?info="+info
 				})
 			},
 			exchange(){
+				var info=JSON.stringify(this.goods)
 				uni.navigateTo({
-					url:"/pages/applyChange/applyChange"
+					url:"/pages/applyChange/applyChange?info="+info
 				})
 			}
 		},
@@ -70,7 +72,7 @@
 				key:"regoods",
 				success:(res)=>{
 					console.log("regoods",res)
-					this.goods=res.regoods;
+					this.goods=res.data;
 				}
 			})
 		}
@@ -113,6 +115,7 @@
 		  }
 		  .product-right{
 			  display: flex;
+			  width:100%;
 			  flex-direction: column;
 			  margin-left:20upx;
 			  .product-title{
@@ -169,6 +172,9 @@ color:rgba(51,51,51,1);
 			  font-size: 16upx;
 			  text-align: center;
 			  margin-right:20upx;
+			  display: flex;
+			  justify-content: center;
+			  align-items: center;
 		  }
 		    text:nth-child(2){
 		  			font-size:28upx;

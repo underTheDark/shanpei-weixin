@@ -133,7 +133,7 @@
 
 					&-title {
                         text-overflow: ellipsis;
-                        white-space: nowrap;
+                        white-space: wrap;
                         overflow: hidden;
                     }
 

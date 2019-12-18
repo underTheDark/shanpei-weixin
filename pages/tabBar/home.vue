@@ -1,5 +1,5 @@
 <template>
-	<view class="home" v-if="home">
+	<view class="home">
 		<!-- 状态栏 -->
 		<!-- <view class="status" :style="{ position: headerPosition,top:statusTop,opacity: afterHeaderOpacity}"></view> -->
 		<!-- 顶部导航栏 -->
@@ -17,7 +17,7 @@
 			<!-- 右侧图标按钮 -->
 			<view class="icon-btn">
 
-				<view class="hongdian"></view>
+				<view class="hongdian" v-if="msgList.length>0"></view>
 
 				<view class="hongdian" v-show="msg"></view>
 
@@ -31,7 +31,7 @@
 			<view class="swiper-box">
 				<swiper circular="true" autoplay="true" @change="swiperChange">
 					<swiper-item v-for="(swiper,index) in swiperList" :key="swiper.id" current="index">
-						<image :src="swiper.cover" @tap="toSwiper(swiper,index)"></image>
+						<image :src="swiper.cover" @tap="toSwiper(index)"></image>
 					</swiper-item>
 
 				</swiper>
@@ -52,8 +52,8 @@
 		</view>
 		<view class="bj-color"></view>
 		<!-- 广告图 -->
-		<view class="banner">
-			<image src="../../static/img/category/jijian.png"></image>
+		<view class="banner" @click="skipGetgoods">
+			<image :src="sendUrl"></image>
 		</view>
 		<!-- 活动区 -->
 		<view class="promotion">
@@ -65,16 +65,21 @@
 						<text>SALES</text>
 					</view>
 				</view>
+				<view class="promotion-head-right" @click="moreLimit">
+					更多
+				</view>
 			</view>
-			<view class="hot-list">
-				<view class="hot-list-item" v-for="(row, index) in limitList" @tap="toGoods(row)" :key="index">
-					<view class="item-img">
-						<image :src="row.logo" />
-					</view>
-					<view class="item-title">{{row.title}}</view>
-					<view class="item-price">
-						<text>{{row.price}}</text>
+			<view class="limit-list">
+				<view class="limit-list-item" v-for="(row, index) in limitList" @tap="limitGoods(row)" :key="index">
+					<!-- <view class="item-price">
+						<view class="title">{{row.title}}</view>
+						<text class="price">{{row.price}}元起</text>
 						<text>{{row.market_price}}</text>
+					</view> -->
+
+
+					<view class="item-img">
+						<image :src="row.cover" />
 					</view>
 				</view>
 			</view>
@@ -100,8 +105,8 @@
 					</view>
 					<view class="item-title">{{row.title}}</view>
 					<view class="item-price">
-						<text>{{row.price}}</text>
-						<text>{{row.market_price}}</text>
+						<text>￥{{row.price}}</text>
+						<text>￥{{row.market_price}}</text>
 					</view>
 				</view>
 			</view>
@@ -118,8 +123,8 @@
 					<image mode="widthFix" :src="product.logo"></image>
 					<view class="name">{{ product.title }}</view>
 					<view class="info">
-						<view class="price">{{ product.price }}</view>
-						<view class="slogan">{{ product.market_price }}</view>
+						<view class="price">￥{{ product.price }}</view>
+						<view class="slogan">￥{{ product.market_price }}</view>
 					</view>
 				</view>
 			</view>
@@ -144,8 +149,26 @@
 			uniLoadMore
 		},
 		mounted() {
-				 this.init();	
-				
+			
+			this.init();
+
+			uni.hideLoading();
+			//系统消息
+			this.request({
+				url: this.config.url + "member/message",
+				method: "POST",
+				data: {
+					token: this.token
+				},
+				success: (res) => {
+					
+
+					if (res.data.code == 1) {
+						this.msgList = res.data.data.data
+					}
+				}
+			})
+
 		},
 
 		data() {
@@ -173,16 +196,26 @@
 				productList: [],
 				totalList: [],
 				loadingText: '正在加载...',
-	            token1:"",
-				
-				current_page: 0,
+				token1: "",
+                sendUrl:"",  //寄件url
+				current_page: 1,
 				total: "",
 				last_page: "1",
 				tishi: false,
-				hot:[],
-				home:false
+				hot: [],
+				limit: [],
+				home: false
 			}
 		},
+		//分享页面 
+		onShareAppMessage: function() {
+			var that = this;
+			return {
+				title: '快来看一看啊！',
+				path: '/pages/tabBar/home'
+			}
+		},
+
 		onPageScroll(e) {
 			//兼容iOS端下拉时顶部漂移
 			this.headerPosition = e.scrollTop >= 0 ? "fixed" : "absolute";
@@ -191,52 +224,75 @@
 		},
 		//下拉刷新，需要自己在page.json文件中配置开启页面下拉刷新 "enablePullDownRefresh": true
 		onPullDownRefresh() {
+
 			setTimeout(function() {
 				uni.stopPullDownRefresh();
 			}, 1000);
+			this.current_page = 1
+			this.productList = [];
+			this.hotList = []
+			this.limitList = []
+			this.pulldown()
+
 		},
 		//上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
 		onReachBottom() {
 			// 调用获取推荐列表接口
 			// 当前页小于最后一页才调用
-			if (this.current_page < this.last_page) {
+			this.current_page++
+			if (this.current_page > this.last_page) {
+				return;
+			} else {
 				this.getRecommendList();
 			}
 
 		},
-		onReady(){
-			 //  uni.showLoading({
-			 // 	title: '加载中'
-			 // });
-		},
+	
 		onLoad() {
-			uni.getStorage({
-					key:"info",
-					success: (res) => {
-						
-						var result=JSON.parse(res.data)
-						
-						this.token1=result.token;
-						
-						this.first_load();
-						
-					}
-				})
-		
+
+			this.pulldown()
 		},
 		methods: {
+			//下拉加载
+			pulldown() {
+
+				uni.showLoading({
+					title: '加载中'
+				});
+				uni.getStorage({
+					key: "info",
+					success: (res) => {
+
+						var result = JSON.parse(res.data)
+
+						this.token1 = result.token;
+						this.first_load();
+						this.getRecommendList()
+					}
+				})
+			},
 			//加载更多热销产品
-			moreLoad(){
-				this.hotList=this.hot;
+			moreLoad() {
+				uni.navigateTo({
+					url: "/pages/goods/goods-list?hot=hot"
+				})
+
 			},
-			init(){
+			//加载限时购商品
+			moreLimit() {
+				uni.navigateTo({
+					url: "/pages/goods/goods-list?limit=limit"
+				})
+
+			},
+			init() {
 				uni.hideLoading();
-				
-					
+
+
 			},
-			first_load(){
-				
-				
+			first_load() {
+
+
 				var amapPlugin = new amap.AMapWX({
 					//高德地图KEY，随时失效，请务必替换为自己的KEY，参考：http://ask.dcloud.net.cn/article/35070
 					key: '5b9b64be2413fc19c26683fcf0de890f'
@@ -244,14 +300,17 @@
 				//定位地址
 				amapPlugin.getRegeo({
 					success: data => {
-						//console.log(data)
+						//console.log (data,"位置")
 						this.city = data[0].regeocodeData.addressComponent.city.replace(/市/g, ''); //把"市"去掉
-					    this.init()
+						this.init()
+					},
+					fail: data => {
+						//console.log(data,"位置")
 					}
 				});
-				
+
 				//系统消息
-				uni.request({
+				this.request({
 					url: this.config.url + "member/message",
 					method: "POST",
 					data: {
@@ -259,7 +318,7 @@
 					},
 					success: (res) => {
 						//console.log("mesg",res)
-						
+
 						if (res.data.code == 1) {
 							this.msgList = res.data.data.data;
 							if (res.data.data.data.length > 0) {
@@ -269,72 +328,86 @@
 					}
 				})
 				//主页数据
-					uni.request({
-						url: this.config.url+'home', //仅为示例，并非真实接口地址。
-						data: {
-							token: this.token1
-						},
-						method: "post",
-						success: (res) => {
-					     //   console.log("hoem", res);
-							var num;
-							if(res.data.code==1){
-							//	console.log(res)
-								this.swiperList = res.data.data.banner;
-								this.categoryList = res.data.data.cate;
-								
-								this.limitList = res.data.data.limit_buy;
-								this.hot = res.data.data.hot;
-								 this.home=true;
-								 
-								
-								if (this.hot.length < 10) {
-									num = this.hot.length;
-								} else {
-									num = 10;
-								}
-								for (var i = 0; i < num; i++) {
-									this.hotList.push(this.hot[i])
-									//	console.log(this.productList)
-								}
-							  
+				this.request({
+					url: this.config.url + 'home', //仅为示例，并非真实接口地址。
+					data: {
+
+					},
+					method: "post",
+					success: (res) => {
+						//console.log("home", res);
+						var num, len;
+						if (res.data.code == 1) {
+							//console.log(res)
+							this.swiperList = res.data.data.banner;
+							this.categoryList = res.data.data.cate;
+                            this.sendUrl=res.data.data.jijian.cover;
+							this.limit = res.data.data.limit_buy;
+							this.hot = res.data.data.hot;
+							this.home = true;
+							if (this.limit.length < 4) {
+								len = this.limit.length;
+							} else {
+								len = 4;
 							}
-							
+							for (var i = 0; i < len; i++) {
+								this.limitList.push(this.limit[i])
+
+							}
+
+							if (this.hot.length < 6) {
+								num = this.hot.length;
+							} else {
+								num = 6;
+							}
+							for (var i = 0; i < num; i++) {
+								this.hotList.push(this.hot[i])
+								//	console.log(this.productList)
+							}
+
 						}
-					})
-				
-				
+
+					}
+				})
+
+
 			},
-			
-			
+
+
 			// 获取推荐列表
 			getRecommendList() {
 				this.status = "loading";
 				// 首页为你推荐
-				uni.request({
-					url: this.config.url+'recommend', //仅为示例，并非真实接口地址。
+				this.request({
+					url: this.config.url + 'recommend', //仅为示例，并非真实接口地址。
 					data: {
 						token: this.token1,
-						page: Number(this.current_page) + 1,
+						page: this.current_page,
 					},
 					method: "post",
 					success: (res) => {
 						var len;
-						// console.log("res.data", res.data);
+						//console.log(this.current_page,"res.data", res.data);
 						// 商品列表
 						this.totalList = res.data.data.data;
+						var page = res.data.data.current_page;
 						//每页10 
-						if (this.totalList.length < 10) {
-							len = this.totalList.length;
+						if (page == 1) {
+							if (this.totalList.length < 10) {
+								len = this.totalList.length;
+							} else {
+								len = 10;
+							}
+							for (var i = 0; i < len; i++) {
+								this.productList.push(this.totalList[i])
+								//	console.log(this.productList)
+							}
 						} else {
-							len = 10;
-						}
-						for (var i = 0; i < len; i++) {
-							this.productList.push(this.totalList[i])
-							//	console.log(this.productList)
+							this.productList.concat(res.data.data.data)
 						}
 
-						this.current_page = res.data.data.current_page;
+
+
 						this.last_page = res.data.data.last_page;
 						this.total = res.data.data.data.total;
 						this.status = "more";
@@ -355,38 +428,43 @@
 			},
 			//搜索跳转
 			toSearch() {
-				// 搜索推荐
-				uni.request({
-					url: this.config.url+'keyword', //仅为示例，并非真实接口地址。
-					data: {
-						token: this.token1
-
-					},
-					method: "post",
-					success: (res) => {
-
-						console.log(res);
-						this.searchList = res.data.data;
-					}
-				});
+				uni.navigateTo({
+					url: "/pages/search/search?"
+				})
 
 			},
 			//轮播图跳转
-			toSwiper(e, index) {
-
-				//this.currentSwiper = index
+			toSwiper(index) {
+			    
+                
+				uni.navigateTo({
+					url:"/pages/webview/webview?item="+index
+				})
+				
 			},
 			//分类跳转
 			toCategory(e) {
-				console.log(e);
+				
 				uni.navigateTo({
-					url:"/pages/goods/goods-list?id="+e.id+"&title="+e.title
+					url: "/pages/goods/goods-list?id=" + e.id + "&title=" + e.title
+				})
+			},
+			//收货跳转
+			skipGetgoods() {
+				uni.navigateTo({
+					url: "/pages/getgoods/getgoods"
 				})
 			},
 			//商品跳转
 			toGoods(e) {
 				uni.navigateTo({
-					url: "/pages/goods/goods?id="+e.id
+					url: "/pages/goods/goods?id=" + e.id
+				})
+			},
+			//限时商品跳转
+			limitGoods(e){
+				uni.navigateTo({
+					url: "/pages/goods/goods?id=" + e.id+"&limit=1"
 				})
 			},
 			//轮播图指示器
@@ -746,6 +824,11 @@
 				}
 			}
 
+			.promotion-head-right {
+				color: #999999;
+				font-size: 24upx;
+			}
+
 		}
 
 		.list {
@@ -831,20 +914,21 @@
 		}
 	}
 
+	//热销
 	.hot-list {
 		width: 100%;
 		display: flex;
-
+		justify-content: space-around;
 		flex-wrap: wrap;
 
 		.hot-list-item {
-			width: 33.3%;
-
+			width: 32%;
+			box-sizing: border-box;
 			display: flex;
 			flex-direction: column;
 
 			flex-wrap: wrap;
-			padding-bottom: 20upx;
+			padding: 0 10upx 20upx 0;
 
 			.item-img {
 				width: 224upx;
@@ -877,9 +961,9 @@
 				align-items: center;
 
 				text:nth-child(1) {
-					font-size: 34upx;
+					font-size: 26upx;
 					color: rgba(255, 84, 31, 1);
-					margin-right: 20upx;
+					margin-right: 10upx;
 					font-weight: 800;
 				}
 
@@ -891,6 +975,70 @@
 			}
 		}
 	}
+
+	// 限购产品
+	.limit-list {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		flex-wrap: wrap;
+
+		.limit-list-item:nth-child(2n-1) {
+			margin-right: 9upx;
+		}
+
+		.limit-list-item {
+			width: 49%;
+			height: 182upx;
+			display: flex;
+			padding-top: 28upx;
+
+			border-radius: 20upx;
+			flex-wrap: wrap;
+			padding-bottom: 9upx;
+
+			.item-img {
+				width: 100%;
+				height: 100%;
+				display: flex;
+				justify-content: center;
+				align-items: flex-end;
+
+				image {
+					width: 100%;
+					height: 100%;
+
+				}
+			}
+
+			.item-price {
+				display: flex;
+				flex-direction: column;
+				margin: 0 28upx 0 21upx;
+
+				.title {
+					font-size: 26upx;
+					color: #B49966;
+					width: 150upx;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
+
+				.price {
+					color: #101010;
+					font-size: 30upx;
+					margin: 20upx 0;
+				}
+
+				image {
+					width: 34upx;
+					height: 34upx;
+				}
+			}
+		}
+	}
+
 
 	.goods-list {
 		// background-color: #f4f4f4;
@@ -973,6 +1121,7 @@
 						color: #807c87;
 						font-size: 24upx;
 						margin-left: 30upx;
+						text-decoration: line-through;
 					}
 				}
 			}

@@ -1,91 +1,64 @@
 <template>
 	<view>
-		<view class="tabr" :style="{top:headerTop}">
+		<!-- <view class="tabr" :style="{top:headerTop}">
 			<view :class="{on:typeClass=='goods'}" @tap="switchType('goods')">已评价</view>
 			<view :class="{on:typeClass=='shop'}" @tap="switchType('shop')">待评价</view>
 			<view class="border" :class="typeClass"></view>
-		</view>
+		</view>-->
 		<view class="place"></view>
-
+ 
 		<view class="keep-main">
 			<!-- 已评价 -->
-			<view class="list" v-show="subState==1" v-for="(eva,evaNum) in goodsList" :key="evaNum">
+			<view class="list"  v-for="(eva,evaNum) in goodsList" :key="evaNum">
 				<view class="list-one">
 					<view class="one-left">
-						<image :src="eva.goods_logo"></image>
+						<image :src="info.headimg"></image>
 						<view class="evaluate">
-							<text>{{eva.id}}</text>
-							<text>{{eva.comment_star}}</text>
+							<text>{{info.nickname}}</text>
+							<view class="star">
+							   <uni-rate max="5" size="18" :value="eva.comment_star" ></uni-rate>
+							</view>
 						</view>
 					</view>
 					<view class="one-right">
-						{{eva.create_at}}
+						{{info.comment_time}}
 					</view>
 				</view>
 				<view class="list-two">
-					{{eva.comment_content}}
+					{{eva.comment_content==null?"":eva.comment_content}}
 				</view>
-				<view class="list-three" v-for="(src,index) in eva.comment_covers">
-					<image src="src"></image>
+				<view  class="list-three" >
+					<view class="imgs" v-for="(src,index) in eva.comment_covers" :key="index">
+						<image :src="src"></image>
+					</view>
+					
 				</view>
 				<view class="list-four">
 					<view class="four-left">
-						<image  src="eva.goods_logo"></image>
+						<image  :src="eva.goods_logo"></image>
 					</view>
 					<view class="four-right">
-						<text>{{eva.comment_content}}</text>
-						<text>{{eva.price_selling}}</text>
+						<text>{{eva.goods_title}}</text>
+						<text>{{eva.goods_spec}}</text>
+						<text>￥{{eva.price_selling}}</text>
 					</view>
 				</view>
 			</view>
-			<view class="do-evaluate" v-show="subState==2" v-for="(eva,index) in goodsList" :key="index">
-				<view class="do-evaluate-one">
-					<view class="evaluate-left">
-						{{eva.order_no}}
-					</view>
-					<view class="evaluate-right">已完成</view>
-				</view>
-				<view class="do-evaluate-two">
-					<image src="eva.goods_logo"></image>
-					<view class="goods-dec">
-						<text class="goods-title">
-							{{eva.goods_title}}
-						</text>
-						<view class="goods-price">
-							<text>共{{eva.number}}件产品 &nbsp合计：</text>
-							<view class="total-price">
-								<text>￥</text>
-								<text>{{eva.price_real}}</text>
-							</view>
-						</view>
-
-					</view>
-				</view>
-				<view class="do-evaluate-three" @click="sayFeel()">
-					<text>去评价</text>
-				</view>
-			</view>
+		
 		</view>
+		<uni-load-more class="setcenter" :status="status" :showIcon="showIcon"></uni-load-more>
 	</view>
 </template>
 
 <script>
+	import uniRate from "@/components/uni-rate/uni-rate.vue" //星星评分
+	import uniLoadMore from "@/components/uni-load-more/uni-load-more.vue" //加载更多
 	export default {
-		mounted(){
-			var _this=this
-			uni.request({
-				url:this.config.url+"member/comment",
-				method:"post",
-				data:{
-					token:this.token,
-					type:this.subState,
-				},
-				success(res) {
-					console.log(res)
-					_this.goodsList=res.data.data.data;
-				}
-			})
+		components:{
+			uniRate,
+			uniLoadMore
 		},
+	
 		data() {
 			return {
 				goodsList: [],
@@ -95,11 +68,26 @@
 				subState: 1,
 				theIndex: null,
 				oldIndex: null,
-				isStop: false
+				isStop: false,
+				info:{},
+				current_page:1 ,
+				last_page:"",
+				status: "more",
 			}
 		},
 		onPageScroll(e) {
 
+		},
+		onReachBottom() {
+			// 调用获取推荐列表接口
+			// 当前页小于最后一页才调用
+			this.current_page++
+			if (this.current_page > this.last_page) {
+				return;
+			} else {
+				this.requestKeep(this.current_page);
+			}
+		
 		},
 		//下拉刷新，需要自己在page.json文件中配置开启页面下拉刷新 "enablePullDownRefresh": true
 		onPullDownRefresh() {
@@ -119,8 +107,45 @@
 				}
 			}, 1);
 			// #endif
+			
+			var _this=this
+			uni.getStorage({
+				key:"info",
+				success: (res) => {
+				
+					this.info=JSON.parse(res.data)
+						console.log(res.data,this.info)
+				}
+			})
+			
+		    this.current_page=1;
+			this.requestKeep(this.current_page);
 		},
 		methods: {
+			requestKeep(page){
+					//ping lun
+				this.request({
+					url:this.config.url+"member/comment",
+					method:"post",
+					data:{
+						token:this.token,
+						page:page,
+					},
+					success:(res)=> {
+						console.log(res)
+						if(res.data.code==1){
+							this.last_page = res.data.data.last_page;
+							this.goodsList=this.goodsList.concat(res.data.data.data);
+							console.log(this.goodsList)
+							this.status = "more";
+							if (this.current_page >= this.last_page) {
+								this.status = "noMore";
+							}
+						}
+						
+					}
+				})
+			},
 			sayFeel() {
 				uni.navigateTo({
 					url: "/pages/user/keep/sayFeel/sayFeel"
@@ -160,6 +185,9 @@
 	}
 </script>
 <style lang="scss">
+	.setcenter{
+		text-align: center;
+	}
 	view {
 		display: flex;
 		flex-wrap: wrap;
@@ -217,8 +245,7 @@
 	}
 
 	.place {
-		width: 100%;
-		height: 95upx;
+		border-top:1px solid #F5F5F5;
 	}
 
 	.tabr {
@@ -261,16 +288,21 @@
 		display: flex;
 		flex-direction: column;
 		background: white;
-		margin-top: 20upx;
+		margin-top: 1upx;
+	
+		width: 100%;
+		
 	}
 
 	.list {
-
-		width: 92%;
-		padding: 30upx 4% 0;
-		margin-bottom: 30upx;
+        width:96%;
+		padding: 30upx 2% ;
+		border-bottom: 20upx solid #F5F5F5;
+		
 		background: white;
-
+        display: flex;
+        flex-direction: column;
+		
 		.list-one {
 			width: 100%;
 			display: flex;
@@ -280,7 +312,7 @@
 			.one-left {
 				display: flex;
 				align-items: center;
-
+                justify-content: center;
 				image {
 					width: 86upx;
 					height: 86upx;
@@ -293,11 +325,14 @@
 					display: flex;
 					flex-direction: column;
 					justify-content: space-around;
-					align-items: center;
+					
 					font-size: 28upx;
 					font-family: PingFang-SC-Regular;
 					font-weight: 400;
 					color: rgba(102, 102, 102, 1);
+					.star{
+						
+					}
 				}
 
 			}
@@ -325,9 +360,14 @@
 			display: flex;
 			align-items: center;
 			margin: 10upx 0 30upx;
-
+            width:100%;
+		    flex-wrap: wrap;
+			.imgs{
+				width:33%;
+				height:220upx;
+			}
 			image {
-				width: 220upx;
+				width: 100%;
 				height: 220upx;
 				margin-right: 10upx;
 			}
@@ -338,13 +378,13 @@
 			padding: 20upx;
 			justify-content: space-between;
 			align-items: center;
-
+            box-sizing: border-box;
 			background: rgba(245, 245, 245, 1);
 
 			.four-left {
 				width: 140upx;
 				height: 140upx;
-          
+                margin-right:30upx;
 				image {
 					width: 140upx;
 					height: 140upx;
@@ -352,11 +392,12 @@
 			}
 
 			.four-right {
-
+                height:100%;
 				margin-left: 10upx;
 				display: flex;
+				flex:1;
 				flex-direction: column;
-				
+				justify-content: space-around;
 				
 
 				text:nth-child(1) {
@@ -369,8 +410,11 @@
 					overflow: hidden;
 
 				}
-
-				text:nth-child(2) {
+                   text:nth-child(2) {
+                   	color:#ccc;
+                   	font-size: 22upx;
+                   }
+				text:nth-child(3) {
 					color: rgba(255, 32, 27, 1);
 					font-size: 24upx;
 				}
